@@ -157,153 +157,116 @@ public struct SoundDNAAnalyzer: SoundDNAAnalyzerProtocol {
         let density: Double     // [0, 1]
     }
 
-    /// Compute spectral centroid, warmth (low-frequency ratio), and
-    /// density (spectral flatness) using windowed FFT.
-    private func computeSpectralFeatures(
-        _ samples: [Float],
-        sampleRate: Double
-    ) -> SpectralResult {
-        let fftSize = Theme.SoundDNA.fftSize
-        let hopSize = Theme.SoundDNA.fftHopSize
-        let halfFFT = fftSize / 2
-
-        guard samples.count >= fftSize else {
-            return SpectralResult(
-                centroid: Theme.SoundDNA.fallbackSpectralCentroidHz,
-                warmth: Theme.SoundDNA.defaultFeatureValue,
-                density: Theme.SoundDNA.defaultFeatureValue
-            )
-        }
-
-        // Setup FFT
-        guard let fftSetup = vDSP_create_fftsetup(
-            vDSP_Length(log2(Double(fftSize))),
-            FFTRadix(kFFTRadix2)
-        ) else {
-            return SpectralResult(
-                centroid: Theme.SoundDNA.fallbackSpectralCentroidHz,
-                warmth: Theme.SoundDNA.defaultFeatureValue,
-                density: Theme.SoundDNA.defaultFeatureValue
-            )
-        }
-        defer { vDSP_destroy_fftsetup(fftSetup) }
-
-        // Hanning window
-        var window = [Float](repeating: 0, count: fftSize)
-        vDSP_hann_window(&window, vDSP_Length(fftSize), Int32(vDSP_HANN_NORM))
-
-        // Frequency bin centers
-        let binWidth = sampleRate / Double(fftSize)
-        let warmthBin = Int(Theme.SoundDNA.warmthCutoffHz / binWidth)
-
+    /// Accumulated spectral statistics across FFT frames.
+    private struct SpectralAccumulator {
         var totalCentroid: Double = 0
         var totalLowEnergy: Double = 0
         var totalEnergy: Double = 0
         var totalFlatness: Double = 0
-        var frameCount = 0
+        var frameCount: Int = 0
+    }
 
-        var offset = 0
-        while offset + fftSize <= samples.count {
-            // Window the frame
-            var windowed = [Float](repeating: 0, count: fftSize)
-            vDSP_vmul(
-                Array(samples[offset..<(offset + fftSize)]), 1,
-                window, 1,
-                &windowed, 1,
-                vDSP_Length(fftSize)
-            )
-
-            // Forward FFT
-            var realPart = [Float](repeating: 0, count: halfFFT)
-            var imagPart = [Float](repeating: 0, count: halfFFT)
-            windowed.withUnsafeBufferPointer { buffer in
-                realPart.withUnsafeMutableBufferPointer { realBuf in
-                    imagPart.withUnsafeMutableBufferPointer { imagBuf in
-                        var splitComplex = DSPSplitComplex(
-                            realp: realBuf.baseAddress!,
-                            imagp: imagBuf.baseAddress!
-                        )
-                        buffer.baseAddress!.withMemoryRebound(
-                            to: DSPComplex.self,
-                            capacity: halfFFT
-                        ) { complexPtr in
-                            vDSP_ctoz(
-                                complexPtr, 2,
-                                &splitComplex, 1,
-                                vDSP_Length(halfFFT)
-                            )
-                        }
-                        vDSP_fft_zrip(
-                            fftSetup,
+    /// Compute magnitude spectrum from a windowed frame via forward FFT.
+    private func computeFrameMagnitudes(
+        _ windowed: [Float],
+        fftSetup: FFTSetup,
+        fftSize: Int,
+        halfFFT: Int
+    ) -> [Float] {
+        var realPart = [Float](repeating: 0, count: halfFFT)
+        var imagPart = [Float](repeating: 0, count: halfFFT)
+        windowed.withUnsafeBufferPointer { buffer in
+            realPart.withUnsafeMutableBufferPointer { realBuf in
+                imagPart.withUnsafeMutableBufferPointer { imagBuf in
+                    var splitComplex = DSPSplitComplex(
+                        realp: realBuf.baseAddress!,
+                        imagp: imagBuf.baseAddress!
+                    )
+                    buffer.baseAddress!.withMemoryRebound(
+                        to: DSPComplex.self,
+                        capacity: halfFFT
+                    ) { complexPtr in
+                        vDSP_ctoz(
+                            complexPtr, 2,
                             &splitComplex, 1,
-                            vDSP_Length(log2(Double(fftSize))),
-                            FFTDirection(FFT_FORWARD)
+                            vDSP_Length(halfFFT)
                         )
                     }
-                }
-            }
-
-            // Magnitude spectrum
-            var magnitudes = [Float](repeating: 0, count: halfFFT)
-            realPart.withUnsafeBufferPointer { realBuf in
-                imagPart.withUnsafeBufferPointer { imagBuf in
-                    var split = DSPSplitComplex(
-                        realp: UnsafeMutablePointer(mutating: realBuf.baseAddress!),
-                        imagp: UnsafeMutablePointer(mutating: imagBuf.baseAddress!)
+                    vDSP_fft_zrip(
+                        fftSetup,
+                        &splitComplex, 1,
+                        vDSP_Length(log2(Double(fftSize))),
+                        FFTDirection(FFT_FORWARD)
                     )
-                    vDSP_zvabs(&split, 1, &magnitudes, 1, vDSP_Length(halfFFT))
                 }
             }
+        }
 
-            // Spectral centroid
-            var weightedSum: Float = 0
-            var magSum: Float = 0
-            for bin in 1..<halfFFT {
-                let freq = Float(bin) * Float(binWidth)
-                weightedSum += freq * magnitudes[bin]
-                magSum += magnitudes[bin]
+        var magnitudes = [Float](repeating: 0, count: halfFFT)
+        realPart.withUnsafeBufferPointer { realBuf in
+            imagPart.withUnsafeBufferPointer { imagBuf in
+                var split = DSPSplitComplex(
+                    realp: UnsafeMutablePointer(mutating: realBuf.baseAddress!),
+                    imagp: UnsafeMutablePointer(mutating: imagBuf.baseAddress!)
+                )
+                vDSP_zvabs(&split, 1, &magnitudes, 1, vDSP_Length(halfFFT))
             }
-            let frameCentroid = magSum > 0
-                    ? Double(weightedSum / magSum)
-                    : Theme.SoundDNA.fallbackSpectralCentroidHz
-            totalCentroid += frameCentroid
-
-            // Low-frequency energy (warmth)
-            var lowEnergy: Float = 0
-            let lowBins = min(warmthBin, halfFFT)
-            vDSP_sve(magnitudes, 1, &lowEnergy, vDSP_Length(lowBins))
-            totalLowEnergy += Double(lowEnergy)
-            totalEnergy += Double(magSum)
-
-            // Spectral flatness (density)
-            // Geometric mean / arithmetic mean of magnitude spectrum
-            var logMags = [Float](repeating: 0, count: halfFFT)
-            var count = Int32(halfFFT)
-            vvlogf(&logMags, magnitudes, &count)
-            var logMean: Float = 0
-            vDSP_meanv(logMags, 1, &logMean, vDSP_Length(halfFFT))
-            let geometricMean = exp(Double(logMean))
-            let arithmeticMean = magSum > 0 ? Double(magSum) / Double(halfFFT) : 1.0
-            let flatness = arithmeticMean > 0 ? geometricMean / arithmeticMean : 0.0
-            totalFlatness += flatness
-
-            frameCount += 1
-            offset += hopSize
         }
+        return magnitudes
+    }
 
-        guard frameCount > 0 else {
-            return SpectralResult(
-                centroid: Theme.SoundDNA.fallbackSpectralCentroidHz,
-                warmth: Theme.SoundDNA.defaultFeatureValue,
-                density: Theme.SoundDNA.defaultFeatureValue
-            )
+    /// Accumulate spectral centroid, warmth, and flatness from one frame's magnitudes.
+    private func accumulateSpectralBins(
+        magnitudes: [Float],
+        binWidth: Double,
+        warmthBin: Int,
+        halfFFT: Int,
+        accumulator: inout SpectralAccumulator
+    ) {
+        // Spectral centroid
+        var weightedSum: Float = 0
+        var magSum: Float = 0
+        for bin in 1..<halfFFT {
+            let freq = Float(bin) * Float(binWidth)
+            weightedSum += freq * magnitudes[bin]
+            magSum += magnitudes[bin]
         }
+        let frameCentroid = magSum > 0
+                ? Double(weightedSum / magSum)
+                : Theme.SoundDNA.fallbackSpectralCentroidHz
+        accumulator.totalCentroid += frameCentroid
 
-        let avgCentroid = totalCentroid / Double(frameCount)
-        let warmthRatio = totalEnergy > 0
-            ? totalLowEnergy / totalEnergy
+        // Low-frequency energy (warmth)
+        var lowEnergy: Float = 0
+        let lowBins = min(warmthBin, halfFFT)
+        vDSP_sve(magnitudes, 1, &lowEnergy, vDSP_Length(lowBins))
+        accumulator.totalLowEnergy += Double(lowEnergy)
+        accumulator.totalEnergy += Double(magSum)
+
+        // Spectral flatness (density)
+        // Geometric mean / arithmetic mean of magnitude spectrum
+        var logMags = [Float](repeating: 0, count: halfFFT)
+        var count = Int32(halfFFT)
+        vvlogf(&logMags, magnitudes, &count)
+        var logMean: Float = 0
+        vDSP_meanv(logMags, 1, &logMean, vDSP_Length(halfFFT))
+        let geometricMean = exp(Double(logMean))
+        let arithmeticMean = magSum > 0 ? Double(magSum) / Double(halfFFT) : 1.0
+        let flatness = arithmeticMean > 0 ? geometricMean / arithmeticMean : 0.0
+        accumulator.totalFlatness += flatness
+
+        accumulator.frameCount += 1
+    }
+
+    /// Normalize accumulated spectral statistics into a final result.
+    private func normalizeSpectralResult(
+        _ accumulator: SpectralAccumulator
+    ) -> SpectralResult {
+        let avgCentroid = accumulator.totalCentroid / Double(accumulator.frameCount)
+        let warmthRatio = accumulator.totalEnergy > 0
+            ? accumulator.totalLowEnergy / accumulator.totalEnergy
             : Theme.SoundDNA.defaultFeatureValue
-        let avgFlatness = totalFlatness / Double(frameCount)
+        let avgFlatness = accumulator.totalFlatness / Double(accumulator.frameCount)
 
         // Warmth: higher low-frequency ratio = warmer
         let warmth = min(max(warmthRatio, 0.0), 1.0)
@@ -317,6 +280,64 @@ public struct SoundDNAAnalyzer: SoundDNAAnalyzerProtocol {
             warmth: warmth,
             density: density
         )
+    }
+
+    /// Compute spectral centroid, warmth (low-frequency ratio), and
+    /// density (spectral flatness) using windowed FFT.
+    private func computeSpectralFeatures(
+        _ samples: [Float],
+        sampleRate: Double
+    ) -> SpectralResult {
+        let fftSize = Theme.SoundDNA.fftSize
+        let hopSize = Theme.SoundDNA.fftHopSize
+        let halfFFT = fftSize / 2
+        let fallback = SpectralResult(
+            centroid: Theme.SoundDNA.fallbackSpectralCentroidHz,
+            warmth: Theme.SoundDNA.defaultFeatureValue,
+            density: Theme.SoundDNA.defaultFeatureValue
+        )
+
+        guard samples.count >= fftSize else { return fallback }
+
+        guard let fftSetup = vDSP_create_fftsetup(
+            vDSP_Length(log2(Double(fftSize))),
+            FFTRadix(kFFTRadix2)
+        ) else { return fallback }
+        defer { vDSP_destroy_fftsetup(fftSetup) }
+
+        var window = [Float](repeating: 0, count: fftSize)
+        vDSP_hann_window(&window, vDSP_Length(fftSize), Int32(vDSP_HANN_NORM))
+
+        let binWidth = sampleRate / Double(fftSize)
+        let warmthBin = Int(Theme.SoundDNA.warmthCutoffHz / binWidth)
+        var accumulator = SpectralAccumulator()
+
+        var offset = 0
+        while offset + fftSize <= samples.count {
+            var windowed = [Float](repeating: 0, count: fftSize)
+            vDSP_vmul(
+                Array(samples[offset..<(offset + fftSize)]), 1,
+                window, 1,
+                &windowed, 1,
+                vDSP_Length(fftSize)
+            )
+
+            let magnitudes = computeFrameMagnitudes(
+                windowed, fftSetup: fftSetup, fftSize: fftSize, halfFFT: halfFFT
+            )
+            accumulateSpectralBins(
+                magnitudes: magnitudes,
+                binWidth: binWidth,
+                warmthBin: warmthBin,
+                halfFFT: halfFFT,
+                accumulator: &accumulator
+            )
+
+            offset += hopSize
+        }
+
+        guard accumulator.frameCount > 0 else { return fallback }
+        return normalizeSpectralResult(accumulator)
     }
 
     // MARK: - Tempo Detection
@@ -446,33 +467,21 @@ public struct SoundDNAAnalyzer: SoundDNAAnalyzerProtocol {
         let scale: DetectedScale
     }
 
-    /// Detect musical key via chromagram + Krumhansl-Schmuckler profiles.
-    private func detectKey(
+    /// Build a normalized chromagram from audio samples using windowed FFT.
+    /// Returns `nil` if no valid frames could be processed.
+    private func buildChromagram(
         _ samples: [Float],
-        sampleRate: Double
-    ) -> KeyResult {
-        let fftSize = Theme.SoundDNA.fftSize
-        let hopSize = Theme.SoundDNA.fftHopSize
+        sampleRate: Double,
+        fftSetup: FFTSetup,
+        fftSize: Int,
+        hopSize: Int
+    ) -> [Double]? {
         let halfFFT = fftSize / 2
-
-        guard samples.count >= fftSize else {
-            return KeyResult(key: nil, scale: .unknown)
-        }
-
-        guard let fftSetup = vDSP_create_fftsetup(
-            vDSP_Length(log2(Double(fftSize))),
-            FFTRadix(kFFTRadix2)
-        ) else {
-            return KeyResult(key: nil, scale: .unknown)
-        }
-        defer { vDSP_destroy_fftsetup(fftSetup) }
+        let binWidth = sampleRate / Double(fftSize)
 
         var window = [Float](repeating: 0, count: fftSize)
         vDSP_hann_window(&window, vDSP_Length(fftSize), Int32(vDSP_HANN_NORM))
 
-        let binWidth = sampleRate / Double(fftSize)
-
-        // Accumulate chroma energy across frames
         var chroma = [Double](repeating: 0, count: 12)
         var frameCount = 0
 
@@ -486,40 +495,9 @@ public struct SoundDNAAnalyzer: SoundDNAAnalyzerProtocol {
                 vDSP_Length(fftSize)
             )
 
-            var realPart = [Float](repeating: 0, count: halfFFT)
-            var imagPart = [Float](repeating: 0, count: halfFFT)
-            windowed.withUnsafeBufferPointer { buffer in
-                realPart.withUnsafeMutableBufferPointer { realBuf in
-                    imagPart.withUnsafeMutableBufferPointer { imagBuf in
-                        var splitComplex = DSPSplitComplex(
-                            realp: realBuf.baseAddress!,
-                            imagp: imagBuf.baseAddress!
-                        )
-                        buffer.baseAddress!.withMemoryRebound(
-                            to: DSPComplex.self,
-                            capacity: halfFFT
-                        ) { complexPtr in
-                            vDSP_ctoz(complexPtr, 2, &splitComplex, 1, vDSP_Length(halfFFT))
-                        }
-                        vDSP_fft_zrip(
-                            fftSetup, &splitComplex, 1,
-                            vDSP_Length(log2(Double(fftSize))),
-                            FFTDirection(FFT_FORWARD)
-                        )
-                    }
-                }
-            }
-
-            var magnitudes = [Float](repeating: 0, count: halfFFT)
-            realPart.withUnsafeBufferPointer { realBuf in
-                imagPart.withUnsafeBufferPointer { imagBuf in
-                    var split = DSPSplitComplex(
-                        realp: UnsafeMutablePointer(mutating: realBuf.baseAddress!),
-                        imagp: UnsafeMutablePointer(mutating: imagBuf.baseAddress!)
-                    )
-                    vDSP_zvabs(&split, 1, &magnitudes, 1, vDSP_Length(halfFFT))
-                }
-            }
+            let magnitudes = computeFrameMagnitudes(
+                windowed, fftSetup: fftSetup, fftSize: fftSize, halfFFT: halfFFT
+            )
 
             // Map FFT bins to chroma (pitch class) bins
             for bin in 1..<halfFFT {
@@ -536,17 +514,19 @@ public struct SoundDNAAnalyzer: SoundDNAAnalyzerProtocol {
             offset += hopSize
         }
 
-        guard frameCount > 0 else {
-            return KeyResult(key: nil, scale: .unknown)
-        }
+        guard frameCount > 0 else { return nil }
 
         // Normalize chroma
         let chromaMax = chroma.max() ?? 1.0
         if chromaMax > 0 {
             chroma = chroma.map { $0 / chromaMax }
         }
+        return chroma
+    }
 
-        // Krumhansl-Schmuckler key profiles from Theme tokens
+    /// Correlate a normalized chromagram with Krumhansl-Schmuckler key profiles
+    /// to determine the best-matching key and scale.
+    private func correlateWithKeyProfiles(_ chroma: [Double]) -> KeyResult {
         let majorProfile = Theme.SoundDNA.majorKeyProfile
         let minorProfile = Theme.SoundDNA.minorKeyProfile
         let noteNames = ["C", "C#", "D", "Eb", "E", "F", "F#", "G", "Ab", "A", "Bb", "B"]
@@ -556,10 +536,8 @@ public struct SoundDNAAnalyzer: SoundDNAAnalyzerProtocol {
         var bestIsMajor = true
 
         for shift in 0..<12 {
-            // Rotate chroma to test this root
             let rotated = (0..<12).map { chroma[($0 + shift) % 12] }
 
-            // Correlate with major profile
             let majorCorr = pearsonCorrelation(rotated, majorProfile)
             if majorCorr > bestCorrelation {
                 bestCorrelation = majorCorr
@@ -567,7 +545,6 @@ public struct SoundDNAAnalyzer: SoundDNAAnalyzerProtocol {
                 bestIsMajor = true
             }
 
-            // Correlate with minor profile
             let minorCorr = pearsonCorrelation(rotated, minorProfile)
             if minorCorr > bestCorrelation {
                 bestCorrelation = minorCorr
@@ -580,6 +557,39 @@ public struct SoundDNAAnalyzer: SoundDNAAnalyzerProtocol {
             key: noteNames[bestKey],
             scale: bestIsMajor ? .major : .minor
         )
+    }
+
+    /// Detect musical key via chromagram + Krumhansl-Schmuckler profiles.
+    private func detectKey(
+        _ samples: [Float],
+        sampleRate: Double
+    ) -> KeyResult {
+        let fftSize = Theme.SoundDNA.fftSize
+        let hopSize = Theme.SoundDNA.fftHopSize
+
+        guard samples.count >= fftSize else {
+            return KeyResult(key: nil, scale: .unknown)
+        }
+
+        guard let fftSetup = vDSP_create_fftsetup(
+            vDSP_Length(log2(Double(fftSize))),
+            FFTRadix(kFFTRadix2)
+        ) else {
+            return KeyResult(key: nil, scale: .unknown)
+        }
+        defer { vDSP_destroy_fftsetup(fftSetup) }
+
+        guard let chroma = buildChromagram(
+            samples,
+            sampleRate: sampleRate,
+            fftSetup: fftSetup,
+            fftSize: fftSize,
+            hopSize: hopSize
+        ) else {
+            return KeyResult(key: nil, scale: .unknown)
+        }
+
+        return correlateWithKeyProfiles(chroma)
     }
 
     // MARK: - Utilities

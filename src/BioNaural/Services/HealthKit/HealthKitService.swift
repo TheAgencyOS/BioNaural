@@ -101,12 +101,12 @@ public final class HealthKitService: HealthKitServiceProtocol, @unchecked Sendab
         self.healthStore = healthStore
         self.calendar = calendar
 
-        // GAP 7: Set up the authorization status AsyncStream.
-        var continuation: AsyncStream<Bool>.Continuation!
+        // Set up the authorization status AsyncStream.
+        var capturedAuth: AsyncStream<Bool>.Continuation?
         let stream = AsyncStream<Bool>(bufferingPolicy: .bufferingNewest(1)) { c in
-            continuation = c
+            capturedAuth = c
         }
-        self.authContinuation = continuation
+        self.authContinuation = capturedAuth!
         self._authorizationStatusChanged = stream
 
         // GAP 7: Listen for app foreground events to re-check authorization.

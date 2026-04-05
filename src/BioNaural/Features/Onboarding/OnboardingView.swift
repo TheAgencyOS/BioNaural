@@ -12,7 +12,7 @@ import SwiftUI
 
 private enum OnboardingKeys {
     static let currentScreen = "onboarding_currentScreen"
-    static let complete = "onboardingComplete"
+    static let complete = "bionaural_onboarding_complete"
     static let ageVerified = "onboarding_ageVerified"
     static let epilepsyAcknowledged = "onboarding_epilepsyAcknowledged"
     static let calibrationRestingHR = "onboarding_calibrationRestingHR"

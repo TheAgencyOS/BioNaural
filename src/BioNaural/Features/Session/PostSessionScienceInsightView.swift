@@ -186,7 +186,7 @@ struct PostSessionScienceInsightView: View {
                 // Animated reveal mask — wipes left to right
                 Rectangle()
                     .frame(
-                        width: UIScreen.main.bounds.width * sparklineProgress
+                        width: Theme.Layout.screenEstimate * sparklineProgress
                     )
                     .frame(maxWidth: .infinity, alignment: .leading)
             )

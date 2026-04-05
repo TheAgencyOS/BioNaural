@@ -217,13 +217,13 @@ public actor BiometricProcessor {
         self.classifier = StateClassifier()
         self.currentOutput = .neutral
 
-        var continuation: AsyncStream<BiometricSnapshot>.Continuation!
-        self.snapshotStream = AsyncStream { continuation = $0 }
-        self.snapshotContinuation = continuation
+        var capturedContinuation: AsyncStream<BiometricSnapshot>.Continuation?
+        self.snapshotStream = AsyncStream { capturedContinuation = $0 }
+        self.snapshotContinuation = capturedContinuation!
 
-        var safetyContinuation: AsyncStream<SafetyEvent>.Continuation!
-        self.safetyEventStream = AsyncStream { safetyContinuation = $0 }
-        self.safetyEventContinuation = safetyContinuation
+        var capturedSafety: AsyncStream<SafetyEvent>.Continuation?
+        self.safetyEventStream = AsyncStream { capturedSafety = $0 }
+        self.safetyEventContinuation = capturedSafety!
     }
 
     deinit {

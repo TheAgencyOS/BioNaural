@@ -53,7 +53,7 @@ struct SessionDemoView: View {
                     ],
                     center: .center,
                     startRadius: .zero,
-                    endRadius: UIScreen.main.bounds.width
+                    endRadius: Theme.Layout.screenEstimate
                 )
                 .ignoresSafeArea()
             }
@@ -317,7 +317,7 @@ struct SessionDemoView: View {
     }
 
     private var orbSize: CGFloat {
-        UIScreen.main.bounds.width * Theme.Animation.OrbScale.restingFraction * 1.5
+        Theme.Layout.screenEstimate * Theme.Animation.OrbScale.restingFraction * 1.5
     }
 
     /// Mirrors the Orb's internal calculation so the readout is accurate.

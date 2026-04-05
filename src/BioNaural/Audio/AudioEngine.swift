@@ -60,7 +60,10 @@ public final class AudioEngine: AudioEngineProtocol {
     /// Tracks the current mode for reconfiguration recovery.
     private var currentMode: FocusMode?
 
-    /// Serial queue for non-real-time engine mutations (start/stop/pause).
+    /// Serial queue for non-real-time engine mutations (start/stop/pause/reconfigure).
+    /// ALL reads and writes to `isSetUp` and `currentMode` must happen on this queue
+    /// to prevent races between user-initiated transport and system-initiated
+    /// configuration changes.
     private let controlQueue = DispatchQueue(
         label: "com.bionaural.audioengine.control",
         qos: .userInitiated
@@ -69,6 +72,11 @@ public final class AudioEngine: AudioEngineProtocol {
     /// Timer source for stop-fade completion (avoids sleeping on the
     /// calling thread).
     private var fadeTimer: DispatchSourceTimer?
+
+    /// Timer that syncs ambient/melodic layer volumes from AudioParameters.
+    /// Runs at 10 Hz while the engine is playing so user slider changes
+    /// are applied to the actual player nodes.
+    private var volumeSyncTimer: Timer?
 
     // MARK: - Initializer
 
@@ -125,11 +133,13 @@ public final class AudioEngine: AudioEngineProtocol {
         // setupSF2Layer()
 
         // -- Output configuration -----------------------------------------
-        // Spatial audio MUST be disabled to preserve stereo binaural beat
+        // Spatial Audio MUST be disabled to preserve stereo binaural beat
         // separation. HRTF processing corrupts the precise L/R frequency
         // difference required for entrainment.
-        // Voice processing and spatialization are disabled via AVAudioSession
-        // category configuration (.playback with no spatial options).
+        // 1. .stereoPassThrough bypasses any HRTF spatialization on the source node.
+        // 2. The audio session is configured with .playback category and no
+        //    spatial options, which prevents system-level Spatial Audio.
+        source.renderingAlgorithm = .stereoPassThrough
 
         // -- Notifications ------------------------------------------------
         registerNotifications()
@@ -161,6 +171,9 @@ public final class AudioEngine: AudioEngineProtocol {
 
         // Start melodic layer (file-based; SF2 generative is v1.5).
         startMelodicLayer(for: mode)
+
+        // Start volume sync so user slider changes reach player nodes.
+        startVolumeSyncTimer()
     }
 
     // MARK: - Melodic Layer Kickoff
@@ -193,7 +206,8 @@ public final class AudioEngine: AudioEngineProtocol {
         parameters.amplitude = 0.0
         currentMode = nil
 
-        // Stop audio layers gracefully.
+        // Stop volume sync and audio layers gracefully.
+        stopVolumeSyncTimer()
         stemAudioLayer?.stop()
         melodicLayer?.stop()
         ambienceLayer?.stop()
@@ -271,6 +285,24 @@ public final class AudioEngine: AudioEngineProtocol {
         if let mode = currentMode {
             startMelodicLayer(for: mode)
         }
+    }
+
+    // MARK: - Volume Sync
+
+    private func startVolumeSyncTimer() {
+        stopVolumeSyncTimer()
+        volumeSyncTimer = Timer.scheduledTimer(
+            withTimeInterval: Theme.Audio.ControlLoop.intervalSeconds,
+            repeats: true
+        ) { [weak self] _ in
+            self?.ambienceLayer?.syncVolume()
+            self?.melodicLayer?.syncVolume()
+        }
+    }
+
+    private func stopVolumeSyncTimer() {
+        volumeSyncTimer?.invalidate()
+        volumeSyncTimer = nil
     }
 
     // MARK: - SF2 Layer Setup (Stubbed)
@@ -415,6 +447,7 @@ public final class AudioEngine: AudioEngineProtocol {
     // MARK: - Cleanup
 
     deinit {
+        volumeSyncTimer?.invalidate()
         fadeTimer?.cancel()
         NotificationCenter.default.removeObserver(self)
         engine.stop()

@@ -148,8 +148,25 @@ public final class SoundDNAService: NSObject, SoundDNAServiceProtocol {
         let engine = AVAudioEngine()
         self.captureEngine = engine
 
+        // Configure audio session for recording BEFORE accessing inputNode.
+        // This ensures the hardware is activated and the input format is valid.
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.record, mode: .measurement)
+            try audioSession.setActive(true)
+        } catch {
+            return false
+        }
+
         let inputNode = engine.inputNode
         let format = inputNode.outputFormat(forBus: 0)
+
+        // Validate format — simulator or denied mic returns 0 Hz / 0 channels.
+        guard format.sampleRate > 0, format.channelCount > 0 else {
+            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+            return false
+        }
+
         capturedSampleRate = format.sampleRate
 
         let targetSampleCount = Int(
@@ -177,14 +194,12 @@ public final class SoundDNAService: NSObject, SoundDNAServiceProtocol {
             }
         }
 
-        // Configure audio session for recording
-        let audioSession = AVAudioSession.sharedInstance()
+        // Start the engine (audio session already configured above).
         do {
-            try audioSession.setCategory(.record, mode: .measurement)
-            try audioSession.setActive(true)
             try engine.start()
         } catch {
             stopCaptureEngine()
+            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
             return false
         }
 

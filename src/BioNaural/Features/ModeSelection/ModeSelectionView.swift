@@ -588,26 +588,7 @@ struct ModeSelectionView: View {
         let color = modeColor(for: mode)
 
         ZStack {
-            // Scrim — deep tint with mode color
-            Theme.Colors.canvas.opacity(Theme.Opacity.translucent)
-                .ignoresSafeArea()
-                .overlay(
-                    RadialGradient(
-                        colors: [
-                            color.opacity(Theme.Opacity.light),
-                            Color.clear
-                        ],
-                        center: .center,
-                        startRadius: .zero,
-                        endRadius: UIScreen.main.bounds.height * 0.5
-                    )
-                    .ignoresSafeArea()
-                )
-                .onTapGesture {
-                    withAnimation(Theme.Animation.standard) {
-                        scienceCardMode = nil
-                    }
-                }
+            scienceCardScrim(color: color)
 
             VStack(alignment: .leading, spacing: .zero) {
 
@@ -619,107 +600,9 @@ struct ModeSelectionView: View {
                 )
                 .frame(height: Theme.Spacing.xxs)
 
-                VStack(alignment: .leading, spacing: Theme.Spacing.lg) {
-
-                    // Mode icon + label
-                    HStack(spacing: Theme.Spacing.sm) {
-                        Image(systemName: scienceIcon(for: mode))
-                            .font(.system(size: Theme.Typography.Size.headline))
-                            .foregroundStyle(color)
-
-                        Text("Why it works")
-                            .font(Theme.Typography.small)
-                            .foregroundStyle(color)
-                            .tracking(Theme.Typography.Tracking.uppercase)
-                            .textCase(.uppercase)
-                    }
-
-                    // Hook
-                    Text(scienceHook(for: mode))
-                        .font(Theme.Typography.headline)
-                        .foregroundStyle(Theme.Colors.textPrimary)
-                        .lineSpacing(Theme.Typography.LineSpacing.relaxed)
-
-                    // Mode-specific live waveform
-                    Canvas { context, size in
-                        drawModeWave(context: context, size: size, mode: mode, color: color)
-                    }
-                    .frame(height: Theme.Spacing.xxxl)
-                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sm, style: .continuous))
-                    .onAppear {
-                        withAnimation(
-                            .linear(duration: Theme.Animation.Duration.orbBreathingDefault)
-                            .repeatForever(autoreverses: false)
-                        ) {
-                            scienceWavePhase = .pi * 2
-                        }
-                    }
-
-                    // Body
-                    Text(scienceText(for: mode))
-                        .font(Theme.Typography.body)
-                        .foregroundStyle(Theme.Colors.textSecondary)
-                        .lineSpacing(Theme.Typography.LineSpacing.relaxed)
-
-                    // Caveat
-                    HStack(alignment: .top, spacing: Theme.Spacing.sm) {
-                        RoundedRectangle(cornerRadius: Theme.Radius.sm)
-                            .fill(color.opacity(Theme.Opacity.accentLight))
-                            .frame(width: 3)
-
-                        Text(scienceCaveat(for: mode))
-                            .font(Theme.Typography.caption)
-                            .foregroundStyle(Theme.Colors.textTertiary)
-                            .lineSpacing(Theme.Typography.LineSpacing.relaxed)
-                    }
-
-                    // Dismiss hint
-                    Text("Tap anywhere to continue")
-                        .font(Theme.Typography.small)
-                        .foregroundStyle(Theme.Colors.textTertiary)
-                        .frame(maxWidth: .infinity)
-                }
-                .padding(.horizontal, Theme.Spacing.xxl)
-                .padding(.vertical, Theme.Spacing.xl)
+                scienceCardContent(for: mode, color: color)
             }
-            .background(
-                RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
-                    .fill(Theme.Colors.surface)
-                    // Inner highlight gradient
-                    .overlay(
-                        RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
-                            .fill(
-                                LinearGradient(
-                                    colors: [
-                                        Color.white.opacity(Theme.Opacity.light),
-                                        Color.clear,
-                                        Color.clear
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                    )
-                    // Edge glow
-                    .overlay(
-                        RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
-                            .strokeBorder(
-                                LinearGradient(
-                                    colors: [
-                                        color.opacity(Theme.Opacity.dim),
-                                        color.opacity(Theme.Opacity.subtle),
-                                        Color.clear
-                                    ],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: Theme.Radius.glassStroke
-                            )
-                    )
-                    // Layered shadows
-                    .shadow(color: Color.black.opacity(Theme.Opacity.dim), radius: Theme.Spacing.sm, y: Theme.Spacing.xxs)
-                    .shadow(color: color.opacity(Theme.Opacity.light), radius: Theme.Spacing.xxl, y: Theme.Spacing.md)
-            )
+            .background(scienceCardBackground(color: color))
             .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
             .padding(.horizontal, Theme.Spacing.pageMargin)
         }
@@ -734,6 +617,134 @@ struct ModeSelectionView: View {
         .accessibilityAddTraits(.isModal)
         .accessibilityLabel("Science card for \(mode.displayName) mode")
         .accessibilityHint("Tap anywhere to dismiss")
+    }
+
+    @ViewBuilder
+    private func scienceCardScrim(color: Color) -> some View {
+        Theme.Colors.canvas.opacity(Theme.Opacity.translucent)
+            .ignoresSafeArea()
+            .overlay(
+                RadialGradient(
+                    colors: [
+                        color.opacity(Theme.Opacity.light),
+                        Color.clear
+                    ],
+                    center: .center,
+                    startRadius: .zero,
+                    endRadius: Theme.Layout.screenEstimate
+                )
+                .ignoresSafeArea()
+            )
+            .onTapGesture {
+                withAnimation(Theme.Animation.standard) {
+                    scienceCardMode = nil
+                }
+            }
+    }
+
+    @ViewBuilder
+    private func scienceCardContent(for mode: FocusMode, color: Color) -> some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.lg) {
+
+            // Mode icon + label
+            HStack(spacing: Theme.Spacing.sm) {
+                Image(systemName: scienceIcon(for: mode))
+                    .font(.system(size: Theme.Typography.Size.headline))
+                    .foregroundStyle(color)
+
+                Text("Why it works")
+                    .font(Theme.Typography.small)
+                    .foregroundStyle(color)
+                    .tracking(Theme.Typography.Tracking.uppercase)
+                    .textCase(.uppercase)
+            }
+
+            // Hook
+            Text(scienceHook(for: mode))
+                .font(Theme.Typography.headline)
+                .foregroundStyle(Theme.Colors.textPrimary)
+                .lineSpacing(Theme.Typography.LineSpacing.relaxed)
+
+            // Mode-specific live waveform
+            Canvas { context, size in
+                drawModeWave(context: context, size: size, mode: mode, color: color)
+            }
+            .frame(height: Theme.Spacing.xxxl)
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sm, style: .continuous))
+            .onAppear {
+                withAnimation(
+                    .linear(duration: Theme.Animation.Duration.orbBreathingDefault)
+                    .repeatForever(autoreverses: false)
+                ) {
+                    scienceWavePhase = .pi * 2
+                }
+            }
+
+            // Body
+            Text(scienceText(for: mode))
+                .font(Theme.Typography.body)
+                .foregroundStyle(Theme.Colors.textSecondary)
+                .lineSpacing(Theme.Typography.LineSpacing.relaxed)
+
+            // Caveat
+            HStack(alignment: .top, spacing: Theme.Spacing.sm) {
+                RoundedRectangle(cornerRadius: Theme.Radius.sm)
+                    .fill(color.opacity(Theme.Opacity.accentLight))
+                    .frame(width: 3)
+
+                Text(scienceCaveat(for: mode))
+                    .font(Theme.Typography.caption)
+                    .foregroundStyle(Theme.Colors.textTertiary)
+                    .lineSpacing(Theme.Typography.LineSpacing.relaxed)
+            }
+
+            // Dismiss hint
+            Text("Tap anywhere to continue")
+                .font(Theme.Typography.small)
+                .foregroundStyle(Theme.Colors.textTertiary)
+                .frame(maxWidth: .infinity)
+        }
+        .padding(.horizontal, Theme.Spacing.xxl)
+        .padding(.vertical, Theme.Spacing.xl)
+    }
+
+    private func scienceCardBackground(color: Color) -> some View {
+        RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
+            .fill(Theme.Colors.surface)
+            // Inner highlight gradient
+            .overlay(
+                RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [
+                                Color.white.opacity(Theme.Opacity.light),
+                                Color.clear,
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+            )
+            // Edge glow
+            .overlay(
+                RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
+                    .strokeBorder(
+                        LinearGradient(
+                            colors: [
+                                color.opacity(Theme.Opacity.dim),
+                                color.opacity(Theme.Opacity.subtle),
+                                Color.clear
+                            ],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        lineWidth: Theme.Radius.glassStroke
+                    )
+            )
+            // Layered shadows
+            .shadow(color: Color.black.opacity(Theme.Opacity.dim), radius: Theme.Spacing.sm, y: Theme.Spacing.xxs)
+            .shadow(color: color.opacity(Theme.Opacity.light), radius: Theme.Spacing.xxl, y: Theme.Spacing.md)
     }
 
     /// Draws a mode-characteristic wave: fast-tight for Focus/Energize,
@@ -787,9 +798,13 @@ struct ModeSelectionView: View {
         )
     }
 
-    // MARK: - Science Content
+}
 
-    private func scienceIcon(for mode: FocusMode) -> String {
+// MARK: - Science Content & Helpers
+
+extension ModeSelectionView {
+
+    fileprivate func scienceIcon(for mode: FocusMode) -> String {
         switch mode {
         case .focus:      return "brain.head.profile"
         case .relaxation: return "leaf.fill"
@@ -798,7 +813,7 @@ struct ModeSelectionView: View {
         }
     }
 
-    private func scienceText(for mode: FocusMode) -> String {
+    fileprivate func scienceText(for mode: FocusMode) -> String {
         switch mode {
         case .focus:
             return "Beta-range binaural beats (14\u{2013}16 Hz) are associated with sustained attention and working memory. " +
@@ -817,7 +832,7 @@ struct ModeSelectionView: View {
         }
     }
 
-    private func scienceHook(for mode: FocusMode) -> String {
+    fileprivate func scienceHook(for mode: FocusMode) -> String {
         switch mode {
         case .focus:
             return "Beta-range beats reduce friction for deep work \u{2014} not superpowers, but a genuine nudge."
@@ -830,7 +845,7 @@ struct ModeSelectionView: View {
         }
     }
 
-    private func scienceCaveat(for mode: FocusMode) -> String {
+    fileprivate func scienceCaveat(for mode: FocusMode) -> String {
         switch mode {
         case .focus:
             return "The effects are real but modest \u{2014} think \u{201C}reducing friction\u{201D} not \u{201C}creating superpowers.\u{201D}"
@@ -843,25 +858,25 @@ struct ModeSelectionView: View {
         }
     }
 
-    // MARK: - UserDefaults — Science Card Flags
+    // MARK: UserDefaults — Science Card Flags
 
-    private func hasScienceBeenShown(for mode: FocusMode) -> Bool {
+    fileprivate func hasScienceBeenShown(for mode: FocusMode) -> Bool {
         UserDefaults.standard.bool(forKey: scienceKey(for: mode))
     }
 
-    private func markScienceShown(for mode: FocusMode) {
+    fileprivate func markScienceShown(for mode: FocusMode) {
         UserDefaults.standard.set(true, forKey: scienceKey(for: mode))
     }
 
-    private func scienceKey(for mode: FocusMode) -> String {
+    fileprivate func scienceKey(for mode: FocusMode) -> String {
         "scienceCardShown_\(mode.rawValue)"
     }
 
-    // MARK: - "Use Your Usual Settings" Heuristic
+    // MARK: "Use Your Usual Settings" Heuristic
 
     /// Returns `true` if the user has 5+ completed sessions for this mode
     /// with similar check-in answers, suggesting we can skip the check-in.
-    private func shouldOfferDefaults(for mode: FocusMode) -> Bool {
+    fileprivate func shouldOfferDefaults(for mode: FocusMode) -> Bool {
         let modeRaw = mode.rawValue
         let modeSessions = recentSessions.filter { $0.mode == modeRaw }
 
@@ -885,9 +900,9 @@ struct ModeSelectionView: View {
         return uniqueGoals.count == 1
     }
 
-    // MARK: - Helpers
+    // MARK: Helpers
 
-    private func modeColor(for mode: FocusMode?) -> Color {
+    fileprivate func modeColor(for mode: FocusMode?) -> Color {
         switch mode {
         case .focus:       return Theme.Colors.focus
         case .relaxation:  return Theme.Colors.relaxation

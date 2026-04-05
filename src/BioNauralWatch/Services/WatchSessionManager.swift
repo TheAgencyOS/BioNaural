@@ -241,6 +241,11 @@ final class WatchSessionManager: NSObject {
             let previousState = currentBiometricState
             let newState = analyzer.classify(bpm: sample.bpm)
 
+            // Write the mutated struct back so EMA state accumulates
+            // across samples. Without this, the dual-EMA smoothing and
+            // hysteresis dwell time reset on every sample.
+            heartRateAnalyzer = analyzer
+
             if newState != previousState {
                 currentBiometricState = newState
                 adaptationCount += 1

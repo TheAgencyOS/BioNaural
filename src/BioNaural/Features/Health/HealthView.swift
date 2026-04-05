@@ -111,9 +111,67 @@ struct HealthView: View {
         .task(id: dateRange) { await refreshLoop() }
     }
 
-    // MARK: - Navigation
+    }
 
-    private var dateRangeMenu: some View {
+    // MARK: - Helpers
+
+    private func sectionLabel(_ text: String) -> some View {
+        Text(text)
+            .font(Theme.Typography.small)
+            .tracking(Theme.Typography.Tracking.uppercase)
+            .textCase(.uppercase)
+            .foregroundStyle(Theme.Colors.textTertiary)
+    }
+
+    private func scoreColor(_ score: Double) -> Color {
+        if score >= Theme.Health.scoreThresholdGood {
+            return Theme.Colors.signalCalm
+        } else if score >= Theme.Health.scoreThresholdFair {
+            return Theme.Colors.accent
+        } else {
+            return Theme.Colors.signalElevated
+        }
+    }
+
+    // MARK: - Computed Data
+
+    private var scoredSessions: [FocusSession] {
+        recentSessions.filter { $0.biometricSuccessScore != nil }
+    }
+
+    /// Returns the average biometric success score across recent sessions.
+    /// Falls back to a seed value before enough data exists.
+    private var impactScore: Double? {
+        let scored = scoredSessions
+        guard !scored.isEmpty else { return Theme.Health.Seed.impactScore }
+        let total = scored.compactMap(\.biometricSuccessScore).reduce(0, +)
+        return total / Double(scored.count)
+    }
+
+    /// Generates a human-readable insight from session biometric data.
+    /// Falls back to a seed insight before enough data exists.
+    private var impactInsight: String? {
+        let sessionsWithHR = recentSessions.filter { ($0.averageHeartRate ?? 0) > 0 }
+        guard sessionsWithHR.count >= Theme.Health.minimumScoredSessions else {
+            return "Your heart rate drops an average of \(Theme.Health.Seed.hrDeltaBPM) BPM during Focus sessions"
+        }
+
+        let avgSessionHR = sessionsWithHR.compactMap(\.averageHeartRate).reduce(0, +) / Double(sessionsWithHR.count)
+        let baseline = restingHR ?? Theme.Health.Defaults.restingHR
+
+        let delta = Int(baseline - avgSessionHR)
+        if Double(delta) > Theme.Health.trendDeltaThreshold {
+            return "Your heart rate drops an average of \(delta) BPM during sessions"
+        }
+        return nil
+    }
+}
+
+// MARK: - Subview Sections
+
+extension HealthView {
+
+    fileprivate var dateRangeMenu: some View {
         Menu {
             ForEach(HealthDateRange.allCases, id: \.self) { range in
                 Button {
@@ -134,7 +192,7 @@ struct HealthView: View {
 
     // MARK: - Section 1: Impact
 
-    private var impactSection: some View {
+    fileprivate var impactSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.md) {
             sectionLabel("Your Impact")
 
@@ -207,12 +265,12 @@ struct HealthView: View {
         }
     }
 
-    private var sparklineData: [Double] {
+    fileprivate var sparklineData: [Double] {
         let real = scoredSessions.suffix(10).compactMap(\.biometricSuccessScore)
         return real.isEmpty ? Theme.Health.Seed.sparkline : real
     }
 
-    private var impactSparkline: some View {
+    fileprivate var impactSparkline: some View {
         Chart {
             ForEach(Array(sparklineData.enumerated()), id: \.offset) { index, score in
                 AreaMark(
@@ -248,7 +306,7 @@ struct HealthView: View {
 
     // MARK: - Section 2: Schedule
 
-    private var scheduleSection: some View {
+    fileprivate var scheduleSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.md) {
             sectionLabel("Your Day")
 
@@ -298,7 +356,7 @@ struct HealthView: View {
         }
     }
 
-    private var calendarPermissionPrompt: some View {
+    fileprivate var calendarPermissionPrompt: some View {
         Button {
             Task {
                 calendarAuthorized = await dependencies.calendarService.requestAccess()
@@ -332,7 +390,7 @@ struct HealthView: View {
         .buttonStyle(.plain)
     }
 
-    private func scheduleRow(event: CalendarEvent) -> some View {
+    fileprivate func scheduleRow(event: CalendarEvent) -> some View {
         HStack(spacing: Theme.Spacing.md) {
             // Time indicator
             RoundedRectangle(cornerRadius: Theme.Radius.xs)
@@ -368,7 +426,7 @@ struct HealthView: View {
         }
     }
 
-    private func freeWindowSuggestion(window: DateInterval) -> some View {
+    fileprivate func freeWindowSuggestion(window: DateInterval) -> some View {
         HStack(spacing: Theme.Spacing.md) {
             Image(systemName: "sparkles")
                 .font(.system(size: Theme.Typography.Size.body, weight: .medium))
@@ -389,7 +447,7 @@ struct HealthView: View {
 
     // MARK: - Section 3: Trend Cards
 
-    private var trendCards: some View {
+    fileprivate var trendCards: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.md) {
             sectionLabel("Trends")
 
@@ -419,7 +477,7 @@ struct HealthView: View {
         }
     }
 
-    private func trendCard(
+    fileprivate func trendCard(
         icon: String,
         label: String,
         value: String,
@@ -490,7 +548,7 @@ struct HealthView: View {
 
     // MARK: - Section 4: Sleep
 
-    private var sleepSection: some View {
+    fileprivate var sleepSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.md) {
             sectionLabel("Last Night")
 
@@ -558,7 +616,7 @@ struct HealthView: View {
         }
     }
 
-    private func stageLegend(label: String, color: Color) -> some View {
+    fileprivate func stageLegend(label: String, color: Color) -> some View {
         HStack(spacing: Theme.Spacing.xxs) {
             RoundedRectangle(cornerRadius: Theme.Radius.xs)
                 .fill(color)
@@ -569,7 +627,7 @@ struct HealthView: View {
         }
     }
 
-    private func sleepStageBar(stages: [SleepStage]) -> some View {
+    fileprivate func sleepStageBar(stages: [SleepStage]) -> some View {
         let total = stages.reduce(0) { $0 + $1.duration }
         return GeometryReader { geo in
             if total > 0 {
@@ -587,7 +645,7 @@ struct HealthView: View {
         .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sm))
     }
 
-    private func stageColor(_ stage: SleepStage.Stage) -> Color {
+    fileprivate func stageColor(_ stage: SleepStage.Stage) -> Color {
         switch stage {
         case .deep:  return Theme.Colors.sleep
         case .core:  return Theme.Colors.accent
@@ -598,7 +656,7 @@ struct HealthView: View {
 
     // MARK: - Section 5: Today's Vitals
 
-    private var vitalsSection: some View {
+    fileprivate var vitalsSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.md) {
             sectionLabel("Today")
 
@@ -644,13 +702,13 @@ struct HealthView: View {
         }
     }
 
-    private var vitalDivider: some View {
+    fileprivate var vitalDivider: some View {
         Rectangle()
             .fill(Theme.Colors.divider.opacity(Theme.Opacity.half))
             .frame(height: Theme.Radius.glassStroke)
     }
 
-    private func vitalRow(icon: String, label: String, value: String, color: Color) -> some View {
+    fileprivate func vitalRow(icon: String, label: String, value: String, color: Color) -> some View {
         HStack(spacing: Theme.Spacing.md) {
             Image(systemName: icon)
                 .font(.system(size: Theme.Typography.Size.body, weight: .medium))
@@ -672,13 +730,13 @@ struct HealthView: View {
 
     // MARK: - Section 6: Event-Health Timeline
 
-    private var eventHealthTimelineSection: some View {
+    fileprivate var eventHealthTimelineSection: some View {
         EventHealthTimelineView()
     }
 
     // MARK: - Section 7: Predictive Forecast
 
-    private func forecastSection(_ forecast: HealthForecast) -> some View {
+    fileprivate func forecastSection(_ forecast: HealthForecast) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.md) {
             sectionLabel("Upcoming")
             PredictiveHealthForecastCard(forecast: forecast)
@@ -687,7 +745,7 @@ struct HealthView: View {
 
     // MARK: - Section 8: Post-Event Impacts
 
-    private var postEventSection: some View {
+    fileprivate var postEventSection: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.md) {
             sectionLabel("Recent Events")
 
@@ -699,7 +757,7 @@ struct HealthView: View {
 
     // MARK: - Section 9: Life Event Halo
 
-    private func lifeEventSection(_ lifeEvent: LifeEvent) -> some View {
+    fileprivate func lifeEventSection(_ lifeEvent: LifeEvent) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.md) {
             sectionLabel("Life Event")
             LifeEventHaloView(event: lifeEvent)
@@ -708,7 +766,7 @@ struct HealthView: View {
 
     // MARK: - Section 10: Weekly Digest
 
-    private func weeklyDigestSection(_ digest: WeeklyDigest) -> some View {
+    fileprivate func weeklyDigestSection(_ digest: WeeklyDigest) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.md) {
             sectionLabel("This Week")
             WeeklyCorrelationDigestView(digest: digest)
@@ -717,73 +775,23 @@ struct HealthView: View {
 
     // MARK: - Section 11: Weather Context
 
-    private func weatherSection(_ insight: WeatherInsight) -> some View {
+    fileprivate func weatherSection(_ insight: WeatherInsight) -> some View {
         WeatherHealthCard(insight: insight)
     }
 
     // MARK: - Section 12: Journal Correlations
 
-    private var journalSection: some View {
+    fileprivate var journalSection: some View {
         JournalCorrelationCard(correlations: journalCorrelations)
     }
+}
 
-    // MARK: - Helpers
+// MARK: - Data Loading
 
-    private func sectionLabel(_ text: String) -> some View {
-        Text(text)
-            .font(Theme.Typography.small)
-            .tracking(Theme.Typography.Tracking.uppercase)
-            .textCase(.uppercase)
-            .foregroundStyle(Theme.Colors.textTertiary)
-    }
-
-    private func scoreColor(_ score: Double) -> Color {
-        if score >= Theme.Health.scoreThresholdGood {
-            return Theme.Colors.signalCalm
-        } else if score >= Theme.Health.scoreThresholdFair {
-            return Theme.Colors.accent
-        } else {
-            return Theme.Colors.signalElevated
-        }
-    }
-
-    // MARK: - Computed Data
-
-    private var scoredSessions: [FocusSession] {
-        recentSessions.filter { $0.biometricSuccessScore != nil }
-    }
-
-    /// Returns the average biometric success score across recent sessions.
-    /// Falls back to a seed value before enough data exists.
-    private var impactScore: Double? {
-        let scored = scoredSessions
-        guard !scored.isEmpty else { return Theme.Health.Seed.impactScore }
-        let total = scored.compactMap(\.biometricSuccessScore).reduce(0, +)
-        return total / Double(scored.count)
-    }
-
-    /// Generates a human-readable insight from session biometric data.
-    /// Falls back to a seed insight before enough data exists.
-    private var impactInsight: String? {
-        let sessionsWithHR = recentSessions.filter { ($0.averageHeartRate ?? 0) > 0 }
-        guard sessionsWithHR.count >= Theme.Health.minimumScoredSessions else {
-            return "Your heart rate drops an average of \(Theme.Health.Seed.hrDeltaBPM) BPM during Focus sessions"
-        }
-
-        let avgSessionHR = sessionsWithHR.compactMap(\.averageHeartRate).reduce(0, +) / Double(sessionsWithHR.count)
-        let baseline = restingHR ?? Theme.Health.Defaults.restingHR
-
-        let delta = Int(baseline - avgSessionHR)
-        if Double(delta) > Theme.Health.trendDeltaThreshold {
-            return "Your heart rate drops an average of \(delta) BPM during sessions"
-        }
-        return nil
-    }
-
-    // MARK: - Data Loading
+extension HealthView {
 
     /// Polls health data on a loop — live HR updates when Watch is streaming.
-    private func refreshLoop() async {
+    fileprivate func refreshLoop() async {
         calendarAuthorized = dependencies.calendarService.isAuthorized
         await loadHealthData()
         if calendarAuthorized {
@@ -798,7 +806,7 @@ struct HealthView: View {
         }
     }
 
-    private func loadCalendarData() async {
+    fileprivate func loadCalendarData() async {
         todaysEvents = await dependencies.calendarService.todaysEvents()
         nextFreeWindow = await dependencies.calendarService.nextFreeWindow(
             minimumMinutes: Theme.SF2.NeutralBiometrics.defaultSessionMinutes
@@ -807,13 +815,27 @@ struct HealthView: View {
 
     /// Loads calendar-health correlation data: post-event impacts, forecasts,
     /// weekly digest, and life event halos. Runs once per session (not polled).
-    private func loadCorrelationData() async {
+    fileprivate func loadCorrelationData() async {
         let patterns = await dependencies.calendarPatternLearner.analyzePatterns()
         let events = todaysEvents
-
-        // Build post-event impact cards for today's completed events
         let now = Date()
         let baseline = restingHR ?? Theme.Health.Defaults.restingHR
+
+        await loadPostEventImpacts(events: events, patterns: patterns, now: now, baseline: baseline)
+        await loadForecasts(events: events, patterns: patterns, now: now)
+        await buildWeeklyDigest(baseline: baseline)
+        await detectLifeEvent(baseline: baseline)
+        await loadWeatherInsight()
+        await loadJournalCorrelations()
+    }
+
+    /// Builds post-event impact cards for today's completed events.
+    fileprivate func loadPostEventImpacts(
+        events: [CalendarEvent],
+        patterns: [CalendarPattern],
+        now: Date,
+        baseline: Double
+    ) async {
         var impacts: [EventImpact] = []
 
         for event in events where event.endDate < now && !event.isBioNauralSession && !event.isAllDay {
@@ -846,117 +868,117 @@ struct HealthView: View {
             ))
         }
         recentImpacts = impacts
+    }
 
-        // Build predictive forecast for next upcoming stressor
+    /// Builds a predictive forecast for the next upcoming stressor.
+    fileprivate func loadForecasts(
+        events: [CalendarEvent],
+        patterns: [CalendarPattern],
+        now: Date
+    ) async {
         let upcomingStressors = events.filter { $0.startDate > now && !$0.isAllDay }
-        if let nextStressor = upcomingStressors.first {
-            let prep = await dependencies.calendarPatternLearner.bestPrepAction(
-                for: nextStressor.title,
-                existingPatterns: patterns
-            )
+        guard let nextStressor = upcomingStressors.first else { return }
 
-            let matchingPatterns = patterns.filter { pattern in
-                nextStressor.title.lowercased().contains(
-                    pattern.condition.replacingOccurrences(of: "events_with_", with: "")
-                )
-            }
+        let prep = await dependencies.calendarPatternLearner.bestPrepAction(
+            for: nextStressor.title,
+            existingPatterns: patterns
+        )
 
-            if !matchingPatterns.isEmpty {
-                var predictions: [ForecastPrediction] = []
-
-                for pattern in matchingPatterns.prefix(Constants.Insights.maxForecastPatterns) {
-                    if pattern.observation.contains("hr_spike") {
-                        predictions.append(ForecastPrediction(
-                            id: "hr_\(pattern.id)",
-                            metric: "Resting HR",
-                            icon: "heart.fill",
-                            delta: "+\(Int(PatternConfig.hrSpikeThreshold)) bpm",
-                            timing: "before event",
-                            isNegative: true
-                        ))
-                    } else if pattern.observation.contains("poor_sleep") {
-                        predictions.append(ForecastPrediction(
-                            id: "sleep_\(pattern.id)",
-                            metric: "Sleep Quality",
-                            icon: "moon.fill",
-                            delta: "below avg",
-                            timing: "night before",
-                            isNegative: true
-                        ))
-                    }
-                }
-
-                if !predictions.isEmpty {
-                    activeForecast = HealthForecast(
-                        id: nextStressor.id,
-                        eventTitle: nextStressor.title,
-                        eventDate: nextStressor.startDate,
-                        stressLevel: "high",
-                        predictions: predictions,
-                        sampleCount: matchingPatterns.first?.sampleCount ?? 0,
-                        suggestedPrepMode: prep?.mode,
-                        suggestedPrepMinutes: prep?.durationMinutes,
-                        confidence: matchingPatterns.first?.strength ?? 0
-                    )
-                }
-            }
-        }
-
-        // MARK: Weekly Digest
-
-        await buildWeeklyDigest(baseline: baseline)
-
-        // MARK: Life Event Detection
-
-        await detectLifeEvent(baseline: baseline)
-
-        // MARK: Weather Context
-
-        if let weather = await dependencies.weatherService.currentWeather() {
-            let pressureDelta = await dependencies.weatherService.pressureChangeFromYesterday()
-            let insightText: String? = {
-                guard let delta = pressureDelta else { return nil }
-                if delta < -WeatherConfig.pressureChangeDeltaThreshold {
-                    return "Pressure dropping — your HRV may be lower today"
-                } else if delta > WeatherConfig.pressureChangeDeltaThreshold {
-                    return "Rising pressure — good conditions for Focus"
-                }
-                return nil
-            }()
-            weatherInsight = WeatherInsight(
-                current: weather,
-                pressureDelta: pressureDelta,
-                insightText: insightText,
-                isPositiveForSession: pressureDelta.map { $0 > 0 }
+        let matchingPatterns = patterns.filter { pattern in
+            nextStressor.title.lowercased().contains(
+                pattern.condition.replacingOccurrences(of: "events_with_", with: "")
             )
         }
 
-        // MARK: Journal Correlations
+        guard !matchingPatterns.isEmpty else { return }
 
-        let activities = await dependencies.journalService.recentActivities()
-        if !activities.isEmpty {
-            // Group activities by type and build simple correlations
-            let grouped = Dictionary(grouping: activities, by: \.activityType)
-            var correlations: [JournalCorrelation] = []
+        var predictions: [ForecastPrediction] = []
 
-            for (type, items) in grouped.prefix(Constants.Insights.maxImpactCards) {
-                let mostRecent = items.sorted(by: { $0.date > $1.date }).first
-                correlations.append(JournalCorrelation(
-                    id: type.rawValue,
-                    activityType: type,
-                    activityTitle: mostRecent?.title ?? type.rawValue.capitalized,
-                    correlationText: "\(items.count) this week",
-                    sampleCount: items.count,
-                    isPositive: true
+        for pattern in matchingPatterns.prefix(Constants.Insights.maxForecastPatterns) {
+            if pattern.observation.contains("hr_spike") {
+                predictions.append(ForecastPrediction(
+                    id: "hr_\(pattern.id)",
+                    metric: "Resting HR",
+                    icon: "heart.fill",
+                    delta: "+\(Int(PatternConfig.hrSpikeThreshold)) bpm",
+                    timing: "before event",
+                    isNegative: true
+                ))
+            } else if pattern.observation.contains("poor_sleep") {
+                predictions.append(ForecastPrediction(
+                    id: "sleep_\(pattern.id)",
+                    metric: "Sleep Quality",
+                    icon: "moon.fill",
+                    delta: "below avg",
+                    timing: "night before",
+                    isNegative: true
                 ))
             }
-            journalCorrelations = correlations
         }
+
+        guard !predictions.isEmpty else { return }
+
+        activeForecast = HealthForecast(
+            id: nextStressor.id,
+            eventTitle: nextStressor.title,
+            eventDate: nextStressor.startDate,
+            stressLevel: "high",
+            predictions: predictions,
+            sampleCount: matchingPatterns.first?.sampleCount ?? 0,
+            suggestedPrepMode: prep?.mode,
+            suggestedPrepMinutes: prep?.durationMinutes,
+            confidence: matchingPatterns.first?.strength ?? 0
+        )
+    }
+
+    /// Loads weather context and builds insight text.
+    fileprivate func loadWeatherInsight() async {
+        guard let weather = await dependencies.weatherService.currentWeather() else { return }
+
+        let pressureDelta = await dependencies.weatherService.pressureChangeFromYesterday()
+        let insightText: String? = {
+            guard let delta = pressureDelta else { return nil }
+            if delta < -WeatherConfig.pressureChangeDeltaThreshold {
+                return "Pressure dropping — your HRV may be lower today"
+            } else if delta > WeatherConfig.pressureChangeDeltaThreshold {
+                return "Rising pressure — good conditions for Focus"
+            }
+            return nil
+        }()
+        weatherInsight = WeatherInsight(
+            current: weather,
+            pressureDelta: pressureDelta,
+            insightText: insightText,
+            isPositiveForSession: pressureDelta.map { $0 > 0 }
+        )
+    }
+
+    /// Loads journal activity correlations.
+    fileprivate func loadJournalCorrelations() async {
+        let activities = await dependencies.journalService.recentActivities()
+        guard !activities.isEmpty else { return }
+
+        // Group activities by type and build simple correlations
+        let grouped = Dictionary(grouping: activities, by: \.activityType)
+        var correlations: [JournalCorrelation] = []
+
+        for (type, items) in grouped.prefix(Constants.Insights.maxImpactCards) {
+            let mostRecent = items.sorted(by: { $0.date > $1.date }).first
+            correlations.append(JournalCorrelation(
+                id: type.rawValue,
+                activityType: type,
+                activityTitle: mostRecent?.title ?? type.rawValue.capitalized,
+                correlationText: "\(items.count) this week",
+                sampleCount: items.count,
+                isPositive: true
+            ))
+        }
+        journalCorrelations = correlations
     }
 
     /// Builds the weekly digest by scoring this week's calendar events against
     /// heart rate data and ranking them by physiological impact.
-    private func buildWeeklyDigest(baseline: Double) async {
+    fileprivate func buildWeeklyDigest(baseline: Double) async {
         let calendar = Calendar.current
         let now = Date()
 
@@ -1080,7 +1102,7 @@ struct HealthView: View {
     /// Detects life events from the calendar by looking for all-day events,
     /// multi-day events, or events with significant keywords in a 7-day
     /// window centered on today.
-    private func detectLifeEvent(baseline: Double) async {
+    fileprivate func detectLifeEvent(baseline: Double) async {
         let calendar = Calendar.current
         let now = Date()
         let radius = Constants.Insights.lifeEventScanDaysRadius
@@ -1176,7 +1198,7 @@ struct HealthView: View {
     }
 
     /// Matches a calendar event title against known life event keywords.
-    private func categoryFromTitle(_ title: String) -> LifeEventCategory? {
+    fileprivate func categoryFromTitle(_ title: String) -> LifeEventCategory? {
         let lowered = title.lowercased()
         for (keyword, mapping) in Constants.Insights.lifeEventKeywords where lowered.contains(keyword) {
             return mapping.category
@@ -1184,7 +1206,7 @@ struct HealthView: View {
         return nil
     }
 
-    private func loadHealthData() async {
+    fileprivate func loadHealthData() async {
         let hk = dependencies.healthKitService
 
         if dependencies.isWatchConnected {

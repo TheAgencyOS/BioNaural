@@ -359,6 +359,28 @@ extension Theme {
     }
 }
 
+// MARK: - Layout
+
+extension Theme {
+
+    /// Screen-level layout constants. Replaces `UIScreen.main` usage
+    /// with a safe estimate. For precise sizing, prefer `GeometryReader`.
+    enum Layout {
+        /// Estimated screen width for radial gradient sizing and layout
+        /// calculations where GeometryReader is impractical.
+        /// Uses the key window scene's bounds when available, falling
+        /// back to 393pt (iPhone 15 Pro logical width).
+        @MainActor static var screenEstimate: CGFloat {
+            guard let scene = UIApplication.shared.connectedScenes
+                .compactMap({ $0 as? UIWindowScene })
+                .first else {
+                return 393
+            }
+            return scene.screen.bounds.width
+        }
+    }
+}
+
 // MARK: - Radius
 
 extension Theme {
@@ -664,6 +686,11 @@ extension Theme {
 extension Theme {
 
     enum Audio {
+
+        // MARK: Fallback Sample Rate
+
+        /// Universal fallback sample rate when hardware reports invalid (Hz).
+        static let fallbackSampleRate: Double = 44100.0
 
         // MARK: Per-Sample Smoothing
 
@@ -1502,7 +1529,7 @@ extension Theme {
         /// Card dimensions for mode selection carousel.
         /// Width fills screen minus standard page margins on each side.
         /// Height maintains a 3:4 (width:height) aspect ratio.
-        @MainActor static var cardWidth: CGFloat { UIScreen.main.bounds.width - (Spacing.pageMargin * 2) }
+        @MainActor static var cardWidth: CGFloat { Layout.screenEstimate - (Spacing.pageMargin * 2) }
         @MainActor static var cardHeight: CGFloat { cardWidth * 4 / 3 }
         /// Fraction of card height the aurora wave graphic occupies (centered).
         static let auroraHeightRatio: CGFloat = 0.4

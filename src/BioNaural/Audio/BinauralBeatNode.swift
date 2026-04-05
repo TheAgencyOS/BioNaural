@@ -16,11 +16,21 @@ public enum BinauralBeatNode {
     // MARK: - Format
 
     /// Stereo, non-interleaved, 32-bit float at the hardware sample rate.
+    /// Falls back to 44100 Hz if the provided sample rate produces an
+    /// invalid format (e.g., during a Bluetooth codec transition).
     public static func makeFormat(sampleRate: Double) -> AVAudioFormat {
-        AVAudioFormat(
-            standardFormatWithSampleRate: sampleRate,
+        let rate = sampleRate > 0 ? sampleRate : Theme.Audio.fallbackSampleRate
+        guard let format = AVAudioFormat(
+            standardFormatWithSampleRate: rate,
             channels: 2
-        )!
+        ) else {
+            // Last resort — 44.1 kHz is universally supported.
+            return AVAudioFormat(
+                standardFormatWithSampleRate: Theme.Audio.fallbackSampleRate,
+                channels: 2
+            )! // Safe: 44100/2ch is guaranteed by CoreAudio.
+        }
+        return format
     }
 
     // MARK: - Node Factory
@@ -57,8 +67,8 @@ public enum BinauralBeatNode {
         var phaseRight3: Double = 0.0
 
         // Smoothed values (converge toward target each sample)
-        var smoothedFreqLeft: Double = 200.0
-        var smoothedFreqRight: Double = 210.0
+        var smoothedFreqLeft: Double = Theme.Audio.Neutral.carrierFrequency
+        var smoothedFreqRight: Double = Theme.Audio.Neutral.carrierFrequency + Theme.Audio.Neutral.beatFrequency
         var smoothedAmplitude: Double = 0.0
 
         // LFO phase accumulators (three unsynchronised LFOs)

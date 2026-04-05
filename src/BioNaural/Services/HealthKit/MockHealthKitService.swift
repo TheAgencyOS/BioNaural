@@ -225,11 +225,11 @@ public final class MockHealthKitService: HealthKitServiceProtocol, @unchecked Se
     // MARK: - Initialization
 
     public init() {
-        var continuation: AsyncStream<Bool>.Continuation!
+        var capturedAuth: AsyncStream<Bool>.Continuation?
         let stream = AsyncStream<Bool>(bufferingPolicy: .bufferingNewest(1)) { c in
-            continuation = c
+            capturedAuth = c
         }
-        self._authContinuation = continuation
+        self._authContinuation = capturedAuth!
         self._authStream = stream
     }
 

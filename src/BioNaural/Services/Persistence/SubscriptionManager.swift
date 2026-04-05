@@ -66,6 +66,9 @@ final class SubscriptionManager {
     // MARK: - Private
 
     /// Background task listening for transaction updates (renewals, refunds, etc.).
+    /// `nonisolated(unsafe)` is required because `deinit` is nonisolated but needs
+    /// to cancel this task. Safe because the task is only written in `init` (before
+    /// any concurrent access) and read in `deinit` (after all concurrent access).
     nonisolated(unsafe) private var transactionListenerTask: Task<Void, Never>?
 
     // MARK: - Singleton

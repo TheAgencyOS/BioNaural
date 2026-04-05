@@ -103,7 +103,8 @@ public final class SoundLibrary {
             let decoder = JSONDecoder()
             let file = try decoder.decode(SoundCatalogFile.self, from: data)
             self.allSounds = file.catalog
-            self.catalog = Dictionary(uniqueKeysWithValues: file.catalog.map { ($0.id, $0) })
+            // Use last-wins for duplicate IDs instead of crashing.
+            self.catalog = Dictionary(file.catalog.map { ($0.id, $0) }, uniquingKeysWith: { _, last in last })
         } catch {
             self.catalog = [:]
             self.allSounds = []

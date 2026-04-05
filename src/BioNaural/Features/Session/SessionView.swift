@@ -213,9 +213,13 @@ struct SessionView: View {
         }
     }
 
-    // MARK: - Nav Bar (iOS native style)
+}
 
-    private var navBar: some View {
+// MARK: - Nav Bar (iOS native style)
+
+extension SessionView {
+
+    fileprivate var navBar: some View {
         HStack {
             // Collapse to mini player
             Button { dismiss() } label: {
@@ -244,10 +248,13 @@ struct SessionView: View {
         .frame(height: Theme.Spacing.jumbo)
         .padding(.top, Theme.Spacing.md)
     }
+}
 
-    // MARK: - Overflow Menu
+// MARK: - Overflow Menu
 
-    private var overflowMenu: some View {
+extension SessionView {
+
+    fileprivate var overflowMenu: some View {
         Menu {
             // Sound selection section
             Section("Soundscape") {
@@ -292,11 +299,14 @@ struct SessionView: View {
         }
         .accessibilityLabel("Session options")
     }
+}
 
-    // MARK: - Biometric Strip
+// MARK: - Biometric Strip
+
+extension SessionView {
 
     /// Bare monospaced numbers floating above the wave zone.
-    private var biometricStrip: some View {
+    fileprivate var biometricStrip: some View {
         HStack(spacing: Theme.Spacing.xxxl) {
             if viewModel.currentHR > .zero {
                 VStack(spacing: Theme.Spacing.xxs) {
@@ -325,14 +335,17 @@ struct SessionView: View {
             }
         }
     }
+}
 
-    // MARK: - Wave + Orb Zone
+// MARK: - Wave + Orb Zone
+
+extension SessionView {
 
     /// The Orb at center with three layered wave lines passing through it.
     /// Ambient = widest/slowest (teal), Melodic = medium (accent), Binaural = tightest (mode color).
     /// Each layer has a distinct color matching the mockup layered-depth design.
     /// All wave frequencies are mathematically derived from the live audio.
-    private var waveOrbZone: some View {
+    fileprivate var waveOrbZone: some View {
         GeometryReader { geo in
             let orbSize = geo.size.width * orbFraction
             waveOrbContent(orbSize: orbSize)
@@ -342,7 +355,7 @@ struct SessionView: View {
         .accessibilityHidden(true)
     }
 
-    private func waveOrbContent(orbSize: CGFloat) -> some View {
+    fileprivate func waveOrbContent(orbSize: CGFloat) -> some View {
         ZStack {
             // Glow behind wave intersection
             RadialGradient(
@@ -411,7 +424,7 @@ struct SessionView: View {
 
     /// Vertical gradient mask that fades wave layers to transparent at top/bottom edges,
     /// eliminating visible rectangular boundaries from the blur effect.
-    private var waveEdgeFadeMask: some View {
+    fileprivate var waveEdgeFadeMask: some View {
         LinearGradient(
             stops: [
                 .init(color: .clear, location: .zero),
@@ -423,10 +436,13 @@ struct SessionView: View {
             endPoint: .bottom
         )
     }
+}
 
-    // MARK: - Layer Legend
+// MARK: - Layer Legend
 
-    private var layerLegend: some View {
+extension SessionView {
+
+    fileprivate var layerLegend: some View {
         HStack(spacing: Theme.Spacing.lg) {
             legendItem(color: Theme.Colors.signalCalm, label: "Ambient", opacity: Theme.Opacity.medium)
             legendItem(color: Theme.Colors.accent, label: "Melodic", opacity: Theme.Opacity.medium)
@@ -434,7 +450,7 @@ struct SessionView: View {
         }
     }
 
-    private func legendItem(color: Color, label: String, opacity: Double) -> some View {
+    fileprivate func legendItem(color: Color, label: String, opacity: Double) -> some View {
         HStack(spacing: Theme.Spacing.xxs) {
             RoundedRectangle(cornerRadius: Theme.Radius.xs)
                 .fill(color.opacity(opacity))
@@ -444,10 +460,13 @@ struct SessionView: View {
                 .foregroundStyle(Theme.Colors.textTertiary)
         }
     }
+}
 
-    // MARK: - Timer Section
+// MARK: - Timer Section
 
-    private var timerSection: some View {
+extension SessionView {
+
+    fileprivate var timerSection: some View {
         VStack(spacing: Theme.Spacing.xxs) {
             // Timer
             if viewModel.isInMandatoryCoolDown,
@@ -493,11 +512,14 @@ struct SessionView: View {
             }
         }
     }
+}
 
-    // MARK: - Transport Bar
+// MARK: - Transport Bar
+
+extension SessionView {
 
     /// Bottom transport: AirPlay · expand · pause/play · stop · lock
-    private var transportBar: some View {
+    fileprivate var transportBar: some View {
         HStack {
             // AirPlay (native route picker — tapping opens the system picker directly)
             AirPlayRoutePickerRepresentable()
@@ -579,10 +601,13 @@ struct SessionView: View {
         }
         .padding(.horizontal, Theme.Spacing.sm)
     }
+}
 
-    // MARK: - Energize Phase Bar
+// MARK: - Energize Phase Bar
 
-    private var energizePhaseBar: some View {
+extension SessionView {
+
+    fileprivate var energizePhaseBar: some View {
         VStack(spacing: Theme.Spacing.xxs) {
             HStack(spacing: Theme.Radius.segmentHeight) {
                 // Warm-up
@@ -619,16 +644,19 @@ struct SessionView: View {
         .padding(.top, Theme.Spacing.xxs)
     }
 
-    private func phaseSegment(filled: Bool, flex: Int, color: Color) -> some View {
+    fileprivate func phaseSegment(filled: Bool, flex: Int, color: Color) -> some View {
         RoundedRectangle(cornerRadius: Theme.Radius.xs)
             .fill(color.opacity(filled ? Theme.Opacity.accentStrong : Theme.Opacity.accentLight))
             .frame(height: Theme.Radius.segmentHeight)
             .frame(maxWidth: .infinity)
     }
+}
 
-    // MARK: - HR Ceiling Gauge
+// MARK: - HR Ceiling Gauge
 
-    private var hrCeilingGauge: some View {
+extension SessionView {
+
+    fileprivate var hrCeilingGauge: some View {
         VStack(spacing: Theme.Spacing.xxs) {
             HStack {
                 Text("HR Ceiling")
@@ -660,10 +688,13 @@ struct SessionView: View {
         }
         .padding(.horizontal, Theme.Spacing.jumbo)
     }
+}
 
-    // MARK: - Sleep Blanking
+// MARK: - Sleep Blanking
 
-    private var sleepBlankingOverlay: some View {
+extension SessionView {
+
+    fileprivate var sleepBlankingOverlay: some View {
         Theme.Colors.canvas
             .ignoresSafeArea()
             .overlay(
@@ -680,11 +711,14 @@ struct SessionView: View {
             .accessibilityLabel("Screen blanked during sleep mode")
             .accessibilityHint("Tap to reveal session data")
     }
+}
 
-    // MARK: - Adaptation Insight Layer
+// MARK: - Adaptation Insight Layer
+
+extension SessionView {
 
     @ViewBuilder
-    private var adaptationInsightLayer: some View {
+    fileprivate var adaptationInsightLayer: some View {
         if showAdaptationInsight {
             VStack {
                 Spacer()
@@ -704,11 +738,14 @@ struct SessionView: View {
             .opacity(viewModel.isSleepBlanked ? Theme.Opacity.transparent : Theme.Opacity.full)
         }
     }
+}
 
-    // MARK: - Safety Banner (Energize)
+// MARK: - Safety Banner (Energize)
+
+extension SessionView {
 
     @ViewBuilder
-    private var safetyBannerOverlay: some View {
+    fileprivate var safetyBannerOverlay: some View {
         if let alert = viewModel.safetyAlert {
             VStack {
                 if alert.severity == .caution {
@@ -754,10 +791,13 @@ struct SessionView: View {
             .animation(Theme.Animation.standard, value: viewModel.safetyAlert?.id)
         }
     }
+}
 
-    // MARK: - Background
+// MARK: - Background
 
-    private var backgroundLayer: some View {
+extension SessionView {
+
+    fileprivate var backgroundLayer: some View {
         GeometryReader { geo in
             ZStack {
                 Theme.Colors.canvas
@@ -776,10 +816,13 @@ struct SessionView: View {
         }
         .ignoresSafeArea()
     }
+}
 
-    // MARK: - Expanded Biometric Details
+// MARK: - Expanded Biometric Details
 
-    private var expandedBiometricDetails: some View {
+extension SessionView {
+
+    fileprivate var expandedBiometricDetails: some View {
         VStack(spacing: Theme.Spacing.sm) {
             HStack(spacing: Theme.Spacing.xl) {
                 VStack(spacing: Theme.Spacing.xxs) {
@@ -826,10 +869,13 @@ struct SessionView: View {
             }
         }
     }
+}
 
-    // MARK: - Mix Levels Sheet
+// MARK: - Mix Levels Sheet
 
-    private var mixLevelsSheet: some View {
+extension SessionView {
+
+    fileprivate var mixLevelsSheet: some View {
         NavigationStack {
             VStack(spacing: Theme.Spacing.xl) {
                 Spacer()
@@ -878,7 +924,7 @@ struct SessionView: View {
         }
     }
 
-    private func mixSlider(label: String, value: Binding<Double>, color: Color) -> some View {
+    fileprivate func mixSlider(label: String, value: Binding<Double>, color: Color) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
             HStack {
                 Text(label)
@@ -894,10 +940,13 @@ struct SessionView: View {
                 .tint(color)
         }
     }
+}
 
-    // MARK: - Session Settings Sheet
+// MARK: - Session Settings Sheet
 
-    private var sessionSettingsSheet: some View {
+extension SessionView {
+
+    fileprivate var sessionSettingsSheet: some View {
         NavigationStack {
             List {
                 Section("Duration") {
@@ -935,10 +984,13 @@ struct SessionView: View {
             .presentationDragIndicator(.visible)
         }
     }
+}
 
-    // MARK: - Science Sheet
+// MARK: - Science Sheet
 
-    private var scienceSheet: some View {
+extension SessionView {
+
+    fileprivate var scienceSheet: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: Theme.Spacing.xl) {
@@ -1006,7 +1058,7 @@ struct SessionView: View {
     }
 
     /// Contextual card showing the science behind the current session mode.
-    private var scienceContextCard: some View {
+    fileprivate var scienceContextCard: some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
             HStack(spacing: Theme.Spacing.sm) {
                 Image(systemName: viewModel.sessionMode.systemImageName)
@@ -1058,7 +1110,7 @@ struct SessionView: View {
         )
     }
 
-    private var scienceContextDescription: String {
+    fileprivate var scienceContextDescription: String {
         switch viewModel.sessionMode {
         case .focus:
             // swiftlint:disable:next line_length
@@ -1075,7 +1127,7 @@ struct SessionView: View {
         }
     }
 
-    private func scienceCard(icon: String, title: String, body: String) -> some View {
+    fileprivate func scienceCard(icon: String, title: String, body: String) -> some View {
         VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
             HStack(spacing: Theme.Spacing.sm) {
                 Image(systemName: icon)
@@ -1098,10 +1150,13 @@ struct SessionView: View {
                 .fill(Theme.Colors.surface)
         )
     }
+}
 
-    // MARK: - Screen Lock Overlay
+// MARK: - Screen Lock Overlay
 
-    private var screenLockOverlay: some View {
+extension SessionView {
+
+    fileprivate var screenLockOverlay: some View {
         Theme.Colors.canvas.opacity(Theme.Opacity.minimal)
             .ignoresSafeArea()
             .overlay(
@@ -1128,43 +1183,46 @@ struct SessionView: View {
             .accessibilityLabel("Screen is locked")
             .accessibilityHint("Long press to unlock")
     }
+}
 
-    // MARK: - Computed Helpers
+// MARK: - Computed Helpers
 
-    private var isSleepMode: Bool { viewModel.sessionMode == .sleep }
+extension SessionView {
 
-    private var effectiveModeColor: Color {
+    fileprivate var isSleepMode: Bool { viewModel.sessionMode == .sleep }
+
+    fileprivate var effectiveModeColor: Color {
         if isSleepMode { return Theme.Colors.sleepTint }
         if viewModel.sessionMode == .energize, viewModel.isInMandatoryCoolDown { return coolDownInterpolatedColor }
         return viewModel.modeColor
     }
 
-    private var effectiveBackgroundColor: Color {
+    fileprivate var effectiveBackgroundColor: Color {
         if viewModel.sessionMode == .energize, viewModel.isInMandatoryCoolDown { return coolDownInterpolatedColor }
         if isSleepMode { return Theme.Colors.sleepTint }
         return viewModel.modeColor
     }
 
-    private var effectiveAccentWashOpacity: Double {
+    fileprivate var effectiveAccentWashOpacity: Double {
         if isSleepMode { return Theme.Opacity.minimal }
         if viewModel.sessionMode == .energize { return Theme.Opacity.accentWash + Theme.Opacity.minimal }
         return Theme.Opacity.accentWash
     }
 
-    private var coolDownInterpolatedColor: Color {
+    fileprivate var coolDownInterpolatedColor: Color {
         let progress = viewModel.coolDownProgress
         if progress <= .zero { return Theme.Colors.energize }
         if progress >= 1.0 { return Theme.Colors.signalCalm }
         return Color(UIColor(Theme.Colors.energize).blended(with: UIColor(Theme.Colors.signalCalm), fraction: progress))
     }
 
-    private var screenOpacity: Double {
+    fileprivate var screenOpacity: Double {
         if viewModel.isSleepBlanked { return Theme.Opacity.transparent }
         return Theme.Opacity.full
     }
 
     /// Fraction of available width for the orb at the current biometric state.
-    private var orbFraction: CGFloat {
+    fileprivate var orbFraction: CGFloat {
         switch viewModel.currentState {
         case .calm:     return Theme.Animation.OrbScale.restingFraction
         case .focused:  return (Theme.Animation.OrbScale.restingFraction + Theme.Animation.OrbScale.peakFraction) / 2.0
@@ -1173,7 +1231,7 @@ struct SessionView: View {
         }
     }
 
-    private var bandLabel: String {
+    fileprivate var bandLabel: String {
         let freq = viewModel.currentBeatFrequency
         switch freq {
         case ..<Constants.BrainwaveBands.deltaCeiling:  return "Delta"

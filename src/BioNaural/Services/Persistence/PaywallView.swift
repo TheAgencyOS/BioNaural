@@ -297,8 +297,7 @@ struct PaywallView: View {
                 .multilineTextAlignment(.center)
 
             HStack(spacing: Theme.Spacing.md) {
-                // swiftlint:disable:next force_unwrapping
-                Link("Terms of Use", destination: URL(string: "https://bionaural.app/terms")!)
+                Link("Terms of Use", destination: Constants.termsURL)
                     .font(Theme.Typography.small)
                     .foregroundStyle(Theme.Colors.textTertiary)
 
@@ -307,8 +306,7 @@ struct PaywallView: View {
                     .foregroundStyle(Theme.Colors.textTertiary)
                     .accessibilityHidden(true)
 
-                // swiftlint:disable:next force_unwrapping
-                Link("Privacy Policy", destination: URL(string: "https://bionaural.app/privacy")!)
+                Link("Privacy Policy", destination: Constants.privacyURL)
                     .font(Theme.Typography.small)
                     .foregroundStyle(Theme.Colors.textTertiary)
             }

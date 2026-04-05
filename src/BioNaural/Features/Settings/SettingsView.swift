@@ -590,10 +590,8 @@ struct SettingsView: View {
 
     // MARK: - URLs
 
-    // swiftlint:disable force_unwrapping
-    private static let privacyURL = URL(string: "https://bionaural.app/privacy")!
-    private static let termsURL = URL(string: "https://bionaural.app/terms")!
-    // swiftlint:enable force_unwrapping
+    private static let privacyURL = Constants.privacyURL
+    private static let termsURL = Constants.termsURL
 
     // MARK: - Helpers
 

@@ -13,6 +13,13 @@ import BioNauralShared
 
 enum Constants {
 
+    // MARK: Legal URLs
+
+    /// Terms of Use URL. Used in PaywallView and SettingsView.
+    static let termsURL = URL(string: "https://bionaural.app/terms")!
+    /// Privacy Policy URL. Used in PaywallView and SettingsView.
+    static let privacyURL = URL(string: "https://bionaural.app/privacy")!
+
     // MARK: Free Tier Limits
 
     /// Maximum sessions allowed per day on the free tier.

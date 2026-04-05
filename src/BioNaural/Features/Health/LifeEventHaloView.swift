@@ -252,8 +252,11 @@ struct LifeEventHaloView: View {
             }
         }
         .chartXScale(
-            domain: (sortedData.first?.dayOffset ?? -Constants.LifeEventHalo.defaultDayRange)
-                ...(sortedData.last?.dayOffset ?? Constants.LifeEventHalo.defaultDayRange)
+            domain: {
+                let lower = sortedData.first?.dayOffset ?? -Constants.LifeEventHalo.defaultDayRange
+                let upper = sortedData.last?.dayOffset ?? Constants.LifeEventHalo.defaultDayRange
+                return lower...upper
+            }()
         )
         .chartYScale(domain: 0...1)
         .chartXAxis {

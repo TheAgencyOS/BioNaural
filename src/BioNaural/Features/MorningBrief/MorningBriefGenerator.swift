@@ -325,61 +325,103 @@ public actor MorningBriefGenerator: MorningBriefGeneratorProtocol {
     ) -> String {
         var sentences: [String] = []
 
-        // Sleep context sentence.
-        if let hours = sleepHours, let quality = sleepQuality {
-            let hoursFormatted = String(format: "%.1f", hours)
-            switch quality {
-            case "poor":
-                var sleepSentence = "Rough night — \(hoursFormatted) hrs"
-                if let delta = hrDelta, delta > BriefConfig.elevatedHRDeltaThreshold {
-                    sleepSentence += ", and your resting HR is elevated"
-                }
-                sleepSentence += "."
-                sentences.append(sleepSentence)
-            case "fair":
-                sentences.append("Decent sleep at \(hoursFormatted) hrs, but not your best.")
-            case "good":
-                var goodSentence = "Solid sleep at \(hoursFormatted) hrs"
-                if hrvTrend == "rising" {
-                    goodSentence += ", HRV trending up"
-                }
-                goodSentence += "."
-                sentences.append(goodSentence)
-            default:
-                break
+        if let sentence = buildSleepSentence(sleepHours: sleepHours, sleepQuality: sleepQuality,
+                                             hrDelta: hrDelta, hrvTrend: hrvTrend) {
+            sentences.append(sentence)
+        }
+
+        if let sentence = buildHRVSentence(sleepHours: sleepHours, hrvTrend: hrvTrend) {
+            sentences.append(sentence)
+        }
+
+        if let sentence = buildHRDeltaSentence(sleepQuality: sleepQuality, hrDelta: hrDelta) {
+            sentences.append(sentence)
+        }
+
+        if let sentence = buildCalendarSentence(meetingCount: meetingCount, stressors: stressors,
+                                                freeWindow: freeWindow) {
+            sentences.append(sentence)
+        }
+
+        if sentences.count < 3,
+           let sentence = buildModeSuggestionSentence(suggestedMode: suggestedMode,
+                                                      sleepQuality: sleepQuality) {
+            sentences.append(sentence)
+        }
+
+        // Cap at 3 sentences. Calm, direct, no exclamation marks.
+        let capped = Array(sentences.prefix(3))
+        return capped.joined(separator: " ")
+    }
+
+    // MARK: - Body Text Helpers
+
+    /// Sleep context sentence.
+    private func buildSleepSentence(
+        sleepHours: Double?,
+        sleepQuality: String?,
+        hrDelta: Double?,
+        hrvTrend: String?
+    ) -> String? {
+        guard let hours = sleepHours, let quality = sleepQuality else { return nil }
+        let hoursFormatted = String(format: "%.1f", hours)
+        switch quality {
+        case "poor":
+            var sleepSentence = "Rough night — \(hoursFormatted) hrs"
+            if let delta = hrDelta, delta > BriefConfig.elevatedHRDeltaThreshold {
+                sleepSentence += ", and your resting HR is elevated"
             }
-        }
-
-        // HRV-only sentence if no sleep context was added but HRV data exists.
-        if sleepHours == nil, let trend = hrvTrend {
-            switch trend {
-            case "declining":
-                sentences.append("Your HRV is trending down — consider a lighter start.")
-            case "rising":
-                sentences.append("HRV is on the rise. Your body is recovering well.")
-            default:
-                break
+            sleepSentence += "."
+            return sleepSentence
+        case "fair":
+            return "Decent sleep at \(hoursFormatted) hrs, but not your best."
+        case "good":
+            var goodSentence = "Solid sleep at \(hoursFormatted) hrs"
+            if hrvTrend == "rising" {
+                goodSentence += ", HRV trending up"
             }
+            goodSentence += "."
+            return goodSentence
+        default:
+            return nil
         }
+    }
 
-        // HR delta sentence (only if not already covered in sleep sentence).
-        if sleepQuality != "poor", let delta = hrDelta, delta > BriefConfig.elevatedHRDeltaThreshold {
-            sentences.append("Resting HR is \(String(format: "+%.0f", delta)) BPM above your average.")
+    /// HRV-only sentence if no sleep context was added but HRV data exists.
+    private func buildHRVSentence(sleepHours: Double?, hrvTrend: String?) -> String? {
+        guard sleepHours == nil, let trend = hrvTrend else { return nil }
+        switch trend {
+        case "declining":
+            return "Your HRV is trending down — consider a lighter start."
+        case "rising":
+            return "HRV is on the rise. Your body is recovering well."
+        default:
+            return nil
         }
+    }
 
-        // Calendar context sentence.
+    /// HR delta sentence (only if not already covered in sleep sentence).
+    private func buildHRDeltaSentence(sleepQuality: String?, hrDelta: Double?) -> String? {
+        guard sleepQuality != "poor",
+              let delta = hrDelta,
+              delta > BriefConfig.elevatedHRDeltaThreshold else { return nil }
+        return "Resting HR is \(String(format: "+%.0f", delta)) BPM above your average."
+    }
+
+    /// Calendar context sentence.
+    private func buildCalendarSentence(
+        meetingCount: Int,
+        stressors: [BriefStressor],
+        freeWindow: DateInterval?
+    ) -> String? {
         if meetingCount >= BriefConfig.highMeetingDayThreshold {
             if let window = freeWindow {
                 let formatter = DateFormatter()
                 formatter.dateFormat = "h:mm a"
                 let windowTime = formatter.string(from: window.start)
-                sentences.append(
-                    "\(meetingCount) meetings today. Save deep work for the \(windowTime) gap."
-                )
+                return "\(meetingCount) meetings today. Save deep work for the \(windowTime) gap."
             } else {
-                sentences.append(
-                    "\(meetingCount) meetings packed in. Squeeze in short sessions between blocks."
-                )
+                return "\(meetingCount) meetings packed in. Squeeze in short sessions between blocks."
             }
         } else if !stressors.isEmpty {
             let first = stressors[0]
@@ -388,31 +430,31 @@ public actor MorningBriefGenerator: MorningBriefGeneratorProtocol {
             let time = formatter.string(from: first.startDate)
             if first.stressLevel == StressLevel.critical.rawValue
                 || first.stressLevel == StressLevel.high.rawValue {
-                sentences.append("\(first.eventTitle) at \(time). Prep with a session beforehand.")
+                return "\(first.eventTitle) at \(time). Prep with a session beforehand."
             }
         }
+        return nil
+    }
 
-        // Mode suggestion if we still have room.
-        if sentences.count < 3 {
-            switch suggestedMode {
-            case .focus:
-                if sleepQuality == "good" || sleepQuality == nil {
-                    sentences.append("You're primed for a long Focus session.")
-                } else {
-                    sentences.append("Start with Relaxation before your first deep work block.")
-                }
-            case .relaxation:
-                sentences.append("A Relaxation session will help reset before the day ramps up.")
-            case .sleep:
-                sentences.append("Wind-down mode — your body is signaling it needs rest.")
-            case .energize:
-                sentences.append("An Energize session could sharpen your start today.")
+    /// Mode suggestion sentence.
+    private func buildModeSuggestionSentence(
+        suggestedMode: FocusMode,
+        sleepQuality: String?
+    ) -> String? {
+        switch suggestedMode {
+        case .focus:
+            if sleepQuality == "good" || sleepQuality == nil {
+                return "You're primed for a long Focus session."
+            } else {
+                return "Start with Relaxation before your first deep work block."
             }
+        case .relaxation:
+            return "A Relaxation session will help reset before the day ramps up."
+        case .sleep:
+            return "Wind-down mode — your body is signaling it needs rest."
+        case .energize:
+            return "An Energize session could sharpen your start today."
         }
-
-        // Cap at 3 sentences. Calm, direct, no exclamation marks.
-        let capped = Array(sentences.prefix(3))
-        return capped.joined(separator: " ")
     }
 
     // MARK: - Prescription Text

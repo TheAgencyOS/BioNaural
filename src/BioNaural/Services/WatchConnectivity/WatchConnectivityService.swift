@@ -80,13 +80,14 @@ public final class WatchConnectivityService: NSObject, @unchecked Sendable {
         self.session = session
         self.logger = Logger(subsystem: "com.bionaural.app", category: "WatchConnectivity")
 
-        // Build the AsyncStream and capture the continuation before
-        // calling super.init, so the delegate can yield immediately.
-        var capturedContinuation: AsyncStream<BiometricSample>.Continuation!
+        // Build the AsyncStream and capture the continuation.
+        // The closure executes synchronously in AsyncStream.init, so
+        // capturedContinuation is guaranteed to be set before use.
+        var capturedContinuation: AsyncStream<BiometricSample>.Continuation?
         self.heartRateSamples = AsyncStream { continuation in
             capturedContinuation = continuation
         }
-        self.continuation = capturedContinuation
+        self.continuation = capturedContinuation!
 
         super.init()
 
