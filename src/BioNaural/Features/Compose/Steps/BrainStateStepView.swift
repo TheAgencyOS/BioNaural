@@ -19,7 +19,7 @@ struct BrainStateStepView: View {
 
     private let columns = [
         GridItem(.flexible(), spacing: Theme.Spacing.md),
-        GridItem(.flexible(), spacing: Theme.Spacing.md),
+        GridItem(.flexible(), spacing: Theme.Spacing.md)
     ]
 
     var body: some View {
@@ -74,7 +74,7 @@ struct BrainStateStepView: View {
             RadialGradient(
                 colors: [
                     color.opacity(isSelected ? Theme.Opacity.accentLight : Theme.Opacity.subtle),
-                    Color.clear,
+                    Color.clear
                 ],
                 center: .topLeading,
                 startRadius: 0,

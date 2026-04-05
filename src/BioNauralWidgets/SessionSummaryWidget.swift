@@ -54,7 +54,7 @@ enum SessionModeParameter: String, AppEnum {
         [
             .focus: "Focus",
             .relaxation: "Relaxation",
-            .sleep: "Sleep",
+            .sleep: "Sleep"
         ]
     }
 

@@ -130,12 +130,12 @@ public final class AudioParameters: @unchecked Sendable {
 
     /// Direct atomic references for capture by the render closure.
     /// The render callback must capture *these structs* — never `self`.
-    public var atomicBaseFrequency: ManagedAtomic<UInt64>   { _baseFrequency }
-    public var atomicBeatFrequency: ManagedAtomic<UInt64>   { _beatFrequency }
-    public var atomicAmplitude: ManagedAtomic<UInt64>       { _amplitude }
+    public var atomicBaseFrequency: ManagedAtomic<UInt64> { _baseFrequency }
+    public var atomicBeatFrequency: ManagedAtomic<UInt64> { _beatFrequency }
+    public var atomicAmplitude: ManagedAtomic<UInt64> { _amplitude }
     public var atomicCarrierFrequency: ManagedAtomic<UInt64> { _carrierFrequency }
-    public var atomicBinauralVolume: ManagedAtomic<UInt64>  { _binauralVolume }
-    public var atomicIsPlaying: ManagedAtomic<Bool>         { _isPlaying }
+    public var atomicBinauralVolume: ManagedAtomic<UInt64> { _binauralVolume }
+    public var atomicIsPlaying: ManagedAtomic<Bool> { _isPlaying }
 
     // MARK: - Initializer
 

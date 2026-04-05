@@ -17,9 +17,9 @@ struct SonicMemoryInputView: View {
     @Environment(\.modelContext) private var modelContext
 
     @State private var description: String = ""
-    @State private var selectedEmotion: EmotionalTag? = nil
-    @State private var selectedMode: FocusMode? = nil
-    @State private var extractedParameters: SonicParameters? = nil
+    @State private var selectedEmotion: EmotionalTag?
+    @State private var selectedMode: FocusMode?
+    @State private var extractedParameters: SonicParameters?
     @State private var isExtracting = false
 
     let onSave: (SonicMemory) -> Void

@@ -416,7 +416,7 @@ private struct ConfidenceDots: View {
                             delta: "-8 ms",
                             timing: "morning of",
                             isNegative: true
-                        ),
+                        )
                     ],
                     sampleCount: 6,
                     suggestedPrepMode: .relaxation,
@@ -449,7 +449,7 @@ private struct ConfidenceDots: View {
                             delta: "+5 ms",
                             timing: "evening",
                             isNegative: false
-                        ),
+                        )
                     ],
                     sampleCount: 14,
                     suggestedPrepMode: nil,

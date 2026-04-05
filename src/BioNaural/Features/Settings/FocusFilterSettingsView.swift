@@ -44,7 +44,7 @@ struct FocusFilterSettingsView: View {
         IOSFocusDefinition(name: "Personal", systemImage: "person.fill", defaultMode: .relaxation),
         IOSFocusDefinition(name: "Sleep", systemImage: "bed.double.fill", defaultMode: .sleep),
         IOSFocusDefinition(name: "Do Not Disturb", systemImage: "moon.fill", defaultMode: .relaxation),
-        IOSFocusDefinition(name: "Fitness", systemImage: "figure.run", defaultMode: .energize),
+        IOSFocusDefinition(name: "Fitness", systemImage: "figure.run", defaultMode: .energize)
     ]
 
     // MARK: - Body
@@ -71,7 +71,7 @@ struct FocusFilterSettingsView: View {
             (iosFocusModes[IOSFocusIndex.personal], $personalMapping),
             (iosFocusModes[IOSFocusIndex.sleep], $sleepMapping),
             (iosFocusModes[IOSFocusIndex.doNotDisturb], $doNotDisturbMapping),
-            (iosFocusModes[IOSFocusIndex.fitness], $fitnessMapping),
+            (iosFocusModes[IOSFocusIndex.fitness], $fitnessMapping)
         ]
     }
 

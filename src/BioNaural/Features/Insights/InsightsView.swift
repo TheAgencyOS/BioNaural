@@ -734,7 +734,7 @@ struct InsightsView: View {
                     : Array(filteredSessions.prefix(Constants.historyPreviewLimit))
 
                 LazyVStack(spacing: Theme.Spacing.md) {
-                    ForEach(Array(displayedSessions.enumerated()), id: \.element.id) { index, session in
+                    ForEach(Array(displayedSessions.enumerated()), id: \.element.id) { _, session in
                         NavigationLink {
                             SessionDetailView(session: session)
                         } label: {

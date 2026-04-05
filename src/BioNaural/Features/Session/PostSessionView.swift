@@ -20,11 +20,11 @@ struct PostSessionView: View {
 
     // MARK: - State
 
-    @State private var thumbsRating: Int? = nil
+    @State private var thumbsRating: Int?
     @State private var showFeedbackTags = false
     @State private var selectedTags: Set<String> = []
     @State private var showShareSheet = false
-    @State private var shareImage: UIImage? = nil
+    @State private var shareImage: UIImage?
     @State private var showSaveTrackConfirmation = false
     @State private var trackSaved = false
     @State private var savedTrackName: String = ""
@@ -168,7 +168,7 @@ struct PostSessionView: View {
         LazyVGrid(
             columns: [
                 GridItem(.flexible(), spacing: Theme.Spacing.md),
-                GridItem(.flexible(), spacing: Theme.Spacing.md),
+                GridItem(.flexible(), spacing: Theme.Spacing.md)
             ],
             spacing: Theme.Spacing.md
         ) {

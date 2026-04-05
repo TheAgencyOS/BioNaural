@@ -52,7 +52,7 @@ private struct ModeCardDescriptor: Identifiable {
             subtitle: "Wind-down to rest",
             frequencyLabel: "Theta\u{2192}Delta 6\u{2192}2 Hz",
             color: Theme.Colors.sleep
-        ),
+        )
     ]
 }
 
@@ -903,7 +903,7 @@ private struct DurationOption {
         DurationOption(minutes: 25, label: "25 minutes"),
         DurationOption(minutes: 30, label: "30 minutes"),
         DurationOption(minutes: 45, label: "45 minutes"),
-        DurationOption(minutes: 60, label: "60 minutes"),
+        DurationOption(minutes: 60, label: "60 minutes")
     ]
 }
 

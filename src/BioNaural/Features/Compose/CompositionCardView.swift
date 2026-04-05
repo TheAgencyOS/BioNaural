@@ -27,7 +27,7 @@ struct CompositionCardView: View {
             RadialGradient(
                 colors: [
                     color.opacity(Theme.Opacity.accentLight),
-                    Color.clear,
+                    Color.clear
                 ],
                 center: .topLeading,
                 startRadius: 0,
@@ -58,7 +58,7 @@ struct CompositionCardView: View {
                     colors: [
                         .clear,
                         Theme.Colors.surface.opacity(Theme.Opacity.half),
-                        Theme.Colors.surface.opacity(Theme.Opacity.translucent),
+                        Theme.Colors.surface.opacity(Theme.Opacity.translucent)
                     ],
                     startPoint: .top,
                     endPoint: .bottom

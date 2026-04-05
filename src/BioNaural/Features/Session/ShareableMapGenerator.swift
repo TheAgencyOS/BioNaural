@@ -126,7 +126,7 @@ private struct ShareableMapContent: View {
     let events: [AdaptationEventRecord] = [
         .init(timestamp: 0, reason: "Start", oldBeatFrequency: 14, newBeatFrequency: 14, heartRateAtTime: 72),
         .init(timestamp: 600, reason: "HR rising", oldBeatFrequency: 14, newBeatFrequency: 12, heartRateAtTime: 80),
-        .init(timestamp: 1200, reason: "Settled", oldBeatFrequency: 12, newBeatFrequency: 16, heartRateAtTime: 70),
+        .init(timestamp: 1200, reason: "Settled", oldBeatFrequency: 12, newBeatFrequency: 16, heartRateAtTime: 70)
     ]
 
     ShareableMapContent(

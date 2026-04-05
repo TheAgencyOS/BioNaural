@@ -1184,4 +1184,3 @@ private struct AirPlayRoutePickerRepresentable: UIViewRepresentable {
 
     func updateUIView(_ uiView: AVRoutePickerView, context: Context) {}
 }
-

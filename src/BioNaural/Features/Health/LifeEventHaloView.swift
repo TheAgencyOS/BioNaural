@@ -510,10 +510,10 @@ struct LifeEventHaloView: View {
         HaloDayData(id: "d-3", dayOffset: -3, restingHR: 71, hrv: 38, sleepHours: 6.8, stressLevel: 0.35),
         HaloDayData(id: "d-2", dayOffset: -2, restingHR: 74, hrv: 34, sleepHours: 6.2, stressLevel: 0.52),
         HaloDayData(id: "d-1", dayOffset: -1, restingHR: 78, hrv: 28, sleepHours: 5.5, stressLevel: 0.74),
-        HaloDayData(id: "d-0", dayOffset:  0, restingHR: 82, hrv: 24, sleepHours: 5.0, stressLevel: 0.91),
-        HaloDayData(id: "d+1", dayOffset:  1, restingHR: 76, hrv: 30, sleepHours: 6.0, stressLevel: 0.63),
-        HaloDayData(id: "d+2", dayOffset:  2, restingHR: 70, hrv: 36, sleepHours: 7.1, stressLevel: 0.38),
-        HaloDayData(id: "d+3", dayOffset:  3, restingHR: 68, hrv: 41, sleepHours: 7.4, stressLevel: 0.25),
+        HaloDayData(id: "d-0", dayOffset: 0, restingHR: 82, hrv: 24, sleepHours: 5.0, stressLevel: 0.91),
+        HaloDayData(id: "d+1", dayOffset: 1, restingHR: 76, hrv: 30, sleepHours: 6.0, stressLevel: 0.63),
+        HaloDayData(id: "d+2", dayOffset: 2, restingHR: 70, hrv: 36, sleepHours: 7.1, stressLevel: 0.38),
+        HaloDayData(id: "d+3", dayOffset: 3, restingHR: 68, hrv: 41, sleepHours: 7.4, stressLevel: 0.25)
     ]
 
     let event = LifeEvent(

@@ -143,7 +143,7 @@ struct BrandWaveCanvas: View {
 
         let gradient = Gradient(colors: [
             Color(hex: Theme.BrandWave.convergenceColorHex).opacity(Theme.BrandWave.convergenceOpacity),
-            Color.clear,
+            Color.clear
         ])
 
         let rect = CGRect(

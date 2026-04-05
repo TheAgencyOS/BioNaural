@@ -183,7 +183,7 @@ struct LibraryView: View {
 
             let columns = [
                 GridItem(.flexible(), spacing: Theme.Spacing.sm),
-                GridItem(.flexible(), spacing: Theme.Spacing.sm),
+                GridItem(.flexible(), spacing: Theme.Spacing.sm)
             ]
 
             LazyVGrid(columns: columns, spacing: Theme.Spacing.sm) {
@@ -311,7 +311,7 @@ private struct LibraryHeroCompositionCard: View {
             RadialGradient(
                 colors: [
                     modeColor.opacity(Theme.Opacity.accentLight),
-                    Color.clear,
+                    Color.clear
                 ],
                 center: .topLeading,
                 startRadius: 0,
@@ -350,7 +350,7 @@ private struct LibraryHeroCompositionCard: View {
                     colors: [
                         .clear,
                         Theme.Colors.surface.opacity(Theme.Opacity.medium),
-                        Theme.Colors.surface.opacity(Theme.Opacity.translucent),
+                        Theme.Colors.surface.opacity(Theme.Opacity.translucent)
                     ],
                     startPoint: .top,
                     endPoint: .bottom
@@ -385,7 +385,7 @@ private struct LibraryCompactCompositionCard: View {
             RadialGradient(
                 colors: [
                     modeColor.opacity(Theme.Opacity.accentLight),
-                    Color.clear,
+                    Color.clear
                 ],
                 center: .topLeading,
                 startRadius: 0,
@@ -415,7 +415,7 @@ private struct LibraryCompactCompositionCard: View {
                     colors: [
                         .clear,
                         Theme.Colors.surface.opacity(Theme.Opacity.half),
-                        Theme.Colors.surface.opacity(Theme.Opacity.translucent),
+                        Theme.Colors.surface.opacity(Theme.Opacity.translucent)
                     ],
                     startPoint: .top,
                     endPoint: .bottom
@@ -576,7 +576,7 @@ private struct LibrarySonicMemoryCard: View {
             RadialGradient(
                 colors: [
                     emotionColor.opacity(Theme.Opacity.subtle),
-                    Color.clear,
+                    Color.clear
                 ],
                 center: .topLeading,
                 startRadius: 0,

@@ -33,7 +33,7 @@ enum Constants {
     static let defaultSessionMinutes: [FocusMode: Int] = [
         .focus: 25,
         .relaxation: 15,
-        .sleep: 30,
+        .sleep: 30
     ]
 
     // MARK: Pomodoro
@@ -179,7 +179,7 @@ enum Constants {
         static let presets: [(bedName: String, displayName: String)] = [
             (rain, "Rain · Warm Pad"),
             (wind, "Wind · Subtle Drone"),
-            (pinkNoise, "Pink Noise · Bright Pad"),
+            (pinkNoise, "Pink Noise · Bright Pad")
         ]
     }
 

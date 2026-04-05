@@ -208,7 +208,7 @@ extension FocusModeMapping {
         FocusModeMapping(iosFocusName: "Personal", bioNauralMode: .relaxation, suggestedDurationMinutes: 20),
         FocusModeMapping(iosFocusName: "Sleep", bioNauralMode: .sleep, suggestedDurationMinutes: 30),
         FocusModeMapping(iosFocusName: "Do Not Disturb", bioNauralMode: .relaxation, suggestedDurationMinutes: 15),
-        FocusModeMapping(iosFocusName: "Fitness", bioNauralMode: .energize, suggestedDurationMinutes: 20),
+        FocusModeMapping(iosFocusName: "Fitness", bioNauralMode: .energize, suggestedDurationMinutes: 20)
     ]
 }
 

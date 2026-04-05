@@ -202,14 +202,14 @@ final class WatchHealthKitService: NSObject, ObservableObject {
             predicate: predicate,
             anchor: queryAnchor,
             limit: HKObjectQueryNoLimit
-        ) { [weak self] _, samples, _, anchor, error in
+        ) { [weak self] _, samples, _, anchor, _ in
             Task { @MainActor in
                 self?.queryAnchor = anchor
                 self?.processHeartRateSamples(samples)
             }
         }
 
-        query.updateHandler = { [weak self] _, samples, _, anchor, error in
+        query.updateHandler = { [weak self] _, samples, _, anchor, _ in
             Task { @MainActor in
                 self?.queryAnchor = anchor
                 self?.processHeartRateSamples(samples)

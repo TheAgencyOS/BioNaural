@@ -1470,7 +1470,7 @@ extension Theme {
 
             /// Render passes for wave lines — outermost glow to innermost crisp.
             static let wavePasses: [(blur: CGFloat, opacity: Double, lineWidth: CGFloat)] = [
-                (12, 0.045, 6), (5, 0.08, 2.5), (0, 0.28, 1.5), (0, 0.5, 0.7),
+                (12, 0.045, 6), (5, 0.08, 2.5), (0, 0.28, 1.5), (0, 0.5, 0.7)
             ]
 
             // MARK: Wave Line Color

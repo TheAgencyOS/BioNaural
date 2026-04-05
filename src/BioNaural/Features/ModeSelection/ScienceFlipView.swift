@@ -242,7 +242,7 @@ private struct ModeScienceData {
                 metrics: [
                     ScienceMetric(value: "14\u{2013}16", label: "Hz target"),
                     ScienceMetric(value: "300\u{2013}450", label: "Hz carrier"),
-                    ScienceMetric(value: "\u{2013}12 dB", label: "Beat level"),
+                    ScienceMetric(value: "\u{2013}12 dB", label: "Beat level")
                 ],
                 caveat: "Effects are real but modest \u{2014} think \u{201C}reducing friction\u{201D} not \u{201C}creating superpowers.\u{201D}",
                 citation: "Garcia-Argibay et al., 2019 \u{2014} meta-analysis of binaural beats on cognition and anxiety"
@@ -255,7 +255,7 @@ private struct ModeScienceData {
                 metrics: [
                     ScienceMetric(value: "8\u{2013}11", label: "Hz target"),
                     ScienceMetric(value: "150\u{2013}250", label: "Hz carrier"),
-                    ScienceMetric(value: "HRV \u{2191}", label: "Expected"),
+                    ScienceMetric(value: "HRV \u{2191}", label: "Expected")
                 ],
                 caveat: "This is our most evidence-backed mode. A 2019 meta-analysis of 22 studies found alpha beats reliably reduce anxiety.",
                 citation: "Wahbeh et al., 2007 \u{2014} binaural beat effects on parasympathetic activity and anxiety"
@@ -268,7 +268,7 @@ private struct ModeScienceData {
                 metrics: [
                     ScienceMetric(value: "6\u{2192}2", label: "Hz ramp"),
                     ScienceMetric(value: "100\u{2013}200", label: "Hz carrier"),
-                    ScienceMetric(value: "25 min", label: "Ramp time"),
+                    ScienceMetric(value: "25 min", label: "Ramp time")
                 ],
                 caveat: "Best used as sleep preparation (15\u{2013}45 min), not all night. Your brain takes over from there.",
                 citation: "Jirakittayakorn & Wongsawat, 2017 \u{2014} delta binaural beats and deep sleep induction"
@@ -281,7 +281,7 @@ private struct ModeScienceData {
                 metrics: [
                     ScienceMetric(value: "18\u{2013}30", label: "Hz target"),
                     ScienceMetric(value: "350\u{2013}500", label: "Hz carrier"),
-                    ScienceMetric(value: "HR \u{2191}", label: "Reinforced"),
+                    ScienceMetric(value: "HR \u{2191}", label: "Reinforced")
                 ],
                 caveat: "Best for short bursts \u{2014} morning wake-up, afternoon reset, or pre-workout activation.",
                 citation: "Colzato et al., 2017 \u{2014} high-frequency binaural beats and cognitive control"

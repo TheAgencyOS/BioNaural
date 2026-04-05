@@ -129,7 +129,7 @@ enum ExtractionConfig {
         (["guitar"], "guitar"),
         (["strings", "violin", "cello"], "strings"),
         (["pads", "synth", "electronic"], "pads"),
-        (["flute", "wind"], "woodwind"),
+        (["flute", "wind"], "woodwind")
     ]
 
     // MARK: Ambient Tag Mappings
@@ -143,7 +143,7 @@ enum ExtractionConfig {
         (["wind", "breeze"], "wind"),
         (["cafe", "coffee shop", "bustling"], "cafe"),
         (["library", "quiet", "hum"], "brown-noise"),
-        (["city", "urban"], "city"),
+        (["city", "urban"], "city")
     ]
 
     // MARK: Emotional Association Keywords
@@ -155,7 +155,7 @@ enum ExtractionConfig {
         (.energized, ["energy", "pump", "workout", "dance", "upbeat", "exciting"]),
         (.nostalgic, ["remember", "childhood", "used to", "grandma", "mom", "dad", "old", "memory"]),
         (.safe, ["home", "safe", "comfort", "cozy", "warm", "familiar", "blanket"]),
-        (.joyful, ["happy", "joy", "love", "fun", "smile", "laugh", "celebrate"]),
+        (.joyful, ["happy", "joy", "love", "fun", "smile", "laugh", "celebrate"])
     ]
 
     /// Default emotional tag when no keywords match.
@@ -168,7 +168,7 @@ enum ExtractionConfig {
         (["lo-fi", "lofi", "chill"], 75),
         (["ambient", "slow"], nil),
         (["upbeat", "energetic"], 120),
-        (["moderate", "walking"], 100),
+        (["moderate", "walking"], 100)
     ]
 
     // MARK: Follow-Up Question Templates

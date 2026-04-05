@@ -517,7 +517,6 @@ final class SessionViewModel {
         Color.modeColor(for: sessionMode)
     }
 
-
     /// Target session duration in minutes (for settings UI).
     var targetDurationMinutes: Double {
         targetDurationSeconds / 60.0

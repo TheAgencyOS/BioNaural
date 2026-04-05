@@ -21,7 +21,7 @@ struct ContextTrackLibraryView: View {
 
     @State private var showingSetup = false
     @State private var showArchived = false
-    @State private var trackToDelete: ContextTrack? = nil
+    @State private var trackToDelete: ContextTrack?
 
     private var activeTracks: [ContextTrack] {
         allTracks.filter { $0.isActive }

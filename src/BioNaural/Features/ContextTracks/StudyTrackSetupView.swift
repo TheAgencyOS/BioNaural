@@ -27,7 +27,7 @@ private let ambientOptions: [AmbientOption] = [
     AmbientOption(id: "forest", label: "Forest", systemImage: "tree.fill"),
     AmbientOption(id: "fire", label: "Fire", systemImage: "flame.fill"),
     AmbientOption(id: "wind", label: "Wind", systemImage: "wind"),
-    AmbientOption(id: "silence", label: "Silence", systemImage: "speaker.slash.fill"),
+    AmbientOption(id: "silence", label: "Silence", systemImage: "speaker.slash.fill")
 ]
 
 /// The selectable session durations in minutes.
@@ -44,12 +44,12 @@ struct StudyTrackSetupView: View {
     @State private var trackName: String = ""
     @State private var eventKeywords: String = ""
     @State private var selectedMode: FocusMode = .focus
-    @State private var selectedAmbient: String? = nil
+    @State private var selectedAmbient: String?
     @State private var sessionDuration: Int = 60
-    @State private var activeUntilDate: Date? = nil
+    @State private var activeUntilDate: Date?
     @State private var showDatePicker: Bool = false
     @State private var useExistingSonicMemory: Bool = false
-    @State private var selectedSonicMemoryID: UUID? = nil
+    @State private var selectedSonicMemoryID: UUID?
 
     @Query(sort: \SonicMemory.dateCreated, order: .reverse)
     private var sonicMemories: [SonicMemory]
@@ -653,7 +653,7 @@ struct StudyTrackSetupView: View {
 
     private func createTrack() {
         // Compute activeUntil: 7 days after event date if set
-        var computedActiveUntil: Date? = nil
+        var computedActiveUntil: Date?
         if showDatePicker, let eventDate = activeUntilDate {
             computedActiveUntil = Calendar.current.date(
                 byAdding: .day,

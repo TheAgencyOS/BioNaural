@@ -299,7 +299,7 @@ enum DemoContentSeeder {
             (5, .relaxation, 15, 64, 50, 0.83, true),
             (7, .focus, 25, 70, 44, 0.71, true),
             (10, .sleep, 45, 56, 58, 0.88, true),
-            (13, .focus, 25, 72, 42, 0.65, false),
+            (13, .focus, 25, 72, 42, 0.65, false)
         ]
 
         for s in sessions {

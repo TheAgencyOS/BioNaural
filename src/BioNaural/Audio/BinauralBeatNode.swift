@@ -47,17 +47,17 @@ public enum BinauralBeatNode {
         let atomicPlaying   = parameters.atomicIsPlaying
 
         // -- Mutable render state (captured by the closure) ----------------
-        var phaseLeft:  Double = 0.0
+        var phaseLeft: Double = 0.0
         var phaseRight: Double = 0.0
 
         // Harmonic phase accumulators
-        var phaseLeft2:  Double = 0.0
+        var phaseLeft2: Double = 0.0
         var phaseRight2: Double = 0.0
-        var phaseLeft3:  Double = 0.0
+        var phaseLeft3: Double = 0.0
         var phaseRight3: Double = 0.0
 
         // Smoothed values (converge toward target each sample)
-        var smoothedFreqLeft:  Double = 200.0
+        var smoothedFreqLeft: Double = 200.0
         var smoothedFreqRight: Double = 210.0
         var smoothedAmplitude: Double = 0.0
 
@@ -67,9 +67,9 @@ public enum BinauralBeatNode {
         var lfoPhase3: Double = 0.71
 
         // Carrier drift state — slow random walk
-        var driftValue:    Double = 0.0
+        var driftValue: Double = 0.0
         var driftVelocity: Double = 0.0
-        var driftCounter:  UInt32 = 0
+        var driftCounter: UInt32 = 0
 
         // Pre-computed constants
         let twoPi          = 2.0 * Double.pi

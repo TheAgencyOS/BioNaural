@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>BioNaural — Sound DNA Feature Placement</title>
+<title>BioNaural — Sound DNA Placement</title>
 <style>
   @import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap');
 
@@ -31,7 +31,7 @@
     --phone-w: 393px;
     --phone-h: 852px;
     --glassFill: rgba(255, 255, 255, 0.06);
-    --glassStroke: rgba(255, 255, 255, 0.10);
+    --glassStroke: rgba(255, 255, 255, 0.08);
   }
 
   body {
@@ -47,7 +47,6 @@
     letter-spacing: -1px;
     text-align: center;
     margin-bottom: 8px;
-    color: var(--textPrimary);
   }
 
   p.page-sub {
@@ -55,7 +54,6 @@
     color: var(--textSecondary);
     font-size: 17px;
     margin-bottom: 80px;
-    font-weight: 400;
   }
 
   .concepts-grid {
@@ -67,179 +65,184 @@
     justify-items: center;
   }
 
-  .concept {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
+  .concept { display: flex; flex-direction: column; align-items: center; }
+  .concept-label { font-size: 13px; font-weight: 500; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  .concept-name { font-size: 24px; font-weight: 500; margin-bottom: 6px; text-align: center; }
+  .concept-desc { font-size: 14px; color: var(--textSecondary); margin-bottom: 24px; text-align: center; max-width: 360px; line-height: 1.5; }
 
-  .concept-label {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--accent);
-    margin-bottom: 8px;
-  }
-
-  .concept-title {
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--textPrimary);
-    margin-bottom: 4px;
-    text-align: center;
-  }
-
-  .concept-desc {
-    font-size: 14px;
-    color: var(--textTertiary);
-    margin-bottom: 24px;
-    text-align: center;
-    max-width: 360px;
-    line-height: 1.5;
-  }
-
-  /* Phone Frame */
+  /* Phone frame */
   .phone {
     width: var(--phone-w);
     height: var(--phone-h);
-    background: var(--canvas);
-    border-radius: 44px;
+    border-radius: 48px;
     overflow: hidden;
     position: relative;
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.04);
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 40px 80px rgba(0,0,0,0.5);
   }
 
-  .phone-inner {
-    padding: 60px 20px 100px 20px;
+  .phone-screen {
+    width: 100%;
     height: 100%;
-    overflow-y: auto;
-    scrollbar-width: none;
+    position: relative;
+    overflow: hidden;
+    background: var(--canvas);
   }
-  .phone-inner::-webkit-scrollbar { display: none; }
 
-  /* Dynamic Island */
+  /* Nebula background */
+  .nebula-bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .nebula-bg .blob1 {
+    position: absolute;
+    width: 300px; height: 300px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(110,124,247,0.06) 0%, transparent 70%);
+    top: -50px; right: -80px;
+    filter: blur(40px);
+  }
+  .nebula-bg .blob2 {
+    position: absolute;
+    width: 250px; height: 250px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(78,168,166,0.04) 0%, transparent 70%);
+    bottom: 200px; left: -60px;
+    filter: blur(40px);
+  }
+
+  .status-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px 0;
+    z-index: 10;
+    font-size: 15px; font-weight: 600;
+  }
+  .status-bar .icons { display: flex; gap: 5px; align-items: center; font-size: 13px; }
+
   .dynamic-island {
     position: absolute;
-    top: 12px;
-    left: 50%;
+    top: 12px; left: 50%;
     transform: translateX(-50%);
-    width: 126px;
-    height: 36px;
+    width: 126px; height: 36px;
     background: #000;
     border-radius: 20px;
-    z-index: 10;
+    z-index: 20;
   }
 
-  /* Tab Bar */
   .tab-bar {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 84px;
-    background: rgba(17, 21, 32, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid var(--divider);
+    bottom: 0; left: 0; right: 0;
+    height: 88px;
     display: flex;
-    justify-content: space-around;
     align-items: flex-start;
+    justify-content: space-around;
     padding-top: 10px;
     z-index: 10;
+    background: rgba(8, 12, 21, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.04);
   }
 
   .tab-item {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
-    font-size: 10px;
+    gap: 4px;
+    font-size: 10px; font-weight: 500;
     color: var(--textTertiary);
-    font-weight: 500;
+    width: 64px;
+  }
+  .tab-item.active { color: var(--accent); }
+  .tab-icon { width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+
+  .home-indicator {
+    position: absolute;
+    bottom: 8px; left: 50%;
+    transform: translateX(-50%);
+    width: 134px; height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    z-index: 20;
   }
 
-  .tab-item.active {
-    color: var(--accent);
+  /* Glass card */
+  .glass-card {
+    background: var(--surface);
+    border-radius: 20px;
+    border: 1px solid var(--divider);
+    overflow: hidden;
+    position: relative;
   }
 
-  .tab-icon {
-    font-size: 22px;
-    line-height: 1;
-  }
-
-  /* Section Headers */
-  .section-header {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--textSecondary);
-    text-transform: uppercase;
-    letter-spacing: 1.5px;
-    margin-bottom: 12px;
+  /* Section header */
+  .lib-section-header {
     display: flex;
     align-items: center;
-    gap: 6px;
-  }
-
-  .nav-title {
-    font-size: 34px;
-    font-weight: 700;
-    color: var(--textPrimary);
-    margin-bottom: 20px;
-    letter-spacing: -0.5px;
-  }
-
-  .nav-title-small {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--textPrimary);
-    text-align: center;
-    margin-bottom: 16px;
-  }
-
-  /* Cards */
-  .card {
-    background: var(--surface);
-    border-radius: 16px;
-    padding: 16px;
+    justify-content: space-between;
     margin-bottom: 12px;
-    border: 1px solid var(--divider);
+    padding: 0 4px;
+  }
+  .lib-section-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--textTertiary);
+  }
+  .lib-section-link {
+    font-size: 13px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 4px;
   }
 
-  .card-glass {
-    background: var(--glassFill);
-    border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 12px;
-    border: 1px solid var(--glassStroke);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-
-  /* Sound DNA Profile Card */
-  .sound-dna-card {
-    background: linear-gradient(135deg, rgba(110, 124, 247, 0.08) 0%, rgba(110, 124, 247, 0.02) 100%);
-    border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 16px;
-    border: 1px solid rgba(110, 124, 247, 0.15);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .sound-dna-card::before {
-    content: '';
+  /* Content area */
+  .content-scroll {
     position: absolute;
-    top: -30px;
-    right: -30px;
-    width: 120px;
-    height: 120px;
-    background: radial-gradient(circle, rgba(110, 124, 247, 0.12) 0%, transparent 70%);
-    border-radius: 50%;
+    top: 60px; left: 0; right: 0; bottom: 88px;
+    padding: 0 20px;
+    overflow-y: auto;
+    z-index: 1;
+    scrollbar-width: none;
+  }
+  .content-scroll::-webkit-scrollbar { display: none; }
+
+  /* ============================================ */
+  /* SOUND DNA HERO CARD — Library */
+  /* ============================================ */
+  .dna-hero {
+    background: var(--surface);
+    border-radius: 20px;
+    border: 1px solid var(--divider);
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 16px;
   }
 
-  .dna-header {
+  .dna-hero-glow {
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(110,124,247,0.12) 0%, transparent 70%);
+    filter: blur(20px);
+  }
+
+  .dna-hero-inner {
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .dna-hero-top {
     display: flex;
     align-items: center;
     gap: 14px;
@@ -247,54 +250,56 @@
   }
 
   .dna-orb {
-    width: 52px;
-    height: 52px;
+    width: 52px; height: 52px;
     border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, rgba(110, 124, 247, 0.5), rgba(110, 124, 247, 0.15));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    box-shadow: 0 0 20px rgba(110, 124, 247, 0.2);
-    animation: orbPulse 4s ease-in-out infinite;
+    background: radial-gradient(circle at 35% 35%, rgba(110,124,247,0.45), rgba(110,124,247,0.1));
+    box-shadow: 0 0 24px rgba(110,124,247,0.15);
+    animation: orb-breathe 5s ease-in-out infinite;
+    display: flex; align-items: center; justify-content: center;
   }
 
-  @keyframes orbPulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(110, 124, 247, 0.2); }
-    50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(110, 124, 247, 0.3); }
+  .dna-orb svg {
+    width: 22px; height: 22px;
+    fill: none;
+    stroke: rgba(226, 230, 240, 0.7);
+    stroke-width: 1.5;
+    stroke-linecap: round;
   }
 
-  .dna-info h3 {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--textPrimary);
+  @keyframes orb-breathe {
+    0%, 100% { transform: scale(0.96); box-shadow: 0 0 20px rgba(110,124,247,0.12); }
+    50% { transform: scale(1.04); box-shadow: 0 0 30px rgba(110,124,247,0.22); }
+  }
+
+  .dna-hero-info h3 {
+    font-size: 17px; font-weight: 600;
     margin-bottom: 2px;
   }
-
-  .dna-info p {
+  .dna-hero-info p {
     font-size: 13px;
     color: var(--textSecondary);
   }
 
-  .dna-stats {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+  .dna-stats-row {
+    display: flex;
     gap: 8px;
     margin-bottom: 16px;
   }
 
   .dna-stat {
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 10px;
+    flex: 1;
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
     padding: 10px 8px;
     text-align: center;
+    border: 1px solid rgba(255,255,255,0.04);
   }
 
-  .dna-stat-value {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--accent);
+  .dna-stat-val {
+    font-size: 17px; font-weight: 600;
     font-family: var(--mono);
+    color: var(--accent);
+    letter-spacing: 0.5px;
   }
 
   .dna-stat-label {
@@ -305,10 +310,10 @@
     margin-top: 2px;
   }
 
-  .sample-btn {
+  .dna-sample-btn {
     width: 100%;
-    padding: 13px;
-    border-radius: 12px;
+    padding: 14px;
+    border-radius: 14px;
     border: none;
     background: var(--accent);
     color: white;
@@ -320,174 +325,266 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    letter-spacing: 0.3px;
   }
 
-  .sample-btn-outline {
-    width: 100%;
-    padding: 13px;
-    border-radius: 12px;
-    border: 1px solid var(--accentLight);
-    background: transparent;
-    color: var(--accent);
-    font-family: var(--font);
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-  }
-
-  /* Home Context Card */
+  /* ============================================ */
+  /* HOME CONTEXTUAL CARD */
+  /* ============================================ */
   .home-dna-card {
-    background: linear-gradient(135deg, rgba(110, 124, 247, 0.06) 0%, rgba(110, 124, 247, 0.02) 100%);
+    background: var(--surface);
     border-radius: 16px;
-    padding: 16px;
-    margin-bottom: 16px;
-    border: 1px solid rgba(110, 124, 247, 0.12);
+    border: 1px solid var(--divider);
+    padding: 16px 18px;
     display: flex;
     align-items: center;
     gap: 14px;
-  }
-
-  .home-dna-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
-    background: rgba(110, 124, 247, 0.12);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-
-  .home-dna-text h4 {
-    font-size: 15px;
-    font-weight: 600;
-    color: var(--textPrimary);
-    margin-bottom: 2px;
-  }
-
-  .home-dna-text p {
-    font-size: 13px;
-    color: var(--textSecondary);
-    line-height: 1.4;
-  }
-
-  .home-dna-arrow {
-    color: var(--accent);
-    font-size: 18px;
-    flex-shrink: 0;
-    margin-left: auto;
-  }
-
-  /* Mode Cards */
-  .mode-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
-
-  .mode-card {
-    border-radius: 16px;
-    padding: 16px;
-    border: 1px solid var(--divider);
+    margin-bottom: 12px;
     position: relative;
     overflow: hidden;
   }
 
-  .mode-card.focus { background: linear-gradient(135deg, rgba(91, 106, 191, 0.12) 0%, rgba(91, 106, 191, 0.04) 100%); }
-  .mode-card.relax { background: linear-gradient(135deg, rgba(78, 168, 166, 0.12) 0%, rgba(78, 168, 166, 0.04) 100%); }
-  .mode-card.sleep { background: linear-gradient(135deg, rgba(144, 128, 196, 0.12) 0%, rgba(144, 128, 196, 0.04) 100%); }
-  .mode-card.energize { background: linear-gradient(135deg, rgba(245, 166, 35, 0.12) 0%, rgba(245, 166, 35, 0.04) 100%); }
-
-  .mode-icon { font-size: 24px; margin-bottom: 10px; }
-  .mode-name { font-size: 15px; font-weight: 600; color: var(--textPrimary); }
-  .mode-desc { font-size: 11px; color: var(--textSecondary); margin-top: 2px; }
-
-  /* Library Items */
-  .lib-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 16px;
-    background: var(--surface);
-    border-radius: 12px;
-    margin-bottom: 8px;
-    border: 1px solid var(--divider);
+  .home-dna-card::before {
+    content: '';
+    position: absolute;
+    top: -20px; left: -20px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(110,124,247,0.08) 0%, transparent 70%);
   }
 
-  .lib-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
+  .home-dna-icon {
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: rgba(110,124,247,0.1);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .home-dna-icon svg {
+    width: 18px; height: 18px;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
+  }
+
+  .home-dna-text { flex: 1; position: relative; }
+  .home-dna-text h4 { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+  .home-dna-text p { font-size: 12px; color: var(--textSecondary); line-height: 1.4; }
+
+  .chevron {
+    color: var(--textTertiary);
+    font-size: 14px;
     flex-shrink: 0;
   }
 
-  .lib-icon.music { background: rgba(110, 124, 247, 0.12); }
-  .lib-icon.body { background: rgba(78, 168, 166, 0.12); }
-  .lib-icon.context { background: rgba(144, 128, 196, 0.12); }
-  .lib-icon.compose { background: rgba(245, 166, 35, 0.12); }
+  /* ============================================ */
+  /* LIBRARY LIST ITEMS */
+  /* ============================================ */
+  .lib-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    background: var(--surface);
+    border-radius: 14px;
+    border: 1px solid var(--divider);
+    margin-bottom: 8px;
+  }
 
-  .lib-text h4 { font-size: 15px; font-weight: 500; color: var(--textPrimary); }
-  .lib-text p { font-size: 12px; color: var(--textTertiary); margin-top: 1px; }
-  .lib-chevron { color: var(--textTertiary); margin-left: auto; font-size: 14px; }
+  .lib-row-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
 
-  /* Post Session */
-  .session-result {
+  .lib-row-text h4 { font-size: 15px; font-weight: 500; }
+  .lib-row-text p { font-size: 12px; color: var(--textTertiary); margin-top: 1px; }
+
+  /* ============================================ */
+  /* HOME MODE CARDS — Matching actual app */
+  /* ============================================ */
+  .home-content {
+    position: absolute;
+    top: 60px; left: 0; right: 0; bottom: 88px;
+    z-index: 1;
+  }
+
+  .home-header {
     text-align: center;
-    margin-bottom: 20px;
+    padding: 16px 20px 0;
   }
-
-  .session-result .orb {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: radial-gradient(circle at 35% 35%, rgba(91, 106, 191, 0.5), rgba(91, 106, 191, 0.15));
-    margin: 0 auto 16px;
-    box-shadow: 0 0 30px rgba(91, 106, 191, 0.2);
-  }
-
-  .session-result h2 {
-    font-size: 22px;
-    font-weight: 600;
+  .home-header h2 {
+    font-size: 28px; font-weight: 300;
+    letter-spacing: -0.5px;
     margin-bottom: 4px;
   }
 
-  .session-result p {
-    font-size: 14px;
-    color: var(--textSecondary);
+  /* Orb */
+  .home-orb {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 50% 50%, rgba(110,124,247,0.3) 0%, rgba(110,124,247,0.06) 50%, transparent 70%);
+    margin: 16px auto;
+    animation: orb-breathe 6s ease-in-out infinite;
+    position: relative;
+  }
+  .home-orb::after {
+    content: '';
+    position: absolute;
+    inset: -30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(110,124,247,0.06) 0%, transparent 60%);
+    filter: blur(15px);
   }
 
-  .metric-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+  /* Waveform placeholder */
+  .home-wave {
+    height: 60px;
+    margin: 0 20px 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .home-wave svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.4;
+  }
+
+  /* Mode + play row */
+  .home-mode-play {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    margin-bottom: 8px;
+  }
+  .home-mode-label {
+    display: flex;
+    align-items: center;
     gap: 8px;
-    margin-bottom: 20px;
+    font-size: 17px; font-weight: 500;
+  }
+  .mode-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .play-btn {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 4px 20px rgba(110,124,247,0.3);
+  }
+  .play-btn svg {
+    width: 20px; height: 20px;
+    fill: white;
+    margin-left: 2px;
   }
 
-  .metric {
+  /* Pager dots */
+  .pager-dots {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-bottom: 8px;
+  }
+  .pager-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--textTertiary);
+  }
+  .pager-dot.active {
+    width: 16px;
+    border-radius: 3px;
+    background: var(--accent);
+  }
+
+  /* Watch status */
+  .watch-status {
+    text-align: center;
+    font-size: 12px;
+    color: var(--textTertiary);
+    font-family: var(--mono);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+  .watch-dot-green {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--relax);
+    animation: pulse-dot 2s ease-in-out infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 1; }
+  }
+
+  /* Bottom mode strip */
+  .mode-strip {
+    display: flex;
+    gap: 8px;
+    padding: 0 20px;
+    position: absolute;
+    bottom: 100px;
+    left: 0; right: 0;
+  }
+  .mode-strip-card {
+    flex: 1;
+    height: 56px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    border: 1px solid var(--divider);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .mode-strip-card:hover { border-color: var(--accentLight); }
+  .mode-strip-card.focus { background: rgba(91,106,191,0.08); }
+  .mode-strip-card.relax { background: rgba(78,168,166,0.08); }
+  .mode-strip-card.sleep { background: rgba(144,128,196,0.08); }
+  .mode-strip-card.energize { background: rgba(245,166,35,0.08); }
+
+  /* ============================================ */
+  /* POST-SESSION */
+  /* ============================================ */
+  .post-orb {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(91,106,191,0.4) 0%, rgba(91,106,191,0.08) 70%, transparent 100%);
+    margin: 0 auto 16px;
+    box-shadow: 0 0 30px rgba(91,106,191,0.15);
+  }
+
+  .post-metrics {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .post-metric {
+    flex: 1;
     text-align: center;
     padding: 12px 8px;
     background: var(--surface);
-    border-radius: 12px;
+    border-radius: 14px;
+    border: 1px solid var(--divider);
   }
-
-  .metric-val {
-    font-size: 20px;
-    font-weight: 600;
+  .post-metric-val {
+    font-size: 20px; font-weight: 600;
     font-family: var(--mono);
-    color: var(--textPrimary);
   }
-
-  .metric-label {
+  .post-metric-label {
     font-size: 10px;
     color: var(--textTertiary);
     text-transform: uppercase;
@@ -496,264 +593,277 @@
   }
 
   .post-dna-prompt {
-    background: linear-gradient(135deg, rgba(110, 124, 247, 0.06) 0%, transparent 100%);
-    border: 1px solid rgba(110, 124, 247, 0.10);
+    background: var(--surface);
+    border: 1px solid var(--divider);
     border-radius: 14px;
     padding: 14px 16px;
     display: flex;
     align-items: center;
     gap: 12px;
     margin-top: 16px;
+    position: relative;
+    overflow: hidden;
   }
-
-  .post-dna-prompt .icon {
-    font-size: 20px;
-    flex-shrink: 0;
+  .post-dna-prompt::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent);
+    border-radius: 2px;
   }
-
   .post-dna-prompt p {
     font-size: 13px;
     color: var(--textSecondary);
     line-height: 1.4;
   }
+  .post-dna-prompt span { color: var(--accent); font-weight: 600; }
 
-  .post-dna-prompt span {
-    color: var(--accent);
-    font-weight: 500;
+  /* DNA waveform icon (SVG inline) */
+  .dna-wave-icon {
+    width: 20px; height: 20px;
+    flex-shrink: 0;
+  }
+  .dna-wave-icon svg {
+    width: 100%; height: 100%;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.5;
+    stroke-linecap: round;
   }
 
-  /* Capture Flow */
+  /* ============================================ */
+  /* LISTENING ANIMATION */
+  /* ============================================ */
   .capture-center {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     height: 100%;
-    padding-bottom: 60px;
+    padding-bottom: 80px;
+  }
+
+  .listening-ring {
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    border: 1px solid rgba(110,124,247,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+    position: relative;
+    animation: ring-pulse 3s ease-in-out infinite;
+  }
+  .listening-ring::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    border-radius: 50%;
+    border: 1px solid rgba(110,124,247,0.06);
+    animation: ring-pulse 3s ease-in-out infinite 0.5s;
+  }
+  .listening-ring::after {
+    content: '';
+    position: absolute;
+    inset: -40px;
+    border-radius: 50%;
+    border: 1px solid rgba(110,124,247,0.03);
+    animation: ring-pulse 3s ease-in-out infinite 1s;
+  }
+
+  @keyframes ring-pulse {
+    0%, 100% { transform: scale(1); opacity: 0.6; }
+    50% { transform: scale(1.06); opacity: 1; }
   }
 
   .listening-bars {
     display: flex;
-    gap: 5px;
-    align-items: flex-end;
-    height: 60px;
-    margin-bottom: 24px;
+    gap: 4px;
+    align-items: center;
+    height: 48px;
   }
-
-  .bar {
-    width: 5px;
-    border-radius: 3px;
+  .l-bar {
+    width: 3px;
+    border-radius: 2px;
     background: var(--accent);
-    animation: barPulse 1.2s ease-in-out infinite;
+    animation: bar-pulse 1s ease-in-out infinite;
   }
+  .l-bar:nth-child(1) { animation-delay: 0s; height: 20px; }
+  .l-bar:nth-child(2) { animation-delay: 0.1s; height: 32px; }
+  .l-bar:nth-child(3) { animation-delay: 0.2s; height: 44px; }
+  .l-bar:nth-child(4) { animation-delay: 0.3s; height: 32px; }
+  .l-bar:nth-child(5) { animation-delay: 0.4s; height: 20px; }
 
-  .bar:nth-child(1) { animation-delay: 0s; }
-  .bar:nth-child(2) { animation-delay: 0.15s; }
-  .bar:nth-child(3) { animation-delay: 0.3s; }
-  .bar:nth-child(4) { animation-delay: 0.45s; }
-  .bar:nth-child(5) { animation-delay: 0.6s; }
-
-  @keyframes barPulse {
-    0%, 100% { height: 16px; opacity: 0.4; }
-    50% { height: 48px; opacity: 1; }
+  @keyframes bar-pulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.6); }
+    50% { opacity: 1; transform: scaleY(1); }
   }
 
   .capture-label {
-    font-size: 20px;
-    font-weight: 600;
-    color: var(--textPrimary);
+    font-size: 22px; font-weight: 300;
+    letter-spacing: -0.3px;
     margin-bottom: 6px;
   }
-
   .capture-sub {
     font-size: 14px;
-    color: var(--textSecondary);
-    margin-bottom: 24px;
-  }
-
-  .cancel-link {
-    font-size: 15px;
-    color: var(--textSecondary);
-    cursor: pointer;
-  }
-
-  /* Onboarding */
-  .onboard-center {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-    padding: 0 16px 60px;
-    text-align: center;
-  }
-
-  .onboard-icon {
-    font-size: 56px;
-    margin-bottom: 24px;
-    opacity: 0.9;
-  }
-
-  .onboard-title {
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--textPrimary);
-    margin-bottom: 10px;
-    letter-spacing: -0.3px;
-  }
-
-  .onboard-desc {
-    font-size: 16px;
-    color: var(--textSecondary);
-    line-height: 1.5;
-    margin-bottom: 36px;
-    max-width: 300px;
-  }
-
-  .onboard-btns {
-    width: 100%;
-    max-width: 300px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .skip-link {
-    font-size: 15px;
     color: var(--textTertiary);
-    margin-top: 16px;
-    cursor: pointer;
   }
 
-  /* Section divider */
-  .section-divider {
-    height: 1px;
-    background: var(--divider);
-    margin: 16px 0;
+  /* Sheet handle */
+  .sheet-handle {
+    width: 36px; height: 5px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+    margin: 10px auto 0;
   }
 
-  /* Feature badge */
+  /* DNA badge in header */
   .dna-badge {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
+    gap: 5px;
     font-size: 11px;
-    color: var(--accent);
-    background: rgba(110, 124, 247, 0.08);
-    padding: 3px 8px;
-    border-radius: 6px;
     font-weight: 500;
-  }
-
-  /* Annotation overlay */
-  .annotation {
-    position: absolute;
-    background: rgba(110, 124, 247, 0.9);
-    color: white;
-    font-size: 11px;
-    font-weight: 600;
+    color: var(--accent);
+    background: rgba(110,124,247,0.08);
+    border: 1px solid rgba(110,124,247,0.12);
     padding: 4px 10px;
-    border-radius: 6px;
-    white-space: nowrap;
-    z-index: 20;
-    pointer-events: none;
+    border-radius: 8px;
+    font-family: var(--mono);
+    letter-spacing: 0.3px;
   }
 
-  .annotation::after {
-    content: '';
-    position: absolute;
-    width: 12px;
-    height: 12px;
-    background: rgba(110, 124, 247, 0.9);
-    transform: rotate(45deg);
+  /* Settings icon */
+  .settings-btn {
+    width: 32px; height: 32px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    color: var(--textSecondary);
   }
-
-  .annotation.left::after { right: -5px; top: 50%; margin-top: -6px; }
-  .annotation.bottom::after { bottom: -5px; left: 50%; margin-left: -6px; }
 </style>
 </head>
 <body>
 
 <h1 class="page-title">Sound DNA — Feature Placement</h1>
-<p class="page-sub">Where the feature lives across the app lifecycle</p>
+<p class="page-sub">How the feature integrates across the app lifecycle</p>
 
 <div class="concepts-grid">
 
-  <!-- SCREEN 1: Library Tab — Permanent Home -->
-  <div class="concept">
-    <div class="concept-label">Primary Home</div>
-    <div class="concept-title">Library Tab — Top Section</div>
-    <div class="concept-desc">Sound DNA's permanent address. Always the first thing in Library. The "Sample a Song" action lives here.</div>
+<!-- ============================================ -->
+<!-- SCREEN 1: LIBRARY — PERMANENT HOME -->
+<!-- ============================================ -->
+<div class="concept">
+  <div class="concept-label">Primary Home</div>
+  <div class="concept-name">Library — Top Section</div>
+  <div class="concept-desc">Sound DNA's permanent address. Always first in Library. Glass card with Orb, profile stats, and Sample button.</div>
 
-    <div class="phone">
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="nebula-bg"><div class="blob1"></div><div class="blob2"></div></div>
+      <div class="status-bar"><span>2:14</span><span class="icons">●●●●● ▐▐▐ 🔋</span></div>
       <div class="dynamic-island"></div>
-      <div class="phone-inner">
-        <div class="nav-title">Library</div>
 
-        <!-- Sound DNA Card — Featured -->
-        <div class="sound-dna-card">
-          <div class="dna-header">
-            <div class="dna-orb">🧬</div>
-            <div class="dna-info">
-              <h3>Your Sound</h3>
-              <p>3 songs sampled · Profile: Strong</p>
+      <div class="content-scroll" style="padding-top: 16px;">
+        <div style="font-size: 28px; font-weight: 500; margin-bottom: 20px; padding: 0 4px;">Library</div>
+
+        <!-- SOUND DNA HERO -->
+        <div class="dna-hero">
+          <div class="dna-hero-glow"></div>
+          <div class="dna-hero-inner">
+            <div class="dna-hero-top">
+              <div class="dna-orb">
+                <svg viewBox="0 0 24 24"><path d="M3 12h2l3-6 4 12 4-8 3 4h2"/></svg>
+              </div>
+              <div class="dna-hero-info">
+                <h3>Your Sound</h3>
+                <p>3 songs · Profile active</p>
+              </div>
             </div>
-          </div>
-          <div class="dna-stats">
-            <div class="dna-stat">
-              <div class="dna-stat-value">95</div>
-              <div class="dna-stat-label">Tempo</div>
+
+            <div class="dna-stats-row">
+              <div class="dna-stat">
+                <div class="dna-stat-val">95</div>
+                <div class="dna-stat-label">BPM</div>
+              </div>
+              <div class="dna-stat">
+                <div class="dna-stat-val">Am</div>
+                <div class="dna-stat-label">Key</div>
+              </div>
+              <div class="dna-stat">
+                <div class="dna-stat-val">Warm</div>
+                <div class="dna-stat-label">Tone</div>
+              </div>
             </div>
-            <div class="dna-stat">
-              <div class="dna-stat-value">A</div>
-              <div class="dna-stat-label">Key</div>
-            </div>
-            <div class="dna-stat">
-              <div class="dna-stat-value">Warm</div>
-              <div class="dna-stat-label">Tone</div>
-            </div>
+
+            <button class="dna-sample-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M3 12h2l3-6 4 12 4-8 3 4h2"/></svg>
+              Sample a Song
+            </button>
           </div>
-          <button class="sample-btn">🎵 &nbsp;Sample a Song</button>
         </div>
 
-        <div class="section-divider"></div>
-
-        <!-- Other Library Items -->
-        <div class="lib-item">
-          <div class="lib-icon body">🎼</div>
-          <div class="lib-text">
-            <h4>Body Music</h4>
-            <p>4 saved tracks</p>
-          </div>
-          <div class="lib-chevron">›</div>
+        <!-- Other library sections -->
+        <div class="lib-section-header">
+          <span class="lib-section-label">Compositions</span>
+          <span class="lib-section-link">See All ›</span>
         </div>
 
-        <div class="lib-item">
-          <div class="lib-icon context">📚</div>
-          <div class="lib-text">
-            <h4>Context Tracks</h4>
-            <p>2 active · 1 archived</p>
+        <div class="lib-row">
+          <div class="lib-row-icon" style="background: rgba(91,106,191,0.1);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--focus)" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
           </div>
-          <div class="lib-chevron">›</div>
+          <div class="lib-row-text"><h4>Deep Work Drift</h4><p>Focus · 45 min</p></div>
+          <span class="chevron">›</span>
         </div>
 
-        <div class="lib-item">
-          <div class="lib-icon compose">🎛️</div>
-          <div class="lib-text">
-            <h4>Compositions</h4>
-            <p>1 saved</p>
-          </div>
-          <div class="lib-chevron">›</div>
+        <div style="height: 16px;"></div>
+        <div class="lib-section-header">
+          <span class="lib-section-label">Body Music</span>
+          <span class="lib-section-link">See All ›</span>
         </div>
 
-        <div class="lib-item">
-          <div class="lib-icon music">🧠</div>
-          <div class="lib-text">
-            <h4>Sonic Memories</h4>
-            <p>2 memories</p>
+        <div class="lib-row">
+          <div class="lib-row-icon" style="background: rgba(78,168,166,0.1);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--relax)" stroke-width="1.5"><path d="M2 12h4l3-9 4 18 4-9h5"/></svg>
           </div>
-          <div class="lib-chevron">›</div>
+          <div class="lib-row-text"><h4>Tuesday Focus</h4><p>Apr 1 · 32 min</p></div>
+          <span class="chevron">›</span>
         </div>
+
+        <div class="lib-row">
+          <div class="lib-row-icon" style="background: rgba(144,128,196,0.1);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--sleep)" stroke-width="1.5"><path d="M2 12h4l3-9 4 18 4-9h5"/></svg>
+          </div>
+          <div class="lib-row-text"><h4>Sunday Wind-Down</h4><p>Mar 30 · 28 min</p></div>
+          <span class="chevron">›</span>
+        </div>
+
+        <div style="height: 16px;"></div>
+        <div class="lib-section-header">
+          <span class="lib-section-label">Sonic Memories</span>
+          <span class="lib-section-link">See All ›</span>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+          <div class="glass-card" style="padding: 14px;">
+            <div style="width: 100%; height: 3px; background: var(--relax); border-radius: 2px; margin-bottom: 10px;"></div>
+            <div style="font-size: 13px; color: var(--textPrimary); line-height: 1.4;">Rain on a tin roof at my cabin</div>
+            <div style="font-size: 11px; color: var(--textTertiary); margin-top: 8px;">🍃 Calm</div>
+          </div>
+          <div class="glass-card" style="padding: 14px;">
+            <div style="width: 100%; height: 3px; background: var(--focus); border-radius: 2px; margin-bottom: 10px;"></div>
+            <div style="font-size: 13px; color: var(--textPrimary); line-height: 1.4;">Library hum during finals</div>
+            <div style="font-size: 11px; color: var(--textTertiary); margin-top: 8px;">🎯 Focused</div>
+          </div>
+        </div>
+
+        <div style="height: 120px;"></div>
       </div>
 
       <div class="tab-bar">
@@ -762,72 +872,98 @@
         <div class="tab-item active"><div class="tab-icon">📚</div>Library</div>
         <div class="tab-item"><div class="tab-icon">📊</div>Insights</div>
       </div>
+      <div class="home-indicator"></div>
     </div>
   </div>
+</div>
 
-  <!-- SCREEN 2: Home — Contextual Card (Week 1) -->
-  <div class="concept">
-    <div class="concept-label">Early Discovery</div>
-    <div class="concept-title">Home — Contextual Card</div>
-    <div class="concept-desc">First week: a prominent card invites users to sample. Disappears as profile matures. Same pattern as Morning Brief.</div>
+<!-- ============================================ -->
+<!-- SCREEN 2: HOME — CONTEXTUAL CARD (WEEK 1) -->
+<!-- ============================================ -->
+<div class="concept">
+  <div class="concept-label">Early Discovery</div>
+  <div class="concept-name">Home — Week 1 Card</div>
+  <div class="concept-desc">First week: a contextual card above the mode carousel invites first sample. Same card pattern as Morning Brief.</div>
 
-    <div class="phone">
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="nebula-bg"><div class="blob1"></div><div class="blob2"></div></div>
+      <div class="status-bar"><span>9:41</span><span class="icons">●●●●● ▐▐▐ 🔋</span></div>
       <div class="dynamic-island"></div>
-      <div class="phone-inner">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <div>
-            <div style="font-size: 14px; color: var(--textSecondary);">Good morning</div>
-            <div style="font-size: 28px; font-weight: 700; letter-spacing: -0.3px;">Eric</div>
-          </div>
-          <div style="width: 36px; height: 36px; border-radius: 10px; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 16px;">⚙️</div>
+
+      <div class="home-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px 0;">
+          <span style="font-size: 15px; font-weight: 600;">BioNaural</span>
+          <div class="settings-btn">⚙</div>
         </div>
 
-        <!-- Sound DNA Contextual Card -->
-        <div class="home-dna-card">
-          <div class="home-dna-icon">🧬</div>
-          <div class="home-dna-text">
-            <h4>Personalize your sound</h4>
-            <p>Sample a song you love and every session will feel more like you.</p>
-          </div>
-          <div class="home-dna-arrow">›</div>
+        <div class="home-header">
+          <h2>Your Signal</h2>
         </div>
 
-        <!-- Mode Grid -->
-        <div style="font-size: 13px; color: var(--textSecondary); margin-bottom: 10px; font-weight: 500;">Start a session</div>
-        <div class="mode-grid">
-          <div class="mode-card focus">
-            <div class="mode-icon">🎯</div>
-            <div class="mode-name">Focus</div>
-            <div class="mode-desc">Beta · 14–16 Hz</div>
+        <!-- Orb -->
+        <div class="home-orb"></div>
+
+        <!-- Waveform -->
+        <div class="home-wave">
+          <svg viewBox="0 0 353 50">
+            <path d="M0 25 Q20 10 40 25 T80 25 T120 25 T160 25 T200 25 T240 25 T280 25 T320 25 T353 25" stroke="var(--accent)" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M0 25 Q25 35 50 25 T100 25 T150 25 T200 25 T250 25 T300 25 T353 25" stroke="var(--energize)" stroke-width="1" fill="none" opacity="0.35"/>
+          </svg>
+        </div>
+
+        <!-- Mode + Play -->
+        <div class="home-mode-play">
+          <div class="home-mode-label">
+            <div class="mode-dot" style="background: var(--focus);"></div>
+            Focus · 25 min
           </div>
-          <div class="mode-card relax">
-            <div class="mode-icon">🌿</div>
-            <div class="mode-name">Relaxation</div>
-            <div class="mode-desc">Alpha · 8–11 Hz</div>
-          </div>
-          <div class="mode-card sleep">
-            <div class="mode-icon">🌙</div>
-            <div class="mode-name">Sleep</div>
-            <div class="mode-desc">Theta→Delta</div>
-          </div>
-          <div class="mode-card energize">
-            <div class="mode-icon">⚡</div>
-            <div class="mode-name">Energize</div>
-            <div class="mode-desc">High Beta · 18–30 Hz</div>
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
           </div>
         </div>
 
-        <!-- Quick Stats -->
-        <div class="card" style="margin-top: 4px;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              <div style="font-size: 13px; color: var(--textTertiary);">This week</div>
-              <div style="font-size: 20px; font-weight: 600; font-family: var(--mono);">4 sessions</div>
+        <!-- Pager -->
+        <div class="pager-dots">
+          <div class="pager-dot active"></div>
+          <div class="pager-dot"></div>
+          <div class="pager-dot"></div>
+          <div class="pager-dot"></div>
+        </div>
+
+        <!-- Watch -->
+        <div class="watch-status">
+          <div class="watch-dot-green"></div>
+          Watch connected · 68 BPM
+        </div>
+
+        <!-- SOUND DNA CONTEXTUAL CARD -->
+        <div style="padding: 0 20px; margin-bottom: 10px;">
+          <div class="home-dna-card">
+            <div class="home-dna-icon">
+              <svg viewBox="0 0 24 24"><path d="M3 12h2l3-6 4 12 4-8 3 4h2"/></svg>
             </div>
-            <div style="text-align: right;">
-              <div style="font-size: 13px; color: var(--textTertiary);">Avg duration</div>
-              <div style="font-size: 20px; font-weight: 600; font-family: var(--mono);">28 min</div>
+            <div class="home-dna-text">
+              <h4>Personalize your sound</h4>
+              <p>Sample a song you love. Every session will feel more like you.</p>
             </div>
+            <span class="chevron">›</span>
+          </div>
+        </div>
+
+        <!-- Mode strip -->
+        <div class="mode-strip">
+          <div class="mode-strip-card focus" style="border-color: rgba(91,106,191,0.2);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--focus)" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m-10-10h4m12 0h4"/></svg>
+          </div>
+          <div class="mode-strip-card relax">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--relax)" stroke-width="1.5"><path d="M12 3c-4 6-7 8-7 12a7 7 0 0014 0c0-4-3-6-7-12z"/></svg>
+          </div>
+          <div class="mode-strip-card sleep">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sleep)" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+          </div>
+          <div class="mode-strip-card energize">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--energize)" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
           </div>
         </div>
       </div>
@@ -838,59 +974,156 @@
         <div class="tab-item"><div class="tab-icon">📚</div>Library</div>
         <div class="tab-item"><div class="tab-icon">📊</div>Insights</div>
       </div>
+      <div class="home-indicator"></div>
     </div>
   </div>
+</div>
 
-  <!-- SCREEN 3: Post-Session Prompt -->
-  <div class="concept">
-    <div class="concept-label">Natural Moment</div>
-    <div class="concept-title">Post-Session Prompt</div>
-    <div class="concept-desc">After a good session, a subtle prompt connects Sound DNA to the experience they just had. Appears selectively.</div>
+<!-- ============================================ -->
+<!-- SCREEN 3: HOME — MATURE (BADGE ONLY) -->
+<!-- ============================================ -->
+<div class="concept">
+  <div class="concept-label">Mature State</div>
+  <div class="concept-name">Home — Profile Active</div>
+  <div class="concept-desc">After profile matures, the card disappears. A subtle DNA badge in the header shows it's working. Zero friction preserved.</div>
 
-    <div class="phone">
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="nebula-bg"><div class="blob1"></div><div class="blob2"></div></div>
+      <div class="status-bar"><span>2:14</span><span class="icons">●●●●● ▐▐▐ 🔋</span></div>
       <div class="dynamic-island"></div>
-      <div class="phone-inner">
-        <div class="nav-title-small">Session Complete</div>
 
-        <div class="session-result">
-          <div class="orb"></div>
-          <h2>Great Focus Session</h2>
-          <p>42 minutes · 3 adaptations</p>
-        </div>
-
-        <div class="metric-row">
-          <div class="metric">
-            <div class="metric-val">68</div>
-            <div class="metric-label">Avg HR</div>
-          </div>
-          <div class="metric">
-            <div class="metric-val">-4</div>
-            <div class="metric-label">HR Delta</div>
-          </div>
-          <div class="metric">
-            <div class="metric-val">0.82</div>
-            <div class="metric-label">Score</div>
+      <div class="home-content">
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 24px 0;">
+          <span style="font-size: 15px; font-weight: 600;">BioNaural</span>
+          <div style="display: flex; gap: 8px; align-items: center;">
+            <div class="dna-badge">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"><path d="M3 12h2l3-6 4 12 4-8 3 4h2"/></svg>
+              Strong
+            </div>
+            <div class="settings-btn">⚙</div>
           </div>
         </div>
 
-        <div class="card" style="display: flex; gap: 12px; align-items: center; margin-bottom: 12px;">
-          <div style="font-size: 24px;">👍</div>
-          <div>
-            <div style="font-size: 15px; font-weight: 500;">Rate this session</div>
-            <div style="font-size: 12px; color: var(--textTertiary);">Helps BioNaural learn your preferences</div>
+        <div class="home-header">
+          <h2>Your Signal</h2>
+        </div>
+
+        <div class="home-orb"></div>
+
+        <div class="home-wave">
+          <svg viewBox="0 0 353 50">
+            <path d="M0 25 Q20 10 40 25 T80 25 T120 25 T160 25 T200 25 T240 25 T280 25 T320 25 T353 25" stroke="var(--accent)" stroke-width="1.5" fill="none" opacity="0.5"/>
+            <path d="M0 25 Q25 35 50 25 T100 25 T150 25 T200 25 T250 25 T300 25 T353 25" stroke="var(--energize)" stroke-width="1" fill="none" opacity="0.35"/>
+          </svg>
+        </div>
+
+        <div class="home-mode-play">
+          <div class="home-mode-label">
+            <div class="mode-dot" style="background: var(--focus);"></div>
+            Focus · 25 min
+          </div>
+          <div class="play-btn">
+            <svg viewBox="0 0 24 24"><polygon points="8,5 20,12 8,19"/></svg>
           </div>
         </div>
 
-        <!-- Sound DNA Prompt -->
+        <div class="pager-dots">
+          <div class="pager-dot active"></div>
+          <div class="pager-dot"></div>
+          <div class="pager-dot"></div>
+          <div class="pager-dot"></div>
+        </div>
+
+        <div class="watch-status">
+          <div class="watch-dot-green"></div>
+          Watch connected · 64 BPM
+        </div>
+
+        <div class="mode-strip">
+          <div class="mode-strip-card focus" style="border-color: rgba(91,106,191,0.2);">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--focus)" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4m-10-10h4m12 0h4"/></svg>
+          </div>
+          <div class="mode-strip-card relax">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--relax)" stroke-width="1.5"><path d="M12 3c-4 6-7 8-7 12a7 7 0 0014 0c0-4-3-6-7-12z"/></svg>
+          </div>
+          <div class="mode-strip-card sleep">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--sleep)" stroke-width="1.5"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z"/></svg>
+          </div>
+          <div class="mode-strip-card energize">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--energize)" stroke-width="1.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-bar">
+        <div class="tab-item active"><div class="tab-icon">⏺</div>Home</div>
+        <div class="tab-item"><div class="tab-icon">🎛</div>Compose</div>
+        <div class="tab-item"><div class="tab-icon">📚</div>Library</div>
+        <div class="tab-item"><div class="tab-icon">📊</div>Insights</div>
+      </div>
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================ -->
+<!-- SCREEN 4: POST-SESSION PROMPT -->
+<!-- ============================================ -->
+<div class="concept">
+  <div class="concept-label">Natural Moment</div>
+  <div class="concept-name">Post-Session Prompt</div>
+  <div class="concept-desc">After a strong session, a subtle accent-bar prompt connects Sound DNA to the experience. Appears selectively, not every time.</div>
+
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="nebula-bg"><div class="blob1"></div><div class="blob2"></div></div>
+      <div class="status-bar"><span>3:42</span><span class="icons">●●●●● ▐▐▐ 🔋</span></div>
+      <div class="dynamic-island"></div>
+
+      <div class="content-scroll" style="padding-top: 20px; text-align: center;">
+        <div style="font-size: 15px; font-weight: 600; margin-bottom: 24px;">Session Complete</div>
+
+        <div class="post-orb"></div>
+        <div style="font-size: 24px; font-weight: 300; letter-spacing: -0.3px; margin-bottom: 4px;">Great Focus Session</div>
+        <div style="font-size: 14px; color: var(--textSecondary); margin-bottom: 24px;">42 minutes · 3 adaptations</div>
+
+        <div class="post-metrics">
+          <div class="post-metric">
+            <div class="post-metric-val">68</div>
+            <div class="post-metric-label">Avg HR</div>
+          </div>
+          <div class="post-metric">
+            <div class="post-metric-val">-4</div>
+            <div class="post-metric-label">HR Delta</div>
+          </div>
+          <div class="post-metric">
+            <div class="post-metric-val">.82</div>
+            <div class="post-metric-label">Score</div>
+          </div>
+        </div>
+
+        <!-- Thumbs row -->
+        <div style="display: flex; gap: 10px; margin-bottom: 8px;">
+          <div class="glass-card" style="flex: 1; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer;">
+            <span style="font-size: 22px;">👍</span>
+            <span style="font-size: 14px; font-weight: 500;">Good</span>
+          </div>
+          <div class="glass-card" style="flex: 1; padding: 14px; display: flex; align-items: center; gap: 12px; cursor: pointer;">
+            <span style="font-size: 22px;">👎</span>
+            <span style="font-size: 14px; font-weight: 500;">Not great</span>
+          </div>
+        </div>
+
+        <!-- DNA PROMPT -->
         <div class="post-dna-prompt">
-          <div class="icon">🧬</div>
-          <p>Make sessions even more personal. <span>Sample a song</span> to tune your sound profile.</p>
+          <div class="dna-wave-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 12h2l3-6 4 12 4-8 3 4h2"/></svg>
+          </div>
+          <p>Make sessions more personal. <span>Sample a song</span> to tune your sound profile.</p>
         </div>
 
-        <div style="margin-top: 20px;">
-          <button class="sample-btn-outline" style="margin-bottom: 10px;">🎵 &nbsp;Sample a Song</button>
-          <div style="text-align: center; font-size: 14px; color: var(--textTertiary); cursor: pointer;">Done</div>
-        </div>
+        <div style="height: 80px;"></div>
       </div>
 
       <div class="tab-bar">
@@ -899,143 +1132,92 @@
         <div class="tab-item"><div class="tab-icon">📚</div>Library</div>
         <div class="tab-item"><div class="tab-icon">📊</div>Insights</div>
       </div>
+      <div class="home-indicator"></div>
     </div>
   </div>
+</div>
 
-  <!-- SCREEN 4: Capture Flow — Listening -->
-  <div class="concept">
-    <div class="concept-label">The Wow Moment</div>
-    <div class="concept-title">Sound DNA Capture</div>
-    <div class="concept-desc">The sampling flow itself. Presented as a sheet from any entry point. Listening animation, then results.</div>
+<!-- ============================================ -->
+<!-- SCREEN 5: CAPTURE SHEET — LISTENING -->
+<!-- ============================================ -->
+<div class="concept">
+  <div class="concept-label">The Wow Moment</div>
+  <div class="concept-name">Sound DNA — Listening</div>
+  <div class="concept-desc">Sheet presentation from any entry point. Expanding rings + waveform bars. Matches the Orb's breathing rhythm.</div>
 
-    <div class="phone">
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="nebula-bg"><div class="blob1"></div><div class="blob2"></div></div>
+      <div class="status-bar"><span>9:41</span><span class="icons">●●●●● ▐▐▐ 🔋</span></div>
       <div class="dynamic-island"></div>
-      <div class="phone-inner">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0;">
-          <div style="font-size: 15px; color: var(--textSecondary); cursor: pointer;">Cancel</div>
-          <div class="nav-title-small" style="margin-bottom: 0;">Sound DNA</div>
-          <div style="width: 50px;"></div>
+
+      <!-- Sheet -->
+      <div style="position: absolute; bottom: 0; left: 0; right: 0; top: 60px; background: var(--canvas); border-radius: 16px 16px 0 0; z-index: 5;">
+        <div class="sheet-handle"></div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px 20px 0;">
+          <span style="font-size: 15px; color: var(--textSecondary); cursor: pointer;">Cancel</span>
+          <span style="font-size: 15px; font-weight: 600;">Sound DNA</span>
+          <span style="width: 50px;"></span>
         </div>
 
         <div class="capture-center">
-          <div class="listening-bars">
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
-            <div class="bar"></div>
+          <div class="listening-ring">
+            <div class="listening-bars">
+              <div class="l-bar"></div>
+              <div class="l-bar"></div>
+              <div class="l-bar"></div>
+              <div class="l-bar"></div>
+              <div class="l-bar"></div>
+            </div>
           </div>
           <div class="capture-label">Listening</div>
-          <div class="capture-sub">Make sure the song is playing nearby.</div>
-          <div class="cancel-link">Cancel</div>
+          <div class="capture-sub">Make sure the song is playing nearby</div>
         </div>
       </div>
+
+      <div class="home-indicator"></div>
     </div>
   </div>
-
-  <!-- SCREEN 5: Onboarding Step -->
-  <div class="concept">
-    <div class="concept-label">First Impression</div>
-    <div class="concept-title">Onboarding Step</div>
-    <div class="concept-desc">Optional personalization during setup. For users who downloaded because of Sound DNA, this is the payoff moment.</div>
-
-    <div class="phone">
-      <div class="dynamic-island"></div>
-      <div class="phone-inner" style="padding-top: 80px;">
-        <div class="onboard-center">
-          <div class="onboard-icon">🧬</div>
-          <div class="onboard-title">What does your<br>music sound like?</div>
-          <div class="onboard-desc">Sample a song you love. We'll use its musical DNA to make every session feel personal.</div>
-          <div class="onboard-btns">
-            <button class="sample-btn">🎵 &nbsp;Sample a Song</button>
-            <button class="sample-btn-outline" style="border-color: var(--divider); color: var(--textSecondary);">Skip for now</button>
-          </div>
-          <div class="skip-link">I'll do this later</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SCREEN 6: Home — Mature Profile (Chip) -->
-  <div class="concept">
-    <div class="concept-label">Mature State</div>
-    <div class="concept-title">Home — After Profile Matures</div>
-    <div class="concept-desc">Once profile is strong (5+ samples, 15+ sessions), the card disappears. A subtle badge shows it's active. Zero friction preserved.</div>
-
-    <div class="phone">
-      <div class="dynamic-island"></div>
-      <div class="phone-inner">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <div>
-            <div style="font-size: 14px; color: var(--textSecondary);">Good afternoon</div>
-            <div style="font-size: 28px; font-weight: 700; letter-spacing: -0.3px;">Eric</div>
-          </div>
-          <div style="display: flex; gap: 8px; align-items: center;">
-            <div class="dna-badge">🧬 Strong</div>
-            <div style="width: 36px; height: 36px; border-radius: 10px; background: var(--surface); display: flex; align-items: center; justify-content: center; font-size: 16px;">⚙️</div>
-          </div>
-        </div>
-
-        <!-- No DNA card — just modes -->
-        <div style="font-size: 13px; color: var(--textSecondary); margin-bottom: 10px; font-weight: 500;">Start a session</div>
-        <div class="mode-grid">
-          <div class="mode-card focus">
-            <div class="mode-icon">🎯</div>
-            <div class="mode-name">Focus</div>
-            <div class="mode-desc">Beta · 14–16 Hz</div>
-          </div>
-          <div class="mode-card relax">
-            <div class="mode-icon">🌿</div>
-            <div class="mode-name">Relaxation</div>
-            <div class="mode-desc">Alpha · 8–11 Hz</div>
-          </div>
-          <div class="mode-card sleep">
-            <div class="mode-icon">🌙</div>
-            <div class="mode-name">Sleep</div>
-            <div class="mode-desc">Theta→Delta</div>
-          </div>
-          <div class="mode-card energize">
-            <div class="mode-icon">⚡</div>
-            <div class="mode-name">Energize</div>
-            <div class="mode-desc">High Beta · 18–30 Hz</div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top: 4px;">
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <div>
-              <div style="font-size: 13px; color: var(--textTertiary);">This week</div>
-              <div style="font-size: 20px; font-weight: 600; font-family: var(--mono);">12 sessions</div>
-            </div>
-            <div style="text-align: right;">
-              <div style="font-size: 13px; color: var(--textTertiary);">Streak</div>
-              <div style="font-size: 20px; font-weight: 600; font-family: var(--mono);">18 days</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top: 4px;">
-          <div style="display: flex; gap: 10px; align-items: center;">
-            <div style="font-size: 18px;">☀️</div>
-            <div>
-              <div style="font-size: 14px; font-weight: 500;">Morning Brief</div>
-              <div style="font-size: 12px; color: var(--textTertiary);">HRV is up 8% this week. Great recovery.</div>
-            </div>
-            <div style="color: var(--textTertiary); margin-left: auto;">›</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="tab-bar">
-        <div class="tab-item active"><div class="tab-icon">⏺</div>Home</div>
-        <div class="tab-item"><div class="tab-icon">🎛</div>Compose</div>
-        <div class="tab-item"><div class="tab-icon">📚</div>Library</div>
-        <div class="tab-item"><div class="tab-icon">📊</div>Insights</div>
-      </div>
-    </div>
-  </div>
-
 </div>
 
+<!-- ============================================ -->
+<!-- SCREEN 6: ONBOARDING STEP -->
+<!-- ============================================ -->
+<div class="concept">
+  <div class="concept-label">First Impression</div>
+  <div class="concept-name">Onboarding Step</div>
+  <div class="concept-desc">Optional personalization during setup. For users who downloaded because of Sound DNA, this is the payoff moment. Skippable.</div>
+
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="nebula-bg"><div class="blob1"></div><div class="blob2"></div></div>
+      <div class="status-bar"><span>9:41</span><span class="icons">●●●●● ▐▐▐ 🔋</span></div>
+      <div class="dynamic-island"></div>
+
+      <div style="position: absolute; top: 60px; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 0 32px 80px; text-align: center; z-index: 1;">
+
+        <!-- Orb with waveform -->
+        <div style="width: 120px; height: 120px; border-radius: 50%; background: radial-gradient(circle, rgba(110,124,247,0.25) 0%, rgba(110,124,247,0.04) 60%, transparent 80%); margin-bottom: 32px; animation: orb-breathe 5s ease-in-out infinite; display: flex; align-items: center; justify-content: center;">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="rgba(226,230,240,0.5)" stroke-width="1.5" stroke-linecap="round"><path d="M3 12h2l3-6 4 12 4-8 3 4h2"/></svg>
+        </div>
+
+        <div style="font-size: 28px; font-weight: 300; letter-spacing: -0.5px; margin-bottom: 12px;">What does your<br>music sound like?</div>
+        <div style="font-size: 15px; color: var(--textSecondary); line-height: 1.5; margin-bottom: 40px; max-width: 280px;">Sample a song you love. We'll use its musical DNA to personalize every session.</div>
+
+        <button class="dna-sample-btn" style="max-width: 300px; margin-bottom: 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round"><path d="M3 12h2l3-6 4 12 4-8 3 4h2"/></svg>
+          Sample a Song
+        </button>
+
+        <div style="font-size: 15px; color: var(--textTertiary); cursor: pointer; margin-top: 8px;">I'll do this later</div>
+      </div>
+
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+</div>
+
+</div>
 </body>
 </html>

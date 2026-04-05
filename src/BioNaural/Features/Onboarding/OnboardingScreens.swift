@@ -182,7 +182,6 @@ struct HowItWorksView: View {
     }
 }
 
-
 // MARK: - Screen 3: AdaptiveDifferenceView
 
 /// The differentiator — why BioNaural is not just another binaural beats app.
@@ -224,7 +223,6 @@ struct AdaptiveDifferenceView: View {
         .accessibilityLabel("How BioNaural adapts to you")
     }
 }
-
 
 // MARK: - Screen 4: HeadphoneCheckView
 

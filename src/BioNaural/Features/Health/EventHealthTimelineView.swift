@@ -238,7 +238,7 @@ struct EventHealthTimelineView: View {
         .chartXScale(domain: selectedRange.startDate...Date())
         .chartYScale(domain: chartYDomain)
         .chartXAxis {
-            AxisMarks(values: .stride(by: xAxisStride, count: xAxisStrideCount)) { value in
+            AxisMarks(values: .stride(by: xAxisStride, count: xAxisStrideCount)) { _ in
                 AxisGridLine()
                     .foregroundStyle(Theme.Colors.divider.opacity(Theme.Opacity.light))
                 AxisValueLabel(format: xAxisDateFormat)
@@ -247,7 +247,7 @@ struct EventHealthTimelineView: View {
             }
         }
         .chartYAxis {
-            AxisMarks(position: .leading) { value in
+            AxisMarks(position: .leading) { _ in
                 AxisGridLine()
                     .foregroundStyle(Theme.Colors.divider.opacity(Theme.Opacity.light))
                 AxisValueLabel()

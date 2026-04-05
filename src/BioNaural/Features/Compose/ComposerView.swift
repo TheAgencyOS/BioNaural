@@ -26,7 +26,7 @@ struct ComposerView: View {
 
     private let columns = [
         GridItem(.flexible(), spacing: Theme.Spacing.md),
-        GridItem(.flexible(), spacing: Theme.Spacing.md),
+        GridItem(.flexible(), spacing: Theme.Spacing.md)
     ]
 
     var body: some View {
@@ -74,7 +74,7 @@ struct ComposerView: View {
                             colors: [
                                 Theme.Colors.accent.opacity(Theme.Opacity.accentLight),
                                 Theme.Colors.accent.opacity(Theme.Opacity.subtle),
-                                .clear,
+                                .clear
                             ],
                             center: .center,
                             startRadius: 0,

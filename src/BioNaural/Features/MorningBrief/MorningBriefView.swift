@@ -383,7 +383,7 @@ extension MorningBrief {
                     startDate: Date().addingTimeInterval(7200),
                     stressLevel: "moderate",
                     prepReady: false
-                ),
+                )
             ],
             meetingCount: 5,
             firstFreeWindow: DateInterval(

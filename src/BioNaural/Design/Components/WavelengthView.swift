@@ -33,7 +33,7 @@ struct WavelengthView: View {
     /// Optional color override. When set, this color is used instead of
     /// the biometric-state-derived color. Used to give each audio layer
     /// (Ambient, Melodic, Binaural) its own distinct color.
-    var layerColor: Color? = nil
+    var layerColor: Color?
 
     /// Compact mode — uses reduced amplitude and stroke for mini player rendering.
     var isCompact: Bool = false

@@ -26,7 +26,7 @@ import os
 ///   save to HealthKit -> sync summary to iPhone.
 @MainActor
 @Observable
-final class WatchSessionManager: NSObject, Sendable {
+final class WatchSessionManager: NSObject {
 
     // MARK: - Published State
 

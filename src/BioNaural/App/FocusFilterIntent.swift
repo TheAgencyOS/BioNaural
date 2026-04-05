@@ -77,7 +77,7 @@ struct BioNauralFocusFilter: SetFocusFilterIntent {
 
         let userInfo: [String: Any] = [
             SessionLaunchKeys.mode: resolvedMode.rawValue,
-            SessionLaunchKeys.durationMinutes: resolvedDuration,
+            SessionLaunchKeys.durationMinutes: resolvedDuration
         ]
 
         NotificationCenter.default.post(

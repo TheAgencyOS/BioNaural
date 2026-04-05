@@ -248,7 +248,7 @@ extension AdaptationMapView {
         .init(timestamp: 0, reason: "Start", oldBeatFrequency: 14, newBeatFrequency: 14, heartRateAtTime: 72),
         .init(timestamp: 300, reason: "HR rising", oldBeatFrequency: 14, newBeatFrequency: 12, heartRateAtTime: 82),
         .init(timestamp: 600, reason: "HR stable", oldBeatFrequency: 12, newBeatFrequency: 15, heartRateAtTime: 75),
-        .init(timestamp: 900, reason: "HR calm", oldBeatFrequency: 15, newBeatFrequency: 16, heartRateAtTime: 68),
+        .init(timestamp: 900, reason: "HR calm", oldBeatFrequency: 15, newBeatFrequency: 16, heartRateAtTime: 68)
     ]
 
     ZStack {

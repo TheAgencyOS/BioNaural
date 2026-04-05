@@ -104,7 +104,7 @@ final class AppDependencies {
             ContextTrack.self,
             SavedTrack.self,
             CalendarPatternStore.self,
-            UserBehavioralPatternsModel.self,
+            UserBehavioralPatternsModel.self
         ])
         let configuration = ModelConfiguration(
             schema: schema,
@@ -175,7 +175,7 @@ final class AppDependencies {
             ContextTrack.self,
             SavedTrack.self,
             CalendarPatternStore.self,
-            UserBehavioralPatternsModel.self,
+            UserBehavioralPatternsModel.self
         ])
         let configuration = ModelConfiguration(
             schema: schema,

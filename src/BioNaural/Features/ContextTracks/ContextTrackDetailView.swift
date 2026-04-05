@@ -221,7 +221,7 @@ struct ContextTrackDetailView: View {
             LazyVGrid(
                 columns: [
                     GridItem(.flexible()),
-                    GridItem(.flexible()),
+                    GridItem(.flexible())
                 ],
                 spacing: Theme.Spacing.md
             ) {

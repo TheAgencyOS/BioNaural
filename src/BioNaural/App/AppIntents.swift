@@ -125,7 +125,7 @@ struct StartSessionIntent: AppIntent {
         // Post a notification that the session UI observes to begin playback.
         let userInfo: [String: Any] = [
             SessionLaunchKeys.mode: focusMode.rawValue,
-            SessionLaunchKeys.durationMinutes: resolvedDuration,
+            SessionLaunchKeys.durationMinutes: resolvedDuration
         ]
 
         NotificationCenter.default.post(

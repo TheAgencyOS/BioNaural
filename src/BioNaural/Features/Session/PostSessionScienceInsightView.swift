@@ -518,7 +518,7 @@ struct PostSessionScienceInsightView: View {
             AdaptationEventRecord(timestamp: 360, reason: "HR", oldBeatFrequency: 13.5, newBeatFrequency: 14.2, heartRateAtTime: 72),
             AdaptationEventRecord(timestamp: 600, reason: "HR", oldBeatFrequency: 14.2, newBeatFrequency: 14.8, heartRateAtTime: 70),
             AdaptationEventRecord(timestamp: 900, reason: "HR", oldBeatFrequency: 14.8, newBeatFrequency: 15.0, heartRateAtTime: 68),
-            AdaptationEventRecord(timestamp: 1200, reason: "HR", oldBeatFrequency: 15.0, newBeatFrequency: 15.2, heartRateAtTime: 67),
+            AdaptationEventRecord(timestamp: 1200, reason: "HR", oldBeatFrequency: 15.0, newBeatFrequency: 15.2, heartRateAtTime: 67)
         ]
     )
     .padding(Theme.Spacing.pageMargin)

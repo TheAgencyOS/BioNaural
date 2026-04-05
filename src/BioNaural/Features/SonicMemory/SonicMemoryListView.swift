@@ -20,7 +20,7 @@ struct SonicMemoryListView: View {
     @Environment(\.modelContext) private var modelContext
 
     @State private var showingInput = false
-    @State private var memoryToDelete: SonicMemory? = nil
+    @State private var memoryToDelete: SonicMemory?
 
     // MARK: - Body
 

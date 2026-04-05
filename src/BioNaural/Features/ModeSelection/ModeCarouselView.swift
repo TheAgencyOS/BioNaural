@@ -523,7 +523,7 @@ private struct RecommendationCarouselCard: View {
             colors: [
                 modeColor.opacity(Theme.Opacity.accentLight),
                 Theme.Colors.surface.opacity(Theme.Opacity.translucent),
-                Theme.Colors.canvas,
+                Theme.Colors.canvas
             ],
             startPoint: .topLeading,
             endPoint: .bottomTrailing
@@ -740,10 +740,10 @@ private struct AuroraDriftCanvas: View {
     private enum AuroraPalette {
         typealias RGB = (r: Double, g: Double, b: Double)
 
-        static let focus: [RGB]      = [(71,86,171), (91,106,191), (110,124,247), (130,115,210), (91,106,191)]
-        static let relaxation: [RGB]  = [(58,148,146), (78,168,166), (88,190,180), (68,155,170), (78,168,166)]
-        static let sleep: [RGB]       = [(124,108,176), (144,128,196), (160,140,220), (130,118,190), (144,128,196)]
-        static let energize: [RGB]    = [(225,146,15), (245,166,35), (255,185,60), (235,155,25), (245,166,35)]
+        static let focus: [RGB]      = [(71, 86, 171), (91, 106, 191), (110, 124, 247), (130, 115, 210), (91, 106, 191)]
+        static let relaxation: [RGB]  = [(58, 148, 146), (78, 168, 166), (88, 190, 180), (68, 155, 170), (78, 168, 166)]
+        static let sleep: [RGB]       = [(124, 108, 176), (144, 128, 196), (160, 140, 220), (130, 118, 190), (144, 128, 196)]
+        static let energize: [RGB]    = [(225, 146, 15), (245, 166, 35), (255, 185, 60), (235, 155, 25), (245, 166, 35)]
     }
 
     /// Color palette for aurora shifting (mode-specific, muted tones)
@@ -830,8 +830,7 @@ private struct AuroraDriftCanvas: View {
             let angle: Double = tx * freqBase + phaseScale
             let y: CGFloat = centerY - ampScale * sin(angle)
             let pt = CGPoint(x: x, y: y)
-            if x <= -ob + 1 { washPath.move(to: pt) }
-            else { washPath.addLine(to: pt) }
+            if x <= -ob + 1 { washPath.move(to: pt) } else { washPath.addLine(to: pt) }
         }
         washPath.addLine(to: CGPoint(x: W + ob, y: H))
         washPath.addLine(to: CGPoint(x: -ob, y: H))
@@ -880,8 +879,7 @@ private struct AuroraDriftCanvas: View {
             let angle: Double = tx * freqMult * .pi + psMult
             let y: CGFloat = centerY - hAmp * sin(angle)
             let pt = CGPoint(x: x, y: y)
-            if x <= -ob + 1 { path.move(to: pt) }
-            else { path.addLine(to: pt) }
+            if x <= -ob + 1 { path.move(to: pt) } else { path.addLine(to: pt) }
         }
         let color = paletteColor(at: colorTime + 0.5, opacity: Theme.CardWave.AuroraDrift.harmonicStrokeOpacity)
         context.stroke(path, with: .color(color), style: StrokeStyle(lineWidth: Theme.Radius.glassStroke * 0.5))

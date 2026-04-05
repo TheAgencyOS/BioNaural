@@ -519,7 +519,7 @@ struct WeeklyCorrelationDigestView: View {
             primaryMetric: "Minimal impact",
             secondaryMetric: nil,
             stressLevel: .low
-        ),
+        )
     ]
 
     let sampleSummary = WeekSummary(

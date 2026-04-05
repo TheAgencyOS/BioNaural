@@ -320,9 +320,9 @@ private struct HomeTab: View {
     private var allSessions: [FocusSession]
 
     // Morning brief + pre-event
-    @State private var morningBrief: MorningBrief? = nil
-    @State private var upcomingStressor: ClassifiedEvent? = nil
-    @State private var freeWindow: DateInterval? = nil
+    @State private var morningBrief: MorningBrief?
+    @State private var upcomingStressor: ClassifiedEvent?
+    @State private var freeWindow: DateInterval?
     @State private var showPreEventCard = false
 
     // Check-in sheet state

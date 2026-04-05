@@ -22,7 +22,7 @@ struct BioNauralShortcuts: AppShortcutsProvider {
                 "Start a focus session in \(.applicationName)",
                 "Begin \(.applicationName) session",
                 "Start relaxation in \(.applicationName)",
-                "Start sleep in \(.applicationName)",
+                "Start sleep in \(.applicationName)"
             ],
             shortTitle: "Start Session",
             systemImageName: "waveform.circle.fill"
@@ -33,7 +33,7 @@ struct BioNauralShortcuts: AppShortcutsProvider {
             phrases: [
                 "Stop \(.applicationName)",
                 "End my \(.applicationName) session",
-                "Stop my session in \(.applicationName)",
+                "Stop my session in \(.applicationName)"
             ],
             shortTitle: "Stop Session",
             systemImageName: "stop.circle.fill"

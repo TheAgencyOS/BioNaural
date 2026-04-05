@@ -20,8 +20,8 @@ struct BodyMusicLibraryView: View {
 
     // MARK: - State
 
-    @State private var selectedTrack: SavedTrack? = nil
-    @State private var filterMode: FocusMode? = nil
+    @State private var selectedTrack: SavedTrack?
+    @State private var filterMode: FocusMode?
     @State private var showFavoritesOnly: Bool = false
     @State private var contentAppeared = false
 

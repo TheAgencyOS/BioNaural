@@ -106,7 +106,6 @@ struct SessionControlsView: View {
     }
 }
 
-
 // MARK: - Preview
 
 #if DEBUG
