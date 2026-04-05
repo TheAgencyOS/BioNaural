@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — 4-Wave Icon Concepts</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#0a0a0a;
+    color:#e2e6f0;
+    font-family:-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    padding:40px;
+    min-height:100vh;
+  }
+  h1 { font-size:32px; font-weight:300; letter-spacing:1px; margin-bottom:8px; }
+  .subtitle { font-size:14px; color:#e2e6f0; opacity:0.4; margin-bottom:16px; letter-spacing:0.5px; }
+  .color-key {
+    display:flex; gap:20px; margin-bottom:48px; flex-wrap:wrap;
+  }
+  .ck { display:flex; align-items:center; gap:6px; }
+  .ck-dot { width:10px; height:10px; border-radius:50%; }
+  .ck-label { font-size:12px; font-weight:500; letter-spacing:0.5px; color:rgba(226,230,240,0.5); }
+
+  .grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(340px, 1fr));
+    gap:56px;
+    margin-bottom:64px;
+  }
+  .card {
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+  }
+  .ios-mask { border-radius:22.37%; overflow:hidden; position:relative; }
+  .card-number {
+    font-size:12px; font-family:'SF Mono','Menlo',monospace;
+    color:#6E7CF7; opacity:0.5; margin-bottom:2px;
+  }
+  .card-name { font-size:18px; font-weight:500; color:#e2e6f0; opacity:0.9; }
+  .card-label {
+    font-size:11px; text-transform:uppercase; letter-spacing:1.5px;
+    color:#6E7CF7; opacity:0.7;
+  }
+  .card-desc {
+    font-size:13px; color:#e2e6f0; opacity:0.4; text-align:center;
+    max-width:300px; line-height:1.5;
+  }
+  .divider { width:100%; height:1px; background:rgba(110,124,247,0.08); margin:16px 0 48px; }
+  .section-title { font-size:20px; font-weight:500; margin-bottom:8px; color:#6E7CF7; }
+  .section-desc { font-size:13px; color:#e2e6f0; opacity:0.45; margin-bottom:28px; max-width:600px; line-height:1.5; }
+  .fave-badge {
+    display:inline-block; background:rgba(110,124,247,0.15);
+    border:1px solid rgba(110,124,247,0.3); color:#6E7CF7;
+    font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase;
+    padding:4px 12px; border-radius:100px; margin-top:4px;
+  }
+  .size-row { display:flex; align-items:flex-end; gap:24px; flex-wrap:wrap; justify-content:center; margin-bottom:48px; }
+  .size-group { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .size-label { font-size:10px; color:#e2e6f0; opacity:0.3; font-family:'SF Mono','Menlo',monospace; }
+</style>
+</head>
+<body>
+
+<h1>BioNaural — 4-Wave Icons</h1>
+<p class="subtitle">Each icon features four waves — one per mode — all working in harmony.</p>
+
+<div class="color-key">
+  <div class="ck"><div class="ck-dot" style="background:#5B6ABF;"></div><span class="ck-label">Focus</span></div>
+  <div class="ck"><div class="ck-dot" style="background:#4EA8A6;"></div><span class="ck-label">Relaxation</span></div>
+  <div class="ck"><div class="ck-dot" style="background:#9080C4;"></div><span class="ck-label">Sleep</span></div>
+  <div class="ck"><div class="ck-dot" style="background:#F5A623;"></div><span class="ck-label">Energize</span></div>
+</div>
+
+<div class="grid">
+
+<!-- ============ 01: FOUR FREQUENCIES ============ -->
+<div class="card">
+  <div class="card-number">01</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="w1-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="50"/></filter>
+        <filter id="w1-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="12"/></filter>
+        <filter id="w1-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+        <radialGradient id="w1-bg" cx="50%" cy="50%" r="55%">
+          <stop offset="0%" stop-color="#6E7CF7" stop-opacity="0.10"/>
+          <stop offset="100%" stop-color="#080C15" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <rect width="1024" height="1024" fill="url(#w1-bg)"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#w1-bloom)"/>
+      <!-- Sleep — slowest, widest wave -->
+      <path d="M0,420 Q256,370 512,420 T1024,420" fill="none" stroke="#9080C4" stroke-width="2.5" opacity="0.35" filter="url(#w1-soft)"/>
+      <path d="M0,420 Q256,370 512,420 T1024,420" fill="none" stroke="#9080C4" stroke-width="1.2" opacity="0.5"/>
+      <!-- Relaxation — gentle -->
+      <path d="M0,480 Q170,440 340,480 T680,480 T1024,480" fill="none" stroke="#4EA8A6" stroke-width="2.5" opacity="0.35" filter="url(#w1-soft)"/>
+      <path d="M0,480 Q170,440 340,480 T680,480 T1024,480" fill="none" stroke="#4EA8A6" stroke-width="1.2" opacity="0.55"/>
+      <!-- Focus — medium frequency -->
+      <path d="M0,540 Q102,500 204,540 T408,540 T612,540 T816,540 T1024,540" fill="none" stroke="#5B6ABF" stroke-width="3" opacity="0.4" filter="url(#w1-soft)"/>
+      <path d="M0,540 Q102,500 204,540 T408,540 T612,540 T816,540 T1024,540" fill="none" stroke="#5B6ABF" stroke-width="1.5" opacity="0.65"/>
+      <!-- Energize — tightest, fastest wave -->
+      <path d="M0,600 Q52,570 104,600 T208,600 T312,600 T416,600 T520,600 T624,600 T728,600 T832,600 T936,600 T1024,600" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.35" filter="url(#w1-soft)"/>
+      <path d="M0,600 Q52,570 104,600 T208,600 T312,600 T416,600 T520,600 T624,600 T728,600 T832,600 T936,600 T1024,600" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.6"/>
+    </svg>
+  </div>
+  <div class="card-name">Four Frequencies</div>
+  <div class="card-label">Stacked by speed</div>
+  <div class="card-desc">Four horizontal waves stacked vertically — each at its natural frequency. Sleep slow, energize fast.</div>
+</div>
+
+<!-- ============ 02: ORB + 4 WAVES ============ -->
+<div class="card">
+  <div class="card-number">02</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="w2-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="w2-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+        <filter id="w2-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+        <radialGradient id="w2-orb" cx="48%" cy="46%" r="30%">
+          <stop offset="0%" stop-color="#F0F1FF"/>
+          <stop offset="20%" stop-color="#E8EAFF"/>
+          <stop offset="45%" stop-color="#9BA3FA"/>
+          <stop offset="70%" stop-color="#6E7CF7"/>
+          <stop offset="100%" stop-color="#4A54C4" stop-opacity="0.9"/>
+        </radialGradient>
+        <radialGradient id="w2-spec" cx="42%" cy="40%" r="18%">
+          <stop offset="0%" stop-color="#FFF" stop-opacity="0.3"/>
+          <stop offset="40%" stop-color="#E8EAFF" stop-opacity="0.10"/>
+          <stop offset="100%" stop-color="#E8EAFF" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="400" fill="#6E7CF7" opacity="0.06" filter="url(#w2-bloom)"/>
+      <!-- Four waves passing through the orb zone -->
+      <!-- Sleep — widest, softest -->
+      <path d="M0,440 Q256,380 512,440 T1024,440" fill="none" stroke="#9080C4" stroke-width="2" opacity="0.25" filter="url(#w2-soft)"/>
+      <path d="M0,440 Q256,380 512,440 T1024,440" fill="none" stroke="#9080C4" stroke-width="1" opacity="0.35"/>
+      <!-- Relaxation -->
+      <path d="M0,488 Q170,450 340,488 T680,488 T1024,488" fill="none" stroke="#4EA8A6" stroke-width="2" opacity="0.25" filter="url(#w2-soft)"/>
+      <path d="M0,488 Q170,450 340,488 T680,488 T1024,488" fill="none" stroke="#4EA8A6" stroke-width="1" opacity="0.40"/>
+      <!-- Focus -->
+      <path d="M0,536 Q102,505 204,536 T408,536 T612,536 T816,536 T1024,536" fill="none" stroke="#5B6ABF" stroke-width="2.5" opacity="0.30" filter="url(#w2-soft)"/>
+      <path d="M0,536 Q102,505 204,536 T408,536 T612,536 T816,536 T1024,536" fill="none" stroke="#5B6ABF" stroke-width="1.2" opacity="0.50"/>
+      <!-- Energize -->
+      <path d="M0,584 Q52,558 104,584 T208,584 T312,584 T416,584 T520,584 T624,584 T728,584 T832,584 T936,584 T1024,584" fill="none" stroke="#F5A623" stroke-width="2" opacity="0.25" filter="url(#w2-soft)"/>
+      <path d="M0,584 Q52,558 104,584 T208,584 T312,584 T416,584 T520,584 T624,584 T728,584 T832,584 T936,584 T1024,584" fill="none" stroke="#F5A623" stroke-width="1" opacity="0.45"/>
+      <!-- Orb -->
+      <circle cx="512" cy="512" r="180" fill="#6E7CF7" opacity="0.12" filter="url(#w2-glow)"/>
+      <circle cx="512" cy="512" r="130" fill="url(#w2-orb)"/>
+      <circle cx="512" cy="512" r="130" fill="url(#w2-spec)"/>
+      <circle cx="498" cy="496" r="25" fill="#FFF" opacity="0.06" filter="url(#w2-glow)"/>
+    </svg>
+  </div>
+  <div class="card-name">Session Orb</div>
+  <div class="card-label">Orb + 4 passing waves</div>
+  <div class="card-desc">The orb from the session screen with all four mode waves flowing through it — the complete experience.</div>
+</div>
+
+<!-- ============ 03: WAVE BRAID ============ -->
+<div class="card">
+  <div class="card-number">03</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="w3-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="50"/></filter>
+        <filter id="w3-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="8"/></filter>
+        <filter id="w3-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="3.5"/></filter>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="380" fill="#6E7CF7" opacity="0.04" filter="url(#w3-bloom)"/>
+      <!-- Four waves braiding through center — all crossing at 512 -->
+      <!-- Sleep — gentle, wide -->
+      <path d="M0,612 Q256,412 512,512 Q768,612 1024,412" fill="none" stroke="#9080C4" stroke-width="3" opacity="0.30" filter="url(#w3-soft)"/>
+      <path d="M0,612 Q256,412 512,512 Q768,612 1024,412" fill="none" stroke="#9080C4" stroke-width="1.5" opacity="0.50"/>
+      <!-- Relaxation -->
+      <path d="M0,412 Q256,612 512,512 Q768,412 1024,612" fill="none" stroke="#4EA8A6" stroke-width="3" opacity="0.30" filter="url(#w3-soft)"/>
+      <path d="M0,412 Q256,612 512,512 Q768,412 1024,612" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.55"/>
+      <!-- Focus — tighter crossings -->
+      <path d="M0,580 Q128,440 256,512 Q384,580 512,512 Q640,440 768,512 Q896,580 1024,512" fill="none" stroke="#5B6ABF" stroke-width="3" opacity="0.35" filter="url(#w3-soft)"/>
+      <path d="M0,580 Q128,440 256,512 Q384,580 512,512 Q640,440 768,512 Q896,580 1024,512" fill="none" stroke="#5B6ABF" stroke-width="1.5" opacity="0.6"/>
+      <!-- Energize — fastest crossings -->
+      <path d="M0,440 Q64,580 128,512 Q192,440 256,512 Q320,580 384,512 Q448,440 512,512 Q576,580 640,512 Q704,440 768,512 Q832,580 896,512 Q960,440 1024,512" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.30" filter="url(#w3-soft)"/>
+      <path d="M0,440 Q64,580 128,512 Q192,440 256,512 Q320,580 384,512 Q448,440 512,512 Q576,580 640,512 Q704,440 768,512 Q832,580 896,512 Q960,440 1024,512" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.55"/>
+      <!-- Central convergence glow -->
+      <circle cx="512" cy="512" r="60" fill="#E8EAFF" opacity="0.06" filter="url(#w3-glow)"/>
+    </svg>
+  </div>
+  <div class="card-name">Wave Braid</div>
+  <div class="card-label">4 waves interweaving</div>
+  <div class="card-desc">All four waves braid together, crossing at the center — different frequencies, one unified experience.</div>
+  <div class="fave-badge">My Pick</div>
+</div>
+
+<!-- ============ 04: CONCENTRIC RINGS ============ -->
+<div class="card">
+  <div class="card-number">04</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="w4-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="w4-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
+        <filter id="w4-ring" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="3"/></filter>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="380" fill="#6E7CF7" opacity="0.04" filter="url(#w4-bloom)"/>
+      <!-- Energize — outermost, wavy circle -->
+      <circle cx="512" cy="512" r="360" fill="none" stroke="#F5A623" stroke-width="2" opacity="0.20" filter="url(#w4-ring)"/>
+      <circle cx="512" cy="512" r="360" fill="none" stroke="#F5A623" stroke-width="1" opacity="0.30" stroke-dasharray="8 12"/>
+      <!-- Sleep — second ring -->
+      <circle cx="512" cy="512" r="280" fill="none" stroke="#9080C4" stroke-width="2.5" opacity="0.22" filter="url(#w4-ring)"/>
+      <circle cx="512" cy="512" r="280" fill="none" stroke="#9080C4" stroke-width="1.2" opacity="0.40"/>
+      <!-- Relaxation — third ring -->
+      <circle cx="512" cy="512" r="200" fill="none" stroke="#4EA8A6" stroke-width="3" opacity="0.25" filter="url(#w4-ring)"/>
+      <circle cx="512" cy="512" r="200" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.50"/>
+      <!-- Focus — innermost, brightest ring -->
+      <circle cx="512" cy="512" r="120" fill="none" stroke="#5B6ABF" stroke-width="3.5" opacity="0.35" filter="url(#w4-ring)"/>
+      <circle cx="512" cy="512" r="120" fill="none" stroke="#5B6ABF" stroke-width="1.8" opacity="0.65"/>
+      <!-- Center point -->
+      <circle cx="512" cy="512" r="25" fill="#E8EAFF" opacity="0.15" filter="url(#w4-glow)"/>
+      <circle cx="512" cy="512" r="8" fill="#F0F1FF" opacity="0.25"/>
+    </svg>
+  </div>
+  <div class="card-name">Four Rings</div>
+  <div class="card-label">Concentric mode circles</div>
+  <div class="card-desc">Four concentric rings — Focus at the core, Energize at the edge. Frequency radiating outward.</div>
+</div>
+
+<!-- ============ 05: WAVEFORM CONVERGENCE ============ -->
+<div class="card">
+  <div class="card-number">05</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="w5-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="w5-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
+        <filter id="w5-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="3.5"/></filter>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#w5-bloom)"/>
+      <!-- Waves converge from edges toward center, fan out from left to right -->
+      <!-- Sleep — enters from top-left -->
+      <path d="M0,200 Q256,350 512,512 Q768,674 1024,824" fill="none" stroke="#9080C4" stroke-width="2.5" opacity="0.30" filter="url(#w5-soft)"/>
+      <path d="M0,200 Q256,350 512,512 Q768,674 1024,824" fill="none" stroke="#9080C4" stroke-width="1.2" opacity="0.45"/>
+      <!-- Relaxation — enters from upper-center -->
+      <path d="M0,380 Q256,440 512,512 Q768,584 1024,644" fill="none" stroke="#4EA8A6" stroke-width="2.5" opacity="0.30" filter="url(#w5-soft)"/>
+      <path d="M0,380 Q256,440 512,512 Q768,584 1024,644" fill="none" stroke="#4EA8A6" stroke-width="1.2" opacity="0.50"/>
+      <!-- Focus — near horizontal with slight wave -->
+      <path d="M0,550 Q128,530 256,520 Q384,510 512,512 Q640,514 768,524 Q896,534 1024,550" fill="none" stroke="#5B6ABF" stroke-width="3" opacity="0.35" filter="url(#w5-soft)"/>
+      <path d="M0,550 Q128,530 256,520 Q384,510 512,512 Q640,514 768,524 Q896,534 1024,550" fill="none" stroke="#5B6ABF" stroke-width="1.5" opacity="0.60"/>
+      <!-- Energize — enters from bottom-left -->
+      <path d="M0,824 Q256,674 512,512 Q768,350 1024,200" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.28" filter="url(#w5-soft)"/>
+      <path d="M0,824 Q256,674 512,512 Q768,350 1024,200" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.50"/>
+      <!-- Convergence point glow -->
+      <circle cx="512" cy="512" r="50" fill="#E8EAFF" opacity="0.10" filter="url(#w5-glow)"/>
+      <circle cx="512" cy="512" r="14" fill="#F0F1FF" opacity="0.20"/>
+    </svg>
+  </div>
+  <div class="card-name">Convergence</div>
+  <div class="card-label">4 paths, one center</div>
+  <div class="card-desc">Four wave paths converge at a single luminous point — all modes flowing to one unified experience.</div>
+</div>
+
+<!-- ============ 06: LAYERED GLOW ============ -->
+<div class="card">
+  <div class="card-number">06</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="w6-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="w6-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="12"/></filter>
+        <filter id="w6-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+        <linearGradient id="w6-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+          <stop offset="15%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="85%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="w6-mask"><rect width="1024" height="1024" fill="url(#w6-fade)"/></mask>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#w6-bloom)"/>
+      <!-- Waves centered vertically, all crossing through middle with fill underneath -->
+      <g mask="url(#w6-mask)">
+        <!-- Sleep wave + fill -->
+        <path d="M0,512 Q256,420 512,512 T1024,512 L1024,700 L0,700 Z" fill="#9080C4" opacity="0.04"/>
+        <path d="M0,512 Q256,420 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="2" opacity="0.40" filter="url(#w6-soft)"/>
+        <path d="M0,512 Q256,420 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="1" opacity="0.55"/>
+        <!-- Relaxation wave + fill -->
+        <path d="M0,512 Q170,450 340,512 T680,512 T1024,512 L1024,650 L0,650 Z" fill="#4EA8A6" opacity="0.04"/>
+        <path d="M0,512 Q170,450 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="2" opacity="0.40" filter="url(#w6-soft)"/>
+        <path d="M0,512 Q170,450 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="1" opacity="0.55"/>
+        <!-- Focus wave + fill -->
+        <path d="M0,512 Q102,470 204,512 T408,512 T612,512 T816,512 T1024,512 L1024,600 L0,600 Z" fill="#5B6ABF" opacity="0.05"/>
+        <path d="M0,512 Q102,470 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2.5" opacity="0.45" filter="url(#w6-soft)"/>
+        <path d="M0,512 Q102,470 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="1.2" opacity="0.65"/>
+        <!-- Energize wave + fill -->
+        <path d="M0,512 Q52,480 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512 L1024,560 L0,560 Z" fill="#F5A623" opacity="0.04"/>
+        <path d="M0,512 Q52,480 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="2" opacity="0.35" filter="url(#w6-soft)"/>
+        <path d="M0,512 Q52,480 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1" opacity="0.55"/>
+      </g>
+      <!-- Center glow line -->
+      <line x1="200" y1="512" x2="824" y2="512" stroke="#E8EAFF" stroke-width="0.5" opacity="0.08"/>
+    </svg>
+  </div>
+  <div class="card-name">Shared Axis</div>
+  <div class="card-label">Waves on one baseline</div>
+  <div class="card-desc">All four waves share a center axis — different amplitudes and frequencies but one baseline. The session screen distilled.</div>
+</div>
+
+<!-- ============ 07: WAVE BLOOM ============ -->
+<div class="card">
+  <div class="card-number">07</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="w7-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="w7-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
+        <filter id="w7-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="3.5"/></filter>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="380" fill="#6E7CF7" opacity="0.04" filter="url(#w7-bloom)"/>
+      <!-- 4 waves radiating outward from center in cardinal directions -->
+      <!-- Focus — right -->
+      <path d="M512,512 Q562,480 612,512 T712,512 T812,512 T912,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2.5" opacity="0.55" filter="url(#w7-soft)"/>
+      <path d="M512,512 Q562,480 612,512 T712,512 T812,512 T912,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="1.2" opacity="0.65"/>
+      <!-- Focus — left (mirror) -->
+      <path d="M512,512 Q462,480 412,512 T312,512 T212,512 T112,512 T0,512" fill="none" stroke="#5B6ABF" stroke-width="2.5" opacity="0.55" filter="url(#w7-soft)"/>
+      <path d="M512,512 Q462,480 412,512 T312,512 T212,512 T112,512 T0,512" fill="none" stroke="#5B6ABF" stroke-width="1.2" opacity="0.65"/>
+      <!-- Relaxation — down -->
+      <path d="M512,512 Q545,582 512,652 T512,792 T512,932 T512,1024" fill="none" stroke="#4EA8A6" stroke-width="2.5" opacity="0.45" filter="url(#w7-soft)"/>
+      <path d="M512,512 Q545,582 512,652 T512,792 T512,932 T512,1024" fill="none" stroke="#4EA8A6" stroke-width="1.2" opacity="0.55"/>
+      <!-- Relaxation — up (mirror) -->
+      <path d="M512,512 Q545,442 512,372 T512,232 T512,92 T512,0" fill="none" stroke="#4EA8A6" stroke-width="2.5" opacity="0.45" filter="url(#w7-soft)"/>
+      <path d="M512,512 Q545,442 512,372 T512,232 T512,92 T512,0" fill="none" stroke="#4EA8A6" stroke-width="1.2" opacity="0.55"/>
+      <!-- Sleep — diagonal upper-left to lower-right -->
+      <path d="M512,512 Q560,560 612,612 T792,792 T972,972" fill="none" stroke="#9080C4" stroke-width="2" opacity="0.30" filter="url(#w7-soft)"/>
+      <path d="M512,512 Q460,460 412,412 T232,232 T52,52" fill="none" stroke="#9080C4" stroke-width="2" opacity="0.30" filter="url(#w7-soft)"/>
+      <!-- Energize — diagonal lower-left to upper-right -->
+      <path d="M512,512 Q560,460 612,412 T792,232 T972,52" fill="none" stroke="#F5A623" stroke-width="2" opacity="0.30" filter="url(#w7-soft)"/>
+      <path d="M512,512 Q460,560 412,612 T232,792 T52,972" fill="none" stroke="#F5A623" stroke-width="2" opacity="0.30" filter="url(#w7-soft)"/>
+      <!-- Center glow -->
+      <circle cx="512" cy="512" r="40" fill="#E8EAFF" opacity="0.10" filter="url(#w7-glow)"/>
+      <circle cx="512" cy="512" r="10" fill="#F0F1FF" opacity="0.25"/>
+    </svg>
+  </div>
+  <div class="card-name">Starburst</div>
+  <div class="card-label">4 waves, 4 directions</div>
+  <div class="card-desc">Each mode radiates in its own direction from a central source — compass-like, expansive.</div>
+</div>
+
+<!-- ============ 08: HORIZON ============ -->
+<div class="card">
+  <div class="card-number">08</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="w8-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="w8-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
+        <filter id="w8-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+        <radialGradient id="w8-orb" cx="50%" cy="48%" r="25%">
+          <stop offset="0%" stop-color="#F0F1FF"/>
+          <stop offset="25%" stop-color="#E8EAFF"/>
+          <stop offset="55%" stop-color="#9BA3FA"/>
+          <stop offset="80%" stop-color="#6E7CF7"/>
+          <stop offset="100%" stop-color="#4A54C4" stop-opacity="0.8"/>
+        </radialGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="560" r="380" fill="#6E7CF7" opacity="0.04" filter="url(#w8-bloom)"/>
+      <!-- Orb rising above the wave field -->
+      <circle cx="512" cy="420" r="150" fill="#6E7CF7" opacity="0.10" filter="url(#w8-glow)"/>
+      <circle cx="512" cy="420" r="100" fill="url(#w8-orb)"/>
+      <circle cx="498" cy="408" r="20" fill="#FFF" opacity="0.08" filter="url(#w8-glow)"/>
+      <!-- Four layered waves below, building up like a horizon -->
+      <!-- Sleep — bottom, widest -->
+      <path d="M0,780 Q256,720 512,780 T1024,780" fill="none" stroke="#9080C4" stroke-width="2.5" opacity="0.25" filter="url(#w8-soft)"/>
+      <path d="M0,780 Q256,720 512,780 T1024,780" fill="none" stroke="#9080C4" stroke-width="1.2" opacity="0.40"/>
+      <path d="M0,780 Q256,720 512,780 T1024,780 L1024,1024 L0,1024 Z" fill="#9080C4" opacity="0.02"/>
+      <!-- Relaxation -->
+      <path d="M0,700 Q170,660 340,700 T680,700 T1024,700" fill="none" stroke="#4EA8A6" stroke-width="2.5" opacity="0.30" filter="url(#w8-soft)"/>
+      <path d="M0,700 Q170,660 340,700 T680,700 T1024,700" fill="none" stroke="#4EA8A6" stroke-width="1.2" opacity="0.45"/>
+      <path d="M0,700 Q170,660 340,700 T680,700 T1024,700 L1024,1024 L0,1024 Z" fill="#4EA8A6" opacity="0.02"/>
+      <!-- Focus -->
+      <path d="M0,630 Q102,598 204,630 T408,630 T612,630 T816,630 T1024,630" fill="none" stroke="#5B6ABF" stroke-width="3" opacity="0.35" filter="url(#w8-soft)"/>
+      <path d="M0,630 Q102,598 204,630 T408,630 T612,630 T816,630 T1024,630" fill="none" stroke="#5B6ABF" stroke-width="1.5" opacity="0.55"/>
+      <path d="M0,630 Q102,598 204,630 T408,630 T612,630 T816,630 T1024,630 L1024,1024 L0,1024 Z" fill="#5B6ABF" opacity="0.02"/>
+      <!-- Energize — topmost wave, closest to orb -->
+      <path d="M0,570 Q52,548 104,570 T208,570 T312,570 T416,570 T520,570 T624,570 T728,570 T832,570 T936,570 T1024,570" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.30" filter="url(#w8-soft)"/>
+      <path d="M0,570 Q52,548 104,570 T208,570 T312,570 T416,570 T520,570 T624,570 T728,570 T832,570 T936,570 T1024,570" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.50"/>
+    </svg>
+  </div>
+  <div class="card-name">Horizon</div>
+  <div class="card-label">Orb above 4-wave field</div>
+  <div class="card-desc">The orb rises above layered wave terrain — like the session screen condensed into a landscape.</div>
+</div>
+
+<!-- ============ 09: PULSE SPECTRUM ============ -->
+<div class="card">
+  <div class="card-number">09</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="w9-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="w9-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+        <filter id="w9-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="380" fill="#6E7CF7" opacity="0.04" filter="url(#w9-bloom)"/>
+      <!-- Vertical bars / frequency spectrum visualization with wave-like tops -->
+      <!-- Each group of bars is a mode color, arranged left to right by frequency -->
+      <!-- Sleep — far left, tall gentle bars -->
+      <rect x="120" y="360" width="22" height="304" rx="11" fill="#9080C4" opacity="0.30"/>
+      <rect x="155" y="320" width="22" height="384" rx="11" fill="#9080C4" opacity="0.40"/>
+      <rect x="190" y="345" width="22" height="334" rx="11" fill="#9080C4" opacity="0.35"/>
+      <rect x="225" y="375" width="22" height="274" rx="11" fill="#9080C4" opacity="0.25"/>
+      <!-- Relaxation -->
+      <rect x="290" y="340" width="20" height="344" rx="10" fill="#4EA8A6" opacity="0.30"/>
+      <rect x="322" y="300" width="20" height="424" rx="10" fill="#4EA8A6" opacity="0.42"/>
+      <rect x="354" y="320" width="20" height="384" rx="10" fill="#4EA8A6" opacity="0.38"/>
+      <rect x="386" y="355" width="20" height="314" rx="10" fill="#4EA8A6" opacity="0.28"/>
+      <!-- Focus -->
+      <rect x="450" y="315" width="18" height="394" rx="9" fill="#5B6ABF" opacity="0.35"/>
+      <rect x="480" y="280" width="18" height="464" rx="9" fill="#5B6ABF" opacity="0.50"/>
+      <rect x="510" y="260" width="18" height="504" rx="9" fill="#5B6ABF" opacity="0.55"/>
+      <rect x="540" y="290" width="18" height="444" rx="9" fill="#5B6ABF" opacity="0.42"/>
+      <rect x="570" y="330" width="18" height="364" rx="9" fill="#5B6ABF" opacity="0.32"/>
+      <!-- Energize -->
+      <rect x="630" y="350" width="16" height="324" rx="8" fill="#F5A623" opacity="0.28"/>
+      <rect x="658" y="310" width="16" height="404" rx="8" fill="#F5A623" opacity="0.40"/>
+      <rect x="686" y="325" width="16" height="374" rx="8" fill="#F5A623" opacity="0.36"/>
+      <rect x="714" y="290" width="16" height="444" rx="8" fill="#F5A623" opacity="0.45"/>
+      <rect x="742" y="330" width="16" height="364" rx="8" fill="#F5A623" opacity="0.33"/>
+      <rect x="770" y="360" width="16" height="304" rx="8" fill="#F5A623" opacity="0.25"/>
+      <rect x="798" y="380" width="16" height="264" rx="8" fill="#F5A623" opacity="0.18"/>
+      <!-- Soft glow under bars -->
+      <ellipse cx="512" cy="712" rx="350" ry="30" fill="#6E7CF7" opacity="0.04" filter="url(#w9-glow)"/>
+    </svg>
+  </div>
+  <div class="card-name">Spectrum</div>
+  <div class="card-label">Frequency bars by mode</div>
+  <div class="card-desc">EQ spectrum — each mode's frequency band as colored bars. Sleep wide, Focus tall, Energize dense.</div>
+</div>
+
+<!-- ============ 10: QUADRANT ============ -->
+<div class="card">
+  <div class="card-number">10</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="w10-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="w10-glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="12"/></filter>
+        <filter id="w10-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+        <clipPath id="w10-tl"><rect x="0" y="0" width="508" height="508"/></clipPath>
+        <clipPath id="w10-tr"><rect x="516" y="0" width="508" height="508"/></clipPath>
+        <clipPath id="w10-bl"><rect x="0" y="516" width="508" height="508"/></clipPath>
+        <clipPath id="w10-br"><rect x="516" y="516" width="508" height="508"/></clipPath>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="380" fill="#6E7CF7" opacity="0.03" filter="url(#w10-bloom)"/>
+      <!-- Subtle divider lines -->
+      <line x1="512" y1="150" x2="512" y2="874" stroke="#E8EAFF" stroke-width="0.5" opacity="0.04"/>
+      <line x1="150" y1="512" x2="874" y2="512" stroke="#E8EAFF" stroke-width="0.5" opacity="0.04"/>
+      <!-- Focus — top left quadrant -->
+      <g clip-path="url(#w10-tl)">
+        <circle cx="254" cy="254" r="180" fill="#5B6ABF" opacity="0.04" filter="url(#w10-glow)"/>
+        <path d="M80,254 Q134,220 188,254 T296,254 T404,254 T480,254" fill="none" stroke="#5B6ABF" stroke-width="2.5" opacity="0.50" filter="url(#w10-soft)"/>
+        <path d="M80,254 Q134,220 188,254 T296,254 T404,254 T480,254" fill="none" stroke="#5B6ABF" stroke-width="1.2" opacity="0.65"/>
+        <circle cx="254" cy="254" r="30" fill="#5B6ABF" opacity="0.10" filter="url(#w10-glow)"/>
+      </g>
+      <!-- Relaxation — top right quadrant -->
+      <g clip-path="url(#w10-tr)">
+        <circle cx="770" cy="254" r="180" fill="#4EA8A6" opacity="0.04" filter="url(#w10-glow)"/>
+        <path d="M544,254 Q627,218 710,254 T876,254 T950,254" fill="none" stroke="#4EA8A6" stroke-width="2.5" opacity="0.50" filter="url(#w10-soft)"/>
+        <path d="M544,254 Q627,218 710,254 T876,254 T950,254" fill="none" stroke="#4EA8A6" stroke-width="1.2" opacity="0.60"/>
+        <circle cx="770" cy="254" r="30" fill="#4EA8A6" opacity="0.10" filter="url(#w10-glow)"/>
+      </g>
+      <!-- Sleep — bottom left quadrant -->
+      <g clip-path="url(#w10-bl)">
+        <circle cx="254" cy="770" r="180" fill="#9080C4" opacity="0.04" filter="url(#w10-glow)"/>
+        <path d="M80,770 Q254,720 430,770 T480,770" fill="none" stroke="#9080C4" stroke-width="2.5" opacity="0.45" filter="url(#w10-soft)"/>
+        <path d="M80,770 Q254,720 430,770 T480,770" fill="none" stroke="#9080C4" stroke-width="1.2" opacity="0.55"/>
+        <circle cx="254" cy="770" r="30" fill="#9080C4" opacity="0.10" filter="url(#w10-glow)"/>
+      </g>
+      <!-- Energize — bottom right quadrant -->
+      <g clip-path="url(#w10-br)">
+        <circle cx="770" cy="770" r="180" fill="#F5A623" opacity="0.04" filter="url(#w10-glow)"/>
+        <path d="M544,770 Q580,742 616,770 T688,770 T760,770 T832,770 T904,770 T950,770" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.45" filter="url(#w10-soft)"/>
+        <path d="M544,770 Q580,742 616,770 T688,770 T760,770 T832,770 T904,770 T950,770" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.55"/>
+        <circle cx="770" cy="770" r="30" fill="#F5A623" opacity="0.10" filter="url(#w10-glow)"/>
+      </g>
+      <!-- Center convergence -->
+      <circle cx="512" cy="512" r="20" fill="#E8EAFF" opacity="0.08" filter="url(#w10-glow)"/>
+    </svg>
+  </div>
+  <div class="card-name">Quadrant</div>
+  <div class="card-label">4 modes, 4 zones</div>
+  <div class="card-desc">Each mode owns a quadrant with its signature wave. Four identities, one unified icon.</div>
+</div>
+
+</div><!-- end grid -->
+
+<div class="divider"></div>
+
+<!-- ============ SIZE TEST ============ -->
+<div class="section-title">Size Test — Top 3</div>
+<p class="section-desc">Testing the strongest concepts from App Store (280px) down to Spotlight (40px).</p>
+
+<!-- Wave Braid sizes -->
+<div style="margin-bottom:48px;">
+  <div style="font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:#6E7CF7; opacity:0.7; margin-bottom:16px; display:flex; align-items:center; gap:8px;">03 — Wave Braid <span class="fave-badge" style="margin:0;">My Pick</span></div>
+  <div class="size-row">
+    <div class="size-group">
+      <div class="ios-mask" style="width:180px;height:180px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws3a-b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="50"/></filter>
+            <filter id="ws3a-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+            <filter id="ws3a-g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="8"/></filter>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <circle cx="512" cy="512" r="380" fill="#6E7CF7" opacity="0.04" filter="url(#ws3a-b)"/>
+          <path d="M0,612 Q256,412 512,512 Q768,612 1024,412" fill="none" stroke="#9080C4" stroke-width="3" opacity="0.30" filter="url(#ws3a-s)"/>
+          <path d="M0,612 Q256,412 512,512 Q768,612 1024,412" fill="none" stroke="#9080C4" stroke-width="1.5" opacity="0.50"/>
+          <path d="M0,412 Q256,612 512,512 Q768,412 1024,612" fill="none" stroke="#4EA8A6" stroke-width="3" opacity="0.30" filter="url(#ws3a-s)"/>
+          <path d="M0,412 Q256,612 512,512 Q768,412 1024,612" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.55"/>
+          <path d="M0,580 Q128,440 256,512 Q384,580 512,512 Q640,440 768,512 Q896,580 1024,512" fill="none" stroke="#5B6ABF" stroke-width="3" opacity="0.35" filter="url(#ws3a-s)"/>
+          <path d="M0,580 Q128,440 256,512 Q384,580 512,512 Q640,440 768,512 Q896,580 1024,512" fill="none" stroke="#5B6ABF" stroke-width="1.5" opacity="0.6"/>
+          <path d="M0,440 Q64,580 128,512 Q192,440 256,512 Q320,580 384,512 Q448,440 512,512 Q576,580 640,512 Q704,440 768,512 Q832,580 896,512 Q960,440 1024,512" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.30" filter="url(#ws3a-s)"/>
+          <path d="M0,440 Q64,580 128,512 Q192,440 256,512 Q320,580 384,512 Q448,440 512,512 Q576,580 640,512 Q704,440 768,512 Q832,580 896,512 Q960,440 1024,512" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.55"/>
+          <circle cx="512" cy="512" r="60" fill="#E8EAFF" opacity="0.06" filter="url(#ws3a-g)"/>
+        </svg>
+      </div>
+      <div class="size-label">180px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:120px;height:120px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws3b-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5"/></filter>
+            <filter id="ws3b-g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <path d="M0,612 Q256,412 512,512 Q768,612 1024,412" fill="none" stroke="#9080C4" stroke-width="4" opacity="0.40" filter="url(#ws3b-s)"/>
+          <path d="M0,412 Q256,612 512,512 Q768,412 1024,612" fill="none" stroke="#4EA8A6" stroke-width="4" opacity="0.45" filter="url(#ws3b-s)"/>
+          <path d="M0,580 Q128,440 256,512 Q384,580 512,512 Q640,440 768,512 Q896,580 1024,512" fill="none" stroke="#5B6ABF" stroke-width="4" opacity="0.50" filter="url(#ws3b-s)"/>
+          <path d="M0,440 Q64,580 128,512 Q192,440 256,512 Q320,580 384,512 Q448,440 512,512 Q576,580 640,512 Q704,440 768,512 Q832,580 896,512 Q960,440 1024,512" fill="none" stroke="#F5A623" stroke-width="3.5" opacity="0.45" filter="url(#ws3b-s)"/>
+          <circle cx="512" cy="512" r="50" fill="#E8EAFF" opacity="0.08" filter="url(#ws3b-g)"/>
+        </svg>
+      </div>
+      <div class="size-label">120px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:87px;height:87px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="87" height="87" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws3c-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="6"/></filter>
+            <filter id="ws3c-g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="12"/></filter>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <path d="M0,612 Q256,412 512,512 Q768,612 1024,412" fill="none" stroke="#9080C4" stroke-width="5" opacity="0.40" filter="url(#ws3c-s)"/>
+          <path d="M0,412 Q256,612 512,512 Q768,412 1024,612" fill="none" stroke="#4EA8A6" stroke-width="5" opacity="0.45" filter="url(#ws3c-s)"/>
+          <path d="M0,580 Q128,440 256,512 Q384,580 512,512 Q640,440 768,512 Q896,580 1024,512" fill="none" stroke="#5B6ABF" stroke-width="5" opacity="0.50" filter="url(#ws3c-s)"/>
+          <path d="M0,440 Q64,580 128,512 Q192,440 256,512 Q320,580 384,512 Q448,440 512,512 Q576,580 640,512 Q704,440 768,512 Q832,580 896,512 Q960,440 1024,512" fill="none" stroke="#F5A623" stroke-width="4" opacity="0.45" filter="url(#ws3c-s)"/>
+          <circle cx="512" cy="512" r="45" fill="#E8EAFF" opacity="0.10" filter="url(#ws3c-g)"/>
+        </svg>
+      </div>
+      <div class="size-label">87px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:60px;height:60px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws3d-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="8"/></filter>
+            <filter id="ws3d-g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <path d="M0,612 Q256,412 512,512 Q768,612 1024,412" fill="none" stroke="#9080C4" stroke-width="7" opacity="0.40" filter="url(#ws3d-s)"/>
+          <path d="M0,412 Q256,612 512,512 Q768,412 1024,612" fill="none" stroke="#4EA8A6" stroke-width="7" opacity="0.45" filter="url(#ws3d-s)"/>
+          <path d="M0,580 Q128,440 256,512 Q384,580 512,512 Q640,440 768,512 Q896,580 1024,512" fill="none" stroke="#5B6ABF" stroke-width="7" opacity="0.50" filter="url(#ws3d-s)"/>
+          <path d="M0,440 Q64,580 128,512 Q192,440 256,512 Q320,580 384,512 Q448,440 512,512 Q576,580 640,512 Q704,440 768,512 Q832,580 896,512 Q960,440 1024,512" fill="none" stroke="#F5A623" stroke-width="5" opacity="0.45" filter="url(#ws3d-s)"/>
+          <circle cx="512" cy="512" r="40" fill="#E8EAFF" opacity="0.12" filter="url(#ws3d-g)"/>
+        </svg>
+      </div>
+      <div class="size-label">60px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:40px;height:40px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws3e-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="10"/></filter>
+            <filter id="ws3e-g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="16"/></filter>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <path d="M0,612 Q256,412 512,512 Q768,612 1024,412" fill="none" stroke="#9080C4" stroke-width="10" opacity="0.40" filter="url(#ws3e-s)"/>
+          <path d="M0,412 Q256,612 512,512 Q768,412 1024,612" fill="none" stroke="#4EA8A6" stroke-width="10" opacity="0.45" filter="url(#ws3e-s)"/>
+          <path d="M0,580 Q128,440 256,512 Q384,580 512,512 Q640,440 768,512 Q896,580 1024,512" fill="none" stroke="#5B6ABF" stroke-width="10" opacity="0.50" filter="url(#ws3e-s)"/>
+          <path d="M0,440 Q64,580 128,512 Q192,440 256,512 Q320,580 384,512 Q448,440 512,512 Q576,580 640,512 Q704,440 768,512 Q832,580 896,512 Q960,440 1024,512" fill="none" stroke="#F5A623" stroke-width="7" opacity="0.45" filter="url(#ws3e-s)"/>
+          <circle cx="512" cy="512" r="35" fill="#E8EAFF" opacity="0.14" filter="url(#ws3e-g)"/>
+        </svg>
+      </div>
+      <div class="size-label">40px</div>
+    </div>
+  </div>
+</div>
+
+<!-- Session Orb sizes -->
+<div style="margin-bottom:48px;">
+  <div style="font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:#6E7CF7; opacity:0.7; margin-bottom:16px;">02 — Session Orb</div>
+  <div class="size-row">
+    <div class="size-group">
+      <div class="ios-mask" style="width:180px;height:180px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws2a-b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+            <filter id="ws2a-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+            <filter id="ws2a-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+            <radialGradient id="ws2a-orb" cx="48%" cy="46%" r="30%"><stop offset="0%" stop-color="#F0F1FF"/><stop offset="20%" stop-color="#E8EAFF"/><stop offset="45%" stop-color="#9BA3FA"/><stop offset="70%" stop-color="#6E7CF7"/><stop offset="100%" stop-color="#4A54C4" stop-opacity="0.9"/></radialGradient>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <circle cx="512" cy="512" r="400" fill="#6E7CF7" opacity="0.06" filter="url(#ws2a-b)"/>
+          <path d="M0,440 Q256,380 512,440 T1024,440" fill="none" stroke="#9080C4" stroke-width="2" opacity="0.35" filter="url(#ws2a-s)"/>
+          <path d="M0,488 Q170,450 340,488 T680,488 T1024,488" fill="none" stroke="#4EA8A6" stroke-width="2" opacity="0.40" filter="url(#ws2a-s)"/>
+          <path d="M0,536 Q102,505 204,536 T408,536 T612,536 T816,536 T1024,536" fill="none" stroke="#5B6ABF" stroke-width="2.5" opacity="0.50" filter="url(#ws2a-s)"/>
+          <path d="M0,584 Q52,558 104,584 T208,584 T312,584 T416,584 T520,584 T624,584 T728,584 T832,584 T936,584 T1024,584" fill="none" stroke="#F5A623" stroke-width="2" opacity="0.45" filter="url(#ws2a-s)"/>
+          <circle cx="512" cy="512" r="180" fill="#6E7CF7" opacity="0.12" filter="url(#ws2a-g)"/>
+          <circle cx="512" cy="512" r="130" fill="url(#ws2a-orb)"/>
+        </svg>
+      </div>
+      <div class="size-label">180px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:120px;height:120px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws2b-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="18"/></filter>
+            <filter id="ws2b-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5"/></filter>
+            <radialGradient id="ws2b-orb" cx="48%" cy="46%" r="30%"><stop offset="0%" stop-color="#F0F1FF"/><stop offset="45%" stop-color="#9BA3FA"/><stop offset="100%" stop-color="#4A54C4" stop-opacity="0.9"/></radialGradient>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <path d="M0,440 Q256,380 512,440 T1024,440" fill="none" stroke="#9080C4" stroke-width="3" opacity="0.35" filter="url(#ws2b-s)"/>
+          <path d="M0,488 Q170,450 340,488 T680,488 T1024,488" fill="none" stroke="#4EA8A6" stroke-width="3" opacity="0.40" filter="url(#ws2b-s)"/>
+          <path d="M0,536 Q102,505 204,536 T408,536 T612,536 T816,536 T1024,536" fill="none" stroke="#5B6ABF" stroke-width="3.5" opacity="0.50" filter="url(#ws2b-s)"/>
+          <path d="M0,584 Q52,558 104,584 T208,584 T312,584 T416,584 T520,584 T624,584 T728,584 T832,584 T936,584 T1024,584" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.45" filter="url(#ws2b-s)"/>
+          <circle cx="512" cy="512" r="180" fill="#6E7CF7" opacity="0.12" filter="url(#ws2b-g)"/>
+          <circle cx="512" cy="512" r="130" fill="url(#ws2b-orb)"/>
+        </svg>
+      </div>
+      <div class="size-label">120px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:87px;height:87px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="87" height="87" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws2c-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="20"/></filter>
+            <filter id="ws2c-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="6"/></filter>
+            <radialGradient id="ws2c-orb" cx="48%" cy="46%" r="32%"><stop offset="0%" stop-color="#F0F1FF"/><stop offset="50%" stop-color="#9BA3FA"/><stop offset="100%" stop-color="#4A54C4" stop-opacity="0.9"/></radialGradient>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <path d="M0,440 Q256,380 512,440 T1024,440" fill="none" stroke="#9080C4" stroke-width="4" opacity="0.35" filter="url(#ws2c-s)"/>
+          <path d="M0,488 Q170,450 340,488 T680,488 T1024,488" fill="none" stroke="#4EA8A6" stroke-width="4" opacity="0.40" filter="url(#ws2c-s)"/>
+          <path d="M0,536 Q102,505 204,536 T408,536 T612,536 T816,536 T1024,536" fill="none" stroke="#5B6ABF" stroke-width="4.5" opacity="0.50" filter="url(#ws2c-s)"/>
+          <path d="M0,584 Q52,558 104,584 T208,584 T312,584 T416,584 T520,584 T624,584 T728,584 T832,584 T936,584 T1024,584" fill="none" stroke="#F5A623" stroke-width="3.5" opacity="0.45" filter="url(#ws2c-s)"/>
+          <circle cx="512" cy="512" r="160" fill="#6E7CF7" opacity="0.14" filter="url(#ws2c-g)"/>
+          <circle cx="512" cy="512" r="120" fill="url(#ws2c-orb)"/>
+        </svg>
+      </div>
+      <div class="size-label">87px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:60px;height:60px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws2d-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="22"/></filter>
+            <radialGradient id="ws2d-orb" cx="48%" cy="46%" r="35%"><stop offset="0%" stop-color="#F0F1FF"/><stop offset="50%" stop-color="#9BA3FA"/><stop offset="100%" stop-color="#4A54C4" stop-opacity="0.9"/></radialGradient>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <circle cx="512" cy="512" r="200" fill="#6E7CF7" opacity="0.14" filter="url(#ws2d-g)"/>
+          <circle cx="512" cy="512" r="130" fill="url(#ws2d-orb)"/>
+        </svg>
+      </div>
+      <div class="size-label">60px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:40px;height:40px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws2e-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="24"/></filter>
+            <radialGradient id="ws2e-orb" cx="48%" cy="46%" r="38%"><stop offset="0%" stop-color="#F0F1FF"/><stop offset="50%" stop-color="#9BA3FA"/><stop offset="100%" stop-color="#4A54C4" stop-opacity="0.9"/></radialGradient>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <circle cx="512" cy="512" r="220" fill="#6E7CF7" opacity="0.16" filter="url(#ws2e-g)"/>
+          <circle cx="512" cy="512" r="140" fill="url(#ws2e-orb)"/>
+        </svg>
+      </div>
+      <div class="size-label">40px</div>
+    </div>
+  </div>
+</div>
+
+<!-- Convergence sizes -->
+<div style="margin-bottom:48px;">
+  <div style="font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:#6E7CF7; opacity:0.7; margin-bottom:16px;">05 — Convergence</div>
+  <div class="size-row">
+    <div class="size-group">
+      <div class="ios-mask" style="width:180px;height:180px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws5a-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+            <filter id="ws5a-g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <path d="M0,200 Q256,350 512,512 Q768,674 1024,824" fill="none" stroke="#9080C4" stroke-width="2.5" opacity="0.30" filter="url(#ws5a-s)"/>
+          <path d="M0,200 Q256,350 512,512 Q768,674 1024,824" fill="none" stroke="#9080C4" stroke-width="1.2" opacity="0.45"/>
+          <path d="M0,380 Q256,440 512,512 Q768,584 1024,644" fill="none" stroke="#4EA8A6" stroke-width="2.5" opacity="0.30" filter="url(#ws5a-s)"/>
+          <path d="M0,380 Q256,440 512,512 Q768,584 1024,644" fill="none" stroke="#4EA8A6" stroke-width="1.2" opacity="0.50"/>
+          <path d="M0,550 Q128,530 256,520 Q384,510 512,512 Q640,514 768,524 Q896,534 1024,550" fill="none" stroke="#5B6ABF" stroke-width="3" opacity="0.35" filter="url(#ws5a-s)"/>
+          <path d="M0,550 Q128,530 256,520 Q384,510 512,512 Q640,514 768,524 Q896,534 1024,550" fill="none" stroke="#5B6ABF" stroke-width="1.5" opacity="0.60"/>
+          <path d="M0,824 Q256,674 512,512 Q768,350 1024,200" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.28" filter="url(#ws5a-s)"/>
+          <path d="M0,824 Q256,674 512,512 Q768,350 1024,200" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.50"/>
+          <circle cx="512" cy="512" r="50" fill="#E8EAFF" opacity="0.10" filter="url(#ws5a-g)"/>
+          <circle cx="512" cy="512" r="14" fill="#F0F1FF" opacity="0.20"/>
+        </svg>
+      </div>
+      <div class="size-label">180px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:120px;height:120px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws5b-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5"/></filter>
+            <filter id="ws5b-g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="12"/></filter>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <path d="M0,200 Q256,350 512,512 Q768,674 1024,824" fill="none" stroke="#9080C4" stroke-width="3.5" opacity="0.40" filter="url(#ws5b-s)"/>
+          <path d="M0,380 Q256,440 512,512 Q768,584 1024,644" fill="none" stroke="#4EA8A6" stroke-width="3.5" opacity="0.45" filter="url(#ws5b-s)"/>
+          <path d="M0,550 Q256,525 512,512 Q768,525 1024,550" fill="none" stroke="#5B6ABF" stroke-width="4" opacity="0.55" filter="url(#ws5b-s)"/>
+          <path d="M0,824 Q256,674 512,512 Q768,350 1024,200" fill="none" stroke="#F5A623" stroke-width="3.5" opacity="0.45" filter="url(#ws5b-s)"/>
+          <circle cx="512" cy="512" r="45" fill="#E8EAFF" opacity="0.12" filter="url(#ws5b-g)"/>
+        </svg>
+      </div>
+      <div class="size-label">120px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:87px;height:87px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="87" height="87" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws5c-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="7"/></filter>
+            <filter id="ws5c-g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="14"/></filter>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <path d="M0,200 Q256,350 512,512 Q768,674 1024,824" fill="none" stroke="#9080C4" stroke-width="5" opacity="0.40" filter="url(#ws5c-s)"/>
+          <path d="M0,380 Q256,440 512,512 Q768,584 1024,644" fill="none" stroke="#4EA8A6" stroke-width="5" opacity="0.45" filter="url(#ws5c-s)"/>
+          <path d="M0,550 Q256,525 512,512 Q768,525 1024,550" fill="none" stroke="#5B6ABF" stroke-width="5.5" opacity="0.55" filter="url(#ws5c-s)"/>
+          <path d="M0,824 Q256,674 512,512 Q768,350 1024,200" fill="none" stroke="#F5A623" stroke-width="5" opacity="0.45" filter="url(#ws5c-s)"/>
+          <circle cx="512" cy="512" r="40" fill="#E8EAFF" opacity="0.14" filter="url(#ws5c-g)"/>
+        </svg>
+      </div>
+      <div class="size-label">87px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:60px;height:60px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws5d-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="9"/></filter>
+            <filter id="ws5d-g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="16"/></filter>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <path d="M0,200 Q256,350 512,512 Q768,674 1024,824" fill="none" stroke="#9080C4" stroke-width="7" opacity="0.40" filter="url(#ws5d-s)"/>
+          <path d="M0,380 Q256,440 512,512 Q768,584 1024,644" fill="none" stroke="#4EA8A6" stroke-width="7" opacity="0.45" filter="url(#ws5d-s)"/>
+          <path d="M0,550 Q256,525 512,512 Q768,525 1024,550" fill="none" stroke="#5B6ABF" stroke-width="7" opacity="0.55" filter="url(#ws5d-s)"/>
+          <path d="M0,824 Q256,674 512,512 Q768,350 1024,200" fill="none" stroke="#F5A623" stroke-width="7" opacity="0.45" filter="url(#ws5d-s)"/>
+          <circle cx="512" cy="512" r="35" fill="#E8EAFF" opacity="0.16" filter="url(#ws5d-g)"/>
+        </svg>
+      </div>
+      <div class="size-label">60px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:40px;height:40px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 1024 1024">
+          <defs>
+            <filter id="ws5e-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="12"/></filter>
+            <filter id="ws5e-g" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="18"/></filter>
+          </defs>
+          <rect width="1024" height="1024" fill="#080C15"/>
+          <path d="M0,200 Q256,350 512,512 Q768,674 1024,824" fill="none" stroke="#9080C4" stroke-width="10" opacity="0.40" filter="url(#ws5e-s)"/>
+          <path d="M0,380 Q256,440 512,512 Q768,584 1024,644" fill="none" stroke="#4EA8A6" stroke-width="10" opacity="0.45" filter="url(#ws5e-s)"/>
+          <path d="M0,550 Q256,525 512,512 Q768,525 1024,550" fill="none" stroke="#5B6ABF" stroke-width="10" opacity="0.55" filter="url(#ws5e-s)"/>
+          <path d="M0,824 Q256,674 512,512 Q768,350 1024,200" fill="none" stroke="#F5A623" stroke-width="10" opacity="0.45" filter="url(#ws5e-s)"/>
+          <circle cx="512" cy="512" r="30" fill="#E8EAFF" opacity="0.18" filter="url(#ws5e-g)"/>
+        </svg>
+      </div>
+      <div class="size-label">40px</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

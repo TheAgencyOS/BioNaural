@@ -1,0 +1,4 @@
+module BioNauralShared {
+header "BioNauralShared-Swift.h"
+export *
+}

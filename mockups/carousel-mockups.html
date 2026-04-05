@@ -1,0 +1,2104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — Carousel Card Concepts</title>
+<style>
+  @import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --canvas: #080C15;
+    --surface: #111520;
+    --surfaceRaised: #1A1F2E;
+    --divider: #1E2336;
+    --textPrimary: #E2E6F0;
+    --textSecondary: rgba(226, 230, 240, 0.55);
+    --textTertiary: rgba(226, 230, 240, 0.30);
+    --accent: #6E7CF7;
+    --accentWash: rgba(110, 124, 247, 0.05);
+    --accentLight: rgba(110, 124, 247, 0.15);
+    --focus: #5B6ABF;
+    --relax: #4EA8A6;
+    --sleep: #9080C4;
+    --energize: #F5A623;
+    --font: 'Satoshi', -apple-system, sans-serif;
+    --mono: 'SF Mono', 'Menlo', monospace;
+    --phone-w: 393px;
+    --phone-h: 852px;
+  }
+
+  body {
+    background: #05080E;
+    font-family: var(--font);
+    color: var(--textPrimary);
+    padding: 60px 40px;
+  }
+
+  h1.page-title {
+    font-size: 48px;
+    font-weight: 300;
+    letter-spacing: -1px;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  p.page-sub {
+    text-align: center;
+    color: var(--textSecondary);
+    font-size: 17px;
+    margin-bottom: 80px;
+  }
+
+  .concepts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 80px 60px;
+    max-width: 1800px;
+    margin: 0 auto;
+    justify-items: center;
+  }
+
+  .concept {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .concept-label {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .concept-name {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .concept-desc {
+    font-size: 14px;
+    color: var(--textSecondary);
+    margin-bottom: 24px;
+    text-align: center;
+    max-width: 360px;
+    line-height: 1.5;
+  }
+
+  .phone {
+    width: var(--phone-w);
+    height: var(--phone-h);
+    border-radius: 48px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 40px 80px rgba(0,0,0,0.5);
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background: var(--canvas);
+  }
+
+  .dynamic-island {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 36px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 20;
+  }
+
+  .status-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px 0;
+    z-index: 10;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--textPrimary);
+  }
+
+  .status-icons {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+  }
+
+  .tab-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 88px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding-top: 10px;
+    z-index: 10;
+    background: linear-gradient(to top, var(--canvas) 60%, transparent);
+  }
+
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--textTertiary);
+    width: 64px;
+  }
+
+  .tab-item.active { color: var(--accent); }
+
+  .home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    z-index: 20;
+  }
+
+  /* Shared animations */
+  @keyframes breathe {
+    0%, 100% { transform: scale(0.95); opacity: 0.8; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
+
+  @keyframes breathe-slow {
+    0%, 100% { transform: scale(0.92); }
+    50% { transform: scale(1.08); }
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% center; }
+    100% { background-position: 200% center; }
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  @keyframes rotate-slow {
+    from { transform: translate(-50%, -50%) rotate(0deg); }
+    to { transform: translate(-50%, -50%) rotate(360deg); }
+  }
+
+  @keyframes pulse-ring {
+    0% { transform: scale(1); opacity: 0.3; }
+    100% { transform: scale(1.5); opacity: 0; }
+  }
+
+  @keyframes wave-x {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ============================================ */
+  /* CONCEPT 1 — Glass Monolith */
+  /* ============================================ */
+  .c1 .header {
+    position: absolute;
+    top: 70px;
+    left: 20px; right: 20px;
+    z-index: 5;
+  }
+
+  .c1 .header h2 {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .c1 .header p {
+    font-size: 13px;
+    color: var(--textTertiary);
+    font-family: var(--mono);
+  }
+
+  .c1 .carousel-area {
+    position: absolute;
+    top: 145px;
+    left: 0; right: 0;
+    height: 520px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 14px;
+    overflow: hidden;
+  }
+
+  .c1 .card {
+    flex-shrink: 0;
+    width: 310px;
+    height: 480px;
+    border-radius: 32px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .c1 .card:hover { transform: scale(0.97); }
+
+  .c1 .card-bg {
+    position: absolute;
+    inset: 0;
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 32px;
+  }
+
+  .c1 .card .orb-glow {
+    position: absolute;
+    top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    filter: blur(30px);
+    animation: breathe 6s ease-in-out infinite;
+  }
+
+  .c1 .card .orb-core {
+    position: absolute;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    animation: breathe 6s ease-in-out infinite;
+  }
+
+  .c1 .card.focus .orb-glow { background: radial-gradient(circle, rgba(91,106,191,0.3) 0%, transparent 70%); }
+  .c1 .card.focus .orb-core { background: radial-gradient(circle, rgba(91,106,191,0.5) 0%, rgba(91,106,191,0.1) 60%, transparent 80%); }
+
+  .c1 .card.relax .orb-glow { background: radial-gradient(circle, rgba(78,168,166,0.25) 0%, transparent 70%); }
+  .c1 .card.relax .orb-core { background: radial-gradient(circle, rgba(78,168,166,0.45) 0%, rgba(78,168,166,0.08) 60%, transparent 80%); }
+
+  .c1 .card-content {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 32px 28px;
+  }
+
+  .c1 .card-mode {
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .c1 .card-desc {
+    font-size: 15px;
+    color: var(--textSecondary);
+    line-height: 1.45;
+    margin-bottom: 16px;
+  }
+
+  .c1 .card-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .c1 .card-hz {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--textTertiary);
+  }
+
+  .c1 .card-begin {
+    font-size: 13px;
+    font-weight: 500;
+    padding: 8px 20px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: var(--textSecondary);
+    background: transparent;
+  }
+
+  .c1 .card.peek {
+    opacity: 0.5;
+    transform: scale(0.92);
+  }
+
+  .c1 .dots {
+    position: absolute;
+    bottom: 105px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+  }
+
+  .c1 .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--divider);
+  }
+
+  .c1 .dot.active {
+    background: var(--accent);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  /* ============================================ */
+  /* CONCEPT 2 — Gradient Wave */
+  /* ============================================ */
+  .c2 .header {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    z-index: 5;
+  }
+
+  .c2 .header h2 {
+    font-size: 28px;
+    font-weight: 500;
+  }
+
+  .c2 .header p {
+    font-size: 13px;
+    color: var(--textTertiary);
+  }
+
+  .c2 .carousel-area {
+    position: absolute;
+    top: 140px;
+    left: 0; right: 0;
+    height: 540px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  .c2 .card {
+    flex-shrink: 0;
+    width: 305px;
+    height: 500px;
+    border-radius: 36px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .c2 .card-fill {
+    position: absolute;
+    inset: 0;
+    border-radius: 36px;
+  }
+
+  .c2 .card.focus .card-fill {
+    background: linear-gradient(165deg, #1a1d3a 0%, #0d1020 40%, var(--canvas) 100%);
+  }
+
+  .c2 .card.relax .card-fill {
+    background: linear-gradient(165deg, #142a2a 0%, #0d1618 40%, var(--canvas) 100%);
+  }
+
+  .c2 .wave-strip {
+    position: absolute;
+    top: 180px;
+    left: -20px;
+    right: -20px;
+    height: 60px;
+    overflow: hidden;
+  }
+
+  .c2 .wave-strip svg {
+    width: 200%;
+    height: 60px;
+    animation: wave-x 8s linear infinite;
+  }
+
+  .c2 .card-top {
+    position: absolute;
+    top: 36px;
+    left: 28px; right: 28px;
+  }
+
+  .c2 .card-band {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--textTertiary);
+    margin-bottom: 8px;
+  }
+
+  .c2 .card-mode {
+    font-size: 40px;
+    font-weight: 300;
+    letter-spacing: -1px;
+  }
+
+  .c2 .card-bottom {
+    position: absolute;
+    bottom: 36px;
+    left: 28px; right: 28px;
+  }
+
+  .c2 .card-desc {
+    font-size: 15px;
+    color: var(--textSecondary);
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .c2 .card-start-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 16px;
+    border-radius: 50px;
+    border: none;
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+  }
+
+  .c2 .focus .card-start-btn { background: var(--focus); color: white; }
+  .c2 .relax .card-start-btn { background: var(--relax); color: white; opacity: 0.3; }
+
+  .c2 .card.peek { opacity: 0.4; transform: scale(0.9) translateX(10px); }
+
+  .c2 .hz-display {
+    position: absolute;
+    bottom: 108px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--textTertiary);
+  }
+
+  /* ============================================ */
+  /* CONCEPT 3 — Orb Portrait */
+  /* ============================================ */
+  .c3 .header {
+    position: absolute;
+    top: 70px;
+    left: 24px;
+    z-index: 5;
+  }
+
+  .c3 .header h2 {
+    font-size: 28px;
+    font-weight: 500;
+  }
+
+  .c3 .carousel-area {
+    position: absolute;
+    top: 130px;
+    left: 0; right: 0;
+    height: 560px;
+    display: flex;
+    align-items: center;
+    padding: 0 28px;
+    gap: 18px;
+    overflow: hidden;
+  }
+
+  .c3 .card {
+    flex-shrink: 0;
+    width: 300px;
+    height: 520px;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.04);
+    background: var(--surface);
+  }
+
+  .c3 .card-orb-zone {
+    height: 300px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .c3 .big-orb {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    position: relative;
+    animation: breathe-slow 7s ease-in-out infinite;
+  }
+
+  .c3 .big-orb::before {
+    content: '';
+    position: absolute;
+    inset: -50px;
+    border-radius: 50%;
+    filter: blur(40px);
+  }
+
+  .c3 .focus .big-orb {
+    background: radial-gradient(circle at 40% 40%, rgba(91,106,191,0.6) 0%, rgba(91,106,191,0.15) 50%, transparent 70%);
+  }
+  .c3 .focus .big-orb::before {
+    background: radial-gradient(circle, rgba(91,106,191,0.15) 0%, transparent 60%);
+  }
+
+  .c3 .relax .big-orb {
+    background: radial-gradient(circle at 40% 40%, rgba(78,168,166,0.55) 0%, rgba(78,168,166,0.12) 50%, transparent 70%);
+  }
+  .c3 .relax .big-orb::before {
+    background: radial-gradient(circle, rgba(78,168,166,0.12) 0%, transparent 60%);
+  }
+
+  .c3 .card-info {
+    padding: 0 28px 32px;
+    display: flex;
+    flex-direction: column;
+    height: 220px;
+    justify-content: flex-end;
+  }
+
+  .c3 .card-mode {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .c3 .card-desc {
+    font-size: 14px;
+    color: var(--textSecondary);
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .c3 .card-hz {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--textTertiary);
+    margin-bottom: 20px;
+  }
+
+  .c3 .card-action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .c3 .card-tap {
+    font-size: 13px;
+    color: var(--textTertiary);
+  }
+
+  .c3 .card-arrow {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+
+  .c3 .focus .card-arrow { background: rgba(91,106,191,0.2); color: var(--focus); }
+  .c3 .relax .card-arrow { background: rgba(78,168,166,0.2); color: var(--relax); }
+
+  .c3 .card.peek { opacity: 0.4; transform: scale(0.88); }
+
+  /* ============================================ */
+  /* CONCEPT 4 — Neon Edge */
+  /* ============================================ */
+  .c4 .header {
+    position: absolute;
+    top: 70px;
+    left: 20px; right: 20px;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .c4 .header h2 { font-size: 28px; font-weight: 500; }
+
+  .c4 .header .watch-pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--textTertiary);
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .c4 .watch-live {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--relax);
+    animation: breathe 2s ease-in-out infinite;
+  }
+
+  .c4 .carousel-area {
+    position: absolute;
+    top: 140px;
+    left: 0; right: 0;
+    height: 540px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 14px;
+    overflow: hidden;
+  }
+
+  .c4 .card {
+    flex-shrink: 0;
+    width: 310px;
+    height: 500px;
+    border-radius: 28px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--surface);
+  }
+
+  .c4 .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    border-radius: 28px 28px 0 0;
+  }
+
+  .c4 .card.focus::before { background: linear-gradient(90deg, transparent, var(--focus), transparent); }
+  .c4 .card.relax::before { background: linear-gradient(90deg, transparent, var(--relax), transparent); }
+
+  .c4 .card-glow-top {
+    position: absolute;
+    top: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 120px;
+    border-radius: 50%;
+    filter: blur(50px);
+  }
+
+  .c4 .focus .card-glow-top { background: rgba(91,106,191,0.15); }
+  .c4 .relax .card-glow-top { background: rgba(78,168,166,0.12); }
+
+  .c4 .card-inner {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 40px 28px 32px;
+  }
+
+  .c4 .card-icon-ring {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .c4 .card-icon-ring::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 1px solid;
+    animation: pulse-ring 3s ease-out infinite;
+  }
+
+  .c4 .focus .card-icon-ring { background: rgba(91,106,191,0.15); }
+  .c4 .focus .card-icon-ring::after { border-color: rgba(91,106,191,0.2); }
+  .c4 .relax .card-icon-ring { background: rgba(78,168,166,0.15); }
+  .c4 .relax .card-icon-ring::after { border-color: rgba(78,168,166,0.2); }
+
+  .c4 .card-icon-ring svg { width: 28px; height: 28px; }
+
+  .c4 .card-mode {
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: -1px;
+    margin-bottom: 12px;
+  }
+
+  .c4 .card-hz {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--textTertiary);
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  .c4 .card-desc {
+    font-size: 15px;
+    color: var(--textSecondary);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .c4 .card-bottom-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 20px;
+    border-top: 1px solid var(--divider);
+  }
+
+  .c4 .card-last {
+    font-size: 12px;
+    color: var(--textTertiary);
+  }
+
+  .c4 .card-play {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .c4 .focus .card-play { background: var(--focus); }
+  .c4 .relax .card-play { background: var(--relax); }
+
+  .c4 .card.peek { opacity: 0.4; transform: scale(0.9); }
+
+  /* ============================================ */
+  /* CONCEPT 5 — Depth Layers */
+  /* ============================================ */
+  .c5 .header {
+    position: absolute;
+    top: 70px;
+    left: 24px;
+    z-index: 5;
+  }
+
+  .c5 .header h2 {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .c5 .header p {
+    font-size: 13px;
+    color: var(--textTertiary);
+  }
+
+  .c5 .carousel-area {
+    position: absolute;
+    top: 150px;
+    left: 0; right: 0;
+    height: 520px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  .c5 .card {
+    flex-shrink: 0;
+    width: 310px;
+    height: 480px;
+    border-radius: 32px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .c5 .card-layer-1 {
+    position: absolute;
+    inset: 0;
+    border-radius: 32px;
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .c5 .card-layer-2 {
+    position: absolute;
+    top: 6px; left: 6px; right: 6px; bottom: 6px;
+    border-radius: 26px;
+    background: rgba(255,255,255,0.02);
+  }
+
+  .c5 .card-gradient-field {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 280px;
+    border-radius: 32px 32px 0 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .c5 .focus .card-gradient-field {
+    background: radial-gradient(ellipse at 50% 60%, rgba(91,106,191,0.12) 0%, transparent 60%);
+  }
+  .c5 .relax .card-gradient-field {
+    background: radial-gradient(ellipse at 50% 60%, rgba(78,168,166,0.1) 0%, transparent 60%);
+  }
+
+  .c5 .depth-orb {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    position: relative;
+    animation: float 8s ease-in-out infinite;
+  }
+
+  .c5 .depth-orb::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+  }
+
+  .c5 .depth-orb::after {
+    content: '';
+    position: absolute;
+    inset: -30px;
+    border-radius: 50%;
+    filter: blur(25px);
+  }
+
+  .c5 .focus .depth-orb::before {
+    background: radial-gradient(circle at 35% 35%, rgba(91,106,191,0.7) 0%, rgba(91,106,191,0.2) 50%, transparent 70%);
+  }
+  .c5 .focus .depth-orb::after {
+    background: radial-gradient(circle, rgba(91,106,191,0.12) 0%, transparent 60%);
+  }
+  .c5 .relax .depth-orb::before {
+    background: radial-gradient(circle at 35% 35%, rgba(78,168,166,0.65) 0%, rgba(78,168,166,0.18) 50%, transparent 70%);
+  }
+  .c5 .relax .depth-orb::after {
+    background: radial-gradient(circle, rgba(78,168,166,0.1) 0%, transparent 60%);
+  }
+
+  .c5 .card-text {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 28px;
+  }
+
+  .c5 .card-mode {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .c5 .card-desc {
+    font-size: 14px;
+    color: var(--textSecondary);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .c5 .card-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .c5 .card-hz {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--textTertiary);
+  }
+
+  .c5 .card-arrow-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--textSecondary);
+    font-size: 16px;
+  }
+
+  .c5 .card.peek { opacity: 0.35; transform: scale(0.88); }
+
+  /* ============================================ */
+  /* CONCEPT 6 — Split Tone */
+  /* ============================================ */
+  .c6 .header {
+    position: absolute;
+    top: 70px;
+    left: 24px;
+    z-index: 5;
+  }
+
+  .c6 .header h2 { font-size: 28px; font-weight: 500; }
+
+  .c6 .carousel-area {
+    position: absolute;
+    top: 130px;
+    left: 0; right: 0;
+    height: 560px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 14px;
+    overflow: hidden;
+  }
+
+  .c6 .card {
+    flex-shrink: 0;
+    width: 314px;
+    height: 520px;
+    border-radius: 32px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .c6 .card-top-half {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .c6 .focus .card-top-half { background: linear-gradient(180deg, rgba(91,106,191,0.12) 0%, var(--surface) 100%); }
+  .c6 .relax .card-top-half { background: linear-gradient(180deg, rgba(78,168,166,0.1) 0%, var(--surface) 100%); }
+
+  .c6 .rings {
+    position: relative;
+    width: 160px;
+    height: 160px;
+  }
+
+  .c6 .ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid;
+    top: 50%; left: 50%;
+  }
+
+  .c6 .ring-1 { width: 60px; height: 60px; transform: translate(-50%, -50%); }
+  .c6 .ring-2 { width: 100px; height: 100px; transform: translate(-50%, -50%); opacity: 0.5; }
+  .c6 .ring-3 { width: 140px; height: 140px; transform: translate(-50%, -50%); opacity: 0.25; }
+
+  .c6 .focus .ring { border-color: var(--focus); }
+  .c6 .relax .ring { border-color: var(--relax); }
+
+  .c6 .ring-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    animation: breathe 4s ease-in-out infinite;
+  }
+
+  .c6 .focus .ring-center { background: var(--focus); box-shadow: 0 0 20px rgba(91,106,191,0.4); }
+  .c6 .relax .ring-center { background: var(--relax); box-shadow: 0 0 20px rgba(78,168,166,0.4); }
+
+  .c6 .card-bottom-half {
+    background: var(--surface);
+    padding: 24px 28px 28px;
+    border-top: 1px solid var(--divider);
+  }
+
+  .c6 .card-mode {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .c6 .card-sub {
+    font-size: 14px;
+    color: var(--textSecondary);
+    margin-bottom: 4px;
+  }
+
+  .c6 .card-hz {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--textTertiary);
+    margin-bottom: 20px;
+  }
+
+  .c6 .card-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 14px;
+    border: none;
+    font-family: var(--font);
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+  }
+
+  .c6 .focus .card-btn { background: rgba(91,106,191,0.15); color: var(--focus); }
+  .c6 .relax .card-btn { background: rgba(78,168,166,0.12); color: var(--relax); }
+
+  .c6 .card.peek { opacity: 0.35; transform: scale(0.88); }
+
+  /* ============================================ */
+  /* CONCEPT 7 — Immersive Dark */
+  /* ============================================ */
+  .c7 .phone-screen {
+    background: #050810;
+  }
+
+  .c7 .header {
+    position: absolute;
+    top: 70px;
+    left: 0; right: 0;
+    text-align: center;
+    z-index: 5;
+  }
+
+  .c7 .header h2 {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--textTertiary);
+  }
+
+  .c7 .carousel-area {
+    position: absolute;
+    top: 110px;
+    left: 0; right: 0;
+    height: 600px;
+    display: flex;
+    align-items: center;
+    padding: 0 22px;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  .c7 .card {
+    flex-shrink: 0;
+    width: 310px;
+    height: 560px;
+    border-radius: 36px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: rgba(17,21,32,0.6);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .c7 .card-aurora {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 350px;
+    overflow: hidden;
+  }
+
+  .c7 .aurora-blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: float 10s ease-in-out infinite;
+  }
+
+  .c7 .focus .aurora-blob:nth-child(1) {
+    width: 200px; height: 200px; top: -40px; left: -20px;
+    background: rgba(91,106,191,0.2);
+  }
+  .c7 .focus .aurora-blob:nth-child(2) {
+    width: 150px; height: 150px; top: 60px; right: -30px;
+    background: rgba(110,124,247,0.12);
+    animation-delay: -3s;
+  }
+
+  .c7 .relax .aurora-blob:nth-child(1) {
+    width: 200px; height: 200px; top: -40px; left: -20px;
+    background: rgba(78,168,166,0.18);
+  }
+  .c7 .relax .aurora-blob:nth-child(2) {
+    width: 150px; height: 150px; top: 60px; right: -30px;
+    background: rgba(78,168,166,0.1);
+    animation-delay: -3s;
+  }
+
+  .c7 .card-center-text {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-60%);
+    left: 32px; right: 32px;
+    text-align: center;
+  }
+
+  .c7 .card-mode {
+    font-size: 44px;
+    font-weight: 300;
+    letter-spacing: -1.5px;
+    margin-bottom: 12px;
+  }
+
+  .c7 .card-desc {
+    font-size: 15px;
+    color: var(--textSecondary);
+    line-height: 1.5;
+  }
+
+  .c7 .card-foot {
+    position: absolute;
+    bottom: 32px;
+    left: 32px; right: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .c7 .card-hz {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--textTertiary);
+  }
+
+  .c7 .card-go {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+
+  .c7 .focus .card-go { background: var(--focus); box-shadow: 0 8px 24px rgba(91,106,191,0.3); }
+  .c7 .relax .card-go { background: var(--relax); box-shadow: 0 8px 24px rgba(78,168,166,0.3); }
+
+  .c7 .card.peek { opacity: 0.3; transform: scale(0.86); }
+
+  /* ============================================ */
+  /* CONCEPT 8 — Spectrum Bar */
+  /* ============================================ */
+  .c8 .header {
+    position: absolute;
+    top: 70px;
+    left: 24px;
+    z-index: 5;
+  }
+
+  .c8 .header h2 {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .c8 .carousel-area {
+    position: absolute;
+    top: 130px;
+    left: 0; right: 0;
+    height: 560px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    gap: 14px;
+    overflow: hidden;
+  }
+
+  .c8 .card {
+    flex-shrink: 0;
+    width: 310px;
+    height: 520px;
+    border-radius: 32px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.04);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .c8 .spectrum-bar {
+    height: 6px;
+    border-radius: 32px 32px 0 0;
+  }
+
+  .c8 .focus .spectrum-bar { background: linear-gradient(90deg, var(--sleep), var(--focus), var(--accent)); }
+  .c8 .relax .spectrum-bar { background: linear-gradient(90deg, var(--sleep), var(--relax)); }
+
+  .c8 .card-orb-area {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .c8 .spectrum-orb {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    position: relative;
+    animation: breathe-slow 6s ease-in-out infinite;
+  }
+
+  .c8 .focus .spectrum-orb {
+    background: radial-gradient(circle at 40% 35%,
+      rgba(91,106,191,0.7) 0%,
+      rgba(110,124,247,0.3) 40%,
+      rgba(91,106,191,0.05) 65%,
+      transparent 80%
+    );
+    box-shadow: 0 0 60px rgba(91,106,191,0.15), 0 0 120px rgba(91,106,191,0.05);
+  }
+
+  .c8 .relax .spectrum-orb {
+    background: radial-gradient(circle at 40% 35%,
+      rgba(78,168,166,0.65) 0%,
+      rgba(78,168,166,0.25) 40%,
+      rgba(78,168,166,0.04) 65%,
+      transparent 80%
+    );
+    box-shadow: 0 0 60px rgba(78,168,166,0.12), 0 0 120px rgba(78,168,166,0.04);
+  }
+
+  .c8 .card-info-block {
+    padding: 24px 28px 32px;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .c8 .card-mode {
+    font-size: 28px;
+    font-weight: 300;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
+  }
+
+  .c8 .card-desc {
+    font-size: 14px;
+    color: var(--textSecondary);
+    margin-bottom: 4px;
+  }
+
+  .c8 .card-hz {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--textTertiary);
+    margin-bottom: 16px;
+  }
+
+  .c8 .card-begin-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--textTertiary);
+    font-size: 13px;
+  }
+
+  .c8 .focus .card-begin-row { color: var(--focus); }
+  .c8 .relax .card-begin-row { color: var(--relax); }
+
+  .c8 .card.peek { opacity: 0.35; transform: scale(0.88); }
+
+  /* ============================================ */
+  /* CONCEPT 9 — Cinematic */
+  /* ============================================ */
+  .c9 .header {
+    position: absolute;
+    top: 70px;
+    left: 20px; right: 20px;
+    z-index: 5;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .c9 .header h2 { font-size: 28px; font-weight: 500; }
+
+  .c9 .bio-chip {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--textTertiary);
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: var(--surface);
+    border: 1px solid var(--divider);
+  }
+
+  .c9 .carousel-area {
+    position: absolute;
+    top: 130px;
+    left: 0; right: 0;
+    height: 570px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 12px;
+    overflow: hidden;
+  }
+
+  .c9 .card {
+    flex-shrink: 0;
+    width: 320px;
+    height: 540px;
+    border-radius: 28px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .c9 .card-scene {
+    position: absolute;
+    inset: 0;
+    border-radius: 28px;
+  }
+
+  .c9 .focus .card-scene {
+    background: linear-gradient(170deg, #151935 0%, #0c0f1c 50%, #080a14 100%);
+  }
+  .c9 .relax .card-scene {
+    background: linear-gradient(170deg, #0f201f 0%, #0a1414 50%, #080c12 100%);
+  }
+
+  .c9 .scene-particles {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+
+  .c9 .particle {
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    border-radius: 50%;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .c9 .focus .particle { background: rgba(91,106,191,0.3); }
+  .c9 .relax .particle { background: rgba(78,168,166,0.3); }
+
+  .c9 .card-content {
+    position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    padding: 36px 28px 32px;
+    z-index: 2;
+  }
+
+  .c9 .card-badge {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border-radius: 6px;
+    display: inline-block;
+    width: fit-content;
+    margin-bottom: 20px;
+  }
+
+  .c9 .focus .card-badge { background: rgba(91,106,191,0.15); color: var(--focus); }
+  .c9 .relax .card-badge { background: rgba(78,168,166,0.12); color: var(--relax); }
+
+  .c9 .card-mode {
+    font-size: 40px;
+    font-weight: 300;
+    letter-spacing: -1.5px;
+    margin-bottom: 8px;
+  }
+
+  .c9 .card-desc {
+    font-size: 15px;
+    color: var(--textSecondary);
+    line-height: 1.5;
+    margin-bottom: 8px;
+  }
+
+  .c9 .card-hz {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--textTertiary);
+  }
+
+  .c9 .card-cta {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 500;
+    border: none;
+    font-family: var(--font);
+    cursor: pointer;
+    gap: 8px;
+  }
+
+  .c9 .focus .card-cta { background: var(--focus); color: white; box-shadow: 0 8px 32px rgba(91,106,191,0.25); }
+  .c9 .relax .card-cta { background: rgba(78,168,166,0.15); color: var(--relax); }
+
+  .c9 .card.peek { opacity: 0.3; transform: scale(0.85); }
+
+  /* ============================================ */
+  /* CONCEPT 10 — Minimal Luxe */
+  /* ============================================ */
+  .c10 .header {
+    position: absolute;
+    top: 70px;
+    left: 24px;
+    z-index: 5;
+  }
+
+  .c10 .header h2 {
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--textSecondary);
+  }
+
+  .c10 .carousel-area {
+    position: absolute;
+    top: 120px;
+    left: 0; right: 0;
+    height: 580px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 18px;
+    overflow: hidden;
+  }
+
+  .c10 .card {
+    flex-shrink: 0;
+    width: 305px;
+    height: 540px;
+    border-radius: 40px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.03);
+  }
+
+  .c10 .card-ambient {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 340px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .c10 .luxe-orb {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    position: relative;
+    animation: breathe-slow 8s ease-in-out infinite;
+  }
+
+  .c10 .luxe-orb::before {
+    content: '';
+    position: absolute;
+    inset: -40%;
+    border-radius: 50%;
+    filter: blur(40px);
+  }
+
+  .c10 .focus .luxe-orb {
+    background: radial-gradient(circle at 35% 35%,
+      rgba(91,106,191,0.8) 0%,
+      rgba(91,106,191,0.3) 35%,
+      rgba(91,106,191,0.08) 55%,
+      transparent 70%
+    );
+  }
+  .c10 .focus .luxe-orb::before { background: radial-gradient(circle, rgba(91,106,191,0.08) 0%, transparent 60%); }
+
+  .c10 .relax .luxe-orb {
+    background: radial-gradient(circle at 35% 35%,
+      rgba(78,168,166,0.75) 0%,
+      rgba(78,168,166,0.25) 35%,
+      rgba(78,168,166,0.06) 55%,
+      transparent 70%
+    );
+  }
+  .c10 .relax .luxe-orb::before { background: radial-gradient(circle, rgba(78,168,166,0.06) 0%, transparent 60%); }
+
+  .c10 .card-details {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    padding: 28px 28px 36px;
+  }
+
+  .c10 .card-mode {
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .c10 .card-desc {
+    font-size: 14px;
+    color: var(--textSecondary);
+    line-height: 1.5;
+    margin-bottom: 16px;
+  }
+
+  .c10 .card-meta-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .c10 .card-hz {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--textTertiary);
+  }
+
+  .c10 .card-tap-hint {
+    font-size: 12px;
+    color: var(--textTertiary);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .c10 .card.peek { opacity: 0.3; transform: scale(0.86); }
+
+</style>
+</head>
+<body>
+
+<h1 class="page-title">BioNaural</h1>
+<p class="page-sub">10 carousel card concepts — premium, world-class</p>
+
+<div class="concepts-grid">
+
+  <!-- CONCEPT 1 — Glass Monolith -->
+  <div class="concept">
+    <div class="concept-label">Concept 01</div>
+    <div class="concept-name">Glass Monolith</div>
+    <div class="concept-desc">Tall glass cards with the Orb floating inside. Subtle borders, light weight type, minimal metadata.</div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="dynamic-island"></div>
+        <div class="status-bar"><span>10:42</span><span class="status-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+        <div class="c1">
+          <div class="header">
+            <h2>Good evening</h2>
+            <p>adaptive listening</p>
+          </div>
+          <div class="carousel-area">
+            <div class="card focus">
+              <div class="card-bg"></div>
+              <div class="orb-glow"></div>
+              <div class="orb-core"></div>
+              <div class="card-content">
+                <div class="card-mode">Focus</div>
+                <div class="card-desc">Deep concentration. The audio calms as your heart rate rises.</div>
+                <div class="card-meta">
+                  <div class="card-hz">Beta 14–16 Hz</div>
+                  <div class="card-begin">Begin ›</div>
+                </div>
+              </div>
+            </div>
+            <div class="card relax peek">
+              <div class="card-bg"></div>
+              <div class="orb-glow"></div>
+              <div class="orb-core"></div>
+              <div class="card-content">
+                <div class="card-mode">Relaxation</div>
+                <div class="card-desc">Calm & de-stress. Alpha waves guide you down.</div>
+                <div class="card-meta">
+                  <div class="card-hz">Alpha 8–11 Hz</div>
+                  <div class="card-begin">Begin ›</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="dots">
+            <div class="dot active"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+          </div>
+        </div>
+        <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></div></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 2 — Gradient Wave -->
+  <div class="concept">
+    <div class="concept-label">Concept 02</div>
+    <div class="concept-name">Gradient Wave</div>
+    <div class="concept-desc">Deep color gradients with animated waveforms flowing through the card. Full-width CTA button at bottom.</div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="dynamic-island"></div>
+        <div class="status-bar"><span>10:42</span><span class="status-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+        <div class="c2">
+          <div class="header">
+            <h2>BioNaural</h2>
+            <p>Adaptive listening</p>
+          </div>
+          <div class="carousel-area">
+            <div class="card focus">
+              <div class="card-fill"></div>
+              <div class="card-top">
+                <div class="card-band">Beta frequency</div>
+                <div class="card-mode">Focus</div>
+              </div>
+              <div class="wave-strip">
+                <svg viewBox="0 0 800 60" preserveAspectRatio="none"><path d="M0 30 Q50 10 100 30 T200 30 T300 30 T400 30 T500 30 T600 30 T700 30 T800 30" fill="none" stroke="rgba(91,106,191,0.3)" stroke-width="1.5"/><path d="M0 30 Q50 50 100 30 T200 30 T300 30 T400 30 T500 30 T600 30 T700 30 T800 30" fill="none" stroke="rgba(91,106,191,0.15)" stroke-width="1"/></svg>
+              </div>
+              <div class="card-bottom">
+                <div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div>
+                <button class="card-start-btn">Begin · 14–16 Hz</button>
+              </div>
+            </div>
+            <div class="card relax peek">
+              <div class="card-fill"></div>
+              <div class="card-top">
+                <div class="card-band">Alpha frequency</div>
+                <div class="card-mode">Relaxation</div>
+              </div>
+              <div class="card-bottom">
+                <div class="card-desc">Calm & de-stress. Guided by alpha waves.</div>
+                <button class="card-start-btn">Begin · 8–11 Hz</button>
+              </div>
+            </div>
+          </div>
+          <div class="hz-display">Beta · 14–16 Hz</div>
+        </div>
+        <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></div></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 3 — Orb Portrait -->
+  <div class="concept">
+    <div class="concept-label">Concept 03</div>
+    <div class="concept-name">Orb Portrait</div>
+    <div class="concept-desc">Hero Orb takes top 60% of card. Bold info panel below. Circular arrow button to enter.</div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="dynamic-island"></div>
+        <div class="status-bar"><span>10:42</span><span class="status-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+        <div class="c3">
+          <div class="header"><h2>BioNaural</h2></div>
+          <div class="carousel-area">
+            <div class="card focus">
+              <div class="card-orb-zone"><div class="big-orb"></div></div>
+              <div class="card-info">
+                <div class="card-mode" style="color: var(--focus)">Focus</div>
+                <div class="card-desc">Sustained attention. Adapts to your biometrics in real-time.</div>
+                <div class="card-hz">Beta 14–16 Hz</div>
+                <div class="card-action">
+                  <div class="card-tap">Tap to begin</div>
+                  <div class="card-arrow">›</div>
+                </div>
+              </div>
+            </div>
+            <div class="card relax peek">
+              <div class="card-orb-zone"><div class="big-orb"></div></div>
+              <div class="card-info">
+                <div class="card-mode" style="color: var(--relax)">Relaxation</div>
+                <div class="card-desc">Calm & de-stress with alpha frequencies.</div>
+                <div class="card-hz">Alpha 8–11 Hz</div>
+                <div class="card-action">
+                  <div class="card-tap">Tap to begin</div>
+                  <div class="card-arrow">›</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></div></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 4 — Neon Edge -->
+  <div class="concept">
+    <div class="concept-label">Concept 04</div>
+    <div class="concept-name">Neon Edge</div>
+    <div class="concept-desc">Top glow line + pulsing icon ring. Structured layout with divider, last-played info, and play button.</div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="dynamic-island"></div>
+        <div class="status-bar"><span>10:42</span><span class="status-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+        <div class="c4">
+          <div class="header">
+            <h2>BioNaural</h2>
+            <div class="watch-pill"><div class="watch-live"></div>62 bpm</div>
+          </div>
+          <div class="carousel-area">
+            <div class="card focus">
+              <div class="card-glow-top"></div>
+              <div class="card-inner">
+                <div class="card-icon-ring"><svg viewBox="0 0 24 24" fill="none" stroke="var(--focus)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg></div>
+                <div class="card-mode">Focus</div>
+                <div class="card-hz">Beta · 14–16 Hz</div>
+                <div class="card-desc">Sustained attention. The audio responds to your heart rate, calming when you're elevated.</div>
+                <div class="card-bottom-bar">
+                  <div class="card-last">Last: 48 min ago</div>
+                  <div class="card-play"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+                </div>
+              </div>
+            </div>
+            <div class="card relax peek">
+              <div class="card-glow-top"></div>
+              <div class="card-inner">
+                <div class="card-icon-ring"><svg viewBox="0 0 24 24" fill="none" stroke="var(--relax)" stroke-width="1.5"><path d="M17 8C8 10 5.9 16.17 3.82 21.34l1.89.66L12 14"/></svg></div>
+                <div class="card-mode">Relaxation</div>
+                <div class="card-hz">Alpha · 8–11 Hz</div>
+                <div class="card-desc">Calm & de-stress.</div>
+                <div class="card-bottom-bar">
+                  <div class="card-last">New</div>
+                  <div class="card-play"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></div></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 5 — Depth Layers -->
+  <div class="concept">
+    <div class="concept-label">Concept 05</div>
+    <div class="concept-name">Depth Layers</div>
+    <div class="concept-desc">Double-border card with floating Orb that drifts vertically. Compact info block at bottom.</div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="dynamic-island"></div>
+        <div class="status-bar"><span>10:42</span><span class="status-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+        <div class="c5">
+          <div class="header">
+            <h2>Good evening</h2>
+            <p>Your body adapts. The sound follows.</p>
+          </div>
+          <div class="carousel-area">
+            <div class="card focus">
+              <div class="card-layer-1"></div>
+              <div class="card-layer-2"></div>
+              <div class="card-gradient-field"><div class="depth-orb"></div></div>
+              <div class="card-text">
+                <div class="card-mode" style="color: var(--focus)">Focus</div>
+                <div class="card-desc">Sustained attention. Biometric adaptation keeps you in the zone.</div>
+                <div class="card-row">
+                  <div class="card-hz">Beta 14–16 Hz</div>
+                  <div class="card-arrow-btn">›</div>
+                </div>
+              </div>
+            </div>
+            <div class="card relax peek">
+              <div class="card-layer-1"></div>
+              <div class="card-layer-2"></div>
+              <div class="card-gradient-field"><div class="depth-orb"></div></div>
+              <div class="card-text">
+                <div class="card-mode" style="color: var(--relax)">Relaxation</div>
+                <div class="card-desc">Calm & de-stress with alpha waves.</div>
+                <div class="card-row">
+                  <div class="card-hz">Alpha 8–11 Hz</div>
+                  <div class="card-arrow-btn">›</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></div></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 6 — Split Tone -->
+  <div class="concept">
+    <div class="concept-label">Concept 06</div>
+    <div class="concept-name">Split Tone</div>
+    <div class="concept-desc">Card split in two: concentric rings visualization on top, bold info + CTA on bottom. Clean divide.</div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="dynamic-island"></div>
+        <div class="status-bar"><span>10:42</span><span class="status-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+        <div class="c6">
+          <div class="header"><h2>BioNaural</h2></div>
+          <div class="carousel-area">
+            <div class="card focus">
+              <div class="card-top-half">
+                <div class="rings">
+                  <div class="ring ring-1"></div>
+                  <div class="ring ring-2"></div>
+                  <div class="ring ring-3"></div>
+                  <div class="ring-center"></div>
+                </div>
+              </div>
+              <div class="card-bottom-half">
+                <div class="card-mode" style="color: var(--focus)">Focus</div>
+                <div class="card-sub">Sustained attention</div>
+                <div class="card-hz">Beta 14–16 Hz</div>
+                <button class="card-btn">Begin Listening</button>
+              </div>
+            </div>
+            <div class="card relax peek">
+              <div class="card-top-half">
+                <div class="rings">
+                  <div class="ring ring-1"></div>
+                  <div class="ring ring-2"></div>
+                  <div class="ring ring-3"></div>
+                  <div class="ring-center"></div>
+                </div>
+              </div>
+              <div class="card-bottom-half">
+                <div class="card-mode" style="color: var(--relax)">Relaxation</div>
+                <div class="card-sub">Calm & de-stress</div>
+                <div class="card-hz">Alpha 8–11 Hz</div>
+                <button class="card-btn">Begin Listening</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></div></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 7 — Immersive Dark -->
+  <div class="concept">
+    <div class="concept-label">Concept 07</div>
+    <div class="concept-name">Immersive Dark</div>
+    <div class="concept-desc">Aurora blobs fill the card with atmospheric light. Giant light-weight type centered. Floating play button.</div>
+    <div class="phone">
+      <div class="phone-screen c7">
+        <div class="dynamic-island"></div>
+        <div class="status-bar"><span>10:42</span><span class="status-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+        <div class="header"><h2>Adaptive Listening</h2></div>
+        <div class="carousel-area">
+          <div class="card focus">
+            <div class="card-aurora">
+              <div class="aurora-blob"></div>
+              <div class="aurora-blob"></div>
+            </div>
+            <div class="card-center-text">
+              <div class="card-mode">Focus</div>
+              <div class="card-desc">Sustained concentration. Your biometrics shape the sound.</div>
+            </div>
+            <div class="card-foot">
+              <div class="card-hz">Beta 14–16 Hz</div>
+              <button class="card-go"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+            </div>
+          </div>
+          <div class="card relax peek">
+            <div class="card-aurora">
+              <div class="aurora-blob"></div>
+              <div class="aurora-blob"></div>
+            </div>
+            <div class="card-center-text">
+              <div class="card-mode">Relaxation</div>
+              <div class="card-desc">Calm & de-stress.</div>
+            </div>
+            <div class="card-foot">
+              <div class="card-hz">Alpha 8–11 Hz</div>
+              <button class="card-go"><svg width="18" height="18" viewBox="0 0 24 24" fill="white"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+            </div>
+          </div>
+        </div>
+        <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></div></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 8 — Spectrum Bar -->
+  <div class="concept">
+    <div class="concept-label">Concept 08</div>
+    <div class="concept-name">Spectrum Bar</div>
+    <div class="concept-desc">Gradient frequency bar across top edge. Rich Orb with box-shadow glow. Clean type block below.</div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="dynamic-island"></div>
+        <div class="status-bar"><span>10:42</span><span class="status-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+        <div class="c8">
+          <div class="header">
+            <h2>Good evening</h2>
+          </div>
+          <div class="carousel-area">
+            <div class="card focus">
+              <div class="spectrum-bar"></div>
+              <div class="card-orb-area"><div class="spectrum-orb"></div></div>
+              <div class="card-info-block">
+                <div class="card-mode">Focus</div>
+                <div class="card-desc">Sustained attention, biometric-driven</div>
+                <div class="card-hz">Beta 14–16 Hz</div>
+                <div class="card-begin-row">Begin listening ›</div>
+              </div>
+            </div>
+            <div class="card relax peek">
+              <div class="spectrum-bar"></div>
+              <div class="card-orb-area"><div class="spectrum-orb"></div></div>
+              <div class="card-info-block">
+                <div class="card-mode">Relaxation</div>
+                <div class="card-desc">Calm & de-stress</div>
+                <div class="card-hz">Alpha 8–11 Hz</div>
+                <div class="card-begin-row">Begin listening ›</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></div></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 9 — Cinematic -->
+  <div class="concept">
+    <div class="concept-label">Concept 09</div>
+    <div class="concept-name">Cinematic</div>
+    <div class="concept-desc">Scene-like gradient backgrounds with floating particles. Badge chip, oversized type, bold CTA with shadow.</div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="dynamic-island"></div>
+        <div class="status-bar"><span>10:42</span><span class="status-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+        <div class="c9">
+          <div class="header">
+            <h2>BioNaural</h2>
+            <div class="bio-chip">62 bpm · Calm</div>
+          </div>
+          <div class="carousel-area">
+            <div class="card focus">
+              <div class="card-scene">
+                <div class="scene-particles">
+                  <div class="particle" style="top:20%;left:15%;width:3px;height:3px;animation-delay:-1s"></div>
+                  <div class="particle" style="top:40%;left:70%;width:2px;height:2px;animation-delay:-3s"></div>
+                  <div class="particle" style="top:60%;left:30%;animation-delay:-5s"></div>
+                  <div class="particle" style="top:25%;left:80%;width:2.5px;height:2.5px;animation-delay:-2s"></div>
+                  <div class="particle" style="top:75%;left:55%;animation-delay:-4s"></div>
+                </div>
+              </div>
+              <div class="card-content">
+                <div class="card-badge">Beta Frequency</div>
+                <div class="card-mode">Focus</div>
+                <div class="card-desc">Sustained attention. Your biometrics drive the adaptation.</div>
+                <div class="card-hz">14–16 Hz</div>
+                <button class="card-cta">Begin Listening</button>
+              </div>
+            </div>
+            <div class="card relax peek">
+              <div class="card-scene">
+                <div class="scene-particles">
+                  <div class="particle" style="top:20%;left:15%"></div>
+                  <div class="particle" style="top:50%;left:60%"></div>
+                </div>
+              </div>
+              <div class="card-content">
+                <div class="card-badge">Alpha Frequency</div>
+                <div class="card-mode">Relaxation</div>
+                <div class="card-desc">Calm & de-stress.</div>
+                <div class="card-hz">8–11 Hz</div>
+                <button class="card-cta">Begin Listening</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></div></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONCEPT 10 — Minimal Luxe -->
+  <div class="concept">
+    <div class="concept-label">Concept 10</div>
+    <div class="concept-name">Minimal Luxe</div>
+    <div class="concept-desc">Extra-round 40px radius. Luminous orb with deep bloom halo. Light-weight type. Whisper-quiet metadata. Pure calm.</div>
+    <div class="phone">
+      <div class="phone-screen">
+        <div class="dynamic-island"></div>
+        <div class="status-bar"><span>10:42</span><span class="status-icons"><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+        <div class="c10">
+          <div class="header"><h2>Good evening</h2></div>
+          <div class="carousel-area">
+            <div class="card focus">
+              <div class="card-ambient"><div class="luxe-orb"></div></div>
+              <div class="card-details">
+                <div class="card-mode">Focus</div>
+                <div class="card-desc">Sustained attention. Adaptive audio that responds to your body.</div>
+                <div class="card-meta-row">
+                  <div class="card-hz">Beta 14–16 Hz</div>
+                  <div class="card-tap-hint">Tap to begin ›</div>
+                </div>
+              </div>
+            </div>
+            <div class="card relax peek">
+              <div class="card-ambient"><div class="luxe-orb"></div></div>
+              <div class="card-details">
+                <div class="card-mode">Relaxation</div>
+                <div class="card-desc">Calm & de-stress with alpha frequencies.</div>
+                <div class="card-meta-row">
+                  <div class="card-hz">Alpha 8–11 Hz</div>
+                  <div class="card-tap-hint">Tap to begin ›</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span>Settings</span></div></div>
+        <div class="home-indicator"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

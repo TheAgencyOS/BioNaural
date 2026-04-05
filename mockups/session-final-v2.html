@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — Session Screen Final v2</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --canvas: #080C15;
+    --surface: #111520;
+    --surface-raised: #1A1F2E;
+    --text-primary: #E2E6F0;
+    --text-secondary: rgba(226,230,240,0.65);
+    --text-tertiary: rgba(226,230,240,0.40);
+    --accent: #6E7CF7;
+    --focus: #5B6ABF;
+    --relaxation: #4EA8A6;
+    --sleep: #9080C4;
+    --sleep-tint: #C47040;
+    --energize: #F5A623;
+    --signal-calm: #4EA8A6;
+    --signal-elevated: #D4954A;
+    --signal-peak: #D46A5A;
+    --pw: 393px; --ph: 852px; --pr: 55px;
+    --st: 59px; --sb: 34px;
+  }
+  body { background:#050508; font-family:'Inter',-apple-system,sans-serif; color:var(--text-primary); padding:40px 20px 80px; }
+  h1 { text-align:center; font-size:28px; font-weight:300; margin-bottom:6px; }
+  .ps { text-align:center; font-size:14px; color:var(--text-secondary); margin-bottom:60px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(420px,1fr)); gap:60px 40px; max-width:1800px; margin:0 auto; justify-items:center; }
+  .concept { display:flex; flex-direction:column; align-items:center; }
+  .cl { font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+  .cd { font-size:13px; color:var(--text-tertiary); margin-bottom:16px; text-align:center; max-width:400px; line-height:1.5; }
+
+  .phone { width:var(--pw); height:var(--ph); background:var(--canvas); border-radius:var(--pr); position:relative; overflow:hidden; box-shadow:0 0 0 2px #1a1a2a, 0 20px 60px rgba(0,0,0,0.6); }
+  .phone::before { content:''; position:absolute; top:12px; left:50%; transform:translateX(-50%); width:126px; height:37px; background:#000; border-radius:20px; z-index:100; }
+  .phone::after { content:''; position:absolute; bottom:8px; left:50%; transform:translateX(-50%); width:139px; height:5px; background:rgba(255,255,255,0.15); border-radius:3px; z-index:100; }
+  .scr { position:absolute; inset:0; display:flex; flex-direction:column; }
+
+  /* Nav */
+  .nav { display:flex; align-items:center; justify-content:space-between; padding:0 16px; height:44px; margin-top:var(--st); z-index:10; flex-shrink:0; }
+  .nb { width:44px; height:44px; display:flex; align-items:center; justify-content:center; }
+  .nb svg { width:12px; height:20px; fill:none; stroke:var(--text-secondary); stroke-width:2.5; stroke-linecap:round; stroke-linejoin:round; }
+  .nt { font-size:17px; font-weight:600; color:var(--text-primary); letter-spacing:-0.4px; }
+  /* Nav right = overflow dots */
+  .nr { width:44px; height:44px; display:flex; align-items:center; justify-content:center; }
+  .nr svg { width:20px; height:20px; fill:var(--text-secondary); }
+
+  .sp { flex:1; }
+
+  /* Dropdown menu (shown as expanded from overflow) */
+  .dropdown-menu {
+    position:absolute; top:calc(var(--st) + 44px); right:16px;
+    width:220px; background:var(--surface); border-radius:14px;
+    border:1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
+    z-index:50; overflow:hidden;
+    padding:4px 0;
+  }
+  .dm-item {
+    display:flex; align-items:center; gap:10px;
+    padding:11px 16px; font-size:15px; color:var(--text-primary);
+  }
+  .dm-item:hover { background:rgba(255,255,255,0.03); }
+  .dm-item svg { width:18px; height:18px; fill:var(--text-secondary); flex-shrink:0; }
+  .dm-item .check { margin-left:auto; font-size:14px; color:var(--accent); }
+  .dm-sep { height:1px; background:rgba(255,255,255,0.05); margin:4px 0; }
+  .dm-label { padding:8px 16px 4px; font-size:11px; font-weight:600; letter-spacing:1.2px; text-transform:uppercase; color:var(--text-tertiary); }
+
+  /* Biometric strip — integrated into the wave zone */
+  .bio-strip {
+    display:flex; justify-content:center; gap:20px;
+    padding:0 20px;
+  }
+  .bio-item { display:flex; flex-direction:column; align-items:center; gap:1px; }
+  .bio-val { font-family:'SF Mono','Menlo',monospace; font-size:22px; font-weight:500; letter-spacing:0.5px; }
+  .bio-label { font-size:10px; font-weight:600; letter-spacing:1px; text-transform:uppercase; }
+
+  /* Wave layers */
+  .wc { position:absolute; left:0; right:0; top:50%; transform:translateY(-50%); pointer-events:none; }
+
+  /* Orb */
+  .ow { position:relative; display:flex; align-items:center; justify-content:center; }
+  .og { position:absolute; border-radius:50%; filter:blur(40px); }
+  .oc { position:absolute; border-radius:50%; filter:blur(10px); }
+
+  /* Timer */
+  .timer { font-family:'SF Mono','Menlo',monospace; font-weight:300; letter-spacing:1px; text-align:center; }
+
+  /* Transport */
+  .tr { display:flex; align-items:center; justify-content:space-between; padding:0 24px; height:56px; }
+  .tr .s { width:40px; height:40px; display:flex; align-items:center; justify-content:center; }
+  .tr .s svg { width:18px; height:18px; fill:var(--text-tertiary); }
+  .tr .c { display:flex; align-items:center; gap:28px; }
+  .tr .ct { width:40px; height:40px; display:flex; align-items:center; justify-content:center; border-radius:50%; }
+  .tr .ct svg { width:16px; height:16px; fill:var(--text-secondary); }
+  .tr .cm { width:52px; height:52px; background:var(--surface-raised); border:1px solid rgba(255,255,255,0.08); }
+  .tr .cm svg { width:20px; height:20px; fill:var(--text-primary); }
+
+  /* Legend */
+  .leg { display:flex; justify-content:center; gap:14px; }
+  .li { display:flex; align-items:center; gap:4px; }
+  .ll { width:14px; height:1.5px; border-radius:1px; }
+  .lt { font-size:10px; font-weight:500; letter-spacing:0.5px; }
+
+  /* Adapt dot */
+  .ad { width:5px; height:5px; border-radius:50%; animation:p 2s ease-in-out infinite; }
+  @keyframes p { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  /* Phase bar */
+  .phase { display:flex; gap:3px; padding:6px 32px; }
+  .phase div { height:3px; border-radius:2px; }
+</style>
+</head>
+<body>
+
+<h1>Session Screen — Final v2</h1>
+<p class="ps">Sound selector in overflow menu · Biometrics woven into the wave zone · Simplified</p>
+
+<div class="grid">
+
+<!-- ============================== -->
+<!-- FOCUS — with dropdown menu shown -->
+<!-- ============================== -->
+<div class="concept">
+  <div class="cl">Focus — Menu Open</div>
+  <div class="cd">Overflow menu contains sound selector, session settings, and mode info. Biometrics float above the Orb as part of the visual field — not a separate bar.</div>
+  <div class="phone">
+    <div class="scr" style="background:radial-gradient(ellipse at 50% 40%, rgba(91,106,191,0.05) 0%, var(--canvas) 55%);">
+      <div class="nav">
+        <div class="nb"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nt">Focus</div>
+        <div class="nr"><svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="10" cy="16" r="2"/></svg></div>
+      </div>
+
+      <!-- Overflow dropdown (shown as if tapped) -->
+      <div class="dropdown-menu">
+        <div class="dm-label">Soundscape</div>
+        <div class="dm-item">
+          <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/><circle cx="6" cy="18" r="3" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/><circle cx="18" cy="16" r="3" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/></svg>
+          Rain · Warm Pad
+          <span class="check">✓</span>
+        </div>
+        <div class="dm-item" style="color:var(--text-secondary);">
+          <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><circle cx="6" cy="18" r="3" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><circle cx="18" cy="16" r="3" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/></svg>
+          Wind · Subtle Drone
+        </div>
+        <div class="dm-item" style="color:var(--text-secondary);">
+          <svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><circle cx="6" cy="18" r="3" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><circle cx="18" cy="16" r="3" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/></svg>
+          Pink Noise · Bright Pad
+        </div>
+        <div class="dm-sep"></div>
+        <div class="dm-item">
+          <svg viewBox="0 0 24 24"><path d="M12 15V3m0 12l-4-4m4 4l4-4M2 17l.621 2.485A2 2 0 004.561 21h14.878a2 2 0 001.94-1.515L22 17" fill="none" stroke="var(--text-secondary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Mix Levels
+        </div>
+        <div class="dm-item">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" fill="none" stroke="var(--text-secondary)" stroke-width="1.5" stroke-linecap="round"/></svg>
+          Session Settings
+        </div>
+        <div class="dm-item">
+          <svg viewBox="0 0 24 24"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" fill="none" stroke="var(--text-secondary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          The Science
+        </div>
+      </div>
+
+      <div class="sp"></div>
+
+      <!-- Biometric values floating above the orb zone -->
+      <div class="bio-strip">
+        <div class="bio-item">
+          <div class="bio-val" style="color:var(--signal-calm);">68</div>
+          <div class="bio-label" style="color:var(--text-tertiary);">BPM</div>
+        </div>
+        <div class="bio-item">
+          <div class="bio-val" style="color:var(--accent);">52</div>
+          <div class="bio-label" style="color:var(--text-tertiary);">HRV</div>
+        </div>
+      </div>
+
+      <div style="height:8px;"></div>
+
+      <!-- Orb + three wave layers -->
+      <div style="position:relative; height:260px; display:flex; align-items:center; justify-content:center;">
+        <div class="wc" style="height:140px;">
+          <svg width="100%" height="100%" viewBox="0 0 393 140" preserveAspectRatio="none">
+            <path d="M0,70 Q98,48 196,70 T393,70" fill="none" stroke="var(--signal-calm)" stroke-width="1" opacity="0.10"/>
+          </svg>
+        </div>
+        <div class="wc" style="height:100px;">
+          <svg width="100%" height="100%" viewBox="0 0 393 100" preserveAspectRatio="none">
+            <path d="M0,50 Q50,36 100,50 T200,50 T300,50 T393,50" fill="none" stroke="var(--accent)" stroke-width="1.2" opacity="0.12"/>
+          </svg>
+        </div>
+        <div class="wc" style="height:70px;">
+          <svg width="100%" height="100%" viewBox="0 0 393 70" preserveAspectRatio="none">
+            <path d="M0,35 Q26,23 52,35 T104,35 T156,35 T208,35 T260,35 T312,35 T364,35 T393,35" fill="none" stroke="var(--focus)" stroke-width="1.5" opacity="0.22"/>
+          </svg>
+        </div>
+        <div class="ow" style="width:140px; height:140px;">
+          <div class="og" style="inset:-45px; background:var(--focus); opacity:0.14;"></div>
+          <div class="oc" style="inset:0; background:radial-gradient(circle, var(--focus) 0%, transparent 70%); opacity:0.30;"></div>
+        </div>
+      </div>
+
+      <div class="leg">
+        <div class="li"><div class="ll" style="background:var(--signal-calm); opacity:0.4;"></div><span class="lt" style="color:var(--text-tertiary);">Ambient</span></div>
+        <div class="li"><div class="ll" style="background:var(--accent); opacity:0.4;"></div><span class="lt" style="color:var(--text-tertiary);">Melodic</span></div>
+        <div class="li"><div class="ll" style="background:var(--focus); opacity:0.5;"></div><span class="lt" style="color:var(--text-tertiary);">Binaural</span></div>
+      </div>
+
+      <div class="sp"></div>
+
+      <div class="timer" style="font-size:38px; opacity:0.5;">18:42</div>
+      <div style="text-align:center; margin-top:4px;">
+        <span style="font-family:monospace; font-size:14px; font-weight:500; color:var(--focus); opacity:0.55;">15.2 Hz</span>
+        <span style="font-size:11px; color:var(--text-tertiary); margin-left:3px;">Beta</span>
+      </div>
+
+      <div class="sp"></div>
+
+      <div class="tr">
+        <div class="s"><svg viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><polygon points="12,15 17,21 7,21"/></svg></div>
+        <div class="c">
+          <div class="ct"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M14 10l6.1-6.1M9 21H3v-6M10 14l-6.1 6.1" fill="none" stroke="var(--text-secondary)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <div class="ct cm"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+          <div class="ct"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+        </div>
+        <div class="s"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><path d="M7 11V7a5 5 0 0110 0v4" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/></svg></div>
+      </div>
+      <div style="height:var(--sb);"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- FOCUS — menu closed (normal state) -->
+<!-- ============================== -->
+<div class="concept">
+  <div class="cl">Focus — In Session</div>
+  <div class="cd">Clean session state. Biometrics sit naturally above the wave field. No chrome, no pills — just the numbers breathing with the visual.</div>
+  <div class="phone">
+    <div class="scr" style="background:radial-gradient(ellipse at 50% 40%, rgba(91,106,191,0.05) 0%, var(--canvas) 55%);">
+      <div class="nav">
+        <div class="nb"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nt">Focus</div>
+        <div class="nr"><svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="10" cy="16" r="2"/></svg></div>
+      </div>
+
+      <div class="sp"></div>
+
+      <!-- Biometrics — large, breathing, no container -->
+      <div class="bio-strip">
+        <div class="bio-item">
+          <div class="bio-val" style="color:var(--signal-calm);">68</div>
+          <div class="bio-label" style="color:var(--text-tertiary);">BPM</div>
+        </div>
+        <div class="bio-item">
+          <div class="bio-val" style="color:var(--accent);">52</div>
+          <div class="bio-label" style="color:var(--text-tertiary);">HRV</div>
+        </div>
+      </div>
+
+      <div style="height:8px;"></div>
+
+      <div style="position:relative; height:260px; display:flex; align-items:center; justify-content:center;">
+        <div class="wc" style="height:140px;"><svg width="100%" height="100%" viewBox="0 0 393 140" preserveAspectRatio="none"><path d="M0,70 Q98,48 196,70 T393,70" fill="none" stroke="var(--signal-calm)" stroke-width="1" opacity="0.10"/></svg></div>
+        <div class="wc" style="height:100px;"><svg width="100%" height="100%" viewBox="0 0 393 100" preserveAspectRatio="none"><path d="M0,50 Q50,36 100,50 T200,50 T300,50 T393,50" fill="none" stroke="var(--accent)" stroke-width="1.2" opacity="0.12"/></svg></div>
+        <div class="wc" style="height:70px;"><svg width="100%" height="100%" viewBox="0 0 393 70" preserveAspectRatio="none"><path d="M0,35 Q26,23 52,35 T104,35 T156,35 T208,35 T260,35 T312,35 T364,35 T393,35" fill="none" stroke="var(--focus)" stroke-width="1.5" opacity="0.22"/></svg></div>
+        <div class="ow" style="width:140px; height:140px;">
+          <div class="og" style="inset:-45px; background:var(--focus); opacity:0.14;"></div>
+          <div class="oc" style="inset:0; background:radial-gradient(circle, var(--focus) 0%, transparent 70%); opacity:0.30;"></div>
+        </div>
+      </div>
+
+      <div class="leg">
+        <div class="li"><div class="ll" style="background:var(--signal-calm); opacity:0.4;"></div><span class="lt" style="color:var(--text-tertiary);">Ambient</span></div>
+        <div class="li"><div class="ll" style="background:var(--accent); opacity:0.4;"></div><span class="lt" style="color:var(--text-tertiary);">Melodic</span></div>
+        <div class="li"><div class="ll" style="background:var(--focus); opacity:0.5;"></div><span class="lt" style="color:var(--text-tertiary);">Binaural</span></div>
+      </div>
+
+      <div class="sp"></div>
+
+      <div class="timer" style="font-size:38px; opacity:0.5;">18:42</div>
+      <div style="text-align:center; margin-top:4px;">
+        <span style="font-family:monospace; font-size:14px; font-weight:500; color:var(--focus); opacity:0.55;">15.2 Hz</span>
+        <span style="font-size:11px; color:var(--text-tertiary); margin-left:3px;">Beta</span>
+      </div>
+
+      <div class="sp"></div>
+
+      <div class="tr">
+        <div class="s"><svg viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><polygon points="12,15 17,21 7,21"/></svg></div>
+        <div class="c">
+          <div class="ct"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M14 10l6.1-6.1M9 21H3v-6M10 14l-6.1 6.1" fill="none" stroke="var(--text-secondary)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <div class="ct cm"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+          <div class="ct"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+        </div>
+        <div class="s"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><path d="M7 11V7a5 5 0 0110 0v4" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/></svg></div>
+      </div>
+      <div style="height:var(--sb);"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- SLEEP -->
+<!-- ============================== -->
+<div class="concept">
+  <div class="cl">Sleep</div>
+  <div class="cd">Near-blackout. No biometrics shown. No menu visible. Just the faintest amber glow and a whisper of a wave. Tap to peek.</div>
+  <div class="phone">
+    <div class="scr" style="background:radial-gradient(ellipse at 50% 45%, rgba(196,112,64,0.03) 0%, var(--canvas) 50%);">
+      <div class="nav" style="opacity:0.2;">
+        <div class="nb"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nt">Sleep</div>
+        <div class="nr" style="opacity:0;"></div>
+      </div>
+
+      <div class="sp"></div>
+      <div class="sp"></div>
+
+      <div style="position:relative; height:240px; display:flex; align-items:center; justify-content:center;">
+        <div class="wc" style="height:80px;">
+          <svg width="100%" height="100%" viewBox="0 0 393 80" preserveAspectRatio="none">
+            <path d="M0,40 Q196,32 393,40" fill="none" stroke="var(--sleep-tint)" stroke-width="1" opacity="0.05"/>
+          </svg>
+        </div>
+        <div class="ow" style="width:80px; height:80px;">
+          <div class="og" style="inset:-60px; background:var(--sleep-tint); opacity:0.04;"></div>
+          <div class="oc" style="inset:0; background:radial-gradient(circle, var(--sleep-tint) 0%, transparent 70%); opacity:0.10;"></div>
+        </div>
+      </div>
+
+      <div class="sp"></div>
+      <div class="sp"></div>
+
+      <div class="timer" style="font-size:32px; color:var(--sleep-tint); opacity:0.10;">42:10</div>
+      <div style="text-align:center; margin-top:4px;">
+        <span style="font-family:monospace; font-size:12px; color:var(--sleep-tint); opacity:0.06;">3.8 Hz · Deep theta</span>
+      </div>
+
+      <div class="sp"></div>
+      <div class="sp"></div>
+      <div class="sp"></div>
+
+      <div style="text-align:center; font-size:11px; color:var(--sleep-tint); opacity:0.07; padding-bottom:calc(var(--sb) + 16px);">Tap to peek</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- ENERGIZE -->
+<!-- ============================== -->
+<div class="concept">
+  <div class="cl">Energize</div>
+  <div class="cd">Phase bar + safety badge + HR ceiling. Biometrics prominent — this mode needs monitoring. Tightest waves, warmest glow.</div>
+  <div class="phone">
+    <div class="scr" style="background:radial-gradient(ellipse at 50% 35%, rgba(245,166,35,0.04) 0%, var(--canvas) 50%);">
+      <div class="nav">
+        <div class="nb"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nt">Energize</div>
+        <div class="nr"><svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2"/><circle cx="10" cy="10" r="2"/><circle cx="10" cy="16" r="2"/></svg></div>
+      </div>
+
+      <!-- Phase bar -->
+      <div class="phase">
+        <div style="flex:1; background:var(--energize); opacity:0.8;"></div>
+        <div style="flex:1; background:var(--energize); opacity:0.8;"></div>
+        <div style="flex:2; background:var(--energize); opacity:0.25;"></div>
+        <div style="flex:1; background:var(--signal-calm); opacity:0.12;"></div>
+      </div>
+      <div style="text-align:center; font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--energize); opacity:0.5;">Ramping</div>
+
+      <div style="height:8px;"></div>
+
+      <!-- Biometrics — larger for energize, safety-aware -->
+      <div class="bio-strip" style="gap:24px;">
+        <div class="bio-item">
+          <div class="bio-val" style="color:var(--signal-elevated); font-size:26px;">92</div>
+          <div class="bio-label" style="color:var(--text-tertiary);">BPM</div>
+        </div>
+        <div class="bio-item">
+          <div style="display:flex; align-items:center; gap:5px;">
+            <div class="ad" style="background:var(--signal-calm);"></div>
+            <span style="font-size:13px; font-weight:600; color:var(--signal-calm);">Safe</span>
+          </div>
+          <div class="bio-label" style="color:var(--text-tertiary);">Status</div>
+        </div>
+        <div class="bio-item">
+          <div class="bio-val" style="color:var(--energize); font-size:26px;">22.4</div>
+          <div class="bio-label" style="color:var(--text-tertiary);">Hz</div>
+        </div>
+      </div>
+
+      <div style="height:4px;"></div>
+
+      <div style="position:relative; height:230px; display:flex; align-items:center; justify-content:center;">
+        <div class="wc" style="height:120px;"><svg width="100%" height="100%" viewBox="0 0 393 120" preserveAspectRatio="none"><path d="M0,60 Q65,44 131,60 T262,60 T393,60" fill="none" stroke="var(--signal-elevated)" stroke-width="1" opacity="0.08"/></svg></div>
+        <div class="wc" style="height:90px;"><svg width="100%" height="100%" viewBox="0 0 393 90" preserveAspectRatio="none"><path d="M0,45 Q33,32 65,45 T131,45 T196,45 T262,45 T327,45 T393,45" fill="none" stroke="var(--energize)" stroke-width="1.2" opacity="0.12"/></svg></div>
+        <div class="wc" style="height:55px;"><svg width="100%" height="100%" viewBox="0 0 393 55" preserveAspectRatio="none"><path d="M0,27 Q16,17 32,27 T64,27 T96,27 T128,27 T160,27 T192,27 T224,27 T256,27 T288,27 T320,27 T352,27 T384,27 T393,27" fill="none" stroke="var(--energize)" stroke-width="2" opacity="0.22"/></svg></div>
+        <div class="ow" style="width:120px; height:120px;">
+          <div class="og" style="inset:-50px; background:var(--energize); opacity:0.18;"></div>
+          <div class="oc" style="inset:0; background:radial-gradient(circle, var(--energize) 0%, transparent 70%); opacity:0.35;"></div>
+        </div>
+      </div>
+
+      <div class="leg">
+        <div class="li"><div class="ll" style="background:var(--signal-elevated); opacity:0.4;"></div><span class="lt" style="color:var(--text-tertiary);">Ambient</span></div>
+        <div class="li"><div class="ll" style="background:var(--energize); opacity:0.4;"></div><span class="lt" style="color:var(--text-tertiary);">Melodic</span></div>
+        <div class="li"><div class="ll" style="background:var(--energize); opacity:0.6;"></div><span class="lt" style="color:var(--text-tertiary);">Binaural</span></div>
+      </div>
+
+      <div class="sp"></div>
+
+      <div class="timer" style="font-size:38px; opacity:0.5;">6:18</div>
+      <div style="text-align:center; margin-top:4px;">
+        <span style="font-family:monospace; font-size:14px; font-weight:500; color:var(--energize); opacity:0.55;">22.4 Hz</span>
+        <span style="font-size:11px; color:var(--text-tertiary); margin-left:3px;">High-Beta</span>
+      </div>
+
+      <!-- HR ceiling gauge -->
+      <div style="padding:0 44px; margin-top:10px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:3px;">
+          <span style="font-size:10px; color:var(--text-tertiary); font-weight:500;">HR Ceiling</span>
+          <span style="font-family:monospace; font-size:10px; color:var(--signal-elevated);">92 / 130</span>
+        </div>
+        <div style="height:3px; border-radius:2px; background:var(--surface-raised);">
+          <div style="width:71%; height:100%; border-radius:2px; background:linear-gradient(90deg, var(--signal-calm), var(--signal-elevated));"></div>
+        </div>
+      </div>
+
+      <div class="sp"></div>
+
+      <div class="tr">
+        <div class="s"><svg viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><polygon points="12,15 17,21 7,21"/></svg></div>
+        <div class="c">
+          <div class="ct"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M14 10l6.1-6.1M9 21H3v-6M10 14l-6.1 6.1" fill="none" stroke="var(--text-secondary)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <div class="ct cm"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+          <div class="ct"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+        </div>
+        <div class="s"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><path d="M7 11V7a5 5 0 0110 0v4" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/></svg></div>
+      </div>
+      <div style="height:var(--sb);"></div>
+    </div>
+  </div>
+</div>
+
+</div>
+
+<div style="text-align:center; margin-top:60px; padding:40px 20px;">
+  <h2 style="font-size:22px; font-weight:300; margin-bottom:16px;">What changed from v1</h2>
+  <div style="max-width:650px; margin:0 auto; text-align:left; font-size:14px; color:var(--text-secondary); line-height:1.8;">
+    <p><strong style="color:var(--text-primary);">Sound selector moved to overflow menu.</strong> Tap the three dots → native iOS context menu with soundscape options, mix levels, session settings, and "The Science" deep link. Not a dropdown pill on the main screen.</p>
+    <p style="margin-top:12px;"><strong style="color:var(--text-primary);">Biometrics are bare numbers, not pills.</strong> BPM and HRV sit above the wave zone as large monospaced values with tiny labels below. No containers, no borders — they breathe with the visual field. In Energize mode they're larger with a safety status badge.</p>
+    <p style="margin-top:12px;"><strong style="color:var(--text-primary);">Less chrome overall.</strong> The compact sound+data bar from v1 is gone. The screen is cleaner. The Orb and waves own the space. Controls are at the bottom where iOS users expect them.</p>
+  </div>
+</div>
+
+</body>
+</html>

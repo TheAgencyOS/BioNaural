@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — Background Depth v2 (Visible)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --canvas: #080C15;
+    --surface: #111520;
+    --text-primary: #E2E6F0;
+    --text-secondary: rgba(226,230,240,0.55);
+    --text-tertiary: rgba(226,230,240,0.30);
+    --accent: #6E7CF7;
+    --focus: #5B6ABF;
+    --relaxation: #4EA8A6;
+    --sleep: #9080C4;
+    --energize: #F5A623;
+    --pw: 393px; --ph: 852px; --pr: 55px;
+    --st: 59px;
+  }
+  body { background:#050508; font-family:'Inter',-apple-system,sans-serif; color:var(--text-primary); padding:40px 20px 80px; }
+  h1 { text-align:center; font-size:28px; font-weight:300; margin-bottom:6px; }
+  .ps { text-align:center; font-size:14px; color:var(--text-secondary); margin-bottom:60px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(420px,1fr)); gap:60px 40px; max-width:1800px; margin:0 auto; justify-items:center; }
+  .concept { display:flex; flex-direction:column; align-items:center; }
+  .cl { font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+  .cd { font-size:13px; color:var(--text-tertiary); margin-bottom:16px; text-align:center; max-width:400px; line-height:1.5; }
+  .phone { width:var(--pw); height:var(--ph); background:var(--canvas); border-radius:var(--pr); position:relative; overflow:hidden; box-shadow:0 0 0 2px #1a1a2a, 0 20px 60px rgba(0,0,0,0.6); }
+  .phone::before { content:''; position:absolute; top:12px; left:50%; transform:translateX(-50%); width:126px; height:37px; background:#000; border-radius:20px; z-index:100; }
+  .phone::after { content:''; position:absolute; bottom:8px; left:50%; transform:translateX(-50%); width:139px; height:5px; background:rgba(255,255,255,0.15); border-radius:3px; z-index:100; }
+  .scr { position:absolute; inset:0; overflow:hidden; }
+
+  .nav { display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:44px; margin-top:var(--st); position:relative; z-index:10; }
+  .nav-title { font-size:17px; font-weight:600; letter-spacing:-0.4px; }
+  .nav-btn { font-size:13px; color:var(--text-secondary); }
+
+  .bio { display:flex; margin:16px 20px; padding:14px 0; background:rgba(17,21,32,0.7); border:1px solid rgba(255,255,255,0.04); border-radius:16px; position:relative; z-index:10; backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); }
+  .bio-col { flex:1; text-align:center; }
+  .bio-val { font-family:'SF Mono','Menlo',monospace; font-size:18px; font-weight:500; }
+  .bio-label { font-size:10px; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:var(--text-tertiary); margin-top:2px; }
+
+  .card-area { padding:0 20px; position:relative; z-index:10; margin-top:12px; }
+  .card { width:100%; height:310px; border-radius:24px; position:relative; overflow:hidden; }
+  .card-content { position:absolute; inset:0; padding:28px; display:flex; flex-direction:column; }
+  .card-band { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-tertiary); }
+  .card-title { font-size:34px; font-weight:300; letter-spacing:-0.5px; margin-top:4px; }
+  .card-desc { font-size:15px; color:var(--text-secondary); line-height:1.5; margin-top:auto; }
+  .card-bottom { display:flex; align-items:center; justify-content:space-between; margin-top:16px; }
+  .card-freq { font-family:'SF Mono','Menlo',monospace; font-size:12px; color:var(--text-tertiary); }
+  .card-play { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .card-play svg { width:16px; height:16px; fill:white; margin-left:2px; }
+  .info-btn { position:absolute; top:20px; right:20px; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--text-secondary); z-index:5; }
+
+  .dots { display:flex; justify-content:center; gap:6px; margin-top:20px; position:relative; z-index:10; }
+  .dot { height:6px; border-radius:3px; }
+  .dot-active { width:24px; background:var(--accent); }
+  .dot-inactive { width:6px; background:rgba(255,255,255,0.12); }
+
+  .watch { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:20px; position:relative; z-index:10; }
+  .watch-dot { width:5px; height:5px; border-radius:50%; background:rgba(0,200,0,0.5); }
+  .watch-text { font-size:12px; color:var(--text-secondary); }
+
+  .tabbar { position:absolute; bottom:0; left:0; right:0; height:83px; background:rgba(17,21,32,0.85); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-top:1px solid rgba(255,255,255,0.04); display:flex; align-items:flex-start; justify-content:space-around; padding-top:10px; z-index:50; }
+  .tab { display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .tab svg { width:22px; height:22px; }
+  .tab-label { font-size:10px; font-weight:500; }
+  .tab-active svg { fill:var(--accent); }
+  .tab-active .tab-label { color:var(--accent); }
+  .tab-inactive svg { fill:rgba(226,230,240,0.25); }
+  .tab-inactive .tab-label { color:rgba(226,230,240,0.25); }
+
+  .fave-badge { display:inline-block; background:rgba(110,124,247,0.15); border:1px solid rgba(110,124,247,0.3); color:var(--accent); font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:4px 12px; border-radius:100px; margin-top:8px; }
+
+  /* Grain — much more visible */
+  .grain {
+    position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0.12; mix-blend-mode:overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size:128px 128px;
+  }
+
+  /* Particles — bigger, brighter */
+  .particle {
+    position:absolute; border-radius:50%; z-index:3; pointer-events:none;
+    animation: float linear infinite;
+  }
+  @keyframes float {
+    0% { transform:translateY(0) translateX(0) scale(1); opacity:0; }
+    15% { opacity:1; }
+    85% { opacity:1; }
+    100% { transform:translateY(-200px) translateX(40px) scale(0.3); opacity:0; }
+  }
+
+  /* Animated shimmer band */
+  .shimmer {
+    position:absolute; z-index:2; pointer-events:none; width:200%; height:200%;
+    background:linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.015) 48%, rgba(255,255,255,0.04) 50%, rgba(255,255,255,0.015) 52%, transparent 60%);
+    animation:sweep 6s ease-in-out infinite;
+  }
+  @keyframes sweep {
+    0% { transform:translateX(-60%) translateY(-60%); }
+    100% { transform:translateX(60%) translateY(60%); }
+  }
+</style>
+</head>
+<body>
+
+<h1>Background Depth — v2 (Cranked Up)</h1>
+<p class="ps">Effects exaggerated so you can actually see the concepts. We'll dial back for production.</p>
+
+<div class="grid">
+
+<!-- ====== A: FLAT BASELINE ====== -->
+<div class="concept">
+  <div class="cl">A — Flat (Current)</div>
+  <div class="cd">Pure #080C15. No depth. The control.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <div class="nav"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><div class="nav-btn">⚙</div></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(91,106,191,0.15) 0%, rgba(17,21,32,0.8) 50%, var(--canvas) 100%);"></div><svg style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus);box-shadow:0 0 20px rgba(91,106,191,0.4);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,7" fill="none" stroke="rgba(226,230,240,0.25)" stroke-width="2"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" fill="none" stroke="rgba(226,230,240,0.25)" stroke-width="1.5"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== B: BIG MODE GLOW ====== -->
+<div class="concept">
+  <div class="cl">B — Mode Glow</div>
+  <div class="cd">A massive, unmistakable radial bloom behind the card. The canvas IS the mode color.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <!-- HUGE visible glow -->
+      <div style="position:absolute; width:600px; height:600px; top:100px; left:50%; margin-left:-300px; background:radial-gradient(circle, rgba(91,106,191,0.20) 0%, rgba(91,106,191,0.08) 40%, transparent 70%); z-index:1; pointer-events:none;"></div>
+
+      <div class="nav" style="position:relative;z-index:10;"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><div class="nav-btn">⚙</div></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(91,106,191,0.18) 0%, rgba(17,21,32,0.7) 50%, var(--canvas) 100%);"></div><svg style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus);box-shadow:0 0 24px rgba(91,106,191,0.5);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,7" fill="none" stroke="rgba(226,230,240,0.25)" stroke-width="2"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== C: GLOW + HEAVY GRAIN ====== -->
+<div class="concept">
+  <div class="cl">C — Glow + Grain</div>
+  <div class="cd">Mode glow with heavy film grain. Analog texture breaks the digital flatness.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <div style="position:absolute; width:600px; height:600px; top:100px; left:50%; margin-left:-300px; background:radial-gradient(circle, rgba(91,106,191,0.20) 0%, rgba(91,106,191,0.08) 40%, transparent 70%); z-index:1;"></div>
+      <div class="grain"></div>
+
+      <div class="nav" style="position:relative;z-index:10;"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><div class="nav-btn">⚙</div></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(91,106,191,0.18) 0%, rgba(17,21,32,0.7) 50%, var(--canvas) 100%);"></div><svg style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus);box-shadow:0 0 24px rgba(91,106,191,0.5);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,7" fill="none" stroke="rgba(226,230,240,0.25)" stroke-width="2"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== D: FULL ATMOSPHERE ====== -->
+<div class="concept">
+  <div class="cl">D — Full Atmosphere</div>
+  <div class="cd">Glow + grain + big floating particles + shimmer sweep. The canvas is alive.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <div style="position:absolute; width:600px; height:600px; top:100px; left:50%; margin-left:-300px; background:radial-gradient(circle, rgba(91,106,191,0.20) 0%, rgba(91,106,191,0.08) 40%, transparent 70%); z-index:1;"></div>
+      <div class="grain"></div>
+      <!-- Big visible particles -->
+      <div class="particle" style="width:14px; height:14px; background:var(--focus); opacity:0.25; filter:blur(4px); left:12%; top:60%; animation-duration:10s;"></div>
+      <div class="particle" style="width:20px; height:20px; background:var(--accent); opacity:0.12; filter:blur(6px); left:72%; top:45%; animation-duration:14s; animation-delay:2s;"></div>
+      <div class="particle" style="width:10px; height:10px; background:var(--focus); opacity:0.20; filter:blur(3px); left:45%; top:70%; animation-duration:8s; animation-delay:4s;"></div>
+      <div class="particle" style="width:16px; height:16px; background:var(--accent); opacity:0.10; filter:blur(5px); left:28%; top:35%; animation-duration:16s; animation-delay:1s;"></div>
+      <div class="particle" style="width:12px; height:12px; background:var(--focus); opacity:0.18; filter:blur(4px); left:82%; top:65%; animation-duration:12s; animation-delay:6s;"></div>
+      <div class="particle" style="width:8px; height:8px; background:var(--accent); opacity:0.22; filter:blur(3px); left:58%; top:25%; animation-duration:11s; animation-delay:3s;"></div>
+      <!-- Shimmer sweep -->
+      <div class="shimmer"></div>
+
+      <div class="nav" style="position:relative;z-index:10;"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><div class="nav-btn">⚙</div></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(91,106,191,0.18) 0%, rgba(17,21,32,0.7) 50%, var(--canvas) 100%);"></div><svg style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus);box-shadow:0 0 24px rgba(91,106,191,0.5);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,7" fill="none" stroke="rgba(226,230,240,0.25)" stroke-width="2"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+  <div class="fave-badge">My Pick</div>
+</div>
+
+<!-- ====== E: MULTI-COLOR BOKEH ====== -->
+<div class="concept">
+  <div class="cl">E — Nebula Bokeh</div>
+  <div class="cd">All four mode colors as large out-of-focus orbs. Like looking into a nebula. Each mode is present.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <!-- Four mode colored bokeh orbs -->
+      <div style="position:absolute; width:320px; height:320px; top:-80px; left:-80px; background:radial-gradient(circle, rgba(144,128,196,0.18) 0%, transparent 70%); z-index:1; border-radius:50%;"></div>
+      <div style="position:absolute; width:280px; height:280px; top:80px; right:-60px; background:radial-gradient(circle, rgba(78,168,166,0.15) 0%, transparent 70%); z-index:1; border-radius:50%;"></div>
+      <div style="position:absolute; width:350px; height:350px; top:300px; left:50%; margin-left:-175px; background:radial-gradient(circle, rgba(91,106,191,0.18) 0%, transparent 65%); z-index:1; border-radius:50%;"></div>
+      <div style="position:absolute; width:250px; height:250px; bottom:80px; right:-40px; background:radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%); z-index:1; border-radius:50%;"></div>
+      <div class="grain"></div>
+
+      <div class="nav" style="position:relative;z-index:10;"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><div class="nav-btn">⚙</div></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(91,106,191,0.18) 0%, rgba(17,21,32,0.7) 50%, var(--canvas) 100%);"></div><svg style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus);box-shadow:0 0 24px rgba(91,106,191,0.5);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,7" fill="none" stroke="rgba(226,230,240,0.25)" stroke-width="2"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== F: MOONLIGHT ====== -->
+<div class="concept">
+  <div class="cl">F — Moonlight</div>
+  <div class="cd">Asymmetric glow from upper-left like moonlight through a window. Natural light direction.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <!-- Strong asymmetric glow — upper left -->
+      <div style="position:absolute; width:700px; height:700px; top:-300px; left:-200px; background:radial-gradient(circle, rgba(91,106,191,0.22) 0%, rgba(110,124,247,0.08) 40%, transparent 65%); z-index:1; border-radius:50%;"></div>
+      <!-- Faint counter on lower right -->
+      <div style="position:absolute; width:300px; height:300px; bottom:-50px; right:-80px; background:radial-gradient(circle, rgba(91,106,191,0.06) 0%, transparent 70%); z-index:1; border-radius:50%;"></div>
+      <div class="grain"></div>
+
+      <div class="nav" style="position:relative;z-index:10;"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><div class="nav-btn">⚙</div></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(91,106,191,0.18) 0%, rgba(17,21,32,0.7) 50%, var(--canvas) 100%);"></div><svg style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus);box-shadow:0 0 24px rgba(91,106,191,0.5);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,7" fill="none" stroke="rgba(226,230,240,0.25)" stroke-width="2"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- grid -->
+</body>
+</html>

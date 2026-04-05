@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — Branded Background</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --canvas: #080C15;
+    --surface: #111520;
+    --text-primary: #E2E6F0;
+    --text-secondary: rgba(226,230,240,0.55);
+    --text-tertiary: rgba(226,230,240,0.30);
+    --accent: #6E7CF7;
+    --focus: #5B6ABF;
+    --relaxation: #4EA8A6;
+    --sleep: #9080C4;
+    --energize: #F5A623;
+    --pw: 393px; --ph: 852px; --pr: 55px; --st: 59px;
+  }
+  body { background:#050508; font-family:'Inter',-apple-system,sans-serif; color:var(--text-primary); padding:40px 20px 80px; }
+  h1 { text-align:center; font-size:28px; font-weight:300; margin-bottom:6px; }
+  .ps { text-align:center; font-size:14px; color:var(--text-secondary); margin-bottom:60px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(420px,1fr)); gap:60px 40px; max-width:1800px; margin:0 auto; justify-items:center; }
+  .concept { display:flex; flex-direction:column; align-items:center; }
+  .cl { font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+  .cd { font-size:13px; color:var(--text-tertiary); margin-bottom:16px; text-align:center; max-width:400px; line-height:1.5; }
+  .phone { width:var(--pw); height:var(--ph); background:var(--canvas); border-radius:var(--pr); position:relative; overflow:hidden; box-shadow:0 0 0 2px #1a1a2a, 0 20px 60px rgba(0,0,0,0.6); }
+  .phone::before { content:''; position:absolute; top:12px; left:50%; transform:translateX(-50%); width:126px; height:37px; background:#000; border-radius:20px; z-index:100; }
+  .phone::after { content:''; position:absolute; bottom:8px; left:50%; transform:translateX(-50%); width:139px; height:5px; background:rgba(255,255,255,0.15); border-radius:3px; z-index:100; }
+  .scr { position:absolute; inset:0; overflow:hidden; }
+  .ui { position:relative; z-index:10; }
+  .nav { display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:44px; margin-top:var(--st); }
+  .nav-title { font-size:17px; font-weight:600; letter-spacing:-0.4px; }
+  .nav-btn { font-size:13px; color:var(--text-secondary); }
+  .bio { display:flex; margin:16px 20px; padding:14px 0; background:rgba(8,12,21,0.55); border:1px solid rgba(255,255,255,0.06); border-radius:16px; backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px); }
+  .bio-col { flex:1; text-align:center; }
+  .bio-val { font-family:'SF Mono','Menlo',monospace; font-size:18px; font-weight:500; }
+  .bio-label { font-size:10px; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:var(--text-tertiary); margin-top:2px; }
+  .card-area { padding:0 20px; margin-top:12px; }
+  .card { width:100%; height:310px; border-radius:24px; position:relative; overflow:hidden; }
+  .card-content { position:absolute; inset:0; padding:28px; display:flex; flex-direction:column; z-index:2; }
+  .card-band { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-tertiary); }
+  .card-title { font-size:34px; font-weight:300; letter-spacing:-0.5px; margin-top:4px; }
+  .card-desc { font-size:15px; color:var(--text-secondary); line-height:1.5; margin-top:auto; }
+  .card-bottom { display:flex; align-items:center; justify-content:space-between; margin-top:16px; }
+  .card-freq { font-family:'SF Mono','Menlo',monospace; font-size:12px; color:var(--text-tertiary); }
+  .card-play { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .card-play svg { width:16px; height:16px; fill:white; margin-left:2px; }
+  .info-btn { position:absolute; top:20px; right:20px; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.10); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--text-secondary); z-index:5; }
+  .dots { display:flex; justify-content:center; gap:6px; margin-top:20px; }
+  .dot { height:6px; border-radius:3px; }
+  .dot-active { width:24px; background:var(--accent); }
+  .dot-inactive { width:6px; background:rgba(255,255,255,0.15); }
+  .watch { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:20px; }
+  .watch-dot { width:5px; height:5px; border-radius:50%; background:rgba(0,200,0,0.5); }
+  .watch-text { font-size:12px; color:var(--text-secondary); }
+  .tabbar { position:absolute; bottom:0; left:0; right:0; height:83px; background:rgba(8,12,21,0.8); backdrop-filter:blur(24px); -webkit-backdrop-filter:blur(24px); border-top:1px solid rgba(255,255,255,0.05); display:flex; align-items:flex-start; justify-content:space-around; padding-top:10px; z-index:50; }
+  .tab { display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .tab svg { width:22px; height:22px; }
+  .tab-label { font-size:10px; font-weight:500; }
+  .tab-active svg { fill:var(--accent); }
+  .tab-active .tab-label { color:var(--accent); }
+  .tab-inactive svg { fill:rgba(226,230,240,0.25); }
+  .tab-inactive .tab-label { color:rgba(226,230,240,0.25); }
+  .fave-badge { display:inline-block; background:rgba(110,124,247,0.15); border:1px solid rgba(110,124,247,0.3); color:var(--accent); font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:4px 12px; border-radius:100px; margin-top:8px; }
+  /* Background wave layer */
+  .bg-waves { position:absolute; inset:0; z-index:1; pointer-events:none; }
+</style>
+</head>
+<body>
+
+<h1>Branded Background — Icon DNA</h1>
+<p class="ps">The four waves from the app icon expanded to fill the screen. You're looking into the icon.</p>
+
+<div class="grid">
+
+<!-- ====== 1: CENTERED — ICON ZOOMED ====== -->
+<div class="concept">
+  <div class="cl">1 — Centered Waves</div>
+  <div class="cd">The icon's exact four waves scaled to screen width. Center glow behind the card. Direct brand echo.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <div class="bg-waves">
+        <svg width="100%" height="100%" viewBox="0 0 393 852" preserveAspectRatio="none">
+          <defs>
+            <filter id="c1-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="40"/></filter>
+            <filter id="c1-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="3"/></filter>
+            <radialGradient id="c1-glow" cx="50%" cy="52%" r="30%">
+              <stop offset="0%" stop-color="#E8EAFF" stop-opacity="0.14"/>
+              <stop offset="40%" stop-color="#6E7CF7" stop-opacity="0.06"/>
+              <stop offset="100%" stop-color="#080C15" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="c1-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+              <stop offset="8%" stop-color="#FFF" stop-opacity="1"/>
+              <stop offset="92%" stop-color="#FFF" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+            </linearGradient>
+            <mask id="c1-mask"><rect width="393" height="852" fill="url(#c1-fade)"/></mask>
+          </defs>
+          <!-- Center glow -->
+          <circle cx="196" cy="440" r="200" fill="url(#c1-glow)"/>
+          <circle cx="196" cy="440" r="100" fill="#E8EAFF" opacity="0.04" filter="url(#c1-bloom)"/>
+          <!-- Waves at y=440 (center of card area) -->
+          <g mask="url(#c1-mask)">
+            <path d="M0,440 Q98,350 196,440 T393,440" fill="none" stroke="#9080C4" stroke-width="3" opacity="0.40" filter="url(#c1-soft)"/>
+            <path d="M0,440 Q98,350 196,440 T393,440" fill="none" stroke="#9080C4" stroke-width="1.5" opacity="0.55"/>
+            <path d="M0,440 Q65,370 131,440 T262,440 T393,440" fill="none" stroke="#4EA8A6" stroke-width="3" opacity="0.40" filter="url(#c1-soft)"/>
+            <path d="M0,440 Q65,370 131,440 T262,440 T393,440" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.60"/>
+            <path d="M0,440 Q39,390 78,440 T157,440 T236,440 T315,440 T393,440" fill="none" stroke="#5B6ABF" stroke-width="4" opacity="0.45" filter="url(#c1-soft)"/>
+            <path d="M0,440 Q39,390 78,440 T157,440 T236,440 T315,440 T393,440" fill="none" stroke="#5B6ABF" stroke-width="2" opacity="0.70"/>
+            <path d="M0,440 Q20,412 40,440 T80,440 T120,440 T160,440 T200,440 T240,440 T280,440 T320,440 T360,440 T393,440" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.35" filter="url(#c1-soft)"/>
+            <path d="M0,440 Q20,412 40,440 T80,440 T120,440 T160,440 T200,440 T240,440 T280,440 T320,440 T360,440 T393,440" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.58"/>
+          </g>
+        </svg>
+      </div>
+      <div class="ui">
+        <div class="nav"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><div class="nav-btn">⚙</div></div>
+        <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+        <div class="card-area"><div class="card"><div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(91,106,191,0.22) 0%, rgba(8,12,21,0.7) 55%, rgba(8,12,21,0.90) 100%);z-index:1;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);"></div><svg style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);opacity:0.15;z-index:2;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus);box-shadow:0 0 24px rgba(91,106,191,0.5);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+        <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+        <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      </div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,7" fill="none" stroke="rgba(226,230,240,0.25)" stroke-width="2"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 2: SPREAD — WAVES FILL SCREEN ====== -->
+<div class="concept">
+  <div class="cl">2 — Full Screen Spread</div>
+  <div class="cd">Waves spread vertically — Sleep at top, Energize at bottom. The whole screen IS the icon, expanded.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <div class="bg-waves">
+        <svg width="100%" height="100%" viewBox="0 0 393 852" preserveAspectRatio="none">
+          <defs>
+            <filter id="c2-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="50"/></filter>
+            <filter id="c2-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+            <radialGradient id="c2-glow" cx="50%" cy="50%" r="35%">
+              <stop offset="0%" stop-color="#E8EAFF" stop-opacity="0.12"/>
+              <stop offset="35%" stop-color="#6E7CF7" stop-opacity="0.05"/>
+              <stop offset="100%" stop-color="#080C15" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="c2-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+              <stop offset="8%" stop-color="#FFF" stop-opacity="1"/>
+              <stop offset="92%" stop-color="#FFF" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+            </linearGradient>
+            <mask id="c2-mask"><rect width="393" height="852" fill="url(#c2-fade)"/></mask>
+          </defs>
+          <!-- Ambient glow -->
+          <circle cx="196" cy="426" r="300" fill="url(#c2-glow)"/>
+          <circle cx="196" cy="426" r="150" fill="#6E7CF7" opacity="0.03" filter="url(#c2-bloom)"/>
+          <g mask="url(#c2-mask)">
+            <!-- Sleep — top band -->
+            <path d="M0,230 Q98,160 196,230 T393,230" fill="none" stroke="#9080C4" stroke-width="3" opacity="0.30" filter="url(#c2-soft)"/>
+            <path d="M0,230 Q98,160 196,230 T393,230" fill="none" stroke="#9080C4" stroke-width="1.5" opacity="0.45"/>
+            <!-- Relaxation -->
+            <path d="M0,360 Q65,300 131,360 T262,360 T393,360" fill="none" stroke="#4EA8A6" stroke-width="3" opacity="0.30" filter="url(#c2-soft)"/>
+            <path d="M0,360 Q65,300 131,360 T262,360 T393,360" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.50"/>
+            <!-- Focus — center -->
+            <path d="M0,480 Q39,430 78,480 T157,480 T236,480 T315,480 T393,480" fill="none" stroke="#5B6ABF" stroke-width="4" opacity="0.35" filter="url(#c2-soft)"/>
+            <path d="M0,480 Q39,430 78,480 T157,480 T236,480 T315,480 T393,480" fill="none" stroke="#5B6ABF" stroke-width="2" opacity="0.60"/>
+            <!-- Energize — bottom -->
+            <path d="M0,600 Q20,572 40,600 T80,600 T120,600 T160,600 T200,600 T240,600 T280,600 T320,600 T360,600 T393,600" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.28" filter="url(#c2-soft)"/>
+            <path d="M0,600 Q20,572 40,600 T80,600 T120,600 T160,600 T200,600 T240,600 T280,600 T320,600 T360,600 T393,600" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.50"/>
+          </g>
+        </svg>
+      </div>
+      <div class="ui">
+        <div class="nav"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><div class="nav-btn">⚙</div></div>
+        <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+        <div class="card-area"><div class="card"><div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(91,106,191,0.22) 0%, rgba(8,12,21,0.7) 55%, rgba(8,12,21,0.90) 100%);z-index:1;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);"></div><svg style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);opacity:0.15;z-index:2;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus);box-shadow:0 0 24px rgba(91,106,191,0.5);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+        <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+        <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      </div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,7" fill="none" stroke="rgba(226,230,240,0.25)" stroke-width="2"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+  <div class="fave-badge">My Pick</div>
+</div>
+
+<!-- ====== 3: DIAGONAL FLOW ====== -->
+<div class="concept">
+  <div class="cl">3 — Diagonal Flow</div>
+  <div class="cd">Waves run diagonal — upper-left to lower-right. Creates a natural energy direction across the screen.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <div class="bg-waves">
+        <svg width="100%" height="100%" viewBox="0 0 393 852" preserveAspectRatio="none">
+          <defs>
+            <filter id="c3-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+            <radialGradient id="c3-glow" cx="35%" cy="40%" r="35%">
+              <stop offset="0%" stop-color="#E8EAFF" stop-opacity="0.10"/>
+              <stop offset="40%" stop-color="#6E7CF7" stop-opacity="0.04"/>
+              <stop offset="100%" stop-color="#080C15" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="140" cy="340" r="280" fill="url(#c3-glow)"/>
+          <!-- Diagonal waves — from upper-left to lower-right -->
+          <!-- Sleep -->
+          <path d="M-50,100 Q100,250 196,350 Q300,450 443,600" fill="none" stroke="#9080C4" stroke-width="3" opacity="0.35" filter="url(#c3-soft)"/>
+          <path d="M-50,100 Q100,250 196,350 Q300,450 443,600" fill="none" stroke="#9080C4" stroke-width="1.5" opacity="0.50"/>
+          <!-- Relaxation -->
+          <path d="M-50,220 Q80,340 180,420 Q280,500 443,660" fill="none" stroke="#4EA8A6" stroke-width="3" opacity="0.35" filter="url(#c3-soft)"/>
+          <path d="M-50,220 Q80,340 180,420 Q280,500 443,660" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.52"/>
+          <!-- Focus — sinusoidal on the diagonal -->
+          <path d="M-50,310 Q30,360 70,330 Q110,300 150,370 Q190,440 230,400 Q270,360 310,430 Q350,500 390,460 Q430,420 443,470" fill="none" stroke="#5B6ABF" stroke-width="3.5" opacity="0.40" filter="url(#c3-soft)"/>
+          <path d="M-50,310 Q30,360 70,330 Q110,300 150,370 Q190,440 230,400 Q270,360 310,430 Q350,500 390,460 Q430,420 443,470" fill="none" stroke="#5B6ABF" stroke-width="1.8" opacity="0.62"/>
+          <!-- Energize — tight diagonal -->
+          <path d="M-50,440 Q10,460 30,440 Q50,420 70,450 Q90,480 110,450 Q130,420 150,460 Q170,500 190,465 Q210,430 230,470 Q250,510 270,475 Q290,440 310,480 Q330,520 350,485 Q370,450 390,490 Q410,530 443,500" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.30" filter="url(#c3-soft)"/>
+          <path d="M-50,440 Q10,460 30,440 Q50,420 70,450 Q90,480 110,450 Q130,420 150,460 Q170,500 190,465 Q210,430 230,470 Q250,510 270,475 Q290,440 310,480 Q330,520 350,485 Q370,450 390,490 Q410,530 443,500" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.50"/>
+        </svg>
+      </div>
+      <div class="ui">
+        <div class="nav"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><div class="nav-btn">⚙</div></div>
+        <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+        <div class="card-area"><div class="card"><div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(91,106,191,0.22) 0%, rgba(8,12,21,0.7) 55%, rgba(8,12,21,0.90) 100%);z-index:1;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);"></div><svg style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);opacity:0.15;z-index:2;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus);box-shadow:0 0 24px rgba(91,106,191,0.5);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+        <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+        <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      </div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,7" fill="none" stroke="rgba(226,230,240,0.25)" stroke-width="2"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== 4: ICON LITERAL ====== -->
+<div class="concept">
+  <div class="cl">4 — Icon as Watermark</div>
+  <div class="cd">The actual icon SVG rendered large behind everything as a watermark. Unmistakable brand presence.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <div class="bg-waves" style="display:flex; align-items:center; justify-content:center; opacity:0.5;">
+        <svg width="500" height="500" viewBox="0 0 1024 1024" style="margin-top:-40px;">
+          <defs>
+            <filter id="c4-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+            <filter id="c4-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="30"/></filter>
+            <filter id="c4-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+            <linearGradient id="c4-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+              <stop offset="12%" stop-color="#FFF" stop-opacity="1"/>
+              <stop offset="88%" stop-color="#FFF" stop-opacity="1"/>
+              <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+            </linearGradient>
+            <mask id="c4-mask"><rect width="1024" height="1024" fill="url(#c4-fade)"/></mask>
+            <radialGradient id="c4-cg" cx="50%" cy="50%" r="25%">
+              <stop offset="0%" stop-color="#E8EAFF" stop-opacity="0.18"/>
+              <stop offset="40%" stop-color="#6E7CF7" stop-opacity="0.08"/>
+              <stop offset="100%" stop-color="#080C15" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+          <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#c4-bloom)"/>
+          <circle cx="512" cy="512" r="250" fill="url(#c4-cg)"/>
+          <circle cx="512" cy="512" r="120" fill="#E8EAFF" opacity="0.03" filter="url(#c4-glow)"/>
+          <g mask="url(#c4-mask)">
+            <path d="M0,512 Q256,385 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="3.5" opacity="0.35" filter="url(#c4-soft)"/>
+            <path d="M0,512 Q256,385 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="1.8" opacity="0.52"/>
+            <path d="M0,512 Q170,425 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="3.5" opacity="0.35" filter="url(#c4-soft)"/>
+            <path d="M0,512 Q170,425 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="1.8" opacity="0.58"/>
+            <path d="M0,512 Q102,452 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="4.5" opacity="0.42" filter="url(#c4-soft)"/>
+            <path d="M0,512 Q102,452 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2.2" opacity="0.68"/>
+            <path d="M0,512 Q52,472 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="3" opacity="0.30" filter="url(#c4-soft)"/>
+            <path d="M0,512 Q52,472 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1.5" opacity="0.58"/>
+          </g>
+        </svg>
+      </div>
+      <div class="ui">
+        <div class="nav"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><div class="nav-btn">⚙</div></div>
+        <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+        <div class="card-area"><div class="card"><div style="position:absolute;inset:0;background:linear-gradient(135deg, rgba(91,106,191,0.22) 0%, rgba(8,12,21,0.65) 55%, rgba(8,12,21,0.88) 100%);z-index:1;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);"></div><svg style="position:absolute;top:50%;left:0;right:0;transform:translateY(-50%);opacity:0.15;z-index:2;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus);box-shadow:0 0 24px rgba(91,106,191,0.5);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+        <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+        <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      </div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><polyline points="3,17 9,11 13,15 21,7" fill="none" stroke="rgba(226,230,240,0.25)" stroke-width="2"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+</div>
+</body>
+</html>

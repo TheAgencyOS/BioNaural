@@ -1,0 +1,69 @@
+{
+  "" : {
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BioNauralShared-primary.dia",
+    "emit-module-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BioNauralShared-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BioNauralShared-primary-emit-module.dia",
+    "pch" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BioNauralShared-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BioNauralShared-primary.swiftdeps"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Models/BiometricSample.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricSample.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricSample.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricSample.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricSample.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricSample.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricSample.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricSample.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricSample~partial.swiftmodule"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Models/BiometricState.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricState.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricState.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricState.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricState.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricState.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricState.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricState.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/BiometricState~partial.swiftmodule"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Models/FocusMode.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FocusMode.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FocusMode.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FocusMode.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FocusMode.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FocusMode.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FocusMode.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FocusMode.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FocusMode~partial.swiftmodule"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Models/SessionOutcome.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/SessionOutcome.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/SessionOutcome.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/SessionOutcome.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/SessionOutcome.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/SessionOutcome.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/SessionOutcome.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/SessionOutcome.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/SessionOutcome~partial.swiftmodule"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Models/WatchMessage.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/WatchMessage.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/WatchMessage.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/WatchMessage.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/WatchMessage.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/WatchMessage.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/WatchMessage.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/WatchMessage.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/WatchMessage~partial.swiftmodule"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Utilities/FrequencyMath.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FrequencyMath.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FrequencyMath.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FrequencyMath.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FrequencyMath.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FrequencyMath.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FrequencyMath.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FrequencyMath.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-watchos/BioNauralShared.build/Objects-normal/arm64_32/FrequencyMath~partial.swiftmodule"
+  }
+}

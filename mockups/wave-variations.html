@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — Wave Animation Variations</title>
+<style>
+  @import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --canvas: #080C15;
+    --surface: #111520;
+    --divider: #1E2336;
+    --textPrimary: #E2E6F0;
+    --textSecondary: rgba(226, 230, 240, 0.55);
+    --textTertiary: rgba(226, 230, 240, 0.30);
+    --accent: #6E7CF7;
+    --focus: #5B6ABF;
+    --font: 'Satoshi', -apple-system, sans-serif;
+    --mono: 'SF Mono', 'Menlo', monospace;
+    --phone-w: 393px;
+    --phone-h: 852px;
+  }
+
+  body {
+    background: #05080E;
+    font-family: var(--font);
+    color: var(--textPrimary);
+    padding: 60px 40px;
+  }
+
+  h1.page-title {
+    font-size: 48px;
+    font-weight: 300;
+    letter-spacing: -1px;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  p.page-sub {
+    text-align: center;
+    color: var(--textSecondary);
+    font-size: 17px;
+    margin-bottom: 80px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 80px 60px;
+    max-width: 1800px;
+    margin: 0 auto;
+    justify-items: center;
+  }
+
+  .variant {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .variant-label {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+
+  .variant-name {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .variant-desc {
+    font-size: 14px;
+    color: var(--textSecondary);
+    margin-bottom: 24px;
+    text-align: center;
+    max-width: 380px;
+    line-height: 1.5;
+  }
+
+  .phone {
+    width: var(--phone-w);
+    height: var(--phone-h);
+    border-radius: 48px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 40px 80px rgba(0,0,0,0.5);
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background: var(--canvas);
+  }
+
+  .dynamic-island {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 36px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 20;
+  }
+
+  .status-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px 0;
+    z-index: 10;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .tab-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 88px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding-top: 10px;
+    z-index: 10;
+    background: linear-gradient(to top, var(--canvas) 60%, transparent);
+  }
+
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--textTertiary);
+    width: 64px;
+  }
+
+  .tab-item.active { color: var(--accent); }
+
+  .home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    z-index: 20;
+  }
+
+  .header {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    z-index: 5;
+  }
+
+  .header h2 { font-size: 28px; font-weight: 500; }
+  .header p { font-size: 13px; color: var(--textTertiary); }
+
+  .carousel-area {
+    position: absolute;
+    top: 140px;
+    left: 0; right: 0;
+    height: 540px;
+    display: flex;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+    overflow: hidden;
+  }
+
+  .card {
+    flex-shrink: 0;
+    width: 305px;
+    height: 500px;
+    border-radius: 36px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+  }
+
+  .card-fill {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(165deg, #1a1d3a 0%, #0d1020 40%, var(--canvas) 100%);
+  }
+
+  .wave-canvas {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .wave-canvas canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-top {
+    position: absolute;
+    top: 36px;
+    left: 28px; right: 28px;
+    z-index: 2;
+  }
+
+  .card-band {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--textTertiary);
+    margin-bottom: 8px;
+  }
+
+  .card-mode {
+    font-size: 40px;
+    font-weight: 300;
+    letter-spacing: -1px;
+  }
+
+  .card-bottom {
+    position: absolute;
+    bottom: 36px;
+    left: 28px; right: 28px;
+    z-index: 2;
+  }
+
+  .card-desc {
+    font-size: 15px;
+    color: var(--textSecondary);
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .card-action-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-hz {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--textTertiary);
+    letter-spacing: 0.5px;
+  }
+
+  .card-play-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: var(--focus);
+    box-shadow: 0 4px 16px rgba(91,106,191,0.35);
+    position: relative;
+  }
+
+  .card-play-btn::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: var(--focus);
+    opacity: 0.3;
+    filter: blur(8px);
+  }
+
+  .card-play-btn svg {
+    position: relative;
+    z-index: 1;
+    margin-left: 2px;
+  }
+
+  .card.peek {
+    opacity: 0.4;
+    transform: scale(0.9) translateX(10px);
+  }
+
+  .hz-label {
+    position: absolute;
+    bottom: 108px;
+    left: 0; right: 0;
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--textTertiary);
+  }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">BioNaural</h1>
+<p class="page-sub">5 wave animation styles — same frequency, different soul</p>
+
+<div class="grid">
+
+  <!-- 1 -->
+  <div class="variant">
+    <div class="variant-label">Variation 01</div>
+    <div class="variant-name">Deep Ocean</div>
+    <div class="variant-desc">Slow breathing layers with filled gradient washes. Bioluminescent. Like watching light move through deep water.</div>
+    <div class="phone"><div class="phone-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar"><span>10:42</span><span><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+      <div class="header"><h2>BioNaural</h2><p>Adaptive listening</p></div>
+      <div class="carousel-area">
+        <div class="card"><div class="card-fill"></div><div class="wave-canvas"><canvas id="c1"></canvas></div>
+          <div class="card-top"><div class="card-band">Beta frequency</div><div class="card-mode">Focus</div></div>
+          <div class="card-bottom"><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-action-row"><div class="card-hz">14–16 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div>
+        </div>
+        <div class="card peek"><div class="card-fill"></div><div class="wave-canvas"><canvas id="c1b"></canvas></div>
+          <div class="card-top"><div class="card-band">Alpha frequency</div><div class="card-mode">Relaxation</div></div>
+          <div class="card-bottom"><div class="card-desc">Calm & de-stress.</div><div class="card-action-row"><div class="card-hz">8–11 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div>
+        </div>
+      </div>
+      <div class="hz-label">Beta · 14–16 Hz</div>
+      <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 8v8M8 12h8"/></svg><span>Settings</span></div></div>
+      <div class="home-indicator"></div>
+    </div></div>
+  </div>
+
+  <!-- 2 -->
+  <div class="variant">
+    <div class="variant-label">Variation 02</div>
+    <div class="variant-name">Neural Pulse</div>
+    <div class="variant-desc">Amplitude breathes in and out on a slow 8-second cycle. Waves swell and recede like a living signal. Particles drift along the waveform.</div>
+    <div class="phone"><div class="phone-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar"><span>10:42</span><span><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+      <div class="header"><h2>BioNaural</h2><p>Adaptive listening</p></div>
+      <div class="carousel-area">
+        <div class="card"><div class="card-fill"></div><div class="wave-canvas"><canvas id="c2"></canvas></div>
+          <div class="card-top"><div class="card-band">Beta frequency</div><div class="card-mode">Focus</div></div>
+          <div class="card-bottom"><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-action-row"><div class="card-hz">14–16 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div>
+        </div>
+        <div class="card peek"><div class="card-fill"></div><div class="wave-canvas"><canvas id="c2b"></canvas></div>
+          <div class="card-top"><div class="card-band">Alpha frequency</div><div class="card-mode">Relaxation</div></div>
+          <div class="card-bottom"><div class="card-desc">Calm & de-stress.</div><div class="card-action-row"><div class="card-hz">8–11 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div>
+        </div>
+      </div>
+      <div class="hz-label">Beta · 14–16 Hz</div>
+      <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 8v8M8 12h8"/></svg><span>Settings</span></div></div>
+      <div class="home-indicator"></div>
+    </div></div>
+  </div>
+
+  <!-- 3 -->
+  <div class="variant">
+    <div class="variant-label">Variation 03</div>
+    <div class="variant-name">Aurora Drift</div>
+    <div class="variant-desc">Color shifts slowly across the wave over time, cycling through warm and cool tones. Vertical gradient bands follow the peaks.</div>
+    <div class="phone"><div class="phone-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar"><span>10:42</span><span><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+      <div class="header"><h2>BioNaural</h2><p>Adaptive listening</p></div>
+      <div class="carousel-area">
+        <div class="card"><div class="card-fill"></div><div class="wave-canvas"><canvas id="c3"></canvas></div>
+          <div class="card-top"><div class="card-band">Beta frequency</div><div class="card-mode">Focus</div></div>
+          <div class="card-bottom"><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-action-row"><div class="card-hz">14–16 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div>
+        </div>
+        <div class="card peek"><div class="card-fill"></div><div class="wave-canvas"><canvas id="c3b"></canvas></div>
+          <div class="card-top"><div class="card-band">Alpha frequency</div><div class="card-mode">Relaxation</div></div>
+          <div class="card-bottom"><div class="card-desc">Calm & de-stress.</div><div class="card-action-row"><div class="card-hz">8–11 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div>
+        </div>
+      </div>
+      <div class="hz-label">Beta · 14–16 Hz</div>
+      <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 8v8M8 12h8"/></svg><span>Settings</span></div></div>
+      <div class="home-indicator"></div>
+    </div></div>
+  </div>
+
+  <!-- 4 -->
+  <div class="variant">
+    <div class="variant-label">Variation 04</div>
+    <div class="variant-name">Interference</div>
+    <div class="variant-desc">Two slightly detuned waves create a visible beat pattern — the actual binaural phenomenon rendered visually. Standing wave nodes glow brighter.</div>
+    <div class="phone"><div class="phone-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar"><span>10:42</span><span><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+      <div class="header"><h2>BioNaural</h2><p>Adaptive listening</p></div>
+      <div class="carousel-area">
+        <div class="card"><div class="card-fill"></div><div class="wave-canvas"><canvas id="c4"></canvas></div>
+          <div class="card-top"><div class="card-band">Beta frequency</div><div class="card-mode">Focus</div></div>
+          <div class="card-bottom"><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-action-row"><div class="card-hz">14–16 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div>
+        </div>
+        <div class="card peek"><div class="card-fill"></div><div class="wave-canvas"><canvas id="c4b"></canvas></div>
+          <div class="card-top"><div class="card-band">Alpha frequency</div><div class="card-mode">Relaxation</div></div>
+          <div class="card-bottom"><div class="card-desc">Calm & de-stress.</div><div class="card-action-row"><div class="card-hz">8–11 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div>
+        </div>
+      </div>
+      <div class="hz-label">Beta · 14–16 Hz</div>
+      <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 8v8M8 12h8"/></svg><span>Settings</span></div></div>
+      <div class="home-indicator"></div>
+    </div></div>
+  </div>
+
+  <!-- 5 -->
+  <div class="variant">
+    <div class="variant-label">Variation 05</div>
+    <div class="variant-name">Smoke &amp; Signal</div>
+    <div class="variant-desc">Noise-modulated waves with soft turbulence. The waveform shimmers like smoke caught in slow motion. One bright signal line cuts through.</div>
+    <div class="phone"><div class="phone-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar"><span>10:42</span><span><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+      <div class="header"><h2>BioNaural</h2><p>Adaptive listening</p></div>
+      <div class="carousel-area">
+        <div class="card"><div class="card-fill"></div><div class="wave-canvas"><canvas id="c5"></canvas></div>
+          <div class="card-top"><div class="card-band">Beta frequency</div><div class="card-mode">Focus</div></div>
+          <div class="card-bottom"><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-action-row"><div class="card-hz">14–16 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div>
+        </div>
+        <div class="card peek"><div class="card-fill"></div><div class="wave-canvas"><canvas id="c5b"></canvas></div>
+          <div class="card-top"><div class="card-band">Alpha frequency</div><div class="card-mode">Relaxation</div></div>
+          <div class="card-bottom"><div class="card-desc">Calm & de-stress.</div><div class="card-action-row"><div class="card-hz">8–11 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div>
+        </div>
+      </div>
+      <div class="hz-label">Beta · 14–16 Hz</div>
+      <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 8v8M8 12h8"/></svg><span>Settings</span></div></div>
+      <div class="home-indicator"></div>
+    </div></div>
+  </div>
+
+</div>
+
+<script>
+// ──────────────────────────────────────────────
+// Shared utilities
+// ──────────────────────────────────────────────
+function setupCanvas(id) {
+  const canvas = document.getElementById(id);
+  if (!canvas) return null;
+  const dpr = window.devicePixelRatio || 2;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { ctx, W: rect.width, H: rect.height };
+}
+
+// Simple seeded noise for deterministic turbulence
+function noise(x) {
+  const n = Math.sin(x * 127.1 + x * 311.7) * 43758.5453;
+  return n - Math.floor(n);
+}
+
+function smoothNoise(x) {
+  const i = Math.floor(x);
+  const f = x - i;
+  const u = f * f * (3 - 2 * f);
+  return noise(i) * (1 - u) + noise(i + 1) * u;
+}
+
+const CYCLES = 15; // Beta 14-16 Hz — all cards use same frequency for comparison
+const R = 91, G = 106, B = 191;
+
+// ──────────────────────────────────────────────
+// V1: DEEP OCEAN
+// Slow, layered filled washes. Bioluminescent depth.
+// ──────────────────────────────────────────────
+function initDeepOcean(id) {
+  const s = setupCanvas(id);
+  if (!s) return;
+  const { ctx, W, H } = s;
+  const CY = H * 0.46;
+  const baseAmp = H * 0.22;
+
+  const layers = [
+    { ampM: 1.5,  freq: 1,   phase: 0,     op: 0.035, w: 35, blur: 28, spd: 0.3,  fill: true },
+    { ampM: 1.2,  freq: 1,   phase: 1.2,   op: 0.04,  w: 20, blur: 18, spd: 0.45, fill: true },
+    { ampM: 0.8,  freq: 0.5, phase: 0.5,   op: 0.03,  w: 10, blur: 14, spd: 0.2,  fill: false },
+    { ampM: 1.05, freq: 1,   phase: 0.3,   op: 0.06,  w: 6,  blur: 10, spd: 0.55, fill: false },
+    { ampM: 1.0,  freq: 1,   phase: 0,     op: 0.12,  w: 3,  blur: 5,  spd: 0.5,  fill: false },
+    { ampM: 1.0,  freq: 1,   phase: 0,     op: 0.35,  w: 1.8,blur: 0,  spd: 0.5,  fill: false },
+    { ampM: 1.0,  freq: 1,   phase: 0,     op: 0.65,  w: 0.7,blur: 0,  spd: 0.5,  fill: false },
+    { ampM: 0.2,  freq: 2,   phase: 0.6,   op: 0.05,  w: 1.5,blur: 3,  spd: 0.7,  fill: false },
+    { ampM: 0.2,  freq: 2,   phase: 0.6,   op: 0.12,  w: 0.5,blur: 0,  spd: 0.7,  fill: false },
+    { ampM: 0.1,  freq: 3,   phase: 1.5,   op: 0.04,  w: 1,  blur: 2,  spd: 0.9,  fill: false },
+    { ampM: 0.1,  freq: 3,   phase: 1.5,   op: 0.08,  w: 0.3,blur: 0,  spd: 0.9,  fill: false },
+    { ampM: 0.65, freq: 1,   phase: Math.PI,op:0.025, w: 2,  blur: 8,  spd: 0.35, fill: false },
+  ];
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    for (const l of layers) {
+      const amp = baseAmp * l.ampM;
+      const freq = CYCLES * l.freq;
+      const ps = t * 0.00004 * l.spd + l.phase;
+      ctx.save();
+      if (l.blur) ctx.filter = `blur(${l.blur}px)`;
+      ctx.beginPath();
+      for (let x = -10; x <= W + 10; x += 1.5) {
+        const y = CY - amp * Math.sin((x / W) * freq * 2 * Math.PI + ps);
+        x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      if (l.fill) {
+        ctx.lineTo(W + 10, H + 50); ctx.lineTo(-10, H + 50); ctx.closePath();
+        const grad = ctx.createLinearGradient(0, CY - amp, 0, CY + amp * 2);
+        grad.addColorStop(0, `rgba(${R},${G},${B},${l.op})`);
+        grad.addColorStop(0.5, `rgba(${R},${G},${B},${l.op * 0.25})`);
+        grad.addColorStop(1, `rgba(${R},${G},${B},0)`);
+        ctx.fillStyle = grad; ctx.fill();
+      } else {
+        ctx.strokeStyle = `rgba(${R},${G},${B},${l.op})`;
+        ctx.lineWidth = l.w; ctx.lineCap = 'round'; ctx.stroke();
+      }
+      ctx.restore();
+    }
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+// ──────────────────────────────────────────────
+// V2: NEURAL PULSE
+// Amplitude breathes. Particles ride the wave.
+// ──────────────────────────────────────────────
+function initNeuralPulse(id) {
+  const s = setupCanvas(id);
+  if (!s) return;
+  const { ctx, W, H } = s;
+  const CY = H * 0.46;
+  const baseAmp = H * 0.24;
+
+  // Particles that ride the waveform
+  const particles = [];
+  for (let i = 0; i < 20; i++) {
+    particles.push({
+      xPos: Math.random(),    // 0-1 position along wave
+      speed: 0.00002 + Math.random() * 0.00003,
+      size: 1 + Math.random() * 2.5,
+      opacity: 0.15 + Math.random() * 0.5,
+    });
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    // Breathing envelope: amplitude swells 0.55 → 1.0 on an 8s cycle
+    const breathe = 0.55 + 0.45 * (0.5 + 0.5 * Math.sin(t * 0.0008));
+    const amp = baseAmp * breathe;
+    const ps = t * 0.00003;
+
+    // Filled wash behind
+    ctx.save();
+    ctx.filter = 'blur(25px)';
+    ctx.beginPath();
+    for (let x = -10; x <= W + 10; x += 2) {
+      const y = CY - amp * 1.3 * Math.sin((x / W) * CYCLES * 2 * Math.PI + ps * 0.8);
+      x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.lineTo(W + 10, H + 50); ctx.lineTo(-10, H + 50); ctx.closePath();
+    const grad = ctx.createLinearGradient(0, CY - amp * 1.3, 0, CY + amp * 2);
+    grad.addColorStop(0, `rgba(${R},${G},${B},${0.04 * breathe})`);
+    grad.addColorStop(1, `rgba(${R},${G},${B},0)`);
+    ctx.fillStyle = grad; ctx.fill();
+    ctx.restore();
+
+    // Glow layers
+    for (const [blur, op, w] of [[12, 0.06, 5], [6, 0.12, 2.5]]) {
+      ctx.save();
+      ctx.filter = `blur(${blur}px)`;
+      ctx.beginPath();
+      for (let x = -10; x <= W + 10; x += 1.5) {
+        const y = CY - amp * Math.sin((x / W) * CYCLES * 2 * Math.PI + ps);
+        x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(${R},${G},${B},${op * breathe})`;
+      ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.stroke();
+      ctx.restore();
+    }
+
+    // Core lines
+    for (const [op, w] of [[0.4, 1.5], [0.75, 0.6]]) {
+      ctx.beginPath();
+      for (let x = -10; x <= W + 10; x += 1.5) {
+        const y = CY - amp * Math.sin((x / W) * CYCLES * 2 * Math.PI + ps);
+        x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(${R},${G},${B},${op * breathe})`;
+      ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.stroke();
+    }
+
+    // Harmonic
+    ctx.save();
+    ctx.filter = 'blur(3px)';
+    ctx.beginPath();
+    const hAmp = amp * 0.18;
+    for (let x = -10; x <= W + 10; x += 2) {
+      const y = CY - hAmp * Math.sin((x / W) * CYCLES * 2 * 2 * Math.PI + ps * 1.4 + 0.5);
+      x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = `rgba(${R},${G},${B},${0.06 * breathe})`;
+    ctx.lineWidth = 1.5; ctx.stroke();
+    ctx.restore();
+
+    // Particles riding the waveform
+    for (const p of particles) {
+      p.xPos = (p.xPos + p.speed * (t - (p._lastT || t))) % 1;
+      p._lastT = t;
+      const px = p.xPos * W;
+      const py = CY - amp * Math.sin(p.xPos * CYCLES * 2 * Math.PI + ps);
+      ctx.beginPath();
+      ctx.arc(px, py, p.size * breathe, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${R},${G},${B},${p.opacity * breathe})`;
+      ctx.fill();
+      // particle glow
+      ctx.save();
+      ctx.filter = 'blur(4px)';
+      ctx.beginPath();
+      ctx.arc(px, py, p.size * 2.5 * breathe, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${R},${G},${B},${p.opacity * 0.2 * breathe})`;
+      ctx.fill();
+      ctx.restore();
+    }
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+// ──────────────────────────────────────────────
+// V3: AURORA DRIFT
+// Color shifts over time. Gradient follows peaks.
+// ──────────────────────────────────────────────
+function initAuroraDrift(id) {
+  const s = setupCanvas(id);
+  if (!s) return;
+  const { ctx, W, H } = s;
+  const CY = H * 0.46;
+  const baseAmp = H * 0.22;
+
+  // Color palette to drift through (all muted, on-brand)
+  const palette = [
+    [91, 106, 191],  // focus indigo
+    [110, 124, 247], // accent periwinkle
+    [130, 110, 200], // near sleep violet
+    [91, 106, 191],  // back to indigo
+  ];
+
+  function lerpColor(a, b, t) {
+    return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
+  }
+
+  function getColor(t) {
+    const total = palette.length - 1;
+    const idx = (t % total);
+    const i = Math.floor(idx);
+    const f = idx - i;
+    return lerpColor(palette[i], palette[Math.min(i + 1, palette.length - 1)], f);
+  }
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    const ps = t * 0.000035;
+    const amp = baseAmp;
+    const colorTime = (t * 0.00005) % (palette.length - 1);
+
+    // Vertical glow columns at wave peaks
+    ctx.save();
+    ctx.filter = 'blur(35px)';
+    for (let i = 0; i < CYCLES; i++) {
+      const peakX = ((i + 0.25) / CYCLES) * W;
+      const peakPhase = ((peakX / W) * CYCLES * 2 * Math.PI + ps) % (2 * Math.PI);
+      const intensity = Math.max(0, Math.sin(peakPhase));
+      const colShift = (colorTime + i * 0.15) % (palette.length - 1);
+      const [cr, cg, cb] = getColor(colShift);
+      const grad = ctx.createRadialGradient(peakX, CY, 0, peakX, CY, amp * 1.5);
+      grad.addColorStop(0, `rgba(${cr|0},${cg|0},${cb|0},${0.04 * intensity})`);
+      grad.addColorStop(1, `rgba(${cr|0},${cg|0},${cb|0},0)`);
+      ctx.fillStyle = grad;
+      ctx.fillRect(peakX - amp * 2, CY - amp * 2, amp * 4, amp * 4);
+    }
+    ctx.restore();
+
+    // Draw wave in segments with shifting color
+    const segW = 3;
+    for (let pass = 0; pass < 4; pass++) {
+      const cfg = [
+        { blur: 18, op: 0.06, w: 8 },
+        { blur: 8,  op: 0.1,  w: 3 },
+        { blur: 0,  op: 0.35, w: 1.5 },
+        { blur: 0,  op: 0.6,  w: 0.7 },
+      ][pass];
+
+      ctx.save();
+      if (cfg.blur) ctx.filter = `blur(${cfg.blur}px)`;
+      ctx.lineWidth = cfg.w;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      for (let x = -10; x < W + 10; x += segW) {
+        const t1 = x / W;
+        const t2 = (x + segW) / W;
+        const y1 = CY - amp * Math.sin(t1 * CYCLES * 2 * Math.PI + ps);
+        const y2 = CY - amp * Math.sin(t2 * CYCLES * 2 * Math.PI + ps);
+        const colShift = (colorTime + t1 * 1.5) % (palette.length - 1);
+        const [cr, cg, cb] = getColor(colShift);
+        ctx.beginPath();
+        ctx.moveTo(x, y1);
+        ctx.lineTo(x + segW, y2);
+        ctx.strokeStyle = `rgba(${cr|0},${cg|0},${cb|0},${cfg.op})`;
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    // Subtle harmonic
+    ctx.beginPath();
+    const hAmp = amp * 0.15;
+    for (let x = -10; x <= W + 10; x += 2) {
+      const y = CY - hAmp * Math.sin((x / W) * CYCLES * 2 * 2 * Math.PI + ps * 1.5);
+      x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = `rgba(${R},${G},${B},0.06)`;
+    ctx.lineWidth = 0.8; ctx.stroke();
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+// ──────────────────────────────────────────────
+// V4: INTERFERENCE
+// Two waves at slightly different frequencies create
+// a visible beat envelope — the actual binaural effect
+// ──────────────────────────────────────────────
+function initInterference(id) {
+  const s = setupCanvas(id);
+  if (!s) return;
+  const { ctx, W, H } = s;
+  const CY = H * 0.46;
+  const baseAmp = H * 0.18;
+
+  // Left ear: 200 Hz carrier. Right ear: 215 Hz. Beat = 15 Hz.
+  // We show ~3 beat envelope cycles with the carrier waves inside.
+  const carrierCycles = CYCLES * 4;   // high-frequency carrier visible
+  const beatCycles = CYCLES;          // envelope at the beat frequency (15 Hz)
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    const ps = t * 0.00003;
+
+    // Beat envelope
+    const envAmp = baseAmp;
+
+    // Filled envelope glow
+    ctx.save();
+    ctx.filter = 'blur(20px)';
+    ctx.beginPath();
+    for (let x = -10; x <= W + 10; x += 2) {
+      const env = Math.abs(Math.sin((x / W) * beatCycles * Math.PI + ps * 0.5));
+      const y = CY - envAmp * env;
+      x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.lineTo(W + 10, H); ctx.lineTo(-10, H); ctx.closePath();
+    const grad = ctx.createLinearGradient(0, CY - envAmp, 0, H);
+    grad.addColorStop(0, `rgba(${R},${G},${B},0.05)`);
+    grad.addColorStop(0.5, `rgba(${R},${G},${B},0.015)`);
+    grad.addColorStop(1, `rgba(${R},${G},${B},0)`);
+    ctx.fillStyle = grad; ctx.fill();
+    ctx.restore();
+
+    // Mirror envelope above
+    ctx.save();
+    ctx.filter = 'blur(20px)';
+    ctx.beginPath();
+    for (let x = -10; x <= W + 10; x += 2) {
+      const env = Math.abs(Math.sin((x / W) * beatCycles * Math.PI + ps * 0.5));
+      const y = CY + envAmp * env;
+      x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.lineTo(W + 10, 0); ctx.lineTo(-10, 0); ctx.closePath();
+    ctx.fillStyle = grad; ctx.fill();
+    ctx.restore();
+
+    // Wave 1 (left ear) — modulated by envelope
+    for (const [blur, op, w] of [[10, 0.06, 4], [4, 0.15, 1.5], [0, 0.45, 0.8]]) {
+      ctx.save();
+      if (blur) ctx.filter = `blur(${blur}px)`;
+      ctx.beginPath();
+      for (let x = -10; x <= W + 10; x += 1.5) {
+        const tx = x / W;
+        const env = Math.abs(Math.sin(tx * beatCycles * Math.PI + ps * 0.5));
+        const y = CY - envAmp * env * Math.sin(tx * carrierCycles * 2 * Math.PI + ps * 2);
+        x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(${R},${G},${B},${op})`;
+      ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.stroke();
+      ctx.restore();
+    }
+
+    // Wave 2 (right ear) — slightly different carrier
+    for (const [blur, op, w] of [[8, 0.04, 3], [0, 0.12, 0.6]]) {
+      ctx.save();
+      if (blur) ctx.filter = `blur(${blur}px)`;
+      ctx.beginPath();
+      for (let x = -10; x <= W + 10; x += 1.5) {
+        const tx = x / W;
+        const env = Math.abs(Math.sin(tx * beatCycles * Math.PI + ps * 0.5));
+        const y = CY - envAmp * env * Math.sin(tx * (carrierCycles + beatCycles) * 2 * Math.PI + ps * 2.1);
+        x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(${R},${G},${B},${op})`;
+      ctx.lineWidth = w; ctx.lineCap = 'round'; ctx.stroke();
+      ctx.restore();
+    }
+
+    // Bright nodes at envelope peaks
+    for (let i = 0; i < beatCycles * 2; i++) {
+      const nodeX = (i / (beatCycles * 2)) * W;
+      const env = Math.abs(Math.sin((nodeX / W) * beatCycles * Math.PI + ps * 0.5));
+      if (env > 0.85) {
+        ctx.save();
+        ctx.filter = 'blur(12px)';
+        const grad = ctx.createRadialGradient(nodeX, CY, 0, nodeX, CY, 25);
+        grad.addColorStop(0, `rgba(${R},${G},${B},${0.12 * env})`);
+        grad.addColorStop(1, `rgba(${R},${G},${B},0)`);
+        ctx.fillStyle = grad;
+        ctx.fillRect(nodeX - 30, CY - 30, 60, 60);
+        ctx.restore();
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+// ──────────────────────────────────────────────
+// V5: SMOKE & SIGNAL
+// Perlin-like noise modulates the wave. Organic turbulence.
+// One clean signal cuts through the chaos.
+// ──────────────────────────────────────────────
+function initSmokeSignal(id) {
+  const s = setupCanvas(id);
+  if (!s) return;
+  const { ctx, W, H } = s;
+  const CY = H * 0.46;
+  const baseAmp = H * 0.2;
+
+  // Multiple noise-distorted copies of the wave
+  const smokeCount = 12;
+
+  function draw(t) {
+    ctx.clearRect(0, 0, W, H);
+    const ps = t * 0.000025;
+    const amp = baseAmp;
+
+    // Smoke layers — wave with noise displacement
+    for (let s = 0; s < smokeCount; s++) {
+      const noiseScale = 2.5 + s * 0.6;
+      const noiseAmp = 8 + s * 5;
+      const opacity = 0.012 + (smokeCount - s) * 0.003;
+      const lineW = 1 + s * 0.8;
+      const phaseOff = s * 0.4;
+      const speedMult = 0.6 + s * 0.08;
+
+      ctx.save();
+      ctx.filter = `blur(${3 + s * 2.5}px)`;
+      ctx.beginPath();
+      for (let x = -10; x <= W + 10; x += 2) {
+        const tx = x / W;
+        const baseY = amp * Math.sin(tx * CYCLES * 2 * Math.PI + ps * speedMult + phaseOff);
+        const noiseDisplace = (smoothNoise(tx * noiseScale + ps * 3 + s * 7) - 0.5) * noiseAmp;
+        const y = CY - baseY + noiseDisplace;
+        x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+      }
+      ctx.strokeStyle = `rgba(${R},${G},${B},${opacity})`;
+      ctx.lineWidth = lineW; ctx.lineCap = 'round'; ctx.stroke();
+      ctx.restore();
+    }
+
+    // Atmospheric fill under smoke
+    ctx.save();
+    ctx.filter = 'blur(30px)';
+    ctx.beginPath();
+    for (let x = -10; x <= W + 10; x += 3) {
+      const tx = x / W;
+      const baseY = amp * 1.2 * Math.sin(tx * CYCLES * 2 * Math.PI + ps * 0.4);
+      const n = (smoothNoise(tx * 2 + ps * 2) - 0.5) * 15;
+      const y = CY - baseY + n;
+      x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.lineTo(W + 10, H + 50); ctx.lineTo(-10, H + 50); ctx.closePath();
+    const grad = ctx.createLinearGradient(0, CY - amp, 0, CY + amp * 2.5);
+    grad.addColorStop(0, `rgba(${R},${G},${B},0.04)`);
+    grad.addColorStop(0.4, `rgba(${R},${G},${B},0.015)`);
+    grad.addColorStop(1, `rgba(${R},${G},${B},0)`);
+    ctx.fillStyle = grad; ctx.fill();
+    ctx.restore();
+
+    // THE SIGNAL — one clean, bright, undistorted wave cutting through
+    // Glow
+    ctx.save();
+    ctx.filter = 'blur(5px)';
+    ctx.beginPath();
+    for (let x = -10; x <= W + 10; x += 1.5) {
+      const y = CY - amp * Math.sin((x / W) * CYCLES * 2 * Math.PI + ps);
+      x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = `rgba(${R},${G},${B},0.2)`;
+    ctx.lineWidth = 2.5; ctx.lineCap = 'round'; ctx.stroke();
+    ctx.restore();
+
+    // Crisp signal
+    ctx.beginPath();
+    for (let x = -10; x <= W + 10; x += 1.5) {
+      const y = CY - amp * Math.sin((x / W) * CYCLES * 2 * Math.PI + ps);
+      x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = `rgba(${R},${G},${B},0.7)`;
+    ctx.lineWidth = 1; ctx.lineCap = 'round'; ctx.stroke();
+
+    // Bright white hot center
+    ctx.beginPath();
+    for (let x = -10; x <= W + 10; x += 1.5) {
+      const y = CY - amp * Math.sin((x / W) * CYCLES * 2 * Math.PI + ps);
+      x === -10 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    }
+    ctx.strokeStyle = `rgba(200,210,240,0.3)`;
+    ctx.lineWidth = 0.4; ctx.lineCap = 'round'; ctx.stroke();
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+}
+
+// ──────────────────────────────────────────────
+// Init all
+// ──────────────────────────────────────────────
+requestAnimationFrame(() => {
+  initDeepOcean('c1');
+  initDeepOcean('c1b');
+  initNeuralPulse('c2');
+  initNeuralPulse('c2b');
+  initAuroraDrift('c3');
+  initAuroraDrift('c3b');
+  initInterference('c4');
+  initInterference('c4b');
+  initSmokeSignal('c5');
+  initSmokeSignal('c5b');
+});
+</script>
+
+</body>
+</html>

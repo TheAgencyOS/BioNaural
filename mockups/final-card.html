@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — Final Card</title>
+<style>
+  @import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --canvas: #080C15;
+    --surface: #111520;
+    --divider: #1E2336;
+    --textPrimary: #E2E6F0;
+    --textSecondary: rgba(226, 230, 240, 0.55);
+    --textTertiary: rgba(226, 230, 240, 0.30);
+    --accent: #6E7CF7;
+    --focus: #5B6ABF;
+    --relax: #4EA8A6;
+    --sleep: #9080C4;
+    --energize: #F5A623;
+    --font: 'Satoshi', -apple-system, sans-serif;
+    --mono: 'SF Mono', 'Menlo', monospace;
+    --phone-w: 393px;
+    --phone-h: 852px;
+  }
+
+  body {
+    background: #05080E;
+    font-family: var(--font);
+    color: var(--textPrimary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 40px;
+    gap: 60px;
+    flex-wrap: wrap;
+  }
+
+  .label-group {
+    position: fixed;
+    top: 24px;
+    left: 0; right: 0;
+    text-align: center;
+    z-index: 100;
+  }
+
+  .label-group h1 {
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+  }
+
+  .label-group p {
+    font-size: 14px;
+    color: var(--textSecondary);
+  }
+
+  .phone-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .phone-label {
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  .phone-sublabel {
+    font-size: 14px;
+    color: var(--textSecondary);
+    text-align: center;
+    max-width: 340px;
+    margin-bottom: 8px;
+  }
+
+  .phone {
+    width: var(--phone-w);
+    height: var(--phone-h);
+    border-radius: 48px;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 40px 80px rgba(0,0,0,0.5);
+    flex-shrink: 0;
+  }
+
+  .phone-screen {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background: var(--canvas);
+  }
+
+  .dynamic-island {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 36px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 20;
+  }
+
+  .status-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 54px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px 0;
+    z-index: 10;
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .tab-bar {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 88px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    padding-top: 10px;
+    z-index: 10;
+    background: linear-gradient(to top, var(--canvas) 60%, transparent);
+  }
+
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--textTertiary);
+    width: 64px;
+  }
+
+  .tab-item.active { color: var(--accent); }
+
+  .home-indicator {
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 134px;
+    height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    z-index: 20;
+  }
+
+  .header {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    z-index: 5;
+  }
+
+  .header h2 { font-size: 28px; font-weight: 500; }
+  .header p { font-size: 13px; color: var(--textTertiary); }
+
+  /* ── Carousel with real swipe ── */
+  .carousel-viewport {
+    position: absolute;
+    top: 140px;
+    left: 0; right: 0;
+    height: 540px;
+    overflow: hidden;
+  }
+
+  .carousel-track {
+    display: flex;
+    height: 100%;
+    align-items: center;
+    padding: 0 24px;
+    gap: 16px;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: grab;
+  }
+
+  .carousel-track.dragging {
+    transition: none;
+    cursor: grabbing;
+  }
+
+  .card {
+    flex-shrink: 0;
+    width: 305px;
+    height: 500px;
+    border-radius: 36px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .card.inactive {
+    transform: scale(0.9);
+    opacity: 0.35;
+  }
+
+  .card-fill {
+    position: absolute;
+    inset: 0;
+  }
+
+  .card.focus .card-fill { background: linear-gradient(165deg, #1a1d3a 0%, #0d1020 40%, var(--canvas) 100%); }
+  .card.relax .card-fill { background: linear-gradient(165deg, #132827 0%, #0d1618 40%, var(--canvas) 100%); }
+  .card.sleep .card-fill { background: linear-gradient(165deg, #1c1530 0%, #100d1e 40%, var(--canvas) 100%); }
+  .card.energize .card-fill { background: linear-gradient(165deg, #261c0a 0%, #1a1408 40%, var(--canvas) 100%); }
+
+  /* Wave zone — constrained to a horizontal band in the middle */
+  .wave-canvas {
+    position: absolute;
+    left: 0; right: 0;
+    top: 140px;
+    height: 160px;
+    pointer-events: none;
+  }
+
+  .wave-canvas canvas {
+    width: 100%;
+    height: 100%;
+  }
+
+  .card-top {
+    position: absolute;
+    top: 36px;
+    left: 28px; right: 28px;
+    z-index: 2;
+  }
+
+  .card-band {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--textTertiary);
+    margin-bottom: 8px;
+  }
+
+  .card-mode {
+    font-size: 40px;
+    font-weight: 300;
+    letter-spacing: -1px;
+  }
+
+  .card-bottom {
+    position: absolute;
+    bottom: 36px;
+    left: 28px; right: 28px;
+    z-index: 2;
+  }
+
+  .card-desc {
+    font-size: 15px;
+    color: var(--textSecondary);
+    line-height: 1.5;
+    margin-bottom: 24px;
+  }
+
+  .card-action-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .card-hz {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--textTertiary);
+    letter-spacing: 0.5px;
+  }
+
+  .card-play-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .card-play-btn:hover { transform: scale(1.08); }
+
+  .card-play-btn::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    opacity: 0.3;
+    filter: blur(8px);
+  }
+
+  .focus .card-play-btn { background: var(--focus); box-shadow: 0 4px 16px rgba(91,106,191,0.35); }
+  .focus .card-play-btn::before { background: var(--focus); }
+  .relax .card-play-btn { background: var(--relax); box-shadow: 0 4px 16px rgba(78,168,166,0.35); }
+  .relax .card-play-btn::before { background: var(--relax); }
+  .sleep .card-play-btn { background: var(--sleep); box-shadow: 0 4px 16px rgba(144,128,196,0.35); }
+  .sleep .card-play-btn::before { background: var(--sleep); }
+  .energize .card-play-btn { background: var(--energize); box-shadow: 0 4px 16px rgba(245,166,35,0.35); }
+  .energize .card-play-btn::before { background: var(--energize); }
+
+  .card-play-btn svg {
+    position: relative;
+    z-index: 1;
+    margin-left: 2px;
+  }
+
+  /* Dots */
+  .page-dots {
+    position: absolute;
+    bottom: 106px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 8px;
+    z-index: 15;
+  }
+
+  .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--divider);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+  }
+
+  .dot.active {
+    background: var(--accent);
+    width: 24px;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+
+<div class="label-group">
+  <h1>BioNaural</h1>
+  <p>Swipe between all 4 modes — 3 wave styles</p>
+</div>
+
+<!-- ═══════════ PHONE 1: DEEP OCEAN ═══════════ -->
+<div class="phone-wrap">
+  <div class="phone-label">Deep Ocean</div>
+  <div class="phone-sublabel">Layered gradient washes, sub-harmonics, bioluminescent glow</div>
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar"><span>10:42</span><span><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+      <div class="header"><h2>BioNaural</h2><p>Adaptive listening</p></div>
+      <div class="carousel-viewport" id="cv1">
+        <div class="carousel-track" id="track1">
+          <div class="card focus" data-index="0"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="1" data-mode="focus"></canvas></div><div class="card-top"><div class="card-band">Beta frequency</div><div class="card-mode">Focus</div></div><div class="card-bottom"><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-action-row"><div class="card-hz">14–16 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+          <div class="card relax inactive" data-index="1"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="1" data-mode="relax"></canvas></div><div class="card-top"><div class="card-band">Alpha frequency</div><div class="card-mode">Relaxation</div></div><div class="card-bottom"><div class="card-desc">Calm & de-stress. Alpha waves guide you down.</div><div class="card-action-row"><div class="card-hz">8–11 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+          <div class="card sleep inactive" data-index="2"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="1" data-mode="sleep"></canvas></div><div class="card-top"><div class="card-band">Theta–Delta</div><div class="card-mode">Sleep</div></div><div class="card-bottom"><div class="card-desc">Wind-down to rest. Frequency descends as you drift off.</div><div class="card-action-row"><div class="card-hz">6→2 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+          <div class="card energize inactive" data-index="3"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="1" data-mode="energize"></canvas></div><div class="card-top"><div class="card-band">High-Beta</div><div class="card-mode">Energize</div></div><div class="card-bottom"><div class="card-desc">Wake up & activate. Uplifting arousal for your day.</div><div class="card-action-row"><div class="card-hz">18–30 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+        </div>
+      </div>
+      <div class="page-dots" id="dots1"><div class="dot active" data-i="0"></div><div class="dot" data-i="1"></div><div class="dot" data-i="2"></div><div class="dot" data-i="3"></div></div>
+      <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 8v8M8 12h8"/></svg><span>Settings</span></div></div>
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PHONE 2: NEURAL PULSE ═══════════ -->
+<div class="phone-wrap">
+  <div class="phone-label">Neural Pulse</div>
+  <div class="phone-sublabel">Breathing amplitude, particles ride the waveform</div>
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar"><span>10:42</span><span><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+      <div class="header"><h2>BioNaural</h2><p>Adaptive listening</p></div>
+      <div class="carousel-viewport" id="cv2">
+        <div class="carousel-track" id="track2">
+          <div class="card focus" data-index="0"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="2" data-mode="focus"></canvas></div><div class="card-top"><div class="card-band">Beta frequency</div><div class="card-mode">Focus</div></div><div class="card-bottom"><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-action-row"><div class="card-hz">14–16 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+          <div class="card relax inactive" data-index="1"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="2" data-mode="relax"></canvas></div><div class="card-top"><div class="card-band">Alpha frequency</div><div class="card-mode">Relaxation</div></div><div class="card-bottom"><div class="card-desc">Calm & de-stress. Alpha waves guide you down.</div><div class="card-action-row"><div class="card-hz">8–11 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+          <div class="card sleep inactive" data-index="2"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="2" data-mode="sleep"></canvas></div><div class="card-top"><div class="card-band">Theta–Delta</div><div class="card-mode">Sleep</div></div><div class="card-bottom"><div class="card-desc">Wind-down to rest. Frequency descends as you drift off.</div><div class="card-action-row"><div class="card-hz">6→2 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+          <div class="card energize inactive" data-index="3"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="2" data-mode="energize"></canvas></div><div class="card-top"><div class="card-band">High-Beta</div><div class="card-mode">Energize</div></div><div class="card-bottom"><div class="card-desc">Wake up & activate. Uplifting arousal for your day.</div><div class="card-action-row"><div class="card-hz">18–30 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+        </div>
+      </div>
+      <div class="page-dots" id="dots2"><div class="dot active" data-i="0"></div><div class="dot" data-i="1"></div><div class="dot" data-i="2"></div><div class="dot" data-i="3"></div></div>
+      <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 8v8M8 12h8"/></svg><span>Settings</span></div></div>
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════ PHONE 3: SMOKE & SIGNAL ═══════════ -->
+<div class="phone-wrap">
+  <div class="phone-label">Smoke &amp; Signal</div>
+  <div class="phone-sublabel">Noise turbulence with one clean signal cutting through</div>
+  <div class="phone">
+    <div class="phone-screen">
+      <div class="dynamic-island"></div>
+      <div class="status-bar"><span>10:42</span><span><svg width="16" height="12" viewBox="0 0 16 12" fill="white"><rect x="0" y="4" width="3" height="8" rx="0.5"/><rect x="4.5" y="2.5" width="3" height="9.5" rx="0.5"/><rect x="9" y="1" width="3" height="11" rx="0.5"/><rect x="13.5" y="0" width="2.5" height="12" rx="0.5"/></svg><svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="22" height="11" rx="2" stroke="white" stroke-opacity="0.35"/><rect x="23" y="3.5" width="1.5" height="5" rx="0.5" fill="white" fill-opacity="0.35"/><rect x="1.5" y="1.5" width="18" height="9" rx="1.5" fill="white"/></svg></span></div>
+      <div class="header"><h2>BioNaural</h2><p>Adaptive listening</p></div>
+      <div class="carousel-viewport" id="cv3">
+        <div class="carousel-track" id="track3">
+          <div class="card focus" data-index="0"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="3" data-mode="focus"></canvas></div><div class="card-top"><div class="card-band">Beta frequency</div><div class="card-mode">Focus</div></div><div class="card-bottom"><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-action-row"><div class="card-hz">14–16 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+          <div class="card relax inactive" data-index="1"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="3" data-mode="relax"></canvas></div><div class="card-top"><div class="card-band">Alpha frequency</div><div class="card-mode">Relaxation</div></div><div class="card-bottom"><div class="card-desc">Calm & de-stress. Alpha waves guide you down.</div><div class="card-action-row"><div class="card-hz">8–11 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+          <div class="card sleep inactive" data-index="2"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="3" data-mode="sleep"></canvas></div><div class="card-top"><div class="card-band">Theta–Delta</div><div class="card-mode">Sleep</div></div><div class="card-bottom"><div class="card-desc">Wind-down to rest. Frequency descends as you drift off.</div><div class="card-action-row"><div class="card-hz">6→2 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+          <div class="card energize inactive" data-index="3"><div class="card-fill"></div><div class="wave-canvas"><canvas class="wc" data-phone="3" data-mode="energize"></canvas></div><div class="card-top"><div class="card-band">High-Beta</div><div class="card-mode">Energize</div></div><div class="card-bottom"><div class="card-desc">Wake up & activate. Uplifting arousal for your day.</div><div class="card-action-row"><div class="card-hz">18–30 Hz</div><button class="card-play-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="white"><polygon points="6 3 20 12 6 21 6 3"/></svg></button></div></div></div>
+        </div>
+      </div>
+      <div class="page-dots" id="dots3"><div class="dot active" data-i="0"></div><div class="dot" data-i="1"></div><div class="dot" data-i="2"></div><div class="dot" data-i="3"></div></div>
+      <div class="tab-bar"><div class="tab-item active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 3L2 12h3v8h6v-5h2v5h6v-8h3L12 3z"/></svg><span>Home</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/></svg><span>History</span></div><div class="tab-item"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 8v8M8 12h8"/></svg><span>Settings</span></div></div>
+      <div class="home-indicator"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Mode configs ──
+const MODES = {
+  focus:    { cycles: 15, color: [91, 106, 191] },
+  relax:    { cycles: 9,  color: [78, 168, 166] },
+  sleep:    { cycles: 4,  color: [144, 128, 196] },
+  energize: { cycles: 24, color: [245, 166, 35] },
+};
+
+// ── Noise ──
+function noise(x) { const n = Math.sin(x*127.1+x*311.7)*43758.5453; return n-Math.floor(n); }
+function smoothNoise(x) { const i=Math.floor(x),f=x-i,u=f*f*(3-2*f); return noise(i)*(1-u)+noise(i+1)*u; }
+
+// ── Canvas setup ──
+function setup(canvas) {
+  const dpr = window.devicePixelRatio || 2;
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = rect.width * dpr;
+  canvas.height = rect.height * dpr;
+  canvas.style.width = rect.width + 'px';
+  canvas.style.height = rect.height + 'px';
+  const ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  return { ctx, W: rect.width, H: rect.height };
+}
+
+// ══════════════════════════════════════
+// STYLE 1: DEEP OCEAN
+// ══════════════════════════════════════
+function drawDeepOcean(ctx, W, H, t, cycles, r, g, b) {
+  const CY = H * 0.5;
+  const amp = H * 0.32;
+  const layers = [
+    { aM:1.4, fM:1,   ph:0,    op:0.03,  w:30, bl:22, sp:0.3,  fill:true },
+    { aM:1.1, fM:1,   ph:1.0,  op:0.035, w:18, bl:15, sp:0.4,  fill:true },
+    { aM:0.7, fM:0.5, ph:0.5,  op:0.025, w:8,  bl:12, sp:0.2,  fill:false },
+    { aM:1.0, fM:1,   ph:0.2,  op:0.05,  w:5,  bl:8,  sp:0.5,  fill:false },
+    { aM:1.0, fM:1,   ph:0,    op:0.1,   w:2.5,bl:4,  sp:0.5,  fill:false },
+    { aM:1.0, fM:1,   ph:0,    op:0.35,  w:1.5,bl:0,  sp:0.5,  fill:false },
+    { aM:1.0, fM:1,   ph:0,    op:0.6,   w:0.6,bl:0,  sp:0.5,  fill:false },
+    { aM:0.18,fM:2,   ph:0.6,  op:0.04,  w:1.2,bl:3,  sp:0.7,  fill:false },
+    { aM:0.18,fM:2,   ph:0.6,  op:0.1,   w:0.4,bl:0,  sp:0.7,  fill:false },
+    { aM:0.6, fM:1,   ph:Math.PI, op:0.02, w:2, bl:7, sp:0.3, fill:false },
+  ];
+  for (const l of layers) {
+    const a = amp*l.aM, f = cycles*l.fM, ps = t*0.00004*l.sp+l.ph;
+    ctx.save();
+    if(l.bl) ctx.filter=`blur(${l.bl}px)`;
+    ctx.beginPath();
+    for(let x=-5;x<=W+5;x+=1.5){ const y=CY-a*Math.sin((x/W)*f*2*Math.PI+ps); x===-5?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+    if(l.fill){ ctx.lineTo(W+5,H+20);ctx.lineTo(-5,H+20);ctx.closePath(); const gd=ctx.createLinearGradient(0,CY-a,0,CY+a*1.5); gd.addColorStop(0,`rgba(${r},${g},${b},${l.op})`); gd.addColorStop(0.6,`rgba(${r},${g},${b},${l.op*0.2})`); gd.addColorStop(1,`rgba(${r},${g},${b},0)`); ctx.fillStyle=gd;ctx.fill();
+    } else { ctx.strokeStyle=`rgba(${r},${g},${b},${l.op})`; ctx.lineWidth=l.w; ctx.lineCap='round'; ctx.stroke(); }
+    ctx.restore();
+  }
+}
+
+// ══════════════════════════════════════
+// STYLE 2: NEURAL PULSE
+// ══════════════════════════════════════
+function drawNeuralPulse(ctx, W, H, t, cycles, r, g, b, particles) {
+  const CY = H * 0.5;
+  const baseAmp = H * 0.34;
+  const breathe = 0.5 + 0.5 * (0.5 + 0.5*Math.sin(t*0.0007));
+  const amp = baseAmp * breathe;
+  const ps = t * 0.00003;
+
+  // Wash
+  ctx.save(); ctx.filter='blur(20px)';
+  ctx.beginPath();
+  for(let x=-5;x<=W+5;x+=2){ const y=CY-amp*1.2*Math.sin((x/W)*cycles*2*Math.PI+ps*0.7); x===-5?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+  ctx.lineTo(W+5,H+20);ctx.lineTo(-5,H+20);ctx.closePath();
+  const gd=ctx.createLinearGradient(0,CY-amp*1.2,0,CY+amp*1.5); gd.addColorStop(0,`rgba(${r},${g},${b},${0.035*breathe})`); gd.addColorStop(1,`rgba(${r},${g},${b},0)`);
+  ctx.fillStyle=gd;ctx.fill();ctx.restore();
+
+  // Glow + core
+  for(const[bl,op,w] of [[10,0.05,4],[5,0.1,2],[0,0.35,1.3],[0,0.65,0.5]]){
+    ctx.save(); if(bl)ctx.filter=`blur(${bl}px)`; ctx.beginPath();
+    for(let x=-5;x<=W+5;x+=1.5){ const y=CY-amp*Math.sin((x/W)*cycles*2*Math.PI+ps); x===-5?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+    ctx.strokeStyle=`rgba(${r},${g},${b},${op*breathe})`; ctx.lineWidth=w; ctx.lineCap='round'; ctx.stroke(); ctx.restore();
+  }
+
+  // Harmonic
+  ctx.save();ctx.filter='blur(2px)';ctx.beginPath();
+  for(let x=-5;x<=W+5;x+=2){ const y=CY-amp*0.15*Math.sin((x/W)*cycles*4*Math.PI+ps*1.3+0.5); x===-5?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+  ctx.strokeStyle=`rgba(${r},${g},${b},${0.05*breathe})`; ctx.lineWidth=1; ctx.stroke(); ctx.restore();
+
+  // Particles
+  for(const p of particles){
+    p.xPos=(p.xPos+p.speed)%1;
+    const px=p.xPos*W, py=CY-amp*Math.sin(p.xPos*cycles*2*Math.PI+ps);
+    ctx.beginPath();ctx.arc(px,py,p.size*breathe,0,Math.PI*2);ctx.fillStyle=`rgba(${r},${g},${b},${p.opacity*breathe})`;ctx.fill();
+    ctx.save();ctx.filter='blur(3px)';ctx.beginPath();ctx.arc(px,py,p.size*2*breathe,0,Math.PI*2);ctx.fillStyle=`rgba(${r},${g},${b},${p.opacity*0.15*breathe})`;ctx.fill();ctx.restore();
+  }
+}
+
+// ══════════════════════════════════════
+// STYLE 3: SMOKE & SIGNAL
+// ══════════════════════════════════════
+function drawSmokeSignal(ctx, W, H, t, cycles, r, g, b) {
+  const CY = H * 0.5;
+  const amp = H * 0.3;
+  const ps = t * 0.000022;
+
+  // Smoke layers
+  for(let s=0;s<10;s++){
+    const nScale=2.5+s*0.5, nAmp=5+s*4, op=0.01+(10-s)*0.0025, lw=0.8+s*0.7, phOff=s*0.4, spM=0.6+s*0.07;
+    ctx.save(); ctx.filter=`blur(${2+s*2.2}px)`; ctx.beginPath();
+    for(let x=-5;x<=W+5;x+=2){
+      const tx=x/W, baseY=amp*Math.sin(tx*cycles*2*Math.PI+ps*spM+phOff);
+      const nd=(smoothNoise(tx*nScale+ps*3+s*7)-0.5)*nAmp;
+      const y=CY-baseY+nd; x===-5?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    }
+    ctx.strokeStyle=`rgba(${r},${g},${b},${op})`; ctx.lineWidth=lw; ctx.lineCap='round'; ctx.stroke(); ctx.restore();
+  }
+
+  // Atmospheric fill
+  ctx.save();ctx.filter='blur(25px)';ctx.beginPath();
+  for(let x=-5;x<=W+5;x+=3){ const tx=x/W, y=CY-amp*1.1*Math.sin(tx*cycles*2*Math.PI+ps*0.4)+(smoothNoise(tx*2+ps*2)-0.5)*10; x===-5?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+  ctx.lineTo(W+5,H+20);ctx.lineTo(-5,H+20);ctx.closePath();
+  const gd=ctx.createLinearGradient(0,CY-amp,0,CY+amp*2); gd.addColorStop(0,`rgba(${r},${g},${b},0.03)`); gd.addColorStop(0.4,`rgba(${r},${g},${b},0.01)`); gd.addColorStop(1,`rgba(${r},${g},${b},0)`);
+  ctx.fillStyle=gd;ctx.fill();ctx.restore();
+
+  // THE SIGNAL
+  ctx.save();ctx.filter='blur(4px)';ctx.beginPath();
+  for(let x=-5;x<=W+5;x+=1.5){ const y=CY-amp*Math.sin((x/W)*cycles*2*Math.PI+ps); x===-5?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+  ctx.strokeStyle=`rgba(${r},${g},${b},0.18)`; ctx.lineWidth=2; ctx.lineCap='round'; ctx.stroke(); ctx.restore();
+
+  ctx.beginPath();
+  for(let x=-5;x<=W+5;x+=1.5){ const y=CY-amp*Math.sin((x/W)*cycles*2*Math.PI+ps); x===-5?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+  ctx.strokeStyle=`rgba(${r},${g},${b},0.6)`; ctx.lineWidth=0.8; ctx.lineCap='round'; ctx.stroke();
+
+  // White-hot
+  ctx.beginPath();
+  for(let x=-5;x<=W+5;x+=1.5){ const y=CY-amp*Math.sin((x/W)*cycles*2*Math.PI+ps); x===-5?ctx.moveTo(x,y):ctx.lineTo(x,y); }
+  ctx.strokeStyle=`rgba(200,210,240,0.25)`; ctx.lineWidth=0.3; ctx.stroke();
+}
+
+// ══════════════════════════════════════
+// INIT
+// ══════════════════════════════════════
+const canvasInstances = [];
+
+requestAnimationFrame(() => {
+  document.querySelectorAll('.wc').forEach(canvas => {
+    const s = setup(canvas);
+    if (!s) return;
+    const phone = parseInt(canvas.dataset.phone);
+    const mode = MODES[canvas.dataset.mode];
+    const [r,g,b] = mode.color;
+    const cycles = mode.cycles;
+
+    let particles = null;
+    if (phone === 2) {
+      particles = [];
+      for(let i=0;i<14;i++) particles.push({ xPos:Math.random(), speed:0.0003+Math.random()*0.0005, size:0.8+Math.random()*1.8, opacity:0.15+Math.random()*0.45 });
+    }
+
+    canvasInstances.push({ ctx:s.ctx, W:s.W, H:s.H, phone, cycles, r, g, b, particles });
+  });
+
+  function loop(t) {
+    for (const inst of canvasInstances) {
+      inst.ctx.clearRect(0, 0, inst.W, inst.H);
+      if (inst.phone === 1) drawDeepOcean(inst.ctx, inst.W, inst.H, t, inst.cycles, inst.r, inst.g, inst.b);
+      else if (inst.phone === 2) drawNeuralPulse(inst.ctx, inst.W, inst.H, t, inst.cycles, inst.r, inst.g, inst.b, inst.particles);
+      else if (inst.phone === 3) drawSmokeSignal(inst.ctx, inst.W, inst.H, t, inst.cycles, inst.r, inst.g, inst.b);
+    }
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+});
+
+// ══════════════════════════════════════
+// CAROUSEL SWIPE
+// ══════════════════════════════════════
+function initCarousel(trackId, dotsId) {
+  const track = document.getElementById(trackId);
+  const dotsContainer = document.getElementById(dotsId);
+  const cards = track.querySelectorAll('.card');
+  const dots = dotsContainer.querySelectorAll('.dot');
+  let current = 0;
+  const cardW = 305 + 16; // card width + gap
+
+  function goTo(idx) {
+    idx = Math.max(0, Math.min(idx, cards.length - 1));
+    current = idx;
+    track.style.transform = `translateX(${-idx * cardW}px)`;
+    cards.forEach((c, i) => { i === idx ? c.classList.remove('inactive') : c.classList.add('inactive'); });
+    dots.forEach((d, i) => { i === idx ? d.classList.add('active') : d.classList.remove('active'); });
+  }
+
+  // Dot clicks
+  dots.forEach(d => d.addEventListener('click', () => goTo(parseInt(d.dataset.i))));
+
+  // Touch / mouse drag
+  let startX = 0, dragging = false, dragDelta = 0;
+
+  track.addEventListener('mousedown', e => { startX = e.clientX; dragging = true; track.classList.add('dragging'); });
+  track.addEventListener('touchstart', e => { startX = e.touches[0].clientX; dragging = true; track.classList.add('dragging'); }, { passive: true });
+
+  const onMove = x => { if (!dragging) return; dragDelta = x - startX; track.style.transform = `translateX(${-current * cardW + dragDelta}px)`; };
+  document.addEventListener('mousemove', e => onMove(e.clientX));
+  document.addEventListener('touchmove', e => onMove(e.touches[0].clientX), { passive: true });
+
+  const onEnd = () => {
+    if (!dragging) return;
+    dragging = false;
+    track.classList.remove('dragging');
+    if (Math.abs(dragDelta) > 60) goTo(current + (dragDelta < 0 ? 1 : -1));
+    else goTo(current);
+    dragDelta = 0;
+  };
+  document.addEventListener('mouseup', onEnd);
+  document.addEventListener('touchend', onEnd);
+
+  goTo(0);
+}
+
+initCarousel('track1', 'dots1');
+initCarousel('track2', 'dots2');
+initCarousel('track3', 'dots3');
+</script>
+
+</body>
+</html>

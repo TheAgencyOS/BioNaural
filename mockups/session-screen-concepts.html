@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — Session Screen Concepts (10 Variants)</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --canvas: #080C15;
+    --surface: #111520;
+    --surface-raised: #1A1F2E;
+    --divider: #1E2336;
+    --text-primary: #E2E6F0;
+    --text-secondary: rgba(226, 230, 240, 0.65);
+    --text-tertiary: rgba(226, 230, 240, 0.40);
+    --accent: #6E7CF7;
+    --focus: #5B6ABF;
+    --relaxation: #4EA8A6;
+    --sleep: #9080C4;
+    --sleep-tint: #C47040;
+    --energize: #F5A623;
+    --signal-calm: #4EA8A6;
+    --signal-elevated: #D4954A;
+    --signal-peak: #D46A5A;
+    --phone-w: 393px;
+    --phone-h: 852px;
+    --phone-radius: 55px;
+    --safe-top: 59px;
+    --safe-bottom: 34px;
+  }
+
+  body {
+    background: #050508;
+    font-family: 'Inter', -apple-system, sans-serif;
+    color: var(--text-primary);
+    padding: 40px 20px 80px;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+    color: var(--text-primary);
+  }
+  .page-sub {
+    text-align: center;
+    font-size: 15px;
+    color: var(--text-secondary);
+    margin-bottom: 60px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 60px 40px;
+    max-width: 1800px;
+    margin: 0 auto;
+    justify-items: center;
+  }
+
+  .concept {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .concept-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 6px;
+  }
+  .concept-desc {
+    font-size: 13px;
+    color: var(--text-tertiary);
+    margin-bottom: 16px;
+    text-align: center;
+    max-width: 380px;
+    line-height: 1.5;
+  }
+  .concept-winner {
+    background: linear-gradient(135deg, var(--accent), #9080C4);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 12px;
+  }
+
+  /* Phone frame */
+  .phone {
+    width: var(--phone-w);
+    height: var(--phone-h);
+    background: var(--canvas);
+    border-radius: var(--phone-radius);
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 0 0 2px #1a1a2a, 0 20px 60px rgba(0,0,0,0.6);
+  }
+
+  /* Dynamic Island */
+  .phone::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 37px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 100;
+  }
+
+  /* Home indicator */
+  .phone::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 139px;
+    height: 5px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 3px;
+    z-index: 100;
+  }
+
+  .screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* iOS Nav Bar */
+  .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px;
+    height: 44px;
+    margin-top: var(--safe-top);
+    z-index: 10;
+    flex-shrink: 0;
+  }
+  .nav-back {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
+  .nav-back svg { width: 12px; height: 20px; fill: none; stroke: var(--text-secondary); stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+  .nav-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.4px;
+  }
+  .nav-right {
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-right svg { width: 20px; height: 20px; fill: var(--text-secondary); }
+
+  /* Bottom bar */
+  .bottom-bar {
+    position: absolute;
+    bottom: var(--safe-bottom);
+    left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 32px;
+    padding: 0 20px;
+    height: 52px;
+    z-index: 10;
+  }
+  .bottom-bar .ctrl {
+    width: 44px; height: 44px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+  .bottom-bar .ctrl svg { width: 20px; height: 20px; fill: var(--text-secondary); }
+  .bottom-bar .ctrl-play {
+    width: 56px; height: 56px;
+    background: var(--surface-raised);
+    border: 1px solid rgba(255,255,255,0.08);
+  }
+  .bottom-bar .ctrl-play svg { width: 22px; height: 22px; fill: var(--text-primary); }
+  .bottom-bar .ctrl-stop svg { width: 18px; height: 18px; fill: var(--text-tertiary); }
+
+  /* Orb */
+  .orb-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+  .orb {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    position: relative;
+  }
+  .orb-glow {
+    position: absolute;
+    inset: -40px;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.15;
+  }
+  .orb-core {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    filter: blur(8px);
+    opacity: 0.3;
+  }
+
+  /* Wavelength line */
+  .wavelength {
+    position: absolute;
+    left: 0; right: 0;
+    height: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  /* Timer */
+  .timer {
+    font-family: 'SF Mono', 'Menlo', 'Courier New', monospace;
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    color: var(--text-primary);
+    opacity: 0.5;
+    text-align: center;
+  }
+
+  /* Frequency display */
+  .freq-display {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 15px;
+    font-weight: 500;
+    text-align: center;
+    opacity: 0.6;
+  }
+
+  /* Data pills */
+  .data-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 0 20px;
+  }
+  .data-pill {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .data-pill .icon { font-size: 11px; opacity: 0.5; }
+  .data-pill .val {
+    font-family: 'SF Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+  }
+  .data-pill .unit {
+    font-size: 11px;
+    color: var(--text-tertiary);
+    font-weight: 500;
+  }
+
+  /* Dropdowns / selectors */
+  .dropdown {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    border-radius: 12px;
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.06);
+    cursor: pointer;
+    font-size: 14px;
+    color: var(--text-primary);
+  }
+  .dropdown .chevron { font-size: 10px; color: var(--text-tertiary); margin-left: 4px; }
+
+  /* Mood selector */
+  .mood-selector {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    padding: 0 20px;
+  }
+  .mood-chip {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+    background: var(--surface);
+    border: 1px solid rgba(255,255,255,0.06);
+    color: var(--text-secondary);
+    cursor: pointer;
+  }
+  .mood-chip.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(110, 124, 247, 0.1);
+  }
+
+  /* Adaptation badge */
+  .adapt-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: rgba(110, 124, 247, 0.08);
+    border: 1px solid rgba(110, 124, 247, 0.15);
+    font-size: 12px;
+    color: var(--accent);
+    margin: 0 auto;
+  }
+  .adapt-badge .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* Sound selector sheet */
+  .sound-sheet {
+    background: var(--surface);
+    border-radius: 16px 16px 0 0;
+    padding: 16px 20px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .sound-option {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+  .sound-option:last-child { border-bottom: none; }
+  .sound-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+  }
+  .sound-name { font-size: 15px; font-weight: 500; }
+  .sound-desc { font-size: 12px; color: var(--text-tertiary); }
+
+  /* SVG wavelength paths */
+  .wave-svg { width: 100%; height: 100%; }
+  .wave-path { fill: none; stroke-width: 1.5; stroke-linecap: round; }
+
+  /* Mode label */
+  .mode-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-align: center;
+    opacity: 0.5;
+  }
+
+  /* Live data feed */
+  .live-feed {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 24px;
+  }
+  .live-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 0;
+  }
+  .live-label { font-size: 12px; color: var(--text-tertiary); font-weight: 500; }
+  .live-val {
+    font-family: 'SF Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  /* Sparkline mini chart */
+  .sparkline {
+    height: 40px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.02);
+    margin: 0 24px;
+    overflow: hidden;
+  }
+
+  /* AirPlay + controls bar */
+  .transport-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    height: 44px;
+  }
+  .transport-bar svg { width: 20px; height: 20px; fill: var(--text-tertiary); }
+
+  /* Circular progress */
+  .circle-progress {
+    width: 200px; height: 200px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .circle-progress svg {
+    position: absolute;
+    inset: 0;
+    transform: rotate(-90deg);
+  }
+  .circle-progress .inner {
+    text-align: center;
+  }
+
+  /* Horizontal mini-waveform */
+  .mini-wave {
+    height: 24px;
+    margin: 0 auto;
+    width: 200px;
+    opacity: 0.4;
+  }
+
+  .spacer { flex: 1; }
+  .gap-xs { height: 4px; }
+  .gap-sm { height: 8px; }
+  .gap-md { height: 12px; }
+  .gap-lg { height: 16px; }
+  .gap-xl { height: 24px; }
+  .gap-xxl { height: 32px; }
+</style>
+</head>
+<body>
+
+<h1>Session Screen — 10 Concepts</h1>
+<p class="page-sub">BioNaural · Focus / Sleep / Relaxation / Energize · Pixel-perfect iOS mockups</p>
+
+<div class="grid">
+
+<!-- ======================================== -->
+<!-- CONCEPT 1: MINIMAL VOID -->
+<!-- ======================================== -->
+<div class="concept">
+  <div class="concept-label">Concept 1</div>
+  <div class="concept-desc">Minimal Void — Maximum restraint. Orb, timer, nothing else. Data only on tap. "A dark room with one perfect light."</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="nav-bar">
+        <div class="nav-back"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nav-title">Focus</div>
+        <div class="nav-right">
+          <svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="10" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="16" r="2" fill="var(--text-secondary)"/></svg>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div style="text-align:center;">
+        <div class="mode-label" style="color: var(--focus);">Focus</div>
+      </div>
+      <div class="gap-xl"></div>
+
+      <div style="position:relative; height: 200px; display:flex; align-items:center; justify-content:center;">
+        <div class="orb">
+          <div class="orb-glow" style="background: var(--focus);"></div>
+          <div class="orb-core" style="background: radial-gradient(circle, var(--focus) 0%, transparent 70%);"></div>
+        </div>
+        <div class="wavelength">
+          <svg class="wave-svg" viewBox="0 0 393 60" preserveAspectRatio="none">
+            <path class="wave-path" stroke="var(--focus)" opacity="0.2" d="M0,30 Q50,10 98,30 T196,30 T294,30 T393,30"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="timer">24:15</div>
+      <div class="gap-lg"></div>
+      <div class="freq-display" style="color: var(--focus);">14.8 Hz</div>
+
+      <div class="spacer"></div>
+
+      <div class="bottom-bar">
+        <div class="ctrl"><svg viewBox="0 0 24 24"><path d="M5.636 5.636a1 1 0 000 1.414L10.586 12l-4.95 4.95a1 1 0 101.414 1.414L12 13.414l4.95 4.95a1 1 0 001.414-1.414L13.414 12l4.95-4.95a1 1 0 00-1.414-1.414L12 10.586l-4.95-4.95a1 1 0 00-1.414 0z"/></svg></div>
+        <div class="ctrl ctrl-play"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+        <div class="ctrl ctrl-stop"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- CONCEPT 2: LIVE BIOMETRIC DASHBOARD -->
+<!-- ======================================== -->
+<div class="concept">
+  <div class="concept-label">Concept 2</div>
+  <div class="concept-desc">Live Biometric Dashboard — Real-time HR, HRV, and adaptation data always visible. The Watch data is the star.</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="nav-bar">
+        <div class="nav-back"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nav-title">Focus</div>
+        <div class="nav-right">
+          <svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="10" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="16" r="2" fill="var(--text-secondary)"/></svg>
+        </div>
+      </div>
+
+      <div class="gap-sm"></div>
+
+      <!-- Live data pills -->
+      <div class="data-row">
+        <div class="data-pill">
+          <span class="icon">♥</span>
+          <span class="val" style="color: var(--signal-calm);">68</span>
+          <span class="unit">bpm</span>
+        </div>
+        <div class="data-pill">
+          <span class="icon">〰</span>
+          <span class="val" style="color: var(--accent);">52</span>
+          <span class="unit">ms HRV</span>
+        </div>
+        <div class="data-pill">
+          <span class="icon">↻</span>
+          <span class="val" style="color: var(--focus);">3</span>
+          <span class="unit">adapt.</span>
+        </div>
+      </div>
+
+      <div class="gap-sm"></div>
+
+      <!-- Mini sparkline -->
+      <div class="sparkline">
+        <svg width="100%" height="100%" viewBox="0 0 345 40" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="spark-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="var(--focus)" stop-opacity="0.15"/>
+              <stop offset="100%" stop-color="var(--focus)" stop-opacity="0"/>
+            </linearGradient>
+          </defs>
+          <path d="M0,35 L30,30 60,28 90,25 120,22 150,20 180,18 210,20 240,17 270,15 300,14 330,13 345,12" fill="none" stroke="var(--focus)" stroke-width="1.5"/>
+          <path d="M0,35 L30,30 60,28 90,25 120,22 150,20 180,18 210,20 240,17 270,15 300,14 330,13 345,12 L345,40 L0,40 Z" fill="url(#spark-fill)"/>
+        </svg>
+      </div>
+
+      <div style="position:relative; height: 220px; display:flex; align-items:center; justify-content:center;">
+        <div class="orb" style="width:120px; height:120px;">
+          <div class="orb-glow" style="background: var(--focus);"></div>
+          <div class="orb-core" style="background: radial-gradient(circle, var(--focus) 0%, transparent 70%);"></div>
+        </div>
+        <div class="wavelength">
+          <svg class="wave-svg" viewBox="0 0 393 60" preserveAspectRatio="none">
+            <path class="wave-path" stroke="var(--focus)" opacity="0.2" d="M0,30 Q33,15 66,30 T132,30 T198,30 T264,30 T330,30 T393,30"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timer">18:42</div>
+      <div class="gap-sm"></div>
+
+      <div class="adapt-badge">
+        <span class="dot"></span>
+        <span>Adapting · 14.8 Hz → 15.2 Hz</span>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="transport-bar">
+        <!-- AirPlay -->
+        <svg viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><polygon points="12,15 17,21 7,21" fill="var(--text-tertiary)"/></svg>
+        <svg viewBox="0 0 24 24" style="opacity:0"></svg>
+      </div>
+
+      <div class="bottom-bar">
+        <div class="ctrl"><svg viewBox="0 0 24 24"><path d="M15 3h6v6M14 10l6.1-6.1M9 21H3v-6M10 14l-6.1 6.1" fill="none" stroke="var(--text-secondary)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+        <div class="ctrl ctrl-play"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+        <div class="ctrl ctrl-stop"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- CONCEPT 3: CIRCULAR PROGRESS -->
+<!-- ======================================== -->
+<div class="concept">
+  <div class="concept-label">Concept 3</div>
+  <div class="concept-desc">Circular Progress — Timer as a ring around the Orb. Frequency inside. Apple Fitness-inspired but dark and minimal.</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="nav-bar">
+        <div class="nav-back"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nav-title">Sleep</div>
+        <div class="nav-right">
+          <svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="10" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="16" r="2" fill="var(--text-secondary)"/></svg>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div style="display:flex; justify-content:center;">
+        <div class="circle-progress">
+          <svg viewBox="0 0 200 200">
+            <circle cx="100" cy="100" r="90" fill="none" stroke="var(--surface)" stroke-width="3"/>
+            <circle cx="100" cy="100" r="90" fill="none" stroke="var(--sleep)" stroke-width="3" stroke-dasharray="565" stroke-dashoffset="170" stroke-linecap="round" opacity="0.6"/>
+          </svg>
+          <div class="orb" style="width:100px; height:100px; position:absolute;">
+            <div class="orb-glow" style="background: var(--sleep); inset:-30px;"></div>
+            <div class="orb-core" style="background: radial-gradient(circle, var(--sleep) 0%, transparent 70%);"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="gap-lg"></div>
+      <div class="timer" style="font-size: 42px; opacity: 0.6;">18:42</div>
+      <div class="gap-sm"></div>
+      <div class="mode-label" style="color: var(--sleep-tint);">Theta → Delta · 4.2 Hz</div>
+      <div class="gap-xl"></div>
+
+      <!-- Mood selector -->
+      <div style="padding: 0 24px;">
+        <div style="font-size: 11px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 8px;">Current mood</div>
+        <div class="mood-selector" style="justify-content: flex-start;">
+          <div class="mood-chip">Wired</div>
+          <div class="mood-chip">Uneasy</div>
+          <div class="mood-chip active">Settling</div>
+          <div class="mood-chip">Calm</div>
+          <div class="mood-chip">Drowsy</div>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="bottom-bar">
+        <div class="ctrl">
+          <!-- AirPlay -->
+          <svg viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/><polygon points="12,15 17,21 7,21" fill="var(--text-secondary)"/></svg>
+        </div>
+        <div class="ctrl ctrl-play"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+        <div class="ctrl ctrl-stop"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- CONCEPT 4: SOUND SELECTOR -->
+<!-- ======================================== -->
+<div class="concept">
+  <div class="concept-label">Concept 4</div>
+  <div class="concept-desc">Sound Selector — Ambient/melodic layer picker visible. User controls the soundscape. Session settings accessible mid-session.</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="nav-bar">
+        <div class="nav-back"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nav-title">Relaxation</div>
+        <div class="nav-right">
+          <svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="10" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="16" r="2" fill="var(--text-secondary)"/></svg>
+        </div>
+      </div>
+
+      <div class="gap-sm"></div>
+
+      <!-- Sound dropdowns -->
+      <div style="padding: 0 20px; display:flex; gap:8px;">
+        <div class="dropdown" style="flex:1;">
+          <span style="font-size:14px;">🌧</span>
+          <span>Rain</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div class="dropdown" style="flex:1;">
+          <span style="font-size:14px;">🎵</span>
+          <span>F Major Pad</span>
+          <span class="chevron">▼</span>
+        </div>
+      </div>
+
+      <div style="position:relative; height: 240px; display:flex; align-items:center; justify-content:center;">
+        <div class="orb" style="width:130px; height:130px;">
+          <div class="orb-glow" style="background: var(--relaxation);"></div>
+          <div class="orb-core" style="background: radial-gradient(circle, var(--relaxation) 0%, transparent 70%);"></div>
+        </div>
+        <div class="wavelength">
+          <svg class="wave-svg" viewBox="0 0 393 60" preserveAspectRatio="none">
+            <path class="wave-path" stroke="var(--relaxation)" opacity="0.15" d="M0,30 Q65,18 131,30 T262,30 T393,30"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timer">12:08</div>
+      <div class="gap-sm"></div>
+      <div class="freq-display" style="color: var(--relaxation);">10.0 Hz · Alpha</div>
+
+      <div class="gap-xl"></div>
+
+      <!-- Volume sliders -->
+      <div style="padding: 0 28px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:12px; color:var(--text-tertiary); font-weight:500;">Ambient</span>
+          <div style="flex:1; margin:0 12px; height:3px; border-radius:2px; background:var(--surface-raised); position:relative;">
+            <div style="width:70%; height:100%; border-radius:2px; background:var(--relaxation); opacity:0.5;"></div>
+          </div>
+          <span style="font-family:monospace; font-size:12px; color:var(--text-tertiary);">70%</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:12px; color:var(--text-tertiary); font-weight:500;">Melodic</span>
+          <div style="flex:1; margin:0 12px; height:3px; border-radius:2px; background:var(--surface-raised); position:relative;">
+            <div style="width:45%; height:100%; border-radius:2px; background:var(--relaxation); opacity:0.5;"></div>
+          </div>
+          <span style="font-family:monospace; font-size:12px; color:var(--text-tertiary);">45%</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:12px; color:var(--text-tertiary); font-weight:500;">Beats</span>
+          <div style="flex:1; margin:0 12px; height:3px; border-radius:2px; background:var(--surface-raised); position:relative;">
+            <div style="width:30%; height:100%; border-radius:2px; background:var(--relaxation); opacity:0.5;"></div>
+          </div>
+          <span style="font-family:monospace; font-size:12px; color:var(--text-tertiary);">30%</span>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="bottom-bar">
+        <div class="ctrl"><svg viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/><polygon points="12,15 17,21 7,21" fill="var(--text-secondary)"/></svg></div>
+        <div class="ctrl ctrl-play"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+        <div class="ctrl ctrl-stop"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- CONCEPT 5: ENERGIZE COMMAND CENTER -->
+<!-- ======================================== -->
+<div class="concept">
+  <div class="concept-label">Concept 5</div>
+  <div class="concept-desc">Energize Command Center — Phase indicator, HR ceiling gauge, safety status. Mission-control energy for the activating mode.</div>
+  <div class="phone">
+    <div class="screen" style="background: linear-gradient(180deg, rgba(245,166,35,0.03) 0%, var(--canvas) 40%);">
+      <div class="nav-bar">
+        <div class="nav-back"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nav-title">Energize</div>
+        <div class="nav-right">
+          <svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="10" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="16" r="2" fill="var(--text-secondary)"/></svg>
+        </div>
+      </div>
+
+      <!-- Phase indicator -->
+      <div style="display:flex; justify-content:center; gap:4px; padding: 8px 40px;">
+        <div style="flex:1; height:3px; border-radius:2px; background:var(--energize); opacity:0.8;"></div>
+        <div style="flex:1; height:3px; border-radius:2px; background:var(--energize); opacity:0.8;"></div>
+        <div style="flex:2; height:3px; border-radius:2px; background:var(--energize); opacity:0.3;"></div>
+        <div style="flex:1; height:3px; border-radius:2px; background:var(--signal-calm); opacity:0.15;"></div>
+      </div>
+      <div style="text-align:center; font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--energize); opacity:0.7;">Ramping · Phase 2 of 4</div>
+
+      <div class="gap-sm"></div>
+
+      <!-- HR + Safety row -->
+      <div class="data-row">
+        <div class="data-pill">
+          <span class="icon">♥</span>
+          <span class="val" style="color: var(--signal-elevated);">92</span>
+          <span class="unit">bpm</span>
+        </div>
+        <div class="data-pill" style="border-color: rgba(78, 168, 166, 0.2);">
+          <span class="dot" style="width:6px;height:6px;border-radius:50%;background:var(--signal-calm);"></span>
+          <span class="val" style="color: var(--signal-calm); font-size:12px;">Safe</span>
+        </div>
+        <div class="data-pill">
+          <span class="icon">⬆</span>
+          <span class="val" style="color: var(--energize);">22.4</span>
+          <span class="unit">Hz</span>
+        </div>
+      </div>
+
+      <div style="position:relative; height: 200px; display:flex; align-items:center; justify-content:center;">
+        <div class="orb" style="width:120px; height:120px;">
+          <div class="orb-glow" style="background: var(--energize); inset:-50px; opacity:0.2;"></div>
+          <div class="orb-core" style="background: radial-gradient(circle, var(--energize) 0%, transparent 70%); opacity:0.4;"></div>
+        </div>
+        <div class="wavelength">
+          <svg class="wave-svg" viewBox="0 0 393 60" preserveAspectRatio="none">
+            <path class="wave-path" stroke="var(--energize)" stroke-width="2" opacity="0.25" d="M0,30 Q20,15 40,30 T80,30 T120,30 T160,30 T200,30 T240,30 T280,30 T320,30 T360,30 T393,30"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timer" style="font-size: 42px;">6:18</div>
+      <div class="gap-xs"></div>
+
+      <!-- HR ceiling gauge -->
+      <div style="padding: 0 40px;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span style="font-size:11px; color:var(--text-tertiary);">HR Ceiling</span>
+          <span style="font-family:monospace; font-size:11px; color:var(--signal-elevated);">92 / 130 bpm</span>
+        </div>
+        <div style="height:4px; border-radius:2px; background:var(--surface-raised);">
+          <div style="width:71%; height:100%; border-radius:2px; background: linear-gradient(90deg, var(--signal-calm), var(--signal-elevated));"></div>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="bottom-bar">
+        <div class="ctrl"><svg viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/><polygon points="12,15 17,21 7,21" fill="var(--text-secondary)"/></svg></div>
+        <div class="ctrl ctrl-play"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+        <div class="ctrl ctrl-stop"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- CONCEPT 6: LAYERED DEPTH -->
+<!-- ======================================== -->
+<div class="concept">
+  <div class="concept-label">Concept 6</div>
+  <div class="concept-desc">Layered Depth — Three audio layers visible as stacked wave lines (binaural/ambient/melodic). Each has its own opacity and color. You see the mix.</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="nav-bar">
+        <div class="nav-back"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nav-title">Focus</div>
+        <div class="nav-right">
+          <svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="10" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="16" r="2" fill="var(--text-secondary)"/></svg>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- Three layered waves -->
+      <div style="position:relative; height: 300px; display:flex; align-items:center; justify-content:center;">
+        <!-- Ambient layer (widest, slowest) -->
+        <svg style="position:absolute;left:0;right:0;top:25%;height:50%;" viewBox="0 0 393 60" preserveAspectRatio="none">
+          <path d="M0,30 Q98,15 196,30 T393,30" fill="none" stroke="var(--signal-calm)" stroke-width="1" opacity="0.12"/>
+        </svg>
+        <!-- Melodic layer (medium) -->
+        <svg style="position:absolute;left:0;right:0;top:30%;height:40%;" viewBox="0 0 393 60" preserveAspectRatio="none">
+          <path d="M0,30 Q50,20 100,30 T200,30 T300,30 T393,30" fill="none" stroke="var(--accent)" stroke-width="1.2" opacity="0.15"/>
+        </svg>
+        <!-- Binaural layer (tightest) -->
+        <svg style="position:absolute;left:0;right:0;top:35%;height:30%;" viewBox="0 0 393 60" preserveAspectRatio="none">
+          <path d="M0,30 Q33,18 66,30 T132,30 T198,30 T264,30 T330,30 T393,30" fill="none" stroke="var(--focus)" stroke-width="1.5" opacity="0.25"/>
+        </svg>
+
+        <div class="orb" style="width:100px; height:100px;">
+          <div class="orb-glow" style="background: var(--focus); inset:-30px;"></div>
+          <div class="orb-core" style="background: radial-gradient(circle, var(--focus) 0%, transparent 70%);"></div>
+        </div>
+      </div>
+
+      <!-- Layer legend -->
+      <div style="display:flex; justify-content:center; gap:16px;">
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:12px;height:2px;border-radius:1px;background:var(--signal-calm);opacity:0.5;"></div><span style="font-size:11px;color:var(--text-tertiary);">Ambient</span></div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:12px;height:2px;border-radius:1px;background:var(--accent);opacity:0.5;"></div><span style="font-size:11px;color:var(--text-tertiary);">Melodic</span></div>
+        <div style="display:flex;align-items:center;gap:5px;"><div style="width:12px;height:2px;border-radius:1px;background:var(--focus);opacity:0.5;"></div><span style="font-size:11px;color:var(--text-tertiary);">Binaural</span></div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="timer">21:33</div>
+      <div class="gap-sm"></div>
+      <div class="freq-display" style="color: var(--focus);">15.0 Hz</div>
+
+      <div class="spacer"></div>
+
+      <div class="bottom-bar">
+        <div class="ctrl"><svg viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/><polygon points="12,15 17,21 7,21" fill="var(--text-secondary)"/></svg></div>
+        <div class="ctrl ctrl-play"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+        <div class="ctrl ctrl-stop"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- CONCEPT 7: FULL CONTROL PANEL -->
+<!-- ======================================== -->
+<div class="concept">
+  <div class="concept-label">Concept 7</div>
+  <div class="concept-desc">Full Control Panel — Sound picker, mood, volume, frequency, all accessible. Power-user mode. Swipe up for more.</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="nav-bar">
+        <div class="nav-back"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nav-title">Relaxation</div>
+        <div class="nav-right">
+          <svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="10" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="16" r="2" fill="var(--text-secondary)"/></svg>
+        </div>
+      </div>
+
+      <div style="position:relative; height: 180px; display:flex; align-items:center; justify-content:center;">
+        <div class="orb" style="width:100px; height:100px;">
+          <div class="orb-glow" style="background: var(--relaxation); inset:-25px;"></div>
+          <div class="orb-core" style="background: radial-gradient(circle, var(--relaxation) 0%, transparent 70%);"></div>
+        </div>
+        <div class="wavelength" style="height:40px;">
+          <svg class="wave-svg" viewBox="0 0 393 40" preserveAspectRatio="none">
+            <path class="wave-path" stroke="var(--relaxation)" opacity="0.15" d="M0,20 Q65,10 131,20 T262,20 T393,20"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="timer" style="font-size:28px;">8:45</div>
+      <div class="gap-xs"></div>
+      <div class="freq-display" style="color: var(--relaxation); font-size:13px;">10.0 Hz · Alpha</div>
+
+      <div class="gap-lg"></div>
+
+      <!-- Control panel -->
+      <div style="padding: 0 16px;">
+        <div style="background:var(--surface); border-radius:16px; padding:16px; border:1px solid rgba(255,255,255,0.04);">
+
+          <!-- Sound row -->
+          <div style="display:flex; gap:8px; margin-bottom:12px;">
+            <div class="dropdown" style="flex:1; background:var(--surface-raised);">
+              <span>🌊</span><span style="font-size:13px;">Ocean</span><span class="chevron">▼</span>
+            </div>
+            <div class="dropdown" style="flex:1; background:var(--surface-raised);">
+              <span>🎹</span><span style="font-size:13px;">Deep Pad</span><span class="chevron">▼</span>
+            </div>
+          </div>
+
+          <!-- Mood -->
+          <div style="font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:6px;">Mood</div>
+          <div style="display:flex; gap:6px; margin-bottom:14px; flex-wrap:wrap;">
+            <div class="mood-chip" style="font-size:12px; padding:5px 12px;">Wired</div>
+            <div class="mood-chip" style="font-size:12px; padding:5px 12px;">Uneasy</div>
+            <div class="mood-chip active" style="font-size:12px; padding:5px 12px; border-color:var(--relaxation); color:var(--relaxation); background:rgba(78,168,166,0.1);">Settling</div>
+            <div class="mood-chip" style="font-size:12px; padding:5px 12px;">Calm</div>
+          </div>
+
+          <!-- Volume -->
+          <div style="font-size:11px; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:8px;">Mix</div>
+          <div style="display:flex; gap:12px; align-items:center; margin-bottom:6px;">
+            <span style="font-size:11px; color:var(--text-tertiary); width:50px;">Ambient</span>
+            <div style="flex:1; height:3px; border-radius:2px; background:var(--surface-raised);"><div style="width:65%; height:100%; border-radius:2px; background:var(--relaxation); opacity:0.4;"></div></div>
+          </div>
+          <div style="display:flex; gap:12px; align-items:center; margin-bottom:6px;">
+            <span style="font-size:11px; color:var(--text-tertiary); width:50px;">Melodic</span>
+            <div style="flex:1; height:3px; border-radius:2px; background:var(--surface-raised);"><div style="width:40%; height:100%; border-radius:2px; background:var(--relaxation); opacity:0.4;"></div></div>
+          </div>
+          <div style="display:flex; gap:12px; align-items:center;">
+            <span style="font-size:11px; color:var(--text-tertiary); width:50px;">Beats</span>
+            <div style="flex:1; height:3px; border-radius:2px; background:var(--surface-raised);"><div style="width:25%; height:100%; border-radius:2px; background:var(--relaxation); opacity:0.4;"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="bottom-bar">
+        <div class="ctrl"><svg viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/><polygon points="12,15 17,21 7,21" fill="var(--text-secondary)"/></svg></div>
+        <div class="ctrl ctrl-play"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+        <div class="ctrl ctrl-stop"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- CONCEPT 8: IMMERSIVE SLEEP -->
+<!-- ======================================== -->
+<div class="concept">
+  <div class="concept-label">Concept 8</div>
+  <div class="concept-desc">Immersive Sleep — Almost nothing on screen. Warm amber tint. Timer fades. Screen dims to near-black. Tap to peek. Circadian-friendly.</div>
+  <div class="phone">
+    <div class="screen" style="background: linear-gradient(180deg, rgba(196,112,64,0.04) 0%, var(--canvas) 50%);">
+      <div class="nav-bar">
+        <div class="nav-back" style="opacity:0.3;"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nav-title" style="opacity:0.3;">Sleep</div>
+        <div class="nav-right" style="opacity:0;"></div>
+      </div>
+
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+
+      <div style="position:relative; height: 200px; display:flex; align-items:center; justify-content:center;">
+        <div class="orb" style="width:80px; height:80px;">
+          <div class="orb-glow" style="background: var(--sleep-tint); inset:-60px; opacity:0.06;"></div>
+          <div class="orb-core" style="background: radial-gradient(circle, var(--sleep-tint) 0%, transparent 70%); opacity:0.15;"></div>
+        </div>
+        <div class="wavelength" style="height:40px;">
+          <svg class="wave-svg" viewBox="0 0 393 40" preserveAspectRatio="none">
+            <path class="wave-path" stroke="var(--sleep-tint)" opacity="0.06" d="M0,20 Q131,14 262,20 T393,20"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <div class="timer" style="opacity: 0.15; color: var(--sleep-tint);">42:10</div>
+      <div class="gap-sm"></div>
+      <div style="text-align:center; font-family:monospace; font-size:12px; color:var(--sleep-tint); opacity:0.1;">3.8 Hz · Deep theta</div>
+
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+      <div class="spacer"></div>
+
+      <div style="text-align:center; font-size:11px; color:var(--sleep-tint); opacity:0.1; padding-bottom:60px;">Tap anywhere to peek</div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- CONCEPT 9: DATA FIRST -->
+<!-- ======================================== -->
+<div class="concept">
+  <div class="concept-label">Concept 9</div>
+  <div class="concept-desc">Data First — Biometric data prominent, Orb secondary. For users who want to see the science working. Live feed from wearable front and center.</div>
+  <div class="phone">
+    <div class="screen">
+      <div class="nav-bar">
+        <div class="nav-back"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nav-title">Focus</div>
+        <div class="nav-right">
+          <svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="10" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="16" r="2" fill="var(--text-secondary)"/></svg>
+        </div>
+      </div>
+
+      <div class="gap-sm"></div>
+
+      <!-- Big HR display -->
+      <div style="text-align:center;">
+        <div style="font-family:monospace; font-size:56px; font-weight:300; color:var(--signal-calm); letter-spacing:2px;">68</div>
+        <div style="font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-tertiary);">Heart Rate · BPM</div>
+      </div>
+
+      <div class="gap-md"></div>
+
+      <!-- Live data feed -->
+      <div class="live-feed">
+        <div class="live-row">
+          <span class="live-label">HRV (RMSSD)</span>
+          <span class="live-val" style="color:var(--accent);">52 ms</span>
+        </div>
+        <div style="height:1px; background:rgba(255,255,255,0.04);"></div>
+        <div class="live-row">
+          <span class="live-label">Beat Frequency</span>
+          <span class="live-val" style="color:var(--focus);">14.8 Hz</span>
+        </div>
+        <div style="height:1px; background:rgba(255,255,255,0.04);"></div>
+        <div class="live-row">
+          <span class="live-label">Carrier</span>
+          <span class="live-val" style="color:var(--text-secondary);">375 Hz</span>
+        </div>
+        <div style="height:1px; background:rgba(255,255,255,0.04);"></div>
+        <div class="live-row">
+          <span class="live-label">Biometric State</span>
+          <span class="live-val" style="color:var(--signal-calm);">Focused</span>
+        </div>
+        <div style="height:1px; background:rgba(255,255,255,0.04);"></div>
+        <div class="live-row">
+          <span class="live-label">Adaptations</span>
+          <span class="live-val" style="color:var(--accent);">3</span>
+        </div>
+      </div>
+
+      <div class="gap-md"></div>
+
+      <!-- Small orb -->
+      <div style="display:flex; justify-content:center;">
+        <div class="orb" style="width:60px; height:60px;">
+          <div class="orb-glow" style="background: var(--focus); inset:-15px; opacity:0.1;"></div>
+          <div class="orb-core" style="background: radial-gradient(circle, var(--focus) 0%, transparent 70%); opacity:0.25;"></div>
+        </div>
+      </div>
+
+      <div class="gap-sm"></div>
+      <div class="timer" style="font-size:24px;">18:42</div>
+
+      <div class="spacer"></div>
+
+      <div class="bottom-bar">
+        <div class="ctrl"><svg viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1" fill="none" stroke="var(--text-secondary)" stroke-width="1.5"/><polygon points="12,15 17,21 7,21" fill="var(--text-secondary)"/></svg></div>
+        <div class="ctrl ctrl-play"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+        <div class="ctrl ctrl-stop"><svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================================== -->
+<!-- CONCEPT 10: THE HYBRID (RECOMMENDED) -->
+<!-- ======================================== -->
+<div class="concept">
+  <div class="concept-label">Concept 10 — Recommended</div>
+  <div class="concept-desc">The Hybrid — Orb-centered but with contextual data. Sound picker in nav dropdown. Biometrics as subtle pills. Mood accessible but not forced. Best of all worlds.</div>
+  <div class="phone">
+    <div class="screen" style="background: radial-gradient(ellipse at 50% 35%, rgba(91,106,191,0.06) 0%, var(--canvas) 60%);">
+      <div class="nav-bar">
+        <div class="nav-back"><svg viewBox="0 0 12 20"><polyline points="10,2 2,10 10,18"/></svg></div>
+        <div class="nav-title">Focus</div>
+        <div class="nav-right">
+          <!-- Overflow menu -->
+          <svg viewBox="0 0 20 20"><circle cx="10" cy="4" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="10" r="2" fill="var(--text-secondary)"/><circle cx="10" cy="16" r="2" fill="var(--text-secondary)"/></svg>
+        </div>
+      </div>
+
+      <!-- Compact sound + biometric row -->
+      <div style="display:flex; justify-content:space-between; align-items:center; padding:4px 20px;">
+        <div class="dropdown" style="padding:5px 10px; font-size:13px; background:rgba(255,255,255,0.03); border-color:rgba(255,255,255,0.05);">
+          <span>🌧</span>
+          <span>Rain · Deep Pad</span>
+          <span class="chevron">▼</span>
+        </div>
+        <div style="display:flex; gap:4px;">
+          <div class="data-pill" style="padding:4px 8px;">
+            <span style="font-size:10px; color:var(--signal-calm);">♥</span>
+            <span class="val" style="font-size:12px; color:var(--signal-calm);">68</span>
+          </div>
+          <div class="data-pill" style="padding:4px 8px;">
+            <span style="font-size:10px; color:var(--accent);">〰</span>
+            <span class="val" style="font-size:12px; color:var(--accent);">52</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- Adaptation badge (contextual, not always visible) -->
+      <div class="adapt-badge" style="margin-bottom:-8px;">
+        <span class="dot"></span>
+        <span>Adapted · 14.8 → 15.2 Hz</span>
+      </div>
+
+      <div class="gap-lg"></div>
+
+      <!-- Orb + wavelength -->
+      <div style="position:relative; height: 240px; display:flex; align-items:center; justify-content:center;">
+        <div class="orb" style="width:150px; height:150px;">
+          <div class="orb-glow" style="background: var(--focus); inset:-50px;"></div>
+          <div class="orb-core" style="background: radial-gradient(circle, var(--focus) 0%, transparent 70%); opacity:0.35;"></div>
+        </div>
+        <div class="wavelength">
+          <svg class="wave-svg" viewBox="0 0 393 60" preserveAspectRatio="none">
+            <path class="wave-path" stroke="var(--focus)" opacity="0.2" d="M0,30 Q33,18 66,30 T132,30 T198,30 T264,30 T330,30 T393,30"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- Timer + frequency -->
+      <div class="timer" style="font-size:40px;">18:42</div>
+      <div class="gap-xs"></div>
+      <div style="text-align:center;">
+        <span style="font-family:monospace; font-size:14px; font-weight:500; color:var(--focus); opacity:0.6;">15.2 Hz</span>
+        <span style="font-size:12px; color:var(--text-tertiary); margin-left:4px;">· Beta</span>
+      </div>
+
+      <div class="spacer"></div>
+
+      <!-- Transport: AirPlay + controls -->
+      <div style="display:flex; align-items:center; justify-content:space-between; padding:0 20px; margin-bottom:4px;">
+        <!-- AirPlay -->
+        <div class="ctrl" style="width:40px;height:40px;">
+          <svg viewBox="0 0 24 24"><path d="M5 17H4a2 2 0 01-2-2V5a2 2 0 012-2h16a2 2 0 012 2v10a2 2 0 01-2 2h-1" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><polygon points="12,15 17,21 7,21" fill="var(--text-tertiary)"/></svg>
+        </div>
+
+        <!-- Center controls -->
+        <div style="display:flex; align-items:center; gap:24px;">
+          <div class="ctrl"><svg viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M15 3h6v6M14 10l6.1-6.1M9 21H3v-6M10 14l-6.1 6.1" fill="none" stroke="var(--text-secondary)" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+          <div class="ctrl ctrl-play"><svg viewBox="0 0 24 24"><path d="M6 4h4v16H6zM14 4h4v16h-4z"/></svg></div>
+          <div class="ctrl ctrl-stop"><svg viewBox="0 0 24 24" style="width:16px;height:16px;"><rect x="6" y="6" width="12" height="12" rx="2"/></svg></div>
+        </div>
+
+        <!-- Lock -->
+        <div class="ctrl" style="width:40px;height:40px;">
+          <svg viewBox="0 0 24 24" style="width:18px;height:18px;"><rect x="3" y="11" width="18" height="11" rx="2" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/><path d="M7 11V7a5 5 0 0110 0v4" fill="none" stroke="var(--text-tertiary)" stroke-width="1.5"/></svg>
+        </div>
+      </div>
+
+      <div style="height: var(--safe-bottom);"></div>
+    </div>
+  </div>
+  <div class="concept-winner">★ Strongest Design</div>
+</div>
+
+</div><!-- /grid -->
+
+<div style="text-align:center; margin-top:80px; padding:40px;">
+  <h2 style="font-size:24px; font-weight:300; margin-bottom:12px;">Recommendation</h2>
+  <p style="max-width:600px; margin:0 auto; font-size:15px; color:var(--text-secondary); line-height:1.6;">
+    <strong style="color:var(--accent);">Concept 10 (The Hybrid)</strong> is the strongest because it follows the design language principle — "earned information" — while giving users contextual access to everything. The Orb is the hero. Data is present but doesn't compete. Sound selection is one tap away. Biometrics are glanceable pills, not a dashboard. The adaptation badge only appears when something happens. And the transport bar includes AirPlay + lock — native iOS controls users expect.
+  </p>
+  <p style="max-width:600px; margin:16px auto 0; font-size:13px; color:var(--text-tertiary); line-height:1.5;">
+    Concept 5 (Energize Command Center) should be the Energize-specific variant — it needs the phase indicator and safety gauge that other modes don't. Concept 8 (Immersive Sleep) should be the Sleep-specific variant — almost nothing on screen, warm tint, auto-dim.
+  </p>
+</div>
+
+</body>
+</html>

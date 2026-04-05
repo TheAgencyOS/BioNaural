@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — Home Background Depth Concepts</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root {
+    --canvas: #080C15;
+    --surface: #111520;
+    --surface-raised: #1A1F2E;
+    --text-primary: #E2E6F0;
+    --text-secondary: rgba(226,230,240,0.55);
+    --text-tertiary: rgba(226,230,240,0.30);
+    --accent: #6E7CF7;
+    --focus: #5B6ABF;
+    --relaxation: #4EA8A6;
+    --sleep: #9080C4;
+    --energize: #F5A623;
+    --pw: 393px; --ph: 852px; --pr: 55px;
+    --st: 59px; --sb: 34px;
+  }
+  body { background:#050508; font-family:'Inter',-apple-system,sans-serif; color:var(--text-primary); padding:40px 20px 80px; }
+  h1 { text-align:center; font-size:28px; font-weight:300; margin-bottom:6px; }
+  .ps { text-align:center; font-size:14px; color:var(--text-secondary); margin-bottom:60px; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(420px,1fr)); gap:60px 40px; max-width:1800px; margin:0 auto; justify-items:center; }
+  .concept { display:flex; flex-direction:column; align-items:center; }
+  .cl { font-size:12px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--accent); margin-bottom:6px; }
+  .cd { font-size:13px; color:var(--text-tertiary); margin-bottom:16px; text-align:center; max-width:400px; line-height:1.5; }
+  .phone { width:var(--pw); height:var(--ph); background:var(--canvas); border-radius:var(--pr); position:relative; overflow:hidden; box-shadow:0 0 0 2px #1a1a2a, 0 20px 60px rgba(0,0,0,0.6); }
+  .phone::before { content:''; position:absolute; top:12px; left:50%; transform:translateX(-50%); width:126px; height:37px; background:#000; border-radius:20px; z-index:100; }
+  .phone::after { content:''; position:absolute; bottom:8px; left:50%; transform:translateX(-50%); width:139px; height:5px; background:rgba(255,255,255,0.15); border-radius:3px; z-index:100; }
+  .scr { position:absolute; inset:0; overflow:hidden; }
+
+  /* Shared UI chrome */
+  .nav { display:flex; align-items:center; justify-content:space-between; padding:0 20px; height:44px; margin-top:var(--st); position:relative; z-index:10; }
+  .nav-title { font-size:17px; font-weight:600; letter-spacing:-0.4px; }
+  .nav-btn { font-size:13px; color:var(--text-secondary); }
+  .nav-icon { width:20px; height:20px; fill:var(--text-secondary); }
+
+  /* Biometric strip */
+  .bio { display:flex; margin:16px 20px; padding:12px 0; background:var(--surface); border-radius:14px; position:relative; z-index:10; }
+  .bio-col { flex:1; text-align:center; }
+  .bio-val { font-family:'SF Mono','Menlo',monospace; font-size:18px; font-weight:500; }
+  .bio-label { font-size:10px; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; color:var(--text-tertiary); margin-top:2px; }
+  .bio-sep { width:1px; background:rgba(255,255,255,0.06); margin:4px 0; }
+
+  /* Card mock */
+  .card-area { padding:0 20px; position:relative; z-index:10; margin-top:12px; }
+  .card {
+    width:100%; height:310px; border-radius:24px; position:relative; overflow:hidden;
+  }
+  .card-gradient { position:absolute; inset:0; }
+  .card-content { position:absolute; inset:0; padding:28px; display:flex; flex-direction:column; }
+  .card-band { font-size:11px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; color:var(--text-tertiary); }
+  .card-title { font-size:34px; font-weight:300; letter-spacing:-0.5px; margin-top:4px; }
+  .card-desc { font-size:15px; color:var(--text-secondary); line-height:1.5; margin-top:auto; }
+  .card-bottom { display:flex; align-items:center; justify-content:space-between; margin-top:16px; }
+  .card-freq { font-family:'SF Mono','Menlo',monospace; font-size:12px; color:var(--text-tertiary); letter-spacing:0.5px; }
+  .card-play { width:48px; height:48px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+  .card-play svg { width:16px; height:16px; fill:white; margin-left:2px; }
+
+  /* Info button */
+  .info-btn { position:absolute; top:20px; right:20px; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; font-size:12px; color:var(--text-secondary); }
+
+  /* Dots */
+  .dots { display:flex; justify-content:center; gap:6px; margin-top:20px; position:relative; z-index:10; }
+  .dot { height:6px; border-radius:3px; }
+  .dot-active { width:24px; background:var(--accent); }
+  .dot-inactive { width:6px; background:rgba(255,255,255,0.12); }
+
+  /* Watch status */
+  .watch { display:flex; align-items:center; justify-content:center; gap:6px; margin-top:20px; position:relative; z-index:10; }
+  .watch-dot { width:5px; height:5px; border-radius:50%; background:rgba(0,200,0,0.5); }
+  .watch-text { font-size:12px; color:var(--text-secondary); }
+
+  /* Tab bar */
+  .tabbar { position:absolute; bottom:0; left:0; right:0; height:83px; background:rgba(17,21,32,0.85); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); border-top:1px solid rgba(255,255,255,0.04); display:flex; align-items:flex-start; justify-content:space-around; padding-top:10px; z-index:50; }
+  .tab { display:flex; flex-direction:column; align-items:center; gap:3px; }
+  .tab svg { width:22px; height:22px; }
+  .tab-label { font-size:10px; font-weight:500; }
+  .tab-active svg { fill:var(--accent); }
+  .tab-active .tab-label { color:var(--accent); }
+  .tab-inactive svg { fill:var(--text-tertiary); }
+  .tab-inactive .tab-label { color:var(--text-tertiary); }
+
+  /* ---- BACKGROUND EFFECT LAYERS ---- */
+
+  /* Grain overlay */
+  .grain {
+    position:absolute; inset:0; z-index:2; pointer-events:none; opacity:0.035;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 128px 128px;
+  }
+
+  /* Radial glow */
+  .glow { position:absolute; border-radius:50%; filter:blur(80px); z-index:1; pointer-events:none; }
+
+  /* Bokeh circles */
+  .bokeh { position:absolute; border-radius:50%; z-index:1; pointer-events:none; }
+
+  /* Particles (CSS animated) */
+  .particle {
+    position:absolute; border-radius:50%; z-index:3; pointer-events:none;
+    animation: drift linear infinite;
+  }
+  @keyframes drift {
+    0% { transform: translateY(0) translateX(0); opacity:0; }
+    10% { opacity:1; }
+    90% { opacity:1; }
+    100% { transform: translateY(-120px) translateX(30px); opacity:0; }
+  }
+
+  /* Aurora shimmer band */
+  .shimmer-band {
+    position:absolute; z-index:2; pointer-events:none;
+    background:linear-gradient(135deg, transparent 30%, rgba(255,255,255,0.03) 50%, transparent 70%);
+    animation: shimmer-move 8s ease-in-out infinite;
+  }
+  @keyframes shimmer-move {
+    0% { transform:translateX(-100%) translateY(-100%); }
+    100% { transform:translateX(100%) translateY(100%); }
+  }
+
+  .divider { width:100%; height:1px; background:rgba(110,124,247,0.08); margin:60px 0; }
+  .section-title { text-align:center; font-size:20px; font-weight:500; color:var(--accent); margin-bottom:8px; }
+  .section-desc { text-align:center; font-size:13px; color:var(--text-tertiary); margin-bottom:40px; max-width:600px; margin-left:auto; margin-right:auto; line-height:1.5; }
+  .fave-badge { display:inline-block; background:rgba(110,124,247,0.15); border:1px solid rgba(110,124,247,0.3); color:var(--accent); font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:4px 12px; border-radius:100px; margin-top:8px; }
+</style>
+</head>
+<body>
+
+<h1>Home Background — Depth Concepts</h1>
+<p class="ps">Six approaches to breaking the flat dark canvas. Each phone shows Focus mode active.</p>
+
+<div class="grid">
+
+<!-- ============================== -->
+<!-- A: FLAT BASELINE (current) -->
+<!-- ============================== -->
+<div class="concept">
+  <div class="cl">A — Current (Flat)</div>
+  <div class="cd">Baseline for comparison. Pure #080C15 canvas with no depth treatment.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <div class="nav">
+        <div class="nav-btn">😐 Neutral</div>
+        <div class="nav-title">BioNaural</div>
+        <svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg>
+      </div>
+
+      <div class="bio">
+        <div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div>
+        <div class="bio-sep"></div>
+        <div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div>
+        <div class="bio-sep"></div>
+        <div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div>
+      </div>
+
+      <div class="card-area">
+        <div class="card">
+          <div class="card-gradient" style="background:linear-gradient(135deg, rgba(91,106,191,0.15) 0%, rgba(17,21,32,0.8) 50%, var(--canvas) 100%);"></div>
+          <!-- Wave SVG -->
+          <svg style="position:absolute; top:50%; left:0; right:0; transform:translateY(-50%); opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120">
+            <path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/>
+          </svg>
+          <div class="info-btn">i</div>
+          <div class="card-content">
+            <div class="card-band">Beta frequency</div>
+            <div class="card-title">Focus</div>
+            <div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div>
+            <div class="card-bottom">
+              <div class="card-freq">Beta 14–16 Hz</div>
+              <div class="card-play" style="background:var(--focus); box-shadow:0 0 20px rgba(91,106,191,0.4);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+
+      <div class="tabbar">
+        <div class="tab tab-active"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg><span class="tab-label">Home</span></div>
+        <div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg><span class="tab-label">Explore</span></div>
+        <div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg><span class="tab-label">History</span></div>
+        <div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg><span class="tab-label">Settings</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- B: MODE-REACTIVE GLOW -->
+<!-- ============================== -->
+<div class="concept">
+  <div class="cl">B — Mode-Reactive Glow</div>
+  <div class="cd">Soft radial bloom behind the card area shifts to the active mode's color. The canvas breathes.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <!-- Mode glow — large soft bloom anchored behind card -->
+      <div class="glow" style="width:500px; height:500px; top:180px; left:50%; margin-left:-250px; background:var(--focus); opacity:0.06;"></div>
+      <div class="glow" style="width:300px; height:300px; top:280px; left:50%; margin-left:-150px; background:var(--focus); opacity:0.04; filter:blur(60px);"></div>
+
+      <div class="nav"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(91,106,191,0.15) 0%, rgba(17,21,32,0.8) 50%, var(--canvas) 100%);"></div><svg style="position:absolute; top:50%; left:0; right:0; transform:translateY(-50%); opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus); box-shadow:0 0 20px rgba(91,106,191,0.4);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- C: GLOW + GRAIN -->
+<!-- ============================== -->
+<div class="concept">
+  <div class="cl">C — Glow + Film Grain</div>
+  <div class="cd">Mode glow plus a subtle noise texture. Breaks the digital flatness — feels like an OLED cinema.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <div class="glow" style="width:500px; height:500px; top:180px; left:50%; margin-left:-250px; background:var(--focus); opacity:0.06;"></div>
+      <div class="glow" style="width:300px; height:300px; top:280px; left:50%; margin-left:-150px; background:var(--focus); opacity:0.04; filter:blur(60px);"></div>
+      <div class="grain"></div>
+
+      <div class="nav"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(91,106,191,0.15) 0%, rgba(17,21,32,0.8) 50%, var(--canvas) 100%);"></div><svg style="position:absolute; top:50%; left:0; right:0; transform:translateY(-50%); opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus); box-shadow:0 0 20px rgba(91,106,191,0.4);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- D: GLOW + GRAIN + PARTICLES -->
+<!-- ============================== -->
+<div class="concept">
+  <div class="cl">D — Full Atmosphere</div>
+  <div class="cd">Mode glow + grain + sparse floating particles. The canvas is alive but never distracting.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <div class="glow" style="width:500px; height:500px; top:180px; left:50%; margin-left:-250px; background:var(--focus); opacity:0.06;"></div>
+      <div class="glow" style="width:300px; height:300px; top:280px; left:50%; margin-left:-150px; background:var(--focus); opacity:0.04; filter:blur(60px);"></div>
+      <div class="grain"></div>
+      <!-- Floating particles -->
+      <div class="particle" style="width:6px; height:6px; background:var(--focus); opacity:0.15; filter:blur(2px); left:15%; top:65%; animation-duration:12s; animation-delay:0s;"></div>
+      <div class="particle" style="width:10px; height:10px; background:var(--focus); opacity:0.08; filter:blur(4px); left:75%; top:45%; animation-duration:15s; animation-delay:2s;"></div>
+      <div class="particle" style="width:4px; height:4px; background:var(--accent); opacity:0.12; filter:blur(1.5px); left:50%; top:75%; animation-duration:10s; animation-delay:4s;"></div>
+      <div class="particle" style="width:8px; height:8px; background:var(--focus); opacity:0.06; filter:blur(3px); left:30%; top:55%; animation-duration:18s; animation-delay:1s;"></div>
+      <div class="particle" style="width:5px; height:5px; background:var(--accent); opacity:0.10; filter:blur(2px); left:85%; top:70%; animation-duration:14s; animation-delay:6s;"></div>
+      <div class="particle" style="width:7px; height:7px; background:var(--focus); opacity:0.07; filter:blur(3px); left:60%; top:30%; animation-duration:16s; animation-delay:3s;"></div>
+
+      <div class="nav"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(91,106,191,0.15) 0%, rgba(17,21,32,0.8) 50%, var(--canvas) 100%);"></div><svg style="position:absolute; top:50%; left:0; right:0; transform:translateY(-50%); opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus); box-shadow:0 0 20px rgba(91,106,191,0.4);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+  <div class="fave-badge">My Pick</div>
+</div>
+
+<!-- ============================== -->
+<!-- E: LAYERED BOKEH -->
+<!-- ============================== -->
+<div class="concept">
+  <div class="cl">E — Layered Bokeh</div>
+  <div class="cd">Large out-of-focus color circles at different depths. Like city lights through a rain-streaked window.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <!-- Deep bokeh — furthest layer, most blurred -->
+      <div class="bokeh" style="width:280px; height:280px; top:-40px; left:-60px; background:var(--sleep); opacity:0.025; filter:blur(100px);"></div>
+      <div class="bokeh" style="width:200px; height:200px; bottom:120px; right:-40px; background:var(--energize); opacity:0.02; filter:blur(90px);"></div>
+      <!-- Mid bokeh -->
+      <div class="bokeh" style="width:160px; height:160px; top:300px; left:40px; background:var(--focus); opacity:0.035; filter:blur(70px);"></div>
+      <div class="bokeh" style="width:120px; height:120px; top:150px; right:30px; background:var(--relaxation); opacity:0.03; filter:blur(60px);"></div>
+      <!-- Near bokeh — closest, least blurred -->
+      <div class="bokeh" style="width:80px; height:80px; top:450px; left:50%; margin-left:-40px; background:var(--accent); opacity:0.04; filter:blur(40px);"></div>
+      <div class="grain"></div>
+
+      <div class="nav"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(91,106,191,0.15) 0%, rgba(17,21,32,0.8) 50%, var(--canvas) 100%);"></div><svg style="position:absolute; top:50%; left:0; right:0; transform:translateY(-50%); opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus); box-shadow:0 0 20px rgba(91,106,191,0.4);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- F: BOKEH + GLOW HYBRID -->
+<!-- ============================== -->
+<div class="concept">
+  <div class="cl">F — Bokeh + Reactive Glow</div>
+  <div class="cd">Layered bokeh for static depth, plus a mode-reactive glow that shifts with the carousel. Best of both.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <!-- Static bokeh depth layers -->
+      <div class="bokeh" style="width:240px; height:240px; top:-30px; left:-50px; background:var(--sleep); opacity:0.02; filter:blur(90px);"></div>
+      <div class="bokeh" style="width:180px; height:180px; bottom:140px; right:-30px; background:var(--energize); opacity:0.018; filter:blur(80px);"></div>
+      <div class="bokeh" style="width:100px; height:100px; top:600px; left:60px; background:var(--relaxation); opacity:0.025; filter:blur(50px);"></div>
+      <!-- Mode-reactive glow on top -->
+      <div class="glow" style="width:450px; height:450px; top:200px; left:50%; margin-left:-225px; background:var(--focus); opacity:0.055;"></div>
+      <div class="grain"></div>
+      <!-- Sparse particles -->
+      <div class="particle" style="width:6px; height:6px; background:var(--focus); opacity:0.12; filter:blur(2px); left:20%; top:60%; animation-duration:14s; animation-delay:0s;"></div>
+      <div class="particle" style="width:8px; height:8px; background:var(--accent); opacity:0.06; filter:blur(3px); left:70%; top:40%; animation-duration:18s; animation-delay:3s;"></div>
+      <div class="particle" style="width:5px; height:5px; background:var(--focus); opacity:0.10; filter:blur(2px); left:45%; top:70%; animation-duration:12s; animation-delay:5s;"></div>
+      <div class="particle" style="width:7px; height:7px; background:var(--focus); opacity:0.05; filter:blur(3px); left:85%; top:55%; animation-duration:16s; animation-delay:1s;"></div>
+
+      <div class="nav"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(91,106,191,0.15) 0%, rgba(17,21,32,0.8) 50%, var(--canvas) 100%);"></div><svg style="position:absolute; top:50%; left:0; right:0; transform:translateY(-50%); opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus); box-shadow:0 0 20px rgba(91,106,191,0.4);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================== -->
+<!-- G: ASYMMETRIC GLOW -->
+<!-- ============================== -->
+<div class="concept">
+  <div class="cl">G — Asymmetric Glow</div>
+  <div class="cd">Off-center glow anchored upper-left. Creates a natural light source direction. Feels like moonlight.</div>
+  <div class="phone">
+    <div class="scr" style="background:var(--canvas);">
+      <!-- Asymmetric glow — upper left origin like a light source -->
+      <div class="glow" style="width:600px; height:600px; top:-200px; left:-150px; background:var(--focus); opacity:0.045;"></div>
+      <div class="glow" style="width:350px; height:350px; top:-80px; left:-50px; background:var(--accent); opacity:0.03; filter:blur(60px);"></div>
+      <!-- Counter-glow lower right, much fainter -->
+      <div class="glow" style="width:250px; height:250px; bottom:100px; right:-50px; background:var(--focus); opacity:0.015; filter:blur(70px);"></div>
+      <div class="grain"></div>
+
+      <div class="nav"><div class="nav-btn">😐 Neutral</div><div class="nav-title">BioNaural</div><svg class="nav-icon" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg></div>
+      <div class="bio"><div class="bio-col"><div class="bio-val" style="color:var(--relaxation);">64</div><div class="bio-label">Resting HR</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--accent);">48</div><div class="bio-label">HRV</div></div><div class="bio-sep"></div><div class="bio-col"><div class="bio-val" style="color:var(--sleep);">7.2</div><div class="bio-label">Sleep</div></div></div>
+      <div class="card-area"><div class="card"><div class="card-gradient" style="background:linear-gradient(135deg, rgba(91,106,191,0.15) 0%, rgba(17,21,32,0.8) 50%, var(--canvas) 100%);"></div><svg style="position:absolute; top:50%; left:0; right:0; transform:translateY(-50%); opacity:0.12;" viewBox="0 0 393 120" preserveAspectRatio="none" height="120"><path d="M0,60 Q49,30 98,60 T196,60 T294,60 T393,60" fill="none" stroke="var(--focus)" stroke-width="1.5"/></svg><div class="info-btn">i</div><div class="card-content"><div class="card-band">Beta frequency</div><div class="card-title">Focus</div><div class="card-desc">Sustained attention for deep work. Audio adapts as your body calms.</div><div class="card-bottom"><div class="card-freq">Beta 14–16 Hz</div><div class="card-play" style="background:var(--focus); box-shadow:0 0 20px rgba(91,106,191,0.4);"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div></div></div></div></div>
+      <div class="dots"><div class="dot dot-active"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div><div class="dot dot-inactive"></div></div>
+      <div class="watch"><div class="watch-dot"></div><span class="watch-text">Apple Watch connected</span></div>
+      <div class="tabbar"><div class="tab tab-active"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93z"/></svg><span class="tab-label">Home</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M4 8h4V4H4v4zm6 12h4v-4h-4v4zm-6 0h4v-4H4v4zm0-6h4v-4H4v4zm6 0h4v-4h-4v4zm6-10v4h4V4h-4zm-6 4h4V4h-4v4zm6 6h4v-4h-4v4zm0 6h4v-4h-4v4z"/></svg><span class="tab-label">Explore</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg><span class="tab-label">History</span></div><div class="tab tab-inactive"><svg viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 0 1 8.5 12 3.5 3.5 0 0 1 12 8.5a3.5 3.5 0 0 1 3.5 3.5 3.5 3.5 0 0 1-3.5 3.5m7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66c-.19.15-.25.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64L19.43 12.97Z"/></svg><span class="tab-label">Settings</span></div></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- grid -->
+
+</body>
+</html>

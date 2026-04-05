@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head><title>Generate Icon PNG</title></head>
+<body style="background:#000;color:#fff;font-family:system-ui;padding:40px;">
+<p>Right-click the image below and "Save Image As..." → <strong>AppIcon.png</strong></p>
+<p>Or click the download link:</p>
+<p id="link"></p>
+<canvas id="c" width="1024" height="1024" style="width:512px;height:512px;border-radius:100px;margin-top:20px;"></canvas>
+<script>
+const S = 1024;
+const canvas = document.getElementById('c');
+const ctx = canvas.getContext('2d');
+
+const SLEEP    = { r:144, g:128, b:196, hex:'#9080C4' };
+const RELAX    = { r:78,  g:168, b:166, hex:'#4EA8A6' };
+const FOCUS    = { r:91,  g:106, b:191, hex:'#5B6ABF' };
+const ENERGIZE = { r:245, g:166, b:35,  hex:'#F5A623' };
+const PERI     = { r:110, g:124, b:247, hex:'#6E7CF7' };
+
+function envelope(x, center, width) {
+  const t = (x - center) / width;
+  return Math.exp(-t * t * 2.5);
+}
+
+function wavePath(freq, amp, phase, envW, steps) {
+  steps = steps || 400;
+  let d = '';
+  for (let i = 0; i <= steps; i++) {
+    const x = (i / steps) * S;
+    const env = envelope(x, S/2, envW);
+    const y = S/2 + Math.sin((x / S) * Math.PI * 2 * freq + (phase || 0)) * amp * env;
+    d += (i === 0 ? 'M' : 'L') + x.toFixed(2) + ',' + y.toFixed(2);
+  }
+  return d;
+}
+
+const waves = [
+  { color: SLEEP,    freq: 1.2, amp: 200, phase: 0,   envW: S*0.38, gw: 18, ga: 0.06, gb: 16, sw: 5, sa: 0.25, sb: 5, w: 2.5, a: 0.6 },
+  { color: RELAX,    freq: 2.0, amp: 190, phase: 0.3, envW: S*0.38, gw: 18, ga: 0.06, gb: 16, sw: 5, sa: 0.28, sb: 5, w: 2.5, a: 0.65 },
+  { color: FOCUS,    freq: 3.2, amp: 210, phase: 0.6, envW: S*0.38, gw: 20, ga: 0.08, gb: 16, sw: 6, sa: 0.35, sb: 5, w: 3,   a: 0.8 },
+  { color: ENERGIZE, freq: 5.5, amp: 140, phase: 0.2, envW: S*0.38, gw: 14, ga: 0.05, gb: 14, sw: 4, sa: 0.2,  sb: 4, w: 2,   a: 0.6 },
+];
+
+// Background
+ctx.fillStyle = '#080C15';
+ctx.fillRect(0, 0, S, S);
+
+// Center glow
+const cg = ctx.createRadialGradient(S/2, S/2, 0, S/2, S/2, S * 0.4);
+cg.addColorStop(0, 'rgba(110,124,247,0.12)');
+cg.addColorStop(0.5, 'rgba(110,124,247,0.04)');
+cg.addColorStop(1, 'rgba(8,12,21,0)');
+ctx.fillStyle = cg;
+ctx.fillRect(0, 0, S, S);
+
+// Ambient glow
+const bg = ctx.createRadialGradient(S/2, S/2, 0, S/2, S/2, S * 0.45);
+bg.addColorStop(0, 'rgba(110,124,247,0.06)');
+bg.addColorStop(1, 'rgba(8,12,21,0)');
+ctx.fillStyle = bg;
+ctx.fillRect(0, 0, S, S);
+
+// Draw waves
+waves.forEach(w => {
+  const path = wavePath(w.freq, w.amp, w.phase, w.envW);
+  const p = new Path2D(path);
+
+  // Glow
+  ctx.save();
+  ctx.strokeStyle = w.color.hex;
+  ctx.lineWidth = w.gw;
+  ctx.globalAlpha = w.ga;
+  ctx.filter = 'blur(' + w.gb + 'px)';
+  ctx.lineCap = 'round';
+  ctx.stroke(p);
+  ctx.restore();
+
+  // Soft
+  ctx.save();
+  ctx.strokeStyle = w.color.hex;
+  ctx.lineWidth = w.sw;
+  ctx.globalAlpha = w.sa;
+  ctx.filter = 'blur(' + w.sb + 'px)';
+  ctx.lineCap = 'round';
+  ctx.stroke(p);
+  ctx.restore();
+
+  // Sharp
+  ctx.save();
+  ctx.strokeStyle = w.color.hex;
+  ctx.lineWidth = w.w;
+  ctx.globalAlpha = w.a;
+  ctx.lineCap = 'round';
+  ctx.filter = 'none';
+  ctx.stroke(p);
+  ctx.restore();
+});
+
+// Download link
+canvas.toBlob(blob => {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'AppIcon.png';
+  a.textContent = 'Download AppIcon.png (1024x1024)';
+  a.style.cssText = 'color:#6E7CF7;font-size:18px;';
+  document.getElementById('link').appendChild(a);
+  // Auto-click
+  a.click();
+}, 'image/png');
+</script>
+</body>
+</html>

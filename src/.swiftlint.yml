@@ -1,0 +1,45 @@
+# BioNaural SwiftLint Configuration
+# Tuned for the project's design token system and architecture.
+
+# Disable rules that conflict with design token naming (xs, sm, md, lg, xl, hr, hz)
+identifier_name:
+  excluded:
+    - id
+    - xs
+    - sm
+    - md
+    - lg
+    - xl
+    - hr
+    - hz
+    - to
+  min_length: 2
+
+# Theme.swift is the centralized design token system (1100+ lines intentional)
+file_length:
+  warning: 700
+  error: 1300
+
+# Complex views may exceed default body length
+type_body_length:
+  warning: 400
+  error: 600
+
+function_body_length:
+  warning: 60
+  error: 100
+
+line_length:
+  warning: 150
+  error: 300
+  ignores_comments: true
+  ignores_urls: true
+  ignores_interpolated_strings: true
+
+# Allow large tuples for HealthKit mock data
+large_tuple:
+  warning: 4
+
+# Exclude generated files and tests
+excluded:
+  - BioNauralShared/Tests

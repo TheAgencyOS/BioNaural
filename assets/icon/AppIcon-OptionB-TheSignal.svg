@@ -1,0 +1,144 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <!-- Ambient glow -->
+    <radialGradient id="b-ambientGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#6E7CF7" stop-opacity="0.22"/>
+      <stop offset="45%" stop-color="#6E7CF7" stop-opacity="0.10"/>
+      <stop offset="75%" stop-color="#6E7CF7" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#6E7CF7" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Deep bloom -->
+    <radialGradient id="b-deepBloom" cx="50%" cy="52%" r="55%">
+      <stop offset="0%" stop-color="#4A54C4" stop-opacity="0.12"/>
+      <stop offset="50%" stop-color="#4A54C4" stop-opacity="0.05"/>
+      <stop offset="100%" stop-color="#4A54C4" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Orb core gradient -->
+    <radialGradient id="b-orbCore" cx="48%" cy="46%" r="32%">
+      <stop offset="0%" stop-color="#F0F1FF" stop-opacity="1"/>
+      <stop offset="15%" stop-color="#E8EAFF" stop-opacity="1"/>
+      <stop offset="40%" stop-color="#9BA3FA" stop-opacity="1"/>
+      <stop offset="65%" stop-color="#6E7CF7" stop-opacity="1"/>
+      <stop offset="85%" stop-color="#5563D6" stop-opacity="1"/>
+      <stop offset="100%" stop-color="#4A54C4" stop-opacity="0.9"/>
+    </radialGradient>
+
+    <!-- Orb edge -->
+    <radialGradient id="b-orbEdge" cx="50%" cy="50%" r="30%">
+      <stop offset="70%" stop-color="#6E7CF7" stop-opacity="0"/>
+      <stop offset="88%" stop-color="#4A54C4" stop-opacity="0.4"/>
+      <stop offset="95%" stop-color="#3D45A8" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#080C15" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Specular highlight -->
+    <radialGradient id="b-specular" cx="42%" cy="40%" r="18%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.32"/>
+      <stop offset="40%" stop-color="#E8EAFF" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#E8EAFF" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Inner light -->
+    <radialGradient id="b-innerLight" cx="50%" cy="48%" r="22%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.12"/>
+      <stop offset="50%" stop-color="#C5CBFF" stop-opacity="0.04"/>
+      <stop offset="100%" stop-color="#6E7CF7" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Interference ring gradient -->
+    <radialGradient id="b-ring1" cx="50%" cy="50%" r="50%">
+      <stop offset="42%" stop-color="#6E7CF7" stop-opacity="0"/>
+      <stop offset="44%" stop-color="#6E7CF7" stop-opacity="0.06"/>
+      <stop offset="46%" stop-color="#6E7CF7" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="b-ring2" cx="50%" cy="50%" r="50%">
+      <stop offset="54%" stop-color="#6E7CF7" stop-opacity="0"/>
+      <stop offset="56.5%" stop-color="#6E7CF7" stop-opacity="0.045"/>
+      <stop offset="59%" stop-color="#6E7CF7" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="b-ring3" cx="50%" cy="50%" r="50%">
+      <stop offset="66%" stop-color="#6E7CF7" stop-opacity="0"/>
+      <stop offset="69%" stop-color="#6E7CF7" stop-opacity="0.03"/>
+      <stop offset="72%" stop-color="#6E7CF7" stop-opacity="0"/>
+    </radialGradient>
+
+    <radialGradient id="b-ring4" cx="50%" cy="50%" r="50%">
+      <stop offset="78%" stop-color="#6E7CF7" stop-opacity="0"/>
+      <stop offset="81.5%" stop-color="#6E7CF7" stop-opacity="0.02"/>
+      <stop offset="85%" stop-color="#6E7CF7" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- Filters -->
+    <filter id="b-bloomWide" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="80"/>
+    </filter>
+
+    <filter id="b-bloomMedium" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="45"/>
+    </filter>
+
+    <filter id="b-bloomTight" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="20"/>
+    </filter>
+
+    <filter id="b-softGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="8"/>
+    </filter>
+
+    <filter id="b-ringBlur" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="4"/>
+    </filter>
+  </defs>
+
+  <!-- Canvas background -->
+  <rect width="1024" height="1024" fill="#080C15"/>
+
+  <!-- Deep bloom -->
+  <rect width="1024" height="1024" fill="url(#b-deepBloom)"/>
+
+  <!-- Wide ambient bloom -->
+  <circle cx="512" cy="520" r="420" fill="#6E7CF7" opacity="0.07" filter="url(#b-bloomWide)"/>
+
+  <!-- Interference rings - barely visible concentric ripples -->
+  <rect width="1024" height="1024" fill="url(#b-ring4)" filter="url(#b-ringBlur)"/>
+  <rect width="1024" height="1024" fill="url(#b-ring3)" filter="url(#b-ringBlur)"/>
+  <rect width="1024" height="1024" fill="url(#b-ring2)" filter="url(#b-ringBlur)"/>
+  <rect width="1024" height="1024" fill="url(#b-ring1)" filter="url(#b-ringBlur)"/>
+
+  <!-- Subtle interference wave distortion - organic ripple shapes -->
+  <circle cx="512" cy="512" r="270" fill="none" stroke="#6E7CF7" stroke-width="1.5" opacity="0.05" filter="url(#b-ringBlur)"/>
+  <ellipse cx="512" cy="512" rx="310" ry="305" fill="none" stroke="#6E7CF7" stroke-width="1.2" opacity="0.04" filter="url(#b-ringBlur)"/>
+  <ellipse cx="512" cy="512" rx="355" ry="348" fill="none" stroke="#6E7CF7" stroke-width="1" opacity="0.03" filter="url(#b-ringBlur)"/>
+  <ellipse cx="512" cy="512" rx="400" ry="392" fill="none" stroke="#6E7CF7" stroke-width="0.8" opacity="0.025" filter="url(#b-ringBlur)"/>
+
+  <!-- Medium bloom -->
+  <circle cx="512" cy="515" r="320" fill="#6E7CF7" opacity="0.10" filter="url(#b-bloomMedium)"/>
+
+  <!-- Ambient glow field -->
+  <rect width="1024" height="1024" fill="url(#b-ambientGlow)"/>
+
+  <!-- Tight bloom -->
+  <circle cx="512" cy="512" r="240" fill="#6E7CF7" opacity="0.18" filter="url(#b-bloomTight)"/>
+
+  <!-- Orb outer glow -->
+  <circle cx="512" cy="512" r="220" fill="#6E7CF7" opacity="0.07" filter="url(#b-softGlow)"/>
+
+  <!-- The Orb -->
+  <circle cx="512" cy="512" r="195" fill="url(#b-orbCore)"/>
+
+  <!-- Orb edge -->
+  <circle cx="512" cy="512" r="200" fill="url(#b-orbEdge)"/>
+
+  <!-- Inner luminosity -->
+  <circle cx="512" cy="505" r="180" fill="url(#b-innerLight)"/>
+
+  <!-- Specular highlight -->
+  <circle cx="512" cy="512" r="195" fill="url(#b-specular)"/>
+
+  <!-- Tiny bright core -->
+  <circle cx="490" cy="480" r="35" fill="#FFFFFF" opacity="0.07" filter="url(#b-softGlow)"/>
+</svg>

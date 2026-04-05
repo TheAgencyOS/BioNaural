@@ -1,0 +1,12 @@
+{
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Models/BiometricSample.swift" : {
+    "abi-baseline-json" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Release-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared.abi.json",
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Release-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared-primary.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Release-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared-primary.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Release-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared-primary.dia",
+    "objc-header" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Release-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared-Swift.h",
+    "swiftdoc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Release-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared.swiftdoc",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Release-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared.swiftmodule",
+    "swiftsourceinfo" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Release-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared.swiftsourceinfo"
+  }
+}

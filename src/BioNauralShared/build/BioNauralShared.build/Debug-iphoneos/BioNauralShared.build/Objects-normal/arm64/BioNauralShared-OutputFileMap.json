@@ -1,0 +1,69 @@
+{
+  "" : {
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared-primary.dia",
+    "emit-module-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared-primary-emit-module.dia",
+    "pch" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BioNauralShared-primary.swiftdeps"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Models/BiometricSample.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricSample.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricSample.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricSample.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricSample.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricSample.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricSample.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricSample.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricSample~partial.swiftmodule"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Models/BiometricState.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricState.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricState.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricState.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricState.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricState.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricState.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricState.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/BiometricState~partial.swiftmodule"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Models/FocusMode.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FocusMode.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FocusMode.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FocusMode.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FocusMode.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FocusMode.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FocusMode.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FocusMode.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FocusMode~partial.swiftmodule"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Models/SessionOutcome.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/SessionOutcome.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/SessionOutcome.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/SessionOutcome.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/SessionOutcome.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/SessionOutcome.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/SessionOutcome.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/SessionOutcome.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/SessionOutcome~partial.swiftmodule"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Models/WatchMessage.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/WatchMessage.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/WatchMessage.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/WatchMessage.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/WatchMessage.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/WatchMessage.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/WatchMessage.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/WatchMessage.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/WatchMessage~partial.swiftmodule"
+  },
+  "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/Sources/BioNauralShared/Utilities/FrequencyMath.swift" : {
+    "const-values" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FrequencyMath.swiftconstvalues",
+    "dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FrequencyMath.d",
+    "diagnostics" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FrequencyMath.dia",
+    "index-unit-output-path" : "/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FrequencyMath.o",
+    "llvm-bc" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FrequencyMath.bc",
+    "object" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FrequencyMath.o",
+    "swift-dependencies" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FrequencyMath.swiftdeps",
+    "swiftmodule" : "/Users/ericyerke/Desktop/App Ideas/BioNaural/src/BioNauralShared/build/BioNauralShared.build/Debug-iphoneos/BioNauralShared.build/Objects-normal/arm64/FrequencyMath~partial.swiftmodule"
+  }
+}

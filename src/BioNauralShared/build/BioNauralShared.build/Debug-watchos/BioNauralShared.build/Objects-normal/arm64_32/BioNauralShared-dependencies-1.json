@@ -1,0 +1,250 @@
+[
+  {
+    "isFramework" : true,
+    "moduleName" : "Combine",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/Combine.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "CoreFoundation",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/CoreFoundation.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Darwin",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/Darwin.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Dispatch",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/Dispatch.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "Foundation",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/Foundation.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "ObjectiveC",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/ObjectiveC.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Observation",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/Observation.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Swift",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/Swift.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "SwiftOnoneSupport",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/SwiftOnoneSupport.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "System",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/System.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_Builtin_float",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/_Builtin_float.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_Concurrency",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/_Concurrency.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation1",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/_DarwinFoundation1.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation2",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/_DarwinFoundation2.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation3",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/_DarwinFoundation3.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_StringProcessing",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/watchos\/prebuilt-modules\/26.2\/_StringProcessing.swiftmodule\/arm64_32-apple-watchos.swiftmodule"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/System\/Library\/Frameworks\/CoreFoundation.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/CoreFoundation-4AOXR5BDRQXJKCPNREBPOWZEO.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreFoundation"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/include\/Darwin.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/Darwin-DMSQO4B9D84H4T1LDGDHXY7X3.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Darwin"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/include\/dispatch.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/Dispatch-DIS7OPPXAV75UKEWMWK07WD65.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Dispatch"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/System\/Library\/Frameworks\/Foundation.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/Foundation-5KEYUBISTF4FGBM4TL2JDJXKD.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Foundation"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/include\/ObjectiveC.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/ObjectiveC-6I7SJ59U8X94KOF7S2TNGKXP7.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ObjectiveC"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/System\/Library\/Frameworks\/Security.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/Security-52J4EO76JINTRGZ8N13YSVF7K.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Security"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/SwiftShims-Y2IK11FWVFHA4GMQPFYL2MXW.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "SwiftShims"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/include\/DarwinFoundation1.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_AvailabilityInternal-8F9I7P7A6NXQBHDNSF9OG6G4F.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_AvailabilityInternal"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_Builtin_float-5RWKYKB8LC0YKUGKQ0VJTB1JR.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_float"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_Builtin_inttypes-7JHNXF14P25HPI0SB3URLQZHX.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_inttypes"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_Builtin_limits-6RALOKCSHU6DDSS17K4G25VRF.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_limits"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdarg-NE0IS91TA8IZET789NGZKTP7.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stdarg"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdbool-71OXPHM8Q0V6ASW7JU522HNV.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stdbool"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stddef-KJBRFYAHOIE5OCGFT0LFFD96.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stddef"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_Builtin_stdint-EZC8PPS8EUPLQWM7NO5SBTE4E.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stdint"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/include\/DarwinFoundation1.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation1-5873NNKRA3A247SW4UT6M49SS.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation1"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/include\/DarwinFoundation2.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation2-5DSJOBBSFKFHHQAKSKR19PR45.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation2"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/include\/DarwinFoundation3.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_DarwinFoundation3-AIWOPMD2W4YRDBMWU6NCAPIV1.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation3"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/_SwiftConcurrencyShims-6G36RZJ187Y1L7GB167UWMCUC.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_SwiftConcurrencyShims"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/include\/os.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/os_object-3P7ZGWNBCWTSMGWN4ONSBW4IS.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "os_object"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/include\/os.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/os_workgroup-8R3QASO4I1TVRR2L3DRRZJ5TU.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "os_workgroup"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/ptrauth-5RVCMPG70KC2GNNVINAE3ZJHJ.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ptrauth"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/17\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/ptrcheck-5AYVVTWBF2UCGNB083FF6VJVG.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ptrcheck"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/WatchOS.platform\/Developer\/SDKs\/WatchOS.sdk\/usr\/include\/DarwinFoundation2.modulemap",
+    "clangModulePath" : "\/Users\/ericyerke\/Desktop\/App Ideas\/BioNaural\/src\/BioNauralShared\/build\/SwiftExplicitPrecompiledModules\/sys_types-4Y0L059UOGK72LZ7UTEGS3SN8.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "sys_types"
+  }
+]

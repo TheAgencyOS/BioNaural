@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — App Icon Preview</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #0a0a0a;
+    color: #e2e6f0;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    padding: 40px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    color: #e2e6f0;
+  }
+
+  .subtitle {
+    font-size: 14px;
+    color: #e2e6f0;
+    opacity: 0.4;
+    margin-bottom: 48px;
+    letter-spacing: 0.5px;
+  }
+
+  .section-title {
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #6E7CF7;
+  }
+
+  .section-desc {
+    font-size: 13px;
+    color: #e2e6f0;
+    opacity: 0.45;
+    margin-bottom: 28px;
+    max-width: 600px;
+    line-height: 1.5;
+  }
+
+  .options-row {
+    display: flex;
+    gap: 48px;
+    margin-bottom: 64px;
+    flex-wrap: wrap;
+  }
+
+  .option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .option-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #e2e6f0;
+    opacity: 0.35;
+  }
+
+  .option-name {
+    font-size: 16px;
+    font-weight: 500;
+    color: #e2e6f0;
+    opacity: 0.8;
+  }
+
+  /* iOS superellipse clip path */
+  .ios-icon {
+    clip-path: url(#ios-squircle);
+    -webkit-clip-path: url(#ios-squircle);
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* Fallback rounded corners that approximate the iOS squircle */
+  .ios-mask {
+    border-radius: 22.37%;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .icon-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* Size variants */
+  .size-row {
+    display: flex;
+    align-items: flex-end;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+
+  .size-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .size-label {
+    font-size: 10px;
+    color: #e2e6f0;
+    opacity: 0.3;
+    font-family: 'SF Mono', 'Menlo', monospace;
+  }
+
+  /* Mock homescreen */
+  .homescreen {
+    position: relative;
+    width: 390px;
+    height: 300px;
+    border-radius: 20px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: repeat(4, 60px);
+    grid-template-rows: repeat(3, 60px);
+    gap: 24px 20px;
+    padding: 30px 35px;
+    align-content: start;
+  }
+
+  .homescreen-dark {
+    background: linear-gradient(135deg, #1a1a2e 0%, #0d0d1a 100%);
+  }
+
+  .homescreen-light {
+    background: linear-gradient(135deg, #e8e0f0 0%, #d4cce0 100%);
+  }
+
+  .mock-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 13.4px;
+    overflow: hidden;
+  }
+
+  .mock-placeholder {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.05);
+  }
+
+  .homescreen-light .mock-placeholder {
+    background: rgba(0,0,0,0.06);
+    border: 1px solid rgba(0,0,0,0.04);
+  }
+
+  .mock-competitor {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 8px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .comp-calm { background: linear-gradient(135deg, #2b5ea7, #1a3a6a); color: rgba(255,255,255,0.7); }
+  .comp-headspace { background: #FF8C42; color: rgba(255,255,255,0.8); }
+  .comp-brainfm { background: linear-gradient(135deg, #4a2d7a, #2d1a4a); color: rgba(255,255,255,0.6); }
+  .comp-endel { background: #111; color: rgba(255,255,255,0.4); }
+
+  .divider {
+    width: 100%;
+    height: 1px;
+    background: rgba(110, 124, 247, 0.08);
+    margin: 16px 0 48px;
+  }
+
+  .comparison-row {
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  /* Notification badge test */
+  .badge-test {
+    position: relative;
+  }
+
+  .badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 20px;
+    height: 20px;
+    background: #FF3B30;
+    border-radius: 50%;
+    border: 2px solid #0a0a0a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: white;
+  }
+
+  .grayscale-test {
+    filter: grayscale(100%);
+  }
+</style>
+</head>
+<body>
+
+<h1>BioNaural App Icon</h1>
+<p class="subtitle">Three options at multiple sizes. Scroll to compare.</p>
+
+<!-- ============ LARGE PREVIEW ============ -->
+<div class="section-title">1024px — App Store</div>
+<p class="section-desc">Full detail. This is what users see when they visit the listing.</p>
+
+<div class="options-row">
+  <div class="option">
+    <div class="ios-mask" style="width:280px;height:280px;">
+      <img src="AppIcon-OptionA-PureOrb.svg" class="icon-canvas" alt="Option A">
+    </div>
+    <div class="option-name">Option A: Pure Orb</div>
+    <div class="option-label">Maximum clarity</div>
+  </div>
+
+  <div class="option">
+    <div class="ios-mask" style="width:280px;height:280px;">
+      <img src="AppIcon-OptionB-TheSignal.svg" class="icon-canvas" alt="Option B">
+    </div>
+    <div class="option-name">Option B: The Signal</div>
+    <div class="option-label">Orb + interference pattern</div>
+  </div>
+
+  <div class="option">
+    <div class="ios-mask" style="width:280px;height:280px;">
+      <img src="AppIcon-OptionC-SunriseOrb.svg" class="icon-canvas" alt="Option C">
+    </div>
+    <div class="option-name">Option C: Sunrise Orb</div>
+    <div class="option-label">Warm-cool chromatic shift</div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============ SIZE TEST ============ -->
+<div class="section-title">Size Test</div>
+<p class="section-desc">The icon must read at every size — from 1024px App Store down to 29pt Settings. If the glow doesn't read at 87px, iterate.</p>
+
+<!-- Option A sizes -->
+<div style="margin-bottom: 40px;">
+  <div class="option-label" style="margin-bottom: 16px;">Option A — Pure Orb</div>
+  <div class="size-row">
+    <div class="size-group">
+      <div class="ios-mask" style="width:180px;height:180px;">
+        <img src="AppIcon-OptionA-PureOrb.svg" class="icon-canvas" alt="A 180px">
+      </div>
+      <div class="size-label">180px (Home @3x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:120px;height:120px;">
+        <img src="AppIcon-OptionA-PureOrb.svg" class="icon-canvas" alt="A 120px">
+      </div>
+      <div class="size-label">120px (Spotlight @3x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask badge-test" style="width:87px;height:87px;">
+        <img src="AppIcon-OptionA-PureOrb.svg" class="icon-canvas" alt="A 87px">
+        <div class="badge">3</div>
+      </div>
+      <div class="size-label">87px (Settings @3x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:60px;height:60px;">
+        <img src="AppIcon-OptionA-PureOrb.svg" class="icon-canvas" alt="A 60px">
+      </div>
+      <div class="size-label">60px (Home @2x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:40px;height:40px;">
+        <img src="AppIcon-OptionA-PureOrb.svg" class="icon-canvas" alt="A 40px">
+      </div>
+      <div class="size-label">40px (Spotlight @2x)</div>
+    </div>
+  </div>
+</div>
+
+<!-- Option B sizes -->
+<div style="margin-bottom: 40px;">
+  <div class="option-label" style="margin-bottom: 16px;">Option B — The Signal</div>
+  <div class="size-row">
+    <div class="size-group">
+      <div class="ios-mask" style="width:180px;height:180px;">
+        <img src="AppIcon-OptionB-TheSignal.svg" class="icon-canvas" alt="B 180px">
+      </div>
+      <div class="size-label">180px (Home @3x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:120px;height:120px;">
+        <img src="AppIcon-OptionB-TheSignal.svg" class="icon-canvas" alt="B 120px">
+      </div>
+      <div class="size-label">120px (Spotlight @3x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask badge-test" style="width:87px;height:87px;">
+        <img src="AppIcon-OptionB-TheSignal.svg" class="icon-canvas" alt="B 87px">
+        <div class="badge">3</div>
+      </div>
+      <div class="size-label">87px (Settings @3x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:60px;height:60px;">
+        <img src="AppIcon-OptionB-TheSignal.svg" class="icon-canvas" alt="B 60px">
+      </div>
+      <div class="size-label">60px (Home @2x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:40px;height:40px;">
+        <img src="AppIcon-OptionB-TheSignal.svg" class="icon-canvas" alt="B 40px">
+      </div>
+      <div class="size-label">40px (Spotlight @2x)</div>
+    </div>
+  </div>
+</div>
+
+<!-- Option C sizes -->
+<div style="margin-bottom: 40px;">
+  <div class="option-label" style="margin-bottom: 16px;">Option C — Sunrise Orb</div>
+  <div class="size-row">
+    <div class="size-group">
+      <div class="ios-mask" style="width:180px;height:180px;">
+        <img src="AppIcon-OptionC-SunriseOrb.svg" class="icon-canvas" alt="C 180px">
+      </div>
+      <div class="size-label">180px (Home @3x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:120px;height:120px;">
+        <img src="AppIcon-OptionC-SunriseOrb.svg" class="icon-canvas" alt="C 120px">
+      </div>
+      <div class="size-label">120px (Spotlight @3x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask badge-test" style="width:87px;height:87px;">
+        <img src="AppIcon-OptionC-SunriseOrb.svg" class="icon-canvas" alt="C 87px">
+        <div class="badge">3</div>
+      </div>
+      <div class="size-label">87px (Settings @3x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:60px;height:60px;">
+        <img src="AppIcon-OptionC-SunriseOrb.svg" class="icon-canvas" alt="C 60px">
+      </div>
+      <div class="size-label">60px (Home @2x)</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:40px;height:40px;">
+        <img src="AppIcon-OptionC-SunriseOrb.svg" class="icon-canvas" alt="C 40px">
+      </div>
+      <div class="size-label">40px (Spotlight @2x)</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============ HOMESCREEN MOCK ============ -->
+<div class="section-title">Homescreen Context</div>
+<p class="section-desc">How each option looks alongside competitors on dark and light wallpapers.</p>
+
+<div class="comparison-row" style="margin-bottom: 48px;">
+  <!-- Dark homescreen -->
+  <div>
+    <div class="option-label" style="margin-bottom: 12px;">Dark wallpaper — Option A</div>
+    <div class="homescreen homescreen-dark">
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-calm mock-competitor">Calm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-headspace mock-competitor">Head<br>space</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon ios-mask" style="width:60px;height:60px;">
+        <img src="AppIcon-OptionA-PureOrb.svg" class="icon-canvas" alt="A home">
+      </div>
+      <div class="mock-icon comp-brainfm mock-competitor">Brain<br>.fm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-endel mock-competitor">Endel</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="option-label" style="margin-bottom: 12px;">Dark wallpaper — Option B</div>
+    <div class="homescreen homescreen-dark">
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-calm mock-competitor">Calm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-headspace mock-competitor">Head<br>space</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon ios-mask" style="width:60px;height:60px;">
+        <img src="AppIcon-OptionB-TheSignal.svg" class="icon-canvas" alt="B home">
+      </div>
+      <div class="mock-icon comp-brainfm mock-competitor">Brain<br>.fm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-endel mock-competitor">Endel</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="option-label" style="margin-bottom: 12px;">Dark wallpaper — Option C</div>
+    <div class="homescreen homescreen-dark">
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-calm mock-competitor">Calm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-headspace mock-competitor">Head<br>space</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon ios-mask" style="width:60px;height:60px;">
+        <img src="AppIcon-OptionC-SunriseOrb.svg" class="icon-canvas" alt="C home">
+      </div>
+      <div class="mock-icon comp-brainfm mock-competitor">Brain<br>.fm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-endel mock-competitor">Endel</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+    </div>
+  </div>
+</div>
+
+<div class="comparison-row" style="margin-bottom: 48px;">
+  <!-- Light homescreen -->
+  <div>
+    <div class="option-label" style="margin-bottom: 12px;">Light wallpaper — Option A</div>
+    <div class="homescreen homescreen-light">
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-calm mock-competitor">Calm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-headspace mock-competitor">Head<br>space</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon ios-mask" style="width:60px;height:60px;">
+        <img src="AppIcon-OptionA-PureOrb.svg" class="icon-canvas" alt="A light">
+      </div>
+      <div class="mock-icon comp-brainfm mock-competitor">Brain<br>.fm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-endel mock-competitor">Endel</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="option-label" style="margin-bottom: 12px;">Light wallpaper — Option B</div>
+    <div class="homescreen homescreen-light">
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-calm mock-competitor">Calm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-headspace mock-competitor">Head<br>space</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon ios-mask" style="width:60px;height:60px;">
+        <img src="AppIcon-OptionB-TheSignal.svg" class="icon-canvas" alt="B light">
+      </div>
+      <div class="mock-icon comp-brainfm mock-competitor">Brain<br>.fm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-endel mock-competitor">Endel</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="option-label" style="margin-bottom: 12px;">Light wallpaper — Option C</div>
+    <div class="homescreen homescreen-light">
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-calm mock-competitor">Calm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-headspace mock-competitor">Head<br>space</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon ios-mask" style="width:60px;height:60px;">
+        <img src="AppIcon-OptionC-SunriseOrb.svg" class="icon-canvas" alt="C light">
+      </div>
+      <div class="mock-icon comp-brainfm mock-competitor">Brain<br>.fm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-endel mock-competitor">Endel</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============ GRAYSCALE TEST ============ -->
+<div class="section-title">iOS 18 Tinted Mode Test</div>
+<p class="section-desc">Grayscale survivability — does the luminosity and form read without color? Critical for iOS 18+ dark/tinted icon variants.</p>
+
+<div class="options-row">
+  <div class="option">
+    <div class="ios-mask grayscale-test" style="width:180px;height:180px;">
+      <img src="AppIcon-OptionA-PureOrb.svg" class="icon-canvas" alt="A gray">
+    </div>
+    <div class="option-label">A — Grayscale</div>
+  </div>
+  <div class="option">
+    <div class="ios-mask grayscale-test" style="width:180px;height:180px;">
+      <img src="AppIcon-OptionB-TheSignal.svg" class="icon-canvas" alt="B gray">
+    </div>
+    <div class="option-label">B — Grayscale</div>
+  </div>
+  <div class="option">
+    <div class="ios-mask grayscale-test" style="width:180px;height:180px;">
+      <img src="AppIcon-OptionC-SunriseOrb.svg" class="icon-canvas" alt="C gray">
+    </div>
+    <div class="option-label">C — Grayscale</div>
+  </div>
+</div>
+
+</body>
+</html>

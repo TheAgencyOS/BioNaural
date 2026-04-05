@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — Compose Tab Mockups</title>
+<style>
+  @import url('https://api.fontshare.com/v2/css?f[]=satoshi@300,400,500,700&display=swap');
+
+  :root {
+    --canvas: #080C15;
+    --surface: #111520;
+    --surface-raised: #1A1F2E;
+    --divider: #1E2336;
+    --text-primary: #E2E6F0;
+    --text-secondary: rgba(226, 230, 240, 0.65);
+    --text-tertiary: rgba(226, 230, 240, 0.40);
+    --accent: #6E7CF7;
+    --accent-light: rgba(110, 124, 247, 0.15);
+    --accent-strong: rgba(110, 124, 247, 0.60);
+    --focus: #5B6ABF;
+    --relaxation: #4EA8A6;
+    --sleep: #9080C4;
+    --energize: #F5A623;
+    --signal-calm: #4EA8A6;
+
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-card: 24px;
+    --radius-sheet: 32px;
+
+    --spacing-xxs: 4px;
+    --spacing-xs: 6px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-xxl: 24px;
+    --spacing-xxxl: 32px;
+    --spacing-jumbo: 48px;
+    --spacing-mega: 64px;
+    --page-margin: 20px;
+
+    --glass-stroke: 0.5px;
+    --glass-fill: rgba(255,255,255,0.06);
+    --glass-border: rgba(255,255,255,0.08);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050810;
+    font-family: 'Satoshi', -apple-system, sans-serif;
+    color: var(--text-primary);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Page layout */
+  .page-header {
+    text-align: center;
+    padding: 60px 20px 40px;
+  }
+  .page-header h1 {
+    font-size: 32px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+  .page-header p {
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-tertiary);
+  }
+
+  .mockup-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(390px, 1fr));
+    gap: 48px;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  .mockup-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .mockup-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--accent);
+    opacity: 0.7;
+  }
+
+  .mockup-sublabel {
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-tertiary);
+    margin-top: -8px;
+    text-align: center;
+    max-width: 340px;
+  }
+
+  /* iPhone frame */
+  .phone {
+    width: 393px;
+    height: 852px;
+    background: var(--canvas);
+    border-radius: 50px;
+    border: 3px solid #1a1a2a;
+    overflow: hidden;
+    position: relative;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 30px 60px rgba(0,0,0,0.5);
+  }
+
+  /* Dynamic Island */
+  .dynamic-island {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 126px;
+    height: 36px;
+    background: #000;
+    border-radius: 20px;
+    z-index: 100;
+  }
+
+  /* Status bar */
+  .status-bar {
+    height: 59px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 0 32px 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .status-bar .time { font-size: 16px; font-weight: 600; }
+  .status-bar .icons { display: flex; gap: 5px; font-size: 12px; }
+
+  /* Screen content */
+  .screen {
+    height: calc(100% - 59px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* Navigation bar */
+  .nav-bar {
+    padding: 8px var(--page-margin) 12px;
+    display: flex;
+    align-items: center;
+  }
+  .nav-bar-title {
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+  .nav-bar-large {
+    padding: 4px var(--page-margin) 16px;
+  }
+  .nav-bar-large .nav-bar-title {
+    font-size: 34px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+  }
+
+  /* Tab bar */
+  .tab-bar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 83px;
+    background: rgba(8, 12, 21, 0.85);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 0.5px solid var(--divider);
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+    padding-top: 8px;
+    z-index: 50;
+  }
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    width: 64px;
+  }
+  .tab-icon { font-size: 22px; line-height: 1; }
+  .tab-label { font-size: 10px; font-weight: 500; }
+  .tab-item.active .tab-icon,
+  .tab-item.active .tab-label { color: var(--accent); }
+  .tab-item:not(.active) .tab-icon,
+  .tab-item:not(.active) .tab-label { color: var(--text-tertiary); }
+
+  /* Scroll area */
+  .scroll-content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 100px;
+  }
+  .scroll-content::-webkit-scrollbar { display: none; }
+
+  /* Shared components */
+  .glass-card {
+    background: var(--surface);
+    border-radius: var(--radius-card);
+    border: var(--glass-stroke) solid var(--glass-border);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .glass-pill {
+    background: var(--surface);
+    border-radius: 100px;
+    border: var(--glass-stroke) solid var(--glass-border);
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .glass-pill.selected {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--text-primary);
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--text-tertiary);
+    padding: 0 var(--page-margin);
+    margin-bottom: var(--spacing-md);
+  }
+
+  /* Orb */
+  .orb {
+    border-radius: 50%;
+    filter: blur(1px);
+  }
+  .orb-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(30px);
+    opacity: 0.3;
+  }
+
+  /* Sheet */
+  .sheet-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.4);
+    z-index: 60;
+  }
+  .sheet {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--canvas);
+    border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
+    z-index: 70;
+    border-top: 0.5px solid var(--glass-border);
+  }
+  .sheet-handle {
+    width: 36px;
+    height: 5px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+    margin: 10px auto 0;
+  }
+
+  /* Step dots */
+  .step-dots {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px 0 8px;
+  }
+  .step-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--divider);
+  }
+  .step-dot.active { background: var(--accent); }
+  .step-dot.completed { background: var(--accent-strong); }
+
+  /* Slider */
+  .slider-track {
+    width: 100%;
+    height: 4px;
+    background: var(--surface-raised);
+    border-radius: 2px;
+    position: relative;
+  }
+  .slider-fill {
+    height: 100%;
+    background: var(--accent);
+    border-radius: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .slider-thumb {
+    width: 22px;
+    height: 22px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  .slider-row {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .slider-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+  }
+
+  /* FAB */
+  .fab {
+    position: absolute;
+    bottom: 100px;
+    right: 20px;
+    width: 56px;
+    height: 56px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(110, 124, 247, 0.35);
+    z-index: 40;
+  }
+  .fab svg { width: 24px; height: 24px; fill: white; }
+
+  /* Nebula background */
+  .nebula-bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    z-index: 0;
+  }
+  .nebula-bg::before {
+    content: '';
+    position: absolute;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.07;
+  }
+  .nebula-bg.accent::before { background: var(--accent); top: 20%; left: 30%; }
+  .nebula-bg.focus-c::before { background: var(--focus); top: 30%; left: 20%; }
+  .nebula-bg.sleep-c::before { background: var(--sleep); top: 25%; left: 40%; }
+
+  /* Relative content */
+  .relative { position: relative; z-index: 1; }
+
+  /* Mode card in brain state step */
+  .brain-card {
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    border: var(--glass-stroke) solid var(--glass-border);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .brain-card.selected {
+    border-color: var(--accent);
+    border-width: 1.5px;
+  }
+  .brain-card .glow {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.2;
+    top: -20px;
+    left: -20px;
+  }
+  .brain-card .card-icon {
+    font-size: 20px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  .brain-card h3 {
+    font-size: 17px;
+    font-weight: 700;
+    position: relative;
+    z-index: 1;
+  }
+  .brain-card p {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    position: relative;
+    z-index: 1;
+    font-family: 'SF Mono', ui-monospace, monospace;
+  }
+
+  /* Composition card */
+  .comp-card {
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    border: var(--glass-stroke) solid var(--glass-border);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .comp-card .comp-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .comp-card .mode-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .comp-card .comp-name {
+    font-size: 16px;
+    font-weight: 700;
+  }
+  .comp-card .comp-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .comp-card .tag {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    background: var(--surface-raised);
+    padding: 4px 10px;
+    border-radius: 100px;
+  }
+  .comp-card .comp-meta {
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  /* Next button */
+  .btn-next {
+    width: 100%;
+    padding: 16px;
+    background: var(--accent);
+    border-radius: 100px;
+    text-align: center;
+    font-size: 17px;
+    font-weight: 600;
+    color: white;
+  }
+  .btn-next.secondary {
+    background: var(--surface-raised);
+    color: var(--text-secondary);
+  }
+  .btn-nav-row {
+    display: flex;
+    gap: 12px;
+    padding: 0 var(--page-margin);
+  }
+  .btn-nav-row .btn-next { flex: 1; }
+
+  /* Volume row */
+  .vol-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 var(--page-margin);
+  }
+  .vol-icon {
+    font-size: 16px;
+    color: var(--text-tertiary);
+    width: 20px;
+    text-align: center;
+  }
+  .vol-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    width: 80px;
+    flex-shrink: 0;
+  }
+  .vol-track {
+    flex: 1;
+    height: 4px;
+    background: var(--surface-raised);
+    border-radius: 2px;
+    position: relative;
+  }
+
+  /* Toggle */
+  .toggle {
+    width: 51px;
+    height: 31px;
+    border-radius: 16px;
+    background: var(--surface-raised);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .toggle.on { background: var(--accent); }
+  .toggle .toggle-knob {
+    width: 27px;
+    height: 27px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+  .toggle.on .toggle-knob { left: 22px; }
+
+  /* Input field */
+  .text-input {
+    width: 100%;
+    padding: 14px 16px;
+    background: var(--surface);
+    border: var(--glass-stroke) solid var(--glass-border);
+    border-radius: var(--radius-lg);
+    font-size: 17px;
+    font-weight: 400;
+    color: var(--text-primary);
+    font-family: 'Satoshi', sans-serif;
+  }
+
+  /* Segmented control */
+  .segmented {
+    display: flex;
+    background: var(--surface);
+    border-radius: var(--radius-md);
+    padding: 3px;
+    border: var(--glass-stroke) solid var(--glass-border);
+  }
+  .seg-item {
+    flex: 1;
+    padding: 8px 0;
+    text-align: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-tertiary);
+    border-radius: 6px;
+  }
+  .seg-item.active {
+    background: var(--surface-raised);
+    color: var(--text-primary);
+  }
+
+  /* Context menu */
+  .context-menu {
+    position: absolute;
+    background: var(--surface-raised);
+    border-radius: var(--radius-lg);
+    border: var(--glass-stroke) solid var(--glass-border);
+    padding: 4px;
+    width: 180px;
+    z-index: 80;
+    box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  }
+  .context-item {
+    padding: 10px 14px;
+    font-size: 15px;
+    font-weight: 400;
+    color: var(--text-primary);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .context-item:hover { background: rgba(255,255,255,0.05); }
+  .context-item.destructive { color: #E55353; }
+  .context-sep {
+    height: 0.5px;
+    background: var(--divider);
+    margin: 4px 8px;
+  }
+
+  /* Playing indicator */
+  .now-playing {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 14px;
+    background: rgba(110, 124, 247, 0.1);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    margin: 0 var(--page-margin);
+  }
+  .bars {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 14px;
+  }
+  .bars span {
+    width: 3px;
+    background: var(--accent);
+    border-radius: 1px;
+    animation: bar-bounce 0.8s ease-in-out infinite alternate;
+  }
+  .bars span:nth-child(1) { height: 6px; animation-delay: 0s; }
+  .bars span:nth-child(2) { height: 10px; animation-delay: 0.15s; }
+  .bars span:nth-child(3) { height: 4px; animation-delay: 0.3s; }
+  .bars span:nth-child(4) { height: 8px; animation-delay: 0.1s; }
+
+  @keyframes bar-bounce {
+    0% { transform: scaleY(0.4); }
+    100% { transform: scaleY(1); }
+  }
+
+  /* Pill scroll */
+  .pill-scroll {
+    display: flex;
+    gap: 8px;
+    padding: 0 var(--page-margin);
+    overflow-x: auto;
+  }
+  .pill-scroll::-webkit-scrollbar { display: none; }
+
+  /* Horizontal divider */
+  .hdiv {
+    height: 0.5px;
+    background: var(--divider);
+    margin: 0 var(--page-margin);
+  }
+
+  /* Step header */
+  .step-header {
+    padding: 0 var(--page-margin);
+    margin-bottom: var(--spacing-xxl);
+  }
+  .step-header h2 {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+  .step-header p {
+    font-size: 14px;
+    color: var(--text-tertiary);
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Compose Tab Mockups</h1>
+  <p>BioNaural Sound Composer  --  10 screens, pixel-perfect</p>
+</div>
+
+<div class="mockup-grid">
+
+<!-- ======================= MOCKUP 1: EMPTY HUB ======================= -->
+<div class="mockup-container">
+  <div class="mockup-label">01 / 10</div>
+  <div class="mockup-sublabel">Compose Hub -- Empty State</div>
+  <div class="phone">
+    <div class="dynamic-island"></div>
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13" y="1" width="3" height="11" rx="1" opacity="0.3"/></svg>
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><path d="M7.5 3.5C9.3 3.5 10.9 4.2 12 5.3L13.4 3.9C11.9 2.4 9.8 1.5 7.5 1.5S3.1 2.4 1.6 3.9L3 5.3C4.1 4.2 5.7 3.5 7.5 3.5Z"/><circle cx="7.5" cy="9" r="1.5"/><path d="M7.5 5.5C8.7 5.5 9.8 6 10.6 6.8L12 5.4C10.8 4.2 9.2 3.5 7.5 3.5S4.2 4.2 3 5.4L4.4 6.8C5.2 6 6.3 5.5 7.5 5.5Z" opacity="0.7"/></svg>
+        <svg width="27" height="12" viewBox="0 0 27 12" fill="currentColor"><rect x="0" y="1" width="22" height="10" rx="3" stroke="currentColor" stroke-width="1" fill="none" opacity="0.3"/><rect x="23" y="4" width="2" height="4" rx="1" opacity="0.3"/><rect x="2" y="3" width="16" height="6" rx="1.5"/></svg>
+      </span>
+    </div>
+    <div class="screen" style="position: relative;">
+      <div class="nebula-bg accent"></div>
+      <div class="relative" style="flex:1; display:flex; flex-direction:column;">
+        <div class="nav-bar nav-bar-large">
+          <span class="nav-bar-title">Compose</span>
+        </div>
+        <div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding-bottom: 120px;">
+          <!-- Orb -->
+          <div style="position:relative; width:80px; height:80px; margin-bottom: 24px;">
+            <div style="position:absolute; inset:-20px; border-radius:50%; background:radial-gradient(circle, rgba(110,124,247,0.3) 0%, rgba(110,124,247,0.05) 60%, transparent 100%);"></div>
+            <div style="position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle, rgba(110,124,247,0.5) 0%, rgba(110,124,247,0.1) 50%, transparent 100%);"></div>
+          </div>
+          <p style="font-size:17px; font-weight:500; color:var(--text-secondary); margin-bottom:8px;">Create your first sound</p>
+          <p style="font-size:13px; color:var(--text-tertiary); max-width:220px; text-align:center; line-height:1.5;">Layer ambient sounds, instruments, and binaural beats into your own composition.</p>
+        </div>
+      </div>
+      <!-- FAB -->
+      <div class="fab">
+        <svg viewBox="0 0 24 24" fill="white"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+      </div>
+      <!-- Tab bar -->
+      <div class="tab-bar">
+        <div class="tab-item"><span class="tab-icon">&#9901;</span><span class="tab-label">Home</span></div>
+        <div class="tab-item active"><span class="tab-icon">&#9783;</span><span class="tab-label">Compose</span></div>
+        <div class="tab-item"><span class="tab-icon">&#8593;</span><span class="tab-label">History</span></div>
+        <div class="tab-item"><span class="tab-icon">&#9829;</span><span class="tab-label">Health</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= MOCKUP 2: HUB WITH SAVED ======================= -->
+<div class="mockup-container">
+  <div class="mockup-label">02 / 10</div>
+  <div class="mockup-sublabel">Compose Hub -- Saved Compositions</div>
+  <div class="phone">
+    <div class="dynamic-island"></div>
+    <div class="status-bar">
+      <span class="time">9:41</span>
+      <span class="icons">
+        <svg width="16" height="12" viewBox="0 0 16 12" fill="currentColor"><rect x="0" y="3" width="3" height="9" rx="1"/><rect x="4.5" y="2" width="3" height="10" rx="1"/><rect x="9" y="0" width="3" height="12" rx="1"/><rect x="13" y="1" width="3" height="11" rx="1" opacity="0.3"/></svg>
+        <svg width="15" height="11" viewBox="0 0 15 11" fill="currentColor"><path d="M7.5 3.5C9.3 3.5 10.9 4.2 12 5.3L13.4 3.9C11.9 2.4 9.8 1.5 7.5 1.5S3.1 2.4 1.6 3.9L3 5.3C4.1 4.2 5.7 3.5 7.5 3.5Z"/><circle cx="7.5" cy="9" r="1.5"/></svg>
+        <svg width="27" height="12" viewBox="0 0 27 12" fill="currentColor"><rect x="0" y="1" width="22" height="10" rx="3" stroke="currentColor" stroke-width="1" fill="none" opacity="0.3"/><rect x="23" y="4" width="2" height="4" rx="1" opacity="0.3"/><rect x="2" y="3" width="16" height="6" rx="1.5"/></svg>
+      </span>
+    </div>
+    <div class="screen" style="position: relative;">
+      <div class="nebula-bg accent"></div>
+      <div class="relative" style="flex:1; display:flex; flex-direction:column;">
+        <div class="nav-bar nav-bar-large">
+          <span class="nav-bar-title">Compose</span>
+        </div>
+        <div class="scroll-content" style="padding: 0 var(--page-margin);">
+          <div class="section-label" style="padding:0; margin-bottom:16px;">My Sounds</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <!-- Card 1 -->
+            <div class="comp-card">
+              <div class="comp-header">
+                <div class="mode-dot" style="background:var(--focus);"></div>
+                <span class="comp-name" style="font-size:15px;">Rain Focus</span>
+              </div>
+              <div class="comp-tags">
+                <span class="tag">&#9835; Piano</span>
+                <span class="tag">&#127783; Rain</span>
+              </div>
+              <div class="comp-meta">25 min &bull; Adaptive</div>
+            </div>
+            <!-- Card 2 -->
+            <div class="comp-card">
+              <div class="comp-header">
+                <div class="mode-dot" style="background:var(--sleep);"></div>
+                <span class="comp-name" style="font-size:15px;">Night Sleep</span>
+              </div>
+              <div class="comp-tags">
+                <span class="tag">&#9835; Pads</span>
+                <span class="tag">&#127769; Night</span>
+              </div>
+              <div class="comp-meta">45 min &bull; Fixed</div>
+            </div>
+            <!-- Card 3 -->
+            <div class="comp-card">
+              <div class="comp-header">
+                <div class="mode-dot" style="background:var(--relaxation);"></div>
+                <span class="comp-name" style="font-size:15px;">Ocean Calm</span>
+              </div>
+              <div class="comp-tags">
+                <span class="tag">&#9835; Strings</span>
+                <span class="tag">&#127754; Ocean</span>
+              </div>
+              <div class="comp-meta">20 min &bull; Adaptive</div>
+            </div>
+            <!-- Card 4 -->
+            <div class="comp-card">
+              <div class="comp-header">
+                <div class="mode-dot" style="background:var(--energize);"></div>
+                <span class="comp-name" style="font-size:15px;">Fire Energy</span>
+              </div>
+              <div class="comp-tags">
+                <span class="tag">&#9835; Guitar</span>
+                <span class="tag">&#128293; Fire</span>
+              </div>
+              <div class="comp-meta">15 min &bull; Fixed</div>
+            </div>
+            <!-- Card 5 -->
+            <div class="comp-card">
+              <div class="comp-header">
+                <div class="mode-dot" style="background:var(--focus);"></div>
+                <span class="comp-name" style="font-size:15px;">Forest Work</span>
+              </div>
+              <div class="comp-tags">
+                <span class="tag">&#9835; Texture</span>
+                <span class="tag">&#127795; Forest</span>
+              </div>
+              <div class="comp-meta">60 min &bull; Adaptive</div>
+            </div>
+            <!-- Card 6 -->
+            <div class="comp-card">
+              <div class="comp-header">
+                <div class="mode-dot" style="background:var(--sleep);"></div>
+                <span class="comp-name" style="font-size:15px;">Rain Drift</span>
+              </div>
+              <div class="comp-tags">
+                <span class="tag">&#9835; Pads</span>
+                <span class="tag">&#9736; Thunder</span>
+              </div>
+              <div class="comp-meta">90 min &bull; Fixed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="fab">
+        <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/></svg>
+      </div>
+      <div class="tab-bar">
+        <div class="tab-item"><span class="tab-icon">&#9901;</span><span class="tab-label">Home</span></div>
+        <div class="tab-item active"><span class="tab-icon">&#9783;</span><span class="tab-label">Compose</span></div>
+        <div class="tab-item"><span class="tab-icon">&#8593;</span><span class="tab-label">History</span></div>
+        <div class="tab-item"><span class="tab-icon">&#9829;</span><span class="tab-label">Health</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= MOCKUP 3: CONTEXT MENU ======================= -->
+<div class="mockup-container">
+  <div class="mockup-label">03 / 10</div>
+  <div class="mockup-sublabel">Long-press Context Menu</div>
+  <div class="phone">
+    <div class="dynamic-island"></div>
+    <div class="status-bar"><span class="time">9:41</span><span class="icons"></span></div>
+    <div class="screen" style="position: relative;">
+      <div class="nebula-bg accent"></div>
+      <div class="relative" style="flex:1; display:flex; flex-direction:column;">
+        <div class="nav-bar nav-bar-large"><span class="nav-bar-title">Compose</span></div>
+        <div style="padding: 0 var(--page-margin);">
+          <div class="section-label" style="padding:0; margin-bottom:16px;">My Sounds</div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+            <!-- Highlighted card -->
+            <div class="comp-card" style="transform:scale(0.97); opacity:0.95; border-color: var(--accent); border-width:1px;">
+              <div class="comp-header">
+                <div class="mode-dot" style="background:var(--focus);"></div>
+                <span class="comp-name" style="font-size:15px;">Rain Focus</span>
+              </div>
+              <div class="comp-tags">
+                <span class="tag">&#9835; Piano</span>
+                <span class="tag">&#127783; Rain</span>
+              </div>
+              <div class="comp-meta">25 min &bull; Adaptive</div>
+            </div>
+            <div class="comp-card" style="opacity:0.3;">
+              <div class="comp-header">
+                <div class="mode-dot" style="background:var(--sleep);"></div>
+                <span class="comp-name" style="font-size:15px;">Night Sleep</span>
+              </div>
+              <div class="comp-tags"><span class="tag">&#9835; Pads</span></div>
+              <div class="comp-meta">45 min</div>
+            </div>
+          </div>
+          <!-- Context menu -->
+          <div class="context-menu" style="top: 200px; left: 20px;">
+            <div class="context-item">Edit <span style="color:var(--text-tertiary); font-size:13px;">&#9998;</span></div>
+            <div class="context-item">Duplicate <span style="color:var(--text-tertiary); font-size:13px;">&#10697;</span></div>
+            <div class="context-sep"></div>
+            <div class="context-item destructive">Delete <span style="font-size:13px;">&#128465;</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="tab-bar" style="opacity:0.3;">
+        <div class="tab-item active"><span class="tab-icon">&#9783;</span><span class="tab-label">Compose</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= MOCKUP 4: STEP 1 - BRAIN STATE ======================= -->
+<div class="mockup-container">
+  <div class="mockup-label">04 / 10</div>
+  <div class="mockup-sublabel">Step 1 -- Brain State Selection</div>
+  <div class="phone">
+    <div class="dynamic-island"></div>
+    <div class="status-bar"><span class="time">9:41</span><span class="icons"></span></div>
+    <div class="screen" style="position: relative;">
+      <!-- Sheet covers most of screen -->
+      <div class="sheet-overlay"></div>
+      <div class="sheet" style="height: 720px;">
+        <div class="sheet-handle"></div>
+        <div class="step-dots">
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div style="padding: 16px 0; overflow-y:auto; height: calc(100% - 60px);">
+          <div class="step-header">
+            <h2>Brain State</h2>
+            <p>Choose your target frequency band</p>
+          </div>
+          <!-- 2x2 Grid -->
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; padding:0 var(--page-margin); margin-bottom: 32px;">
+            <div class="brain-card selected">
+              <div class="glow" style="background:var(--focus);"></div>
+              <div class="card-icon" style="background:rgba(91,106,191,0.15); color:var(--focus);">&#9881;</div>
+              <h3>Deep Focus</h3>
+              <p>Beta 12-20 Hz</p>
+            </div>
+            <div class="brain-card">
+              <div class="glow" style="background:var(--relaxation); opacity:0;"></div>
+              <div class="card-icon" style="background:rgba(78,168,166,0.15); color:var(--relaxation);">&#127811;</div>
+              <h3>Calm</h3>
+              <p>Alpha 7-12 Hz</p>
+            </div>
+            <div class="brain-card">
+              <div class="glow" style="background:var(--sleep); opacity:0;"></div>
+              <div class="card-icon" style="background:rgba(144,128,196,0.15); color:var(--sleep);">&#127769;</div>
+              <h3>Sleep</h3>
+              <p>Theta 1-8 Hz</p>
+            </div>
+            <div class="brain-card">
+              <div class="glow" style="background:var(--energize); opacity:0;"></div>
+              <div class="card-icon" style="background:rgba(245,166,35,0.15); color:var(--energize);">&#9889;</div>
+              <h3>Energy</h3>
+              <p>Beta 14-30 Hz</p>
+            </div>
+          </div>
+          <div style="padding: 0 var(--page-margin);">
+            <div class="btn-next">Next</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= MOCKUP 5: STEP 2 - SOUNDSCAPE ======================= -->
+<div class="mockup-container">
+  <div class="mockup-label">05 / 10</div>
+  <div class="mockup-sublabel">Step 2 -- Soundscape (Base + Detail)</div>
+  <div class="phone">
+    <div class="dynamic-island"></div>
+    <div class="status-bar"><span class="time">9:41</span><span class="icons"></span></div>
+    <div class="screen" style="position: relative;">
+      <div class="sheet-overlay"></div>
+      <div class="sheet" style="height: 720px;">
+        <div class="sheet-handle"></div>
+        <div class="step-dots">
+          <div class="step-dot completed"></div>
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div style="padding: 16px 0; overflow-y:auto; height: calc(100% - 60px);">
+          <div class="step-header">
+            <h2>Soundscape</h2>
+            <p>Build your ambient environment</p>
+          </div>
+
+          <!-- Now Playing indicator -->
+          <div class="now-playing" style="margin-bottom: 24px;">
+            <div class="bars"><span></span><span></span><span></span><span></span></div>
+            Preview playing -- Deep Focus
+          </div>
+
+          <div class="section-label">Environment</div>
+          <div class="pill-scroll" style="margin-bottom:24px;">
+            <div class="glass-pill selected">&#127783;&#65039; Rain</div>
+            <div class="glass-pill">&#127754; Ocean</div>
+            <div class="glass-pill">&#127795; Forest</div>
+            <div class="glass-pill">&#127754; River</div>
+            <div class="glass-pill">&#127788;&#65039; Wind</div>
+            <div class="glass-pill">&#127769; Night</div>
+            <div class="glass-pill" style="opacity:0.5;">Off</div>
+          </div>
+
+          <div class="section-label">Detail Texture</div>
+          <div class="pill-scroll" style="margin-bottom:32px;">
+            <div class="glass-pill">None</div>
+            <div class="glass-pill selected">&#9736; Thunder</div>
+            <div class="glass-pill">&#128038; Birdsong</div>
+            <div class="glass-pill">&#129431; Crickets</div>
+            <div class="glass-pill">&#128293; Fire</div>
+            <div class="glass-pill">&#127900; Chimes</div>
+          </div>
+
+          <div class="btn-nav-row">
+            <div class="btn-next secondary">Back</div>
+            <div class="btn-next">Next</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= MOCKUP 6: STEP 3 - MELODIC ======================= -->
+<div class="mockup-container">
+  <div class="mockup-label">06 / 10</div>
+  <div class="mockup-sublabel">Step 3 -- Melodic Layer</div>
+  <div class="phone">
+    <div class="dynamic-island"></div>
+    <div class="status-bar"><span class="time">9:41</span><span class="icons"></span></div>
+    <div class="screen" style="position: relative;">
+      <div class="sheet-overlay"></div>
+      <div class="sheet" style="height: 720px;">
+        <div class="sheet-handle"></div>
+        <div class="step-dots">
+          <div class="step-dot completed"></div>
+          <div class="step-dot completed"></div>
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div style="padding: 16px 0; overflow-y:auto; height: calc(100% - 60px);">
+          <div class="step-header">
+            <h2>Melodic Layer</h2>
+            <p>Choose instruments and character</p>
+          </div>
+
+          <div class="now-playing" style="margin-bottom: 24px;">
+            <div class="bars"><span></span><span></span><span></span><span></span></div>
+            Deep Focus &bull; Rain + Thunder
+          </div>
+
+          <div class="section-label">Instruments</div>
+          <div class="pill-scroll" style="margin-bottom:28px;">
+            <div class="glass-pill selected">&#127929; Piano</div>
+            <div class="glass-pill selected">&#127926; Pads</div>
+            <div class="glass-pill">&#127931; Strings</div>
+            <div class="glass-pill">&#127928; Guitar</div>
+            <div class="glass-pill">&#127912; Texture</div>
+          </div>
+
+          <div class="section-label">Character</div>
+          <div style="padding: 0 var(--page-margin); display:flex; flex-direction:column; gap:24px; margin-bottom:32px;">
+            <div class="slider-row">
+              <div class="slider-labels"><span>Warm</span><span>Bright</span></div>
+              <div class="slider-track">
+                <div class="slider-fill" style="width:40%;"></div>
+                <div class="slider-thumb" style="left:40%;"></div>
+              </div>
+            </div>
+            <div class="slider-row">
+              <div class="slider-labels"><span>Sparse</span><span>Dense</span></div>
+              <div class="slider-track">
+                <div class="slider-fill" style="width:30%;"></div>
+                <div class="slider-thumb" style="left:30%;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-nav-row">
+            <div class="btn-next secondary">Back</div>
+            <div class="btn-next">Next</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= MOCKUP 7: STEP 4 - SPACE & MIX ======================= -->
+<div class="mockup-container">
+  <div class="mockup-label">07 / 10</div>
+  <div class="mockup-sublabel">Step 4 -- Space & Mix</div>
+  <div class="phone">
+    <div class="dynamic-island"></div>
+    <div class="status-bar"><span class="time">9:41</span><span class="icons"></span></div>
+    <div class="screen" style="position: relative;">
+      <div class="sheet-overlay"></div>
+      <div class="sheet" style="height: 720px;">
+        <div class="sheet-handle"></div>
+        <div class="step-dots">
+          <div class="step-dot completed"></div>
+          <div class="step-dot completed"></div>
+          <div class="step-dot completed"></div>
+          <div class="step-dot active"></div>
+          <div class="step-dot"></div>
+        </div>
+        <div style="padding: 16px 0; overflow-y:auto; height: calc(100% - 60px);">
+          <div class="step-header">
+            <h2>Space & Mix</h2>
+            <p>Shape the depth and balance</p>
+          </div>
+
+          <div class="now-playing" style="margin-bottom: 24px;">
+            <div class="bars"><span></span><span></span><span></span><span></span></div>
+            Focus &bull; Rain + Thunder &bull; Piano, Pads
+          </div>
+
+          <div class="section-label">Space</div>
+          <div style="padding: 0 var(--page-margin); margin-bottom:32px;">
+            <div class="slider-row">
+              <div class="slider-labels"><span>Intimate</span><span>Vast</span></div>
+              <div class="slider-track">
+                <div class="slider-fill" style="width:35%; background: linear-gradient(90deg, var(--accent), var(--sleep));"></div>
+                <div class="slider-thumb" style="left:35%;"></div>
+              </div>
+              <div style="text-align:center; font-size:12px; color:var(--text-tertiary); font-family:'SF Mono', monospace; margin-top:4px;">Hall</div>
+            </div>
+          </div>
+
+          <div class="section-label">Volume Balance</div>
+          <div style="display:flex; flex-direction:column; gap:20px; margin-bottom:32px;">
+            <div class="vol-row">
+              <span class="vol-label">Beats</span>
+              <div class="vol-track">
+                <div style="position:absolute; left:0; top:0; width:45%; height:100%; background:var(--accent); border-radius:2px;"></div>
+                <div class="slider-thumb" style="left:45%; width:18px; height:18px;"></div>
+              </div>
+            </div>
+            <div class="vol-row">
+              <span class="vol-label">Soundscape</span>
+              <div class="vol-track">
+                <div style="position:absolute; left:0; top:0; width:70%; height:100%; background:var(--relaxation); border-radius:2px;"></div>
+                <div class="slider-thumb" style="left:70%; width:18px; height:18px;"></div>
+              </div>
+            </div>
+            <div class="vol-row">
+              <span class="vol-label">Melodic</span>
+              <div class="vol-track">
+                <div style="position:absolute; left:0; top:0; width:55%; height:100%; background:var(--sleep); border-radius:2px;"></div>
+                <div class="slider-thumb" style="left:55%; width:18px; height:18px;"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="btn-nav-row">
+            <div class="btn-next secondary">Back</div>
+            <div class="btn-next">Next</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= MOCKUP 8: STEP 5 - SAVE ======================= -->
+<div class="mockup-container">
+  <div class="mockup-label">08 / 10</div>
+  <div class="mockup-sublabel">Step 5 -- Save Composition</div>
+  <div class="phone">
+    <div class="dynamic-island"></div>
+    <div class="status-bar"><span class="time">9:41</span><span class="icons"></span></div>
+    <div class="screen" style="position: relative;">
+      <div class="sheet-overlay"></div>
+      <div class="sheet" style="height: 720px;">
+        <div class="sheet-handle"></div>
+        <div class="step-dots">
+          <div class="step-dot completed"></div>
+          <div class="step-dot completed"></div>
+          <div class="step-dot completed"></div>
+          <div class="step-dot completed"></div>
+          <div class="step-dot active"></div>
+        </div>
+        <div style="padding: 16px 0; overflow-y:auto; height: calc(100% - 60px);">
+          <div class="step-header">
+            <h2>Save</h2>
+            <p>Name your composition and set duration</p>
+          </div>
+
+          <div class="now-playing" style="margin-bottom: 24px;">
+            <div class="bars"><span></span><span></span><span></span><span></span></div>
+            Full preview playing
+          </div>
+
+          <!-- Name -->
+          <div class="section-label">Name</div>
+          <div style="padding: 0 var(--page-margin); margin-bottom:24px;">
+            <div class="text-input">Rain + Piano Focus</div>
+          </div>
+
+          <!-- Duration -->
+          <div class="section-label">Duration</div>
+          <div style="padding: 0 var(--page-margin); margin-bottom:24px;">
+            <div class="segmented">
+              <div class="seg-item">15</div>
+              <div class="seg-item active">25</div>
+              <div class="seg-item">45</div>
+              <div class="seg-item">60</div>
+              <div class="seg-item">90</div>
+            </div>
+            <div style="text-align:center; font-size:11px; color:var(--text-tertiary); margin-top:6px;">minutes</div>
+          </div>
+
+          <!-- Adaptive -->
+          <div style="padding: 0 var(--page-margin); margin-bottom:32px;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:16px; background:var(--surface); border-radius:var(--radius-lg); border:var(--glass-stroke) solid var(--glass-border);">
+              <div>
+                <div style="font-size:15px; font-weight:500; margin-bottom:2px;">Adaptive</div>
+                <div style="font-size:12px; color:var(--text-tertiary);">Responds to biometrics via Watch</div>
+              </div>
+              <div class="toggle on"><div class="toggle-knob"></div></div>
+            </div>
+          </div>
+
+          <!-- Summary -->
+          <div style="padding: 0 var(--page-margin); margin-bottom:24px;">
+            <div style="background:var(--surface); border-radius:var(--radius-lg); border:var(--glass-stroke) solid var(--glass-border); padding:16px;">
+              <div style="font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-tertiary); margin-bottom:12px;">Summary</div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; font-size:13px;">
+                <div><span style="color:var(--text-tertiary);">Brain State</span></div>
+                <div style="text-align:right; color:var(--focus);">Deep Focus</div>
+                <div><span style="color:var(--text-tertiary);">Soundscape</span></div>
+                <div style="text-align:right;">Rain + Thunder</div>
+                <div><span style="color:var(--text-tertiary);">Melodic</span></div>
+                <div style="text-align:right;">Piano, Pads</div>
+                <div><span style="color:var(--text-tertiary);">Space</span></div>
+                <div style="text-align:right;">Hall</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding: 0 var(--page-margin); display:flex; gap:12px;">
+            <div class="btn-next secondary" style="flex:0.4;">Back</div>
+            <div class="btn-next" style="flex:0.6;">Save Composition</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= MOCKUP 9: PLAYING FROM HUB ======================= -->
+<div class="mockup-container">
+  <div class="mockup-label">09 / 10</div>
+  <div class="mockup-sublabel">Session Launch -- Tapping a Composition</div>
+  <div class="phone">
+    <div class="dynamic-island"></div>
+    <div class="status-bar"><span class="time">9:41</span><span class="icons"></span></div>
+    <div class="screen" style="position:relative; background:var(--canvas);">
+      <!-- Session screen with orb -->
+      <div style="position:absolute; inset:0; background:radial-gradient(circle at 50% 45%, rgba(91,106,191,0.05) 0%, transparent 70%);"></div>
+
+      <div style="position:relative; z-index:1; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+        <!-- Mode label -->
+        <div style="font-size:28px; font-weight:300; color:rgba(91,106,191,0.4); letter-spacing:0.5px; margin-bottom:40px;">Deep Focus</div>
+
+        <!-- Wavelength + Orb -->
+        <div style="position:relative; width:100%; height:140px; display:flex; align-items:center; justify-content:center;">
+          <!-- Wavelength SVG -->
+          <svg style="position:absolute; width:100%; height:60px;" viewBox="0 0 393 60" preserveAspectRatio="none">
+            <path d="M0,30 Q49,10 98,30 Q147,50 196,30 Q245,10 294,30 Q343,50 393,30" fill="none" stroke="rgba(91,106,191,0.15)" stroke-width="1.5"/>
+          </svg>
+          <!-- Orb -->
+          <div style="position:relative; width:100px; height:100px;">
+            <div style="position:absolute; inset:-40px; border-radius:50%; background:radial-gradient(circle, rgba(91,106,191,0.2) 0%, rgba(91,106,191,0.03) 60%, transparent 100%);"></div>
+            <div style="position:absolute; inset:0; border-radius:50%; background:radial-gradient(circle, rgba(91,106,191,0.4) 0%, rgba(91,106,191,0.08) 50%, transparent 100%);"></div>
+          </div>
+        </div>
+
+        <!-- Timer -->
+        <div style="font-family:'SF Mono', monospace; font-size:32px; font-weight:300; color:rgba(226,230,240,0.5); margin-top:32px; letter-spacing:1px;">24:59</div>
+
+        <!-- Composition label -->
+        <div style="font-size:13px; color:var(--text-tertiary); margin-top:8px;">Rain + Piano Focus</div>
+
+        <!-- Spacer -->
+        <div style="flex:1;"></div>
+
+        <!-- Bottom info -->
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+          <span style="font-family:'SF Mono', monospace; font-size:14px; color:rgba(226,230,240,0.3);">&#9829; 64</span>
+        </div>
+
+        <!-- Stop button -->
+        <div style="width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.08); display:flex; align-items:center; justify-content:center; margin-bottom:60px;">
+          <div style="width:14px; height:14px; background:rgba(226,230,240,0.5); border-radius:3px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= MOCKUP 10: FULL FLOW OVERVIEW ======================= -->
+<div class="mockup-container">
+  <div class="mockup-label">10 / 10</div>
+  <div class="mockup-sublabel">Step Flow Diagram -- The Journey</div>
+  <div class="phone">
+    <div class="dynamic-island"></div>
+    <div class="status-bar"><span class="time">9:41</span><span class="icons"></span></div>
+    <div class="screen" style="position:relative; background:var(--canvas);">
+      <div style="position:relative; z-index:1; height:100%; display:flex; flex-direction:column; padding:24px var(--page-margin);">
+        <div style="font-size:22px; font-weight:500; margin-bottom:4px;">The Flow</div>
+        <div style="font-size:13px; color:var(--text-tertiary); margin-bottom:32px;">Sound builds with each step</div>
+
+        <!-- Flow steps -->
+        <div style="display:flex; flex-direction:column; gap:0; flex:1;">
+          <!-- Step 1 -->
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+              <div style="width:36px; height:36px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:white;">1</div>
+              <div style="width:2px; flex:1; background:linear-gradient(180deg, var(--accent), var(--focus)); min-height:40px;"></div>
+            </div>
+            <div style="padding-bottom:16px;">
+              <div style="font-size:16px; font-weight:600; margin-bottom:2px;">Brain State</div>
+              <div style="font-size:12px; color:var(--text-tertiary);">Focus, Calm, Sleep, or Energy</div>
+              <div style="font-size:11px; color:var(--accent); margin-top:4px;">&#9654; Binaural beats start</div>
+            </div>
+          </div>
+          <!-- Step 2 -->
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+              <div style="width:36px; height:36px; border-radius:50%; background:var(--relaxation); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:white;">2</div>
+              <div style="width:2px; flex:1; background:linear-gradient(180deg, var(--relaxation), var(--sleep)); min-height:40px;"></div>
+            </div>
+            <div style="padding-bottom:16px;">
+              <div style="font-size:16px; font-weight:600; margin-bottom:2px;">Soundscape</div>
+              <div style="font-size:12px; color:var(--text-tertiary);">Base environment + detail texture</div>
+              <div style="font-size:11px; color:var(--relaxation); margin-top:4px;">&#9654; Ambient layer fades in</div>
+            </div>
+          </div>
+          <!-- Step 3 -->
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+              <div style="width:36px; height:36px; border-radius:50%; background:var(--sleep); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:white;">3</div>
+              <div style="width:2px; flex:1; background:linear-gradient(180deg, var(--sleep), var(--energize)); min-height:40px;"></div>
+            </div>
+            <div style="padding-bottom:16px;">
+              <div style="font-size:16px; font-weight:600; margin-bottom:2px;">Melodic Layer</div>
+              <div style="font-size:12px; color:var(--text-tertiary);">Instruments + Warm/Bright, Sparse/Dense</div>
+              <div style="font-size:11px; color:var(--sleep); margin-top:4px;">&#9654; Music joins the mix</div>
+            </div>
+          </div>
+          <!-- Step 4 -->
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+              <div style="width:36px; height:36px; border-radius:50%; background:var(--energize); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:white;">4</div>
+              <div style="width:2px; flex:1; background:linear-gradient(180deg, var(--energize), var(--accent)); min-height:40px;"></div>
+            </div>
+            <div style="padding-bottom:16px;">
+              <div style="font-size:16px; font-weight:600; margin-bottom:2px;">Space & Mix</div>
+              <div style="font-size:12px; color:var(--text-tertiary);">Reverb depth + volume balance</div>
+              <div style="font-size:11px; color:var(--energize); margin-top:4px;">&#9654; Refine the blend</div>
+            </div>
+          </div>
+          <!-- Step 5 -->
+          <div style="display:flex; gap:16px; align-items:flex-start;">
+            <div style="display:flex; flex-direction:column; align-items:center;">
+              <div style="width:36px; height:36px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:white;">5</div>
+            </div>
+            <div>
+              <div style="font-size:16px; font-weight:600; margin-bottom:2px;">Save</div>
+              <div style="font-size:12px; color:var(--text-tertiary);">Name, duration, adaptive toggle</div>
+              <div style="font-size:11px; color:var(--accent); margin-top:4px;">&#9654; Saved to your library</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom note -->
+        <div style="text-align:center; padding:16px 0; font-size:12px; color:var(--text-tertiary); border-top:0.5px solid var(--divider); margin-top:8px;">
+          Audio preview plays throughout. Swipe between steps.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end mockup-grid -->
+
+</body>
+</html>

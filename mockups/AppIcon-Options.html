@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — App Icon Options</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #0a0a0a;
+    color: #e0e0e0;
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+    padding: 60px 40px;
+  }
+  h1 { text-align: center; font-size: 32px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 8px; color: #fff; }
+  .subtitle { text-align: center; font-size: 15px; color: #888; margin-bottom: 50px; }
+  .section-label { text-align: center; font-size: 13px; text-transform: uppercase; letter-spacing: 2px; color: #6E7CF7; margin-bottom: 20px; margin-top: 50px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 50px 30px;
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+  .icon-card { display: flex; flex-direction: column; align-items: center; }
+  .icon-card .label { margin-top: 14px; font-size: 14px; font-weight: 500; color: #aaa; }
+  .icon-card .desc { margin-top: 4px; font-size: 12px; color: #555; max-width: 220px; text-align: center; line-height: 1.4; }
+  .divider { width: 120px; height: 1px; background: #1a1a1a; margin: 50px auto 0; }
+  canvas.icon { width: 220px; height: 220px; border-radius: 48px; }
+  @media (max-width: 1200px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (max-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+</style>
+</head>
+<body>
+
+<h1>BioNaural — Wave Icon Exploration</h1>
+<p class="subtitle">Bulge at center, taper to edges — waves breathe together</p>
+
+<div class="grid" id="grid"></div>
+
+<div class="divider"></div>
+<div class="section-label">Size Tests</div>
+<div style="text-align:center; font-size:13px; color:#555; margin-bottom:30px;">Every option at 29pt, 60pt, 87px, 120px, 180px</div>
+<div id="size-tests" style="max-width:1200px; margin:0 auto;"></div>
+
+<div style="height:80px"></div>
+
+<script>
+const S = 1024;
+const BG = '#080C15';
+
+// Wave colors
+const SLEEP    = { r:144, g:128, b:196, hex:'#9080C4' };
+const RELAX    = { r:78,  g:168, b:166, hex:'#4EA8A6' };
+const FOCUS    = { r:91,  g:106, b:191, hex:'#5B6ABF' };
+const ENERGIZE = { r:245, g:166, b:35,  hex:'#F5A623' };
+const PERI     = { r:110, g:124, b:247, hex:'#6E7CF7' };
+
+// Bell-curve amplitude envelope
+function envelope(x, center, width) {
+  const t = (x - center) / width;
+  return Math.exp(-t * t * 2.5);
+}
+
+// Generate wave y-values with amplitude envelope
+function waveY(x, freq, amp, centerX, envWidth, phase) {
+  const env = envelope(x, centerX, envWidth);
+  return Math.sin((x / S) * Math.PI * 2 * freq + (phase || 0)) * amp * env;
+}
+
+// Build a wave path string
+function wavePath(freq, amp, centerX, envWidth, phase, steps) {
+  steps = steps || 200;
+  let d = '';
+  for (let i = 0; i <= steps; i++) {
+    const x = (i / steps) * S;
+    const y = S / 2 + waveY(x, freq, amp, centerX, envWidth, phase);
+    d += (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+  }
+  return d;
+}
+
+function drawIcon(ctx, config) {
+  const { waves, glowIntensity = 1, centerGlow = false, centerGlowColor = PERI } = config;
+
+  // Background
+  ctx.fillStyle = BG;
+  ctx.fillRect(0, 0, S, S);
+
+  // Ambient center glow
+  if (centerGlow) {
+    const cg = ctx.createRadialGradient(S/2, S/2, 0, S/2, S/2, S * 0.4);
+    cg.addColorStop(0, `rgba(${centerGlowColor.r},${centerGlowColor.g},${centerGlowColor.b},0.12)`);
+    cg.addColorStop(0.5, `rgba(${centerGlowColor.r},${centerGlowColor.g},${centerGlowColor.b},0.04)`);
+    cg.addColorStop(1, 'rgba(8,12,21,0)');
+    ctx.fillStyle = cg;
+    ctx.fillRect(0, 0, S, S);
+  }
+
+  // Background glow
+  const bg = ctx.createRadialGradient(S/2, S/2, 0, S/2, S/2, S * 0.45);
+  bg.addColorStop(0, `rgba(${PERI.r},${PERI.g},${PERI.b},${0.06 * glowIntensity})`);
+  bg.addColorStop(1, 'rgba(8,12,21,0)');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, S, S);
+
+  // Draw each wave
+  waves.forEach(w => {
+    const path = wavePath(w.freq, w.amp, w.cx || S/2, w.envW || S * 0.38, w.phase || 0, 300);
+    const p = new Path2D(path);
+
+    // Glow layer
+    ctx.save();
+    ctx.strokeStyle = w.color.hex;
+    ctx.lineWidth = (w.glowWidth || 16) * glowIntensity;
+    ctx.globalAlpha = (w.glowAlpha || 0.06) * glowIntensity;
+    ctx.filter = `blur(${w.glowBlur || 14}px)`;
+    ctx.lineCap = 'round';
+    ctx.stroke(p);
+    ctx.restore();
+
+    // Soft layer
+    ctx.save();
+    ctx.strokeStyle = w.color.hex;
+    ctx.lineWidth = w.softWidth || 5;
+    ctx.globalAlpha = w.softAlpha || 0.3;
+    ctx.filter = `blur(${w.softBlur || 4}px)`;
+    ctx.lineCap = 'round';
+    ctx.stroke(p);
+    ctx.restore();
+
+    // Sharp layer
+    ctx.save();
+    ctx.strokeStyle = w.color.hex;
+    ctx.lineWidth = w.width || 2.5;
+    ctx.globalAlpha = w.alpha || 0.75;
+    ctx.lineCap = 'round';
+    ctx.filter = 'none';
+    ctx.stroke(p);
+    ctx.restore();
+  });
+}
+
+// ============ 10 CONFIGS ============
+
+const configs = [
+  {
+    name: '1. Balanced Four',
+    desc: 'All four modes, equal presence, bell-curve amplitude',
+    config: {
+      centerGlow: true,
+      waves: [
+        { color: SLEEP,    freq: 1.2,  amp: 200, width: 2.5, alpha: 0.6,  softWidth: 5, softAlpha: 0.25, softBlur: 5, glowWidth: 18, glowAlpha: 0.06, glowBlur: 16 },
+        { color: RELAX,    freq: 2.0,  amp: 190, width: 2.5, alpha: 0.65, softWidth: 5, softAlpha: 0.28, softBlur: 5, glowWidth: 18, glowAlpha: 0.06, glowBlur: 16, phase: 0.3 },
+        { color: FOCUS,    freq: 3.2,  amp: 210, width: 3,   alpha: 0.8,  softWidth: 6, softAlpha: 0.35, softBlur: 5, glowWidth: 20, glowAlpha: 0.08, glowBlur: 16, phase: 0.6 },
+        { color: ENERGIZE, freq: 5.5,  amp: 140, width: 2,   alpha: 0.6,  softWidth: 4, softAlpha: 0.2,  softBlur: 4, glowWidth: 14, glowAlpha: 0.05, glowBlur: 14, phase: 0.2 },
+      ]
+    }
+  },
+  {
+    name: '2. Focus Forward',
+    desc: 'Blue focus wave dominates, others support from behind',
+    config: {
+      centerGlow: true,
+      centerGlowColor: FOCUS,
+      waves: [
+        { color: SLEEP,    freq: 1.0,  amp: 150, width: 1.8, alpha: 0.3,  softWidth: 4, softAlpha: 0.15, softBlur: 6, glowWidth: 14, glowAlpha: 0.04, glowBlur: 18, phase: 0.5 },
+        { color: RELAX,    freq: 1.8,  amp: 160, width: 2,   alpha: 0.4,  softWidth: 4, softAlpha: 0.18, softBlur: 6, glowWidth: 14, glowAlpha: 0.04, glowBlur: 18 },
+        { color: ENERGIZE, freq: 6.0,  amp: 100, width: 1.5, alpha: 0.35, softWidth: 3, softAlpha: 0.12, softBlur: 5, glowWidth: 10, glowAlpha: 0.03, glowBlur: 14, phase: 0.8 },
+        { color: FOCUS,    freq: 3.0,  amp: 240, width: 3.5, alpha: 0.9,  softWidth: 7, softAlpha: 0.4,  softBlur: 6, glowWidth: 24, glowAlpha: 0.1,  glowBlur: 18, phase: 0.4 },
+      ]
+    }
+  },
+  {
+    name: '3. Wide & Airy',
+    desc: 'Wider envelope, waves breathe across more space',
+    config: {
+      centerGlow: true,
+      glowIntensity: 0.8,
+      waves: [
+        { color: SLEEP,    freq: 1.0,  amp: 180, envW: S*0.44, width: 2.5, alpha: 0.55, softWidth: 5, softAlpha: 0.22, softBlur: 5, glowWidth: 16, glowAlpha: 0.05, glowBlur: 16 },
+        { color: RELAX,    freq: 1.8,  amp: 170, envW: S*0.42, width: 2.5, alpha: 0.6,  softWidth: 5, softAlpha: 0.25, softBlur: 5, glowWidth: 16, glowAlpha: 0.05, glowBlur: 16, phase: 0.4 },
+        { color: FOCUS,    freq: 2.8,  amp: 200, envW: S*0.40, width: 3,   alpha: 0.78, softWidth: 6, softAlpha: 0.32, softBlur: 5, glowWidth: 20, glowAlpha: 0.07, glowBlur: 16, phase: 0.7 },
+        { color: ENERGIZE, freq: 5.0,  amp: 130, envW: S*0.36, width: 2,   alpha: 0.55, softWidth: 4, softAlpha: 0.18, softBlur: 4, glowWidth: 12, glowAlpha: 0.04, glowBlur: 14, phase: 0.1 },
+      ]
+    }
+  },
+  {
+    name: '4. Tight Bulge',
+    desc: 'Narrower envelope, more dramatic center swell',
+    config: {
+      centerGlow: true,
+      waves: [
+        { color: SLEEP,    freq: 1.2,  amp: 230, envW: S*0.30, width: 2.5, alpha: 0.55, softWidth: 5, softAlpha: 0.22, softBlur: 5, glowWidth: 16, glowAlpha: 0.06, glowBlur: 16 },
+        { color: RELAX,    freq: 2.2,  amp: 220, envW: S*0.28, width: 2.5, alpha: 0.62, softWidth: 5, softAlpha: 0.26, softBlur: 5, glowWidth: 16, glowAlpha: 0.06, glowBlur: 16, phase: 0.5 },
+        { color: FOCUS,    freq: 3.5,  amp: 250, envW: S*0.32, width: 3,   alpha: 0.85, softWidth: 6, softAlpha: 0.38, softBlur: 5, glowWidth: 22, glowAlpha: 0.09, glowBlur: 16, phase: 0.3 },
+        { color: ENERGIZE, freq: 6.0,  amp: 160, envW: S*0.26, width: 2,   alpha: 0.55, softWidth: 4, softAlpha: 0.18, softBlur: 4, glowWidth: 14, glowAlpha: 0.04, glowBlur: 14, phase: 0.8 },
+      ]
+    }
+  },
+  {
+    name: '5. Neon Trails',
+    desc: 'Heavy glow — waves feel like light traced in darkness',
+    config: {
+      centerGlow: true,
+      glowIntensity: 1.6,
+      waves: [
+        { color: SLEEP,    freq: 1.2,  amp: 195, width: 2,   alpha: 0.55, softWidth: 6, softAlpha: 0.3,  softBlur: 7, glowWidth: 28, glowAlpha: 0.1,  glowBlur: 22 },
+        { color: RELAX,    freq: 2.0,  amp: 185, width: 2,   alpha: 0.6,  softWidth: 6, softAlpha: 0.32, softBlur: 7, glowWidth: 28, glowAlpha: 0.1,  glowBlur: 22, phase: 0.4 },
+        { color: FOCUS,    freq: 3.2,  amp: 215, width: 2.5, alpha: 0.75, softWidth: 7, softAlpha: 0.38, softBlur: 7, glowWidth: 32, glowAlpha: 0.12, glowBlur: 22, phase: 0.6 },
+        { color: ENERGIZE, freq: 5.5,  amp: 135, width: 1.8, alpha: 0.5,  softWidth: 5, softAlpha: 0.22, softBlur: 6, glowWidth: 22, glowAlpha: 0.08, glowBlur: 20, phase: 0.2 },
+      ]
+    }
+  },
+  {
+    name: '6. Essential Three',
+    desc: 'No energize — cleaner at small sizes, stronger identity',
+    config: {
+      centerGlow: true,
+      waves: [
+        { color: SLEEP,    freq: 1.0,  amp: 200, width: 2.8, alpha: 0.55, softWidth: 5.5, softAlpha: 0.25, softBlur: 5, glowWidth: 18, glowAlpha: 0.06, glowBlur: 16 },
+        { color: RELAX,    freq: 2.0,  amp: 200, width: 2.8, alpha: 0.65, softWidth: 5.5, softAlpha: 0.3,  softBlur: 5, glowWidth: 18, glowAlpha: 0.07, glowBlur: 16, phase: 0.5 },
+        { color: FOCUS,    freq: 3.2,  amp: 230, width: 3.2, alpha: 0.85, softWidth: 6.5, softAlpha: 0.38, softBlur: 5, glowWidth: 22, glowAlpha: 0.09, glowBlur: 16, phase: 0.3 },
+      ]
+    }
+  },
+  {
+    name: '7. Phase Shift',
+    desc: 'Waves are phase-offset so peaks interleave, not stack',
+    config: {
+      centerGlow: true,
+      waves: [
+        { color: SLEEP,    freq: 1.2,  amp: 200, width: 2.5, alpha: 0.58, softWidth: 5, softAlpha: 0.25, softBlur: 5, glowWidth: 18, glowAlpha: 0.06, glowBlur: 16, phase: 0 },
+        { color: RELAX,    freq: 2.0,  amp: 190, width: 2.5, alpha: 0.62, softWidth: 5, softAlpha: 0.28, softBlur: 5, glowWidth: 18, glowAlpha: 0.06, glowBlur: 16, phase: Math.PI * 0.4 },
+        { color: FOCUS,    freq: 3.2,  amp: 210, width: 3,   alpha: 0.8,  softWidth: 6, softAlpha: 0.35, softBlur: 5, glowWidth: 20, glowAlpha: 0.08, glowBlur: 16, phase: Math.PI * 0.8 },
+        { color: ENERGIZE, freq: 5.5,  amp: 140, width: 2,   alpha: 0.55, softWidth: 4, softAlpha: 0.2,  softBlur: 4, glowWidth: 14, glowAlpha: 0.05, glowBlur: 14, phase: Math.PI * 1.2 },
+      ]
+    }
+  },
+  {
+    name: '8. Soft Power',
+    desc: 'Thicker lines, more blur — gentle but commanding',
+    config: {
+      centerGlow: true,
+      glowIntensity: 1.2,
+      waves: [
+        { color: SLEEP,    freq: 1.2,  amp: 195, width: 3.5, alpha: 0.5,  softWidth: 8, softAlpha: 0.28, softBlur: 8, glowWidth: 22, glowAlpha: 0.08, glowBlur: 20 },
+        { color: RELAX,    freq: 2.0,  amp: 185, width: 3.5, alpha: 0.55, softWidth: 8, softAlpha: 0.3,  softBlur: 8, glowWidth: 22, glowAlpha: 0.08, glowBlur: 20, phase: 0.3 },
+        { color: FOCUS,    freq: 3.0,  amp: 210, width: 4,   alpha: 0.7,  softWidth: 9, softAlpha: 0.38, softBlur: 8, glowWidth: 26, glowAlpha: 0.1,  glowBlur: 20, phase: 0.6 },
+        { color: ENERGIZE, freq: 5.0,  amp: 130, width: 2.5, alpha: 0.45, softWidth: 6, softAlpha: 0.2,  softBlur: 7, glowWidth: 16, glowAlpha: 0.06, glowBlur: 18, phase: 0.2 },
+      ]
+    }
+  },
+  {
+    name: '9. High Contrast',
+    desc: 'Sharper lines, less blur — crisp at every size',
+    config: {
+      centerGlow: false,
+      glowIntensity: 0.5,
+      waves: [
+        { color: SLEEP,    freq: 1.2,  amp: 200, width: 2.8, alpha: 0.65, softWidth: 4, softAlpha: 0.3,  softBlur: 3, glowWidth: 10, glowAlpha: 0.04, glowBlur: 10 },
+        { color: RELAX,    freq: 2.0,  amp: 190, width: 2.8, alpha: 0.7,  softWidth: 4, softAlpha: 0.32, softBlur: 3, glowWidth: 10, glowAlpha: 0.04, glowBlur: 10, phase: 0.3 },
+        { color: FOCUS,    freq: 3.2,  amp: 215, width: 3.2, alpha: 0.9,  softWidth: 5, softAlpha: 0.4,  softBlur: 3, glowWidth: 12, glowAlpha: 0.05, glowBlur: 10, phase: 0.6 },
+        { color: ENERGIZE, freq: 5.5,  amp: 140, width: 2,   alpha: 0.65, softWidth: 3, softAlpha: 0.25, softBlur: 3, glowWidth: 8,  glowAlpha: 0.03, glowBlur: 8,  phase: 0.2 },
+      ]
+    }
+  },
+  {
+    name: '10. Convergence',
+    desc: 'Waves + bright center glow where they all cross',
+    config: {
+      centerGlow: true,
+      centerGlowColor: { r: 232, g: 234, b: 255, hex: '#E8EAFF' },
+      glowIntensity: 1.3,
+      waves: [
+        { color: SLEEP,    freq: 1.2,  amp: 195, width: 2.5, alpha: 0.55, softWidth: 5, softAlpha: 0.25, softBlur: 5, glowWidth: 18, glowAlpha: 0.06, glowBlur: 16 },
+        { color: RELAX,    freq: 2.0,  amp: 185, width: 2.5, alpha: 0.6,  softWidth: 5, softAlpha: 0.28, softBlur: 5, glowWidth: 18, glowAlpha: 0.06, glowBlur: 16, phase: 0.4 },
+        { color: FOCUS,    freq: 3.2,  amp: 210, width: 3,   alpha: 0.78, softWidth: 6, softAlpha: 0.35, softBlur: 5, glowWidth: 20, glowAlpha: 0.08, glowBlur: 16, phase: 0.7 },
+        { color: ENERGIZE, freq: 5.5,  amp: 135, width: 2,   alpha: 0.55, softWidth: 4, softAlpha: 0.2,  softBlur: 4, glowWidth: 14, glowAlpha: 0.05, glowBlur: 14, phase: 0.1 },
+      ]
+    }
+  },
+];
+
+// Render all icons
+const grid = document.getElementById('grid');
+const canvases = [];
+
+configs.forEach((item, i) => {
+  const card = document.createElement('div');
+  card.className = 'icon-card';
+
+  const canvas = document.createElement('canvas');
+  canvas.width = S;
+  canvas.height = S;
+  canvas.className = 'icon';
+  const ctx = canvas.getContext('2d');
+  drawIcon(ctx, item.config);
+  canvases.push(canvas);
+
+  const label = document.createElement('div');
+  label.className = 'label';
+  label.textContent = item.name;
+
+  const desc = document.createElement('div');
+  desc.className = 'desc';
+  desc.textContent = item.desc;
+
+  card.appendChild(canvas);
+  card.appendChild(label);
+  card.appendChild(desc);
+  grid.appendChild(card);
+});
+
+// Size tests
+const testContainer = document.getElementById('size-tests');
+const sizes = [{px:29,l:'29pt'},{px:60,l:'60pt'},{px:87,l:'87px'},{px:120,l:'120px'},{px:180,l:'180px'}];
+
+configs.forEach((item, i) => {
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex; align-items:flex-end; gap:24px; margin-bottom:24px;';
+
+  const lbl = document.createElement('div');
+  lbl.style.cssText = 'width:120px; font-size:12px; color:#6E7CF7; font-weight:500; padding-bottom:16px; text-align:right; flex-shrink:0;';
+  lbl.textContent = item.name;
+  row.appendChild(lbl);
+
+  sizes.forEach(s => {
+    const wrap = document.createElement('div');
+    wrap.style.cssText = 'display:flex; flex-direction:column; align-items:center; gap:5px;';
+
+    const img = document.createElement('img');
+    img.src = canvases[i].toDataURL();
+    img.style.cssText = `width:${s.px}px; height:${s.px}px; border-radius:${s.px*0.22}px;`;
+    wrap.appendChild(img);
+
+    const txt = document.createElement('span');
+    txt.style.cssText = 'font-size:10px; color:#444;';
+    txt.textContent = s.l;
+    wrap.appendChild(txt);
+
+    row.appendChild(wrap);
+  });
+
+  testContainer.appendChild(row);
+});
+</script>
+
+</body>
+</html>

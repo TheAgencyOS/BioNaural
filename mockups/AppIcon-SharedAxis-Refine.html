@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — Shared Axis Refinements</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:#0a0a0a; color:#e2e6f0;
+    font-family:-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+    padding:40px; min-height:100vh;
+  }
+  h1 { font-size:32px; font-weight:300; letter-spacing:1px; margin-bottom:8px; }
+  .subtitle { font-size:14px; color:#e2e6f0; opacity:0.4; margin-bottom:16px; letter-spacing:0.5px; }
+  .color-key { display:flex; gap:20px; margin-bottom:48px; flex-wrap:wrap; }
+  .ck { display:flex; align-items:center; gap:6px; }
+  .ck-dot { width:10px; height:10px; border-radius:50%; }
+  .ck-label { font-size:12px; font-weight:500; letter-spacing:0.5px; color:rgba(226,230,240,0.5); }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(340px, 1fr)); gap:56px; margin-bottom:64px; }
+  .card { display:flex; flex-direction:column; align-items:center; gap:14px; }
+  .ios-mask { border-radius:22.37%; overflow:hidden; position:relative; }
+  .card-number { font-size:12px; font-family:'SF Mono','Menlo',monospace; color:#6E7CF7; opacity:0.5; margin-bottom:2px; }
+  .card-name { font-size:18px; font-weight:500; color:#e2e6f0; opacity:0.9; }
+  .card-label { font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:#6E7CF7; opacity:0.7; }
+  .card-desc { font-size:13px; color:#e2e6f0; opacity:0.4; text-align:center; max-width:300px; line-height:1.5; }
+  .divider { width:100%; height:1px; background:rgba(110,124,247,0.08); margin:16px 0 48px; }
+  .section-title { font-size:20px; font-weight:500; margin-bottom:8px; color:#6E7CF7; }
+  .section-desc { font-size:13px; color:#e2e6f0; opacity:0.45; margin-bottom:28px; max-width:600px; line-height:1.5; }
+  .fave-badge { display:inline-block; background:rgba(110,124,247,0.15); border:1px solid rgba(110,124,247,0.3); color:#6E7CF7; font-size:10px; font-weight:600; letter-spacing:1.5px; text-transform:uppercase; padding:4px 12px; border-radius:100px; margin-top:4px; }
+  .size-row { display:flex; align-items:flex-end; gap:24px; flex-wrap:wrap; justify-content:center; margin-bottom:48px; }
+  .size-group { display:flex; flex-direction:column; align-items:center; gap:8px; }
+  .size-label { font-size:10px; color:#e2e6f0; opacity:0.3; font-family:'SF Mono','Menlo',monospace; }
+  .compare-row { display:flex; gap:32px; flex-wrap:wrap; justify-content:center; margin-bottom:48px; }
+  .homescreen { position:relative; width:390px; height:300px; border-radius:20px; overflow:hidden; display:grid; grid-template-columns:repeat(4,60px); grid-template-rows:repeat(3,60px); gap:24px 20px; padding:30px 35px; align-content:start; }
+  .homescreen-dark { background:linear-gradient(135deg,#1a1a2e 0%,#0d0d1a 100%); }
+  .homescreen-light { background:linear-gradient(135deg,#e8e0f0 0%,#d4cce0 100%); }
+  .mock-icon { width:60px; height:60px; border-radius:13.4px; overflow:hidden; }
+  .mock-placeholder { background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.05); }
+  .homescreen-light .mock-placeholder { background:rgba(0,0,0,0.06); border:1px solid rgba(0,0,0,0.04); }
+  .mock-competitor { display:flex; align-items:center; justify-content:center; font-size:8px; font-weight:600; text-transform:uppercase; letter-spacing:0.5px; }
+  .comp-calm { background:linear-gradient(135deg,#2b5ea7,#1a3a6a); color:rgba(255,255,255,0.7); }
+  .comp-headspace { background:#FF8C42; color:rgba(255,255,255,0.8); }
+  .comp-brainfm { background:linear-gradient(135deg,#4a2d7a,#2d1a4a); color:rgba(255,255,255,0.6); }
+  .comp-endel { background:#111; color:rgba(255,255,255,0.4); }
+  .grayscale-test { filter:grayscale(100%); }
+</style>
+</head>
+<body>
+
+<h1>Shared Axis — Refinements</h1>
+<p class="subtitle">10 variations on the 4-wave baseline concept. Exploring weight, glow, fills, and orb combinations.</p>
+
+<div class="color-key">
+  <div class="ck"><div class="ck-dot" style="background:#5B6ABF;"></div><span class="ck-label">Focus</span></div>
+  <div class="ck"><div class="ck-dot" style="background:#4EA8A6;"></div><span class="ck-label">Relaxation</span></div>
+  <div class="ck"><div class="ck-dot" style="background:#9080C4;"></div><span class="ck-label">Sleep</span></div>
+  <div class="ck"><div class="ck-dot" style="background:#F5A623;"></div><span class="ck-label">Energize</span></div>
+</div>
+
+<div class="grid">
+
+<!-- ============ A: ORIGINAL ============ -->
+<div class="card">
+  <div class="card-number">A</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="a-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="a-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+        <linearGradient id="a-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+          <stop offset="15%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="85%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="a-mask"><rect width="1024" height="1024" fill="url(#a-fade)"/></mask>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#a-bloom)"/>
+      <g mask="url(#a-mask)">
+        <path d="M0,512 Q256,420 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="2" opacity="0.40" filter="url(#a-soft)"/>
+        <path d="M0,512 Q256,420 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="1" opacity="0.55"/>
+        <path d="M0,512 Q170,450 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="2" opacity="0.40" filter="url(#a-soft)"/>
+        <path d="M0,512 Q170,450 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="1" opacity="0.55"/>
+        <path d="M0,512 Q102,470 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2.5" opacity="0.45" filter="url(#a-soft)"/>
+        <path d="M0,512 Q102,470 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="1.2" opacity="0.65"/>
+        <path d="M0,512 Q52,480 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="2" opacity="0.35" filter="url(#a-soft)"/>
+        <path d="M0,512 Q52,480 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1" opacity="0.55"/>
+      </g>
+    </svg>
+  </div>
+  <div class="card-name">A: Original</div>
+  <div class="card-label">Baseline from round 1</div>
+  <div class="card-desc">Reference point — edge fade, thin strokes, subtle.</div>
+</div>
+
+<!-- ============ B: BOLDER STROKES ============ -->
+<div class="card">
+  <div class="card-number">B</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="b-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="b-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5"/></filter>
+        <linearGradient id="b-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+          <stop offset="12%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="88%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="b-mask"><rect width="1024" height="1024" fill="url(#b-fade)"/></mask>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#b-bloom)"/>
+      <g mask="url(#b-mask)">
+        <path d="M0,512 Q256,390 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="4" opacity="0.35" filter="url(#b-soft)"/>
+        <path d="M0,512 Q256,390 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="2" opacity="0.55"/>
+        <path d="M0,512 Q170,420 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="4" opacity="0.35" filter="url(#b-soft)"/>
+        <path d="M0,512 Q170,420 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="2" opacity="0.60"/>
+        <path d="M0,512 Q102,450 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="5" opacity="0.40" filter="url(#b-soft)"/>
+        <path d="M0,512 Q102,450 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2.5" opacity="0.70"/>
+        <path d="M0,512 Q52,468 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="3.5" opacity="0.30" filter="url(#b-soft)"/>
+        <path d="M0,512 Q52,468 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1.8" opacity="0.60"/>
+      </g>
+    </svg>
+  </div>
+  <div class="card-name">B: Bolder</div>
+  <div class="card-label">Heavier strokes + deeper amplitude</div>
+  <div class="card-desc">More presence. Each wave's amplitude pushed further so they separate more clearly.</div>
+</div>
+
+<!-- ============ C: WITH GHOST ORB ============ -->
+<div class="card">
+  <div class="card-number">C</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="c-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="c-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="25"/></filter>
+        <filter id="c-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+        <linearGradient id="c-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+          <stop offset="12%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="88%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="c-mask"><rect width="1024" height="1024" fill="url(#c-fade)"/></mask>
+        <radialGradient id="c-orb" cx="50%" cy="48%" r="20%">
+          <stop offset="0%" stop-color="#E8EAFF" stop-opacity="0.12"/>
+          <stop offset="50%" stop-color="#6E7CF7" stop-opacity="0.06"/>
+          <stop offset="100%" stop-color="#6E7CF7" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#c-bloom)"/>
+      <!-- Ghost orb — barely there -->
+      <circle cx="512" cy="512" r="180" fill="url(#c-orb)"/>
+      <circle cx="512" cy="512" r="140" fill="#6E7CF7" opacity="0.04" filter="url(#c-glow)"/>
+      <g mask="url(#c-mask)">
+        <path d="M0,512 Q256,400 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="3" opacity="0.35" filter="url(#c-soft)"/>
+        <path d="M0,512 Q256,400 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="1.5" opacity="0.50"/>
+        <path d="M0,512 Q170,430 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="3" opacity="0.35" filter="url(#c-soft)"/>
+        <path d="M0,512 Q170,430 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.55"/>
+        <path d="M0,512 Q102,458 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="3.5" opacity="0.40" filter="url(#c-soft)"/>
+        <path d="M0,512 Q102,458 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="1.8" opacity="0.65"/>
+        <path d="M0,512 Q52,472 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.30" filter="url(#c-soft)"/>
+        <path d="M0,512 Q52,472 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.55"/>
+      </g>
+    </svg>
+  </div>
+  <div class="card-name">C: Ghost Orb</div>
+  <div class="card-label">Barely-there orb behind waves</div>
+  <div class="card-desc">A phantom orb anchors the center — the waves feel like they're emanating from something.</div>
+</div>
+
+<!-- ============ D: FILLED WAVES ============ -->
+<div class="card">
+  <div class="card-number">D</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="d-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="d-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="3"/></filter>
+        <linearGradient id="d-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+          <stop offset="10%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="90%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="d-mask"><rect width="1024" height="1024" fill="url(#d-fade)"/></mask>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.03" filter="url(#d-bloom)"/>
+      <g mask="url(#d-mask)">
+        <!-- Sleep — filled area under wave -->
+        <path d="M0,512 Q256,380 512,512 T1024,512 L1024,580 Q768,512 512,580 Q256,512 0,580 Z" fill="#9080C4" opacity="0.06"/>
+        <path d="M0,512 Q256,380 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="2" opacity="0.55"/>
+        <!-- Relaxation -->
+        <path d="M0,512 Q170,420 340,512 T680,512 T1024,512 L1024,565 Q850,512 680,565 Q510,512 340,565 Q170,512 0,565 Z" fill="#4EA8A6" opacity="0.06"/>
+        <path d="M0,512 Q170,420 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="2" opacity="0.60"/>
+        <!-- Focus -->
+        <path d="M0,512 Q102,450 204,512 T408,512 T612,512 T816,512 T1024,512 L1024,555 Q918,512 816,555 Q714,512 612,555 Q510,512 408,555 Q306,512 204,555 Q102,512 0,555 Z" fill="#5B6ABF" opacity="0.07"/>
+        <path d="M0,512 Q102,450 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2.5" opacity="0.70"/>
+        <!-- Energize -->
+        <path d="M0,512 Q52,468 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512 L1024,540 Q972,512 936,540 Q900,512 832,540 Q764,512 728,540 Q692,512 624,540 Q556,512 520,540 Q484,512 416,540 Q348,512 312,540 Q276,512 208,540 Q140,512 104,540 Q68,512 0,540 Z" fill="#F5A623" opacity="0.06"/>
+        <path d="M0,512 Q52,468 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1.5" opacity="0.60"/>
+      </g>
+    </svg>
+  </div>
+  <div class="card-name">D: Filled Waves</div>
+  <div class="card-label">Color fills under each wave</div>
+  <div class="card-desc">Subtle color fills give each wave more body and presence — richer without being heavy.</div>
+</div>
+
+<!-- ============ E: FULL BLEED ============ -->
+<div class="card">
+  <div class="card-number">E</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="e-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="e-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#e-bloom)"/>
+      <!-- No edge mask — waves go edge to edge -->
+      <path d="M0,512 Q256,380 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="3" opacity="0.35" filter="url(#e-soft)"/>
+      <path d="M0,512 Q256,380 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="1.5" opacity="0.50"/>
+      <path d="M0,512 Q170,420 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="3" opacity="0.35" filter="url(#e-soft)"/>
+      <path d="M0,512 Q170,420 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.55"/>
+      <path d="M0,512 Q102,450 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="4" opacity="0.40" filter="url(#e-soft)"/>
+      <path d="M0,512 Q102,450 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2" opacity="0.65"/>
+      <path d="M0,512 Q52,470 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.30" filter="url(#e-soft)"/>
+      <path d="M0,512 Q52,470 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.55"/>
+    </svg>
+  </div>
+  <div class="card-name">E: Full Bleed</div>
+  <div class="card-label">No edge fade — waves hit the mask</div>
+  <div class="card-desc">Waves run edge-to-edge. The iOS squircle crops them — feels like looking through a window into the waveform.</div>
+</div>
+
+<!-- ============ F: CENTER GLOW ============ -->
+<div class="card">
+  <div class="card-number">F</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="f-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="f-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="30"/></filter>
+        <filter id="f-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+        <linearGradient id="f-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+          <stop offset="12%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="88%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="f-mask"><rect width="1024" height="1024" fill="url(#f-fade)"/></mask>
+        <radialGradient id="f-cg" cx="50%" cy="50%" r="25%">
+          <stop offset="0%" stop-color="#E8EAFF" stop-opacity="0.18"/>
+          <stop offset="40%" stop-color="#6E7CF7" stop-opacity="0.08"/>
+          <stop offset="100%" stop-color="#080C15" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#f-bloom)"/>
+      <!-- Center glow where waves converge -->
+      <circle cx="512" cy="512" r="250" fill="url(#f-cg)"/>
+      <circle cx="512" cy="512" r="120" fill="#E8EAFF" opacity="0.03" filter="url(#f-glow)"/>
+      <g mask="url(#f-mask)">
+        <path d="M0,512 Q256,385 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="3.5" opacity="0.35" filter="url(#f-soft)"/>
+        <path d="M0,512 Q256,385 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="1.8" opacity="0.52"/>
+        <path d="M0,512 Q170,425 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="3.5" opacity="0.35" filter="url(#f-soft)"/>
+        <path d="M0,512 Q170,425 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="1.8" opacity="0.58"/>
+        <path d="M0,512 Q102,452 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="4.5" opacity="0.42" filter="url(#f-soft)"/>
+        <path d="M0,512 Q102,452 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2.2" opacity="0.68"/>
+        <path d="M0,512 Q52,472 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="3" opacity="0.30" filter="url(#f-soft)"/>
+        <path d="M0,512 Q52,472 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1.5" opacity="0.58"/>
+      </g>
+    </svg>
+  </div>
+  <div class="card-name">F: Center Glow</div>
+  <div class="card-label">Luminous center convergence</div>
+  <div class="card-desc">A soft glow at the center where all waves cross — the shared baseline becomes a light source.</div>
+  <div class="fave-badge">My Pick</div>
+</div>
+
+<!-- ============ G: WIDER SPREAD ============ -->
+<div class="card">
+  <div class="card-number">G</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="g-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="g-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+        <linearGradient id="g-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+          <stop offset="12%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="88%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="g-mask"><rect width="1024" height="1024" fill="url(#g-fade)"/></mask>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#g-bloom)"/>
+      <g mask="url(#g-mask)">
+        <!-- Sleep — top, big amplitude -->
+        <path d="M0,380 Q256,280 512,380 T1024,380" fill="none" stroke="#9080C4" stroke-width="3" opacity="0.35" filter="url(#g-soft)"/>
+        <path d="M0,380 Q256,280 512,380 T1024,380" fill="none" stroke="#9080C4" stroke-width="1.5" opacity="0.50"/>
+        <!-- Relaxation -->
+        <path d="M0,460 Q170,390 340,460 T680,460 T1024,460" fill="none" stroke="#4EA8A6" stroke-width="3" opacity="0.35" filter="url(#g-soft)"/>
+        <path d="M0,460 Q170,390 340,460 T680,460 T1024,460" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.55"/>
+        <!-- Focus -->
+        <path d="M0,555 Q102,510 204,555 T408,555 T612,555 T816,555 T1024,555" fill="none" stroke="#5B6ABF" stroke-width="4" opacity="0.40" filter="url(#g-soft)"/>
+        <path d="M0,555 Q102,510 204,555 T408,555 T612,555 T816,555 T1024,555" fill="none" stroke="#5B6ABF" stroke-width="2" opacity="0.65"/>
+        <!-- Energize — bottom -->
+        <path d="M0,640 Q52,610 104,640 T208,640 T312,640 T416,640 T520,640 T624,640 T728,640 T832,640 T936,640 T1024,640" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.30" filter="url(#g-soft)"/>
+        <path d="M0,640 Q52,610 104,640 T208,640 T312,640 T416,640 T520,640 T624,640 T728,640 T832,640 T936,640 T1024,640" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.55"/>
+      </g>
+    </svg>
+  </div>
+  <div class="card-name">G: Spread</div>
+  <div class="card-label">Waves separated vertically</div>
+  <div class="card-desc">Each wave on its own y-position — more like a waveform monitor. Cleaner separation, each mode breathes.</div>
+</div>
+
+<!-- ============ H: DOUBLE LINES ============ -->
+<div class="card">
+  <div class="card-number">H</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="h-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="h-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter>
+        <filter id="h-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="20"/></filter>
+        <linearGradient id="h-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+          <stop offset="12%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="88%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="h-mask"><rect width="1024" height="1024" fill="url(#h-fade)"/></mask>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#h-bloom)"/>
+      <circle cx="512" cy="512" r="150" fill="#E8EAFF" opacity="0.03" filter="url(#h-glow)"/>
+      <g mask="url(#h-mask)">
+        <!-- Each wave as a symmetric pair (above + below baseline) -->
+        <!-- Sleep -->
+        <path d="M0,512 Q256,380 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="1.5" opacity="0.45"/>
+        <path d="M0,512 Q256,644 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="1.5" opacity="0.45"/>
+        <!-- Relaxation -->
+        <path d="M0,512 Q170,420 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.50"/>
+        <path d="M0,512 Q170,604 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.50"/>
+        <!-- Focus -->
+        <path d="M0,512 Q102,455 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2" opacity="0.60"/>
+        <path d="M0,512 Q102,569 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2" opacity="0.60"/>
+        <!-- Energize -->
+        <path d="M0,512 Q52,475 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.50"/>
+        <path d="M0,512 Q52,549 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.50"/>
+      </g>
+    </svg>
+  </div>
+  <div class="card-name">H: Mirrored</div>
+  <div class="card-label">Symmetric wave pairs</div>
+  <div class="card-desc">Each mode shown as a mirrored pair above and below the axis — like an actual audio waveform visualization.</div>
+</div>
+
+<!-- ============ I: BOLD + ORB + GLOW ============ -->
+<div class="card">
+  <div class="card-number">I</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="i-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="i-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="22"/></filter>
+        <filter id="i-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5"/></filter>
+        <linearGradient id="i-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+          <stop offset="10%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="90%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="i-mask"><rect width="1024" height="1024" fill="url(#i-fade)"/></mask>
+        <radialGradient id="i-orb" cx="48%" cy="47%" r="18%">
+          <stop offset="0%" stop-color="#F0F1FF" stop-opacity="0.20"/>
+          <stop offset="30%" stop-color="#9BA3FA" stop-opacity="0.12"/>
+          <stop offset="60%" stop-color="#6E7CF7" stop-opacity="0.06"/>
+          <stop offset="100%" stop-color="#6E7CF7" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#i-bloom)"/>
+      <!-- Orb + glow behind -->
+      <circle cx="512" cy="512" r="200" fill="url(#i-orb)"/>
+      <circle cx="512" cy="512" r="100" fill="#C5CBFF" opacity="0.04" filter="url(#i-glow)"/>
+      <g mask="url(#i-mask)">
+        <!-- Bold waves with deep amplitude -->
+        <path d="M0,512 Q256,360 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="4" opacity="0.38" filter="url(#i-soft)"/>
+        <path d="M0,512 Q256,360 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="2" opacity="0.55"/>
+        <path d="M0,512 Q170,400 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="4" opacity="0.38" filter="url(#i-soft)"/>
+        <path d="M0,512 Q170,400 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="2" opacity="0.60"/>
+        <path d="M0,512 Q102,440 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="5" opacity="0.42" filter="url(#i-soft)"/>
+        <path d="M0,512 Q102,440 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2.5" opacity="0.70"/>
+        <path d="M0,512 Q52,465 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="3.5" opacity="0.32" filter="url(#i-soft)"/>
+        <path d="M0,512 Q52,465 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1.8" opacity="0.60"/>
+      </g>
+    </svg>
+  </div>
+  <div class="card-name">I: Full Package</div>
+  <div class="card-label">Bold waves + ghost orb + center glow</div>
+  <div class="card-desc">Everything combined — the orb presence, center luminance, and bold wave weights. Maximum impact.</div>
+</div>
+
+<!-- ============ J: ASYMMETRIC AMPLITUDE ============ -->
+<div class="card">
+  <div class="card-number">J</div>
+  <div class="ios-mask" style="width:300px;height:300px;">
+    <svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" viewBox="0 0 1024 1024">
+      <defs>
+        <filter id="j-bloom" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="55"/></filter>
+        <filter id="j-glow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="25"/></filter>
+        <filter id="j-soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4.5"/></filter>
+        <linearGradient id="j-fade" x1="0%" y1="0%" x2="100%" y2="0%">
+          <stop offset="0%" stop-color="#FFF" stop-opacity="0"/>
+          <stop offset="10%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="90%" stop-color="#FFF" stop-opacity="1"/>
+          <stop offset="100%" stop-color="#FFF" stop-opacity="0"/>
+        </linearGradient>
+        <mask id="j-mask"><rect width="1024" height="1024" fill="url(#j-fade)"/></mask>
+        <radialGradient id="j-cg" cx="50%" cy="50%" r="25%">
+          <stop offset="0%" stop-color="#E8EAFF" stop-opacity="0.14"/>
+          <stop offset="40%" stop-color="#6E7CF7" stop-opacity="0.06"/>
+          <stop offset="100%" stop-color="#080C15" stop-opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="1024" height="1024" fill="#080C15"/>
+      <circle cx="512" cy="512" r="350" fill="#6E7CF7" opacity="0.04" filter="url(#j-bloom)"/>
+      <circle cx="512" cy="512" r="200" fill="url(#j-cg)"/>
+      <g mask="url(#j-mask)">
+        <!-- Waves grow from edges → large at center, like the orb amplifies them -->
+        <!-- Sleep — amplitude peaks at center -->
+        <path d="M0,512 Q128,498 256,506 Q384,450 512,512 Q640,574 768,518 Q896,504 1024,512" fill="none" stroke="#9080C4" stroke-width="3" opacity="0.35" filter="url(#j-soft)"/>
+        <path d="M0,512 Q128,498 256,506 Q384,450 512,512 Q640,574 768,518 Q896,504 1024,512" fill="none" stroke="#9080C4" stroke-width="1.5" opacity="0.52"/>
+        <!-- Relaxation -->
+        <path d="M0,512 Q85,506 170,508 Q255,460 340,512 Q425,564 510,512 Q595,460 680,512 Q765,540 850,510 Q940,506 1024,512" fill="none" stroke="#4EA8A6" stroke-width="3" opacity="0.35" filter="url(#j-soft)"/>
+        <path d="M0,512 Q85,506 170,508 Q255,460 340,512 Q425,564 510,512 Q595,460 680,512 Q765,540 850,510 Q940,506 1024,512" fill="none" stroke="#4EA8A6" stroke-width="1.5" opacity="0.58"/>
+        <!-- Focus — strongest amplitude in the center third -->
+        <path d="M0,512 Q51,510 102,511 Q153,508 204,512 Q255,470 306,512 Q357,440 408,512 Q459,430 510,512 Q561,594 612,512 Q663,430 714,512 Q765,450 816,512 Q867,508 918,511 Q969,510 1024,512" fill="none" stroke="#5B6ABF" stroke-width="4" opacity="0.40" filter="url(#j-soft)"/>
+        <path d="M0,512 Q51,510 102,511 Q153,508 204,512 Q255,470 306,512 Q357,440 408,512 Q459,430 510,512 Q561,594 612,512 Q663,430 714,512 Q765,450 816,512 Q867,508 918,511 Q969,510 1024,512" fill="none" stroke="#5B6ABF" stroke-width="2" opacity="0.68"/>
+        <!-- Energize — tight ripples growing from edges -->
+        <path d="M0,512 Q26,510 52,511 Q78,509 104,512 Q130,505 156,512 Q182,498 208,512 Q234,490 260,512 Q286,480 312,512 Q338,470 364,512 Q390,465 416,512 Q442,460 468,512 Q494,458 520,512 Q546,458 572,512 Q598,465 624,512 Q650,470 676,512 Q702,480 728,512 Q754,490 780,512 Q806,498 832,512 Q858,505 884,512 Q910,509 936,511 Q962,510 988,512 L1024,512" fill="none" stroke="#F5A623" stroke-width="2.5" opacity="0.30" filter="url(#j-soft)"/>
+        <path d="M0,512 Q26,510 52,511 Q78,509 104,512 Q130,505 156,512 Q182,498 208,512 Q234,490 260,512 Q286,480 312,512 Q338,470 364,512 Q390,465 416,512 Q442,460 468,512 Q494,458 520,512 Q546,458 572,512 Q598,465 624,512 Q650,470 676,512 Q702,480 728,512 Q754,490 780,512 Q806,498 832,512 Q858,505 884,512 Q910,509 936,511 Q962,510 988,512 L1024,512" fill="none" stroke="#F5A623" stroke-width="1.2" opacity="0.58"/>
+      </g>
+    </svg>
+  </div>
+  <div class="card-name">J: Amplified Center</div>
+  <div class="card-label">Waves grow toward middle</div>
+  <div class="card-desc">Amplitude builds from quiet edges to loud center — like the orb is amplifying the signal. Organic and alive.</div>
+</div>
+
+</div><!-- end grid -->
+
+<div class="divider"></div>
+
+<!-- ============ SIZE + HOMESCREEN TESTS ============ -->
+<div class="section-title">Size Test — Top 3</div>
+<p class="section-desc">F (Center Glow), I (Full Package), and J (Amplified Center) at all iOS sizes.</p>
+
+<!-- F: Center Glow sizes -->
+<div style="margin-bottom:48px;">
+  <div style="font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:#6E7CF7; opacity:0.7; margin-bottom:16px; display:flex; align-items:center; gap:8px;">F — Center Glow <span class="fave-badge" style="margin:0;">My Pick</span></div>
+  <div class="size-row">
+    <div class="size-group">
+      <div class="ios-mask" style="width:180px;height:180px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 1024 1024"><defs><filter id="fs-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="30"/></filter><filter id="fs-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5"/></filter><linearGradient id="fs-f" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFF" stop-opacity="0"/><stop offset="12%" stop-color="#FFF" stop-opacity="1"/><stop offset="88%" stop-color="#FFF" stop-opacity="1"/><stop offset="100%" stop-color="#FFF" stop-opacity="0"/></linearGradient><mask id="fs-m"><rect width="1024" height="1024" fill="url(#fs-f)"/></mask><radialGradient id="fs-cg" cx="50%" cy="50%" r="25%"><stop offset="0%" stop-color="#E8EAFF" stop-opacity="0.18"/><stop offset="40%" stop-color="#6E7CF7" stop-opacity="0.08"/><stop offset="100%" stop-color="#080C15" stop-opacity="0"/></radialGradient></defs><rect width="1024" height="1024" fill="#080C15"/><circle cx="512" cy="512" r="250" fill="url(#fs-cg)"/><circle cx="512" cy="512" r="120" fill="#E8EAFF" opacity="0.03" filter="url(#fs-g)"/><g mask="url(#fs-m)"><path d="M0,512 Q256,385 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="3.5" opacity="0.35" filter="url(#fs-s)"/><path d="M0,512 Q256,385 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="1.8" opacity="0.52"/><path d="M0,512 Q170,425 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="3.5" opacity="0.35" filter="url(#fs-s)"/><path d="M0,512 Q170,425 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="1.8" opacity="0.58"/><path d="M0,512 Q102,452 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="4.5" opacity="0.42" filter="url(#fs-s)"/><path d="M0,512 Q102,452 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="2.2" opacity="0.68"/><path d="M0,512 Q52,472 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="3" opacity="0.30" filter="url(#fs-s)"/><path d="M0,512 Q52,472 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="1.5" opacity="0.58"/></g></svg>
+      </div>
+      <div class="size-label">180px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:120px;height:120px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 1024 1024"><defs><filter id="fs2-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="35"/></filter><filter id="fs2-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="6"/></filter><linearGradient id="fs2-f" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFF" stop-opacity="0"/><stop offset="12%" stop-color="#FFF" stop-opacity="1"/><stop offset="88%" stop-color="#FFF" stop-opacity="1"/><stop offset="100%" stop-color="#FFF" stop-opacity="0"/></linearGradient><mask id="fs2-m"><rect width="1024" height="1024" fill="url(#fs2-f)"/></mask></defs><rect width="1024" height="1024" fill="#080C15"/><circle cx="512" cy="512" r="200" fill="#E8EAFF" opacity="0.05" filter="url(#fs2-g)"/><g mask="url(#fs2-m)"><path d="M0,512 Q256,385 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="5" opacity="0.40" filter="url(#fs2-s)"/><path d="M0,512 Q170,425 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="5" opacity="0.45" filter="url(#fs2-s)"/><path d="M0,512 Q102,452 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="6" opacity="0.55" filter="url(#fs2-s)"/><path d="M0,512 Q52,472 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="4" opacity="0.45" filter="url(#fs2-s)"/></g></svg>
+      </div>
+      <div class="size-label">120px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:87px;height:87px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="87" height="87" viewBox="0 0 1024 1024"><defs><filter id="fs3-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="40"/></filter><filter id="fs3-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="8"/></filter></defs><rect width="1024" height="1024" fill="#080C15"/><circle cx="512" cy="512" r="180" fill="#E8EAFF" opacity="0.06" filter="url(#fs3-g)"/><path d="M0,512 Q256,385 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="7" opacity="0.40" filter="url(#fs3-s)"/><path d="M0,512 Q170,425 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="7" opacity="0.45" filter="url(#fs3-s)"/><path d="M0,512 Q102,450 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="8" opacity="0.55" filter="url(#fs3-s)"/><path d="M0,512 Q52,470 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="5.5" opacity="0.45" filter="url(#fs3-s)"/></svg>
+      </div>
+      <div class="size-label">87px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:60px;height:60px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 1024 1024"><defs><filter id="fs4-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="45"/></filter><filter id="fs4-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="10"/></filter></defs><rect width="1024" height="1024" fill="#080C15"/><circle cx="512" cy="512" r="160" fill="#E8EAFF" opacity="0.07" filter="url(#fs4-g)"/><path d="M0,512 Q256,380 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="9" opacity="0.40" filter="url(#fs4-s)"/><path d="M0,512 Q170,420 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="9" opacity="0.45" filter="url(#fs4-s)"/><path d="M0,512 Q102,445 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="10" opacity="0.55" filter="url(#fs4-s)"/><path d="M0,512 Q52,468 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="7" opacity="0.45" filter="url(#fs4-s)"/></svg>
+      </div>
+      <div class="size-label">60px</div>
+    </div>
+    <div class="size-group">
+      <div class="ios-mask" style="width:40px;height:40px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 1024 1024"><defs><filter id="fs5-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="50"/></filter><filter id="fs5-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="14"/></filter></defs><rect width="1024" height="1024" fill="#080C15"/><circle cx="512" cy="512" r="150" fill="#E8EAFF" opacity="0.08" filter="url(#fs5-g)"/><path d="M0,512 Q256,375 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="12" opacity="0.40" filter="url(#fs5-s)"/><path d="M0,512 Q170,415 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="12" opacity="0.45" filter="url(#fs5-s)"/><path d="M0,512 Q102,440 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="14" opacity="0.55" filter="url(#fs5-s)"/><path d="M0,512 Q52,465 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="10" opacity="0.45" filter="url(#fs5-s)"/></svg>
+      </div>
+      <div class="size-label">40px</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============ HOMESCREEN TEST ============ -->
+<div class="section-title">Homescreen Context — F (Center Glow)</div>
+<p class="section-desc">How it sits alongside competitors on dark and light wallpapers.</p>
+
+<div class="compare-row">
+  <div>
+    <div style="font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:rgba(226,230,240,0.35); margin-bottom:12px;">Dark Wallpaper</div>
+    <div class="homescreen homescreen-dark">
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-calm mock-competitor">Calm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-headspace mock-competitor">Head<br>space</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon ios-mask" style="width:60px;height:60px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 1024 1024"><defs><filter id="hs-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="45"/></filter><filter id="hs-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="10"/></filter></defs><rect width="1024" height="1024" fill="#080C15"/><circle cx="512" cy="512" r="160" fill="#E8EAFF" opacity="0.07" filter="url(#hs-g)"/><path d="M0,512 Q256,380 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="9" opacity="0.40" filter="url(#hs-s)"/><path d="M0,512 Q170,420 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="9" opacity="0.45" filter="url(#hs-s)"/><path d="M0,512 Q102,445 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="10" opacity="0.55" filter="url(#hs-s)"/><path d="M0,512 Q52,468 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="7" opacity="0.45" filter="url(#hs-s)"/></svg>
+      </div>
+      <div class="mock-icon comp-brainfm mock-competitor">Brain<br>.fm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-endel mock-competitor">Endel</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+    </div>
+  </div>
+
+  <div>
+    <div style="font-size:11px; text-transform:uppercase; letter-spacing:1.5px; color:rgba(226,230,240,0.35); margin-bottom:12px;">Light Wallpaper</div>
+    <div class="homescreen homescreen-light">
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-calm mock-competitor">Calm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-headspace mock-competitor">Head<br>space</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon ios-mask" style="width:60px;height:60px;">
+        <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 1024 1024"><defs><filter id="hs2-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="45"/></filter><filter id="hs2-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="10"/></filter></defs><rect width="1024" height="1024" fill="#080C15"/><circle cx="512" cy="512" r="160" fill="#E8EAFF" opacity="0.07" filter="url(#hs2-g)"/><path d="M0,512 Q256,380 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="9" opacity="0.40" filter="url(#hs2-s)"/><path d="M0,512 Q170,420 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="9" opacity="0.45" filter="url(#hs2-s)"/><path d="M0,512 Q102,445 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="10" opacity="0.55" filter="url(#hs2-s)"/><path d="M0,512 Q52,468 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="7" opacity="0.45" filter="url(#hs2-s)"/></svg>
+      </div>
+      <div class="mock-icon comp-brainfm mock-competitor">Brain<br>.fm</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon comp-endel mock-competitor">Endel</div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+      <div class="mock-icon mock-placeholder"></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ============ GRAYSCALE TEST ============ -->
+<div class="section-title">iOS 18 Tinted Mode — Grayscale</div>
+<p class="section-desc">Does the luminosity read without color? Critical for dark/tinted icon variants.</p>
+
+<div style="display:flex; gap:32px; flex-wrap:wrap; margin-bottom:48px;">
+  <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+    <div class="ios-mask" style="width:180px;height:180px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 1024 1024"><defs><filter id="gs-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="30"/></filter><filter id="gs-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5"/></filter><linearGradient id="gs-f" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFF" stop-opacity="0"/><stop offset="12%" stop-color="#FFF" stop-opacity="1"/><stop offset="88%" stop-color="#FFF" stop-opacity="1"/><stop offset="100%" stop-color="#FFF" stop-opacity="0"/></linearGradient><mask id="gs-m"><rect width="1024" height="1024" fill="url(#gs-f)"/></mask></defs><rect width="1024" height="1024" fill="#080C15"/><circle cx="512" cy="512" r="200" fill="#E8EAFF" opacity="0.05" filter="url(#gs-g)"/><g mask="url(#gs-m)"><path d="M0,512 Q256,385 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="3.5" opacity="0.52" filter="url(#gs-s)"/><path d="M0,512 Q170,425 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="3.5" opacity="0.58" filter="url(#gs-s)"/><path d="M0,512 Q102,452 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="4.5" opacity="0.68" filter="url(#gs-s)"/><path d="M0,512 Q52,472 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="3" opacity="0.58" filter="url(#gs-s)"/></g></svg>
+    </div>
+    <div class="size-label">F — Color</div>
+  </div>
+  <div style="display:flex; flex-direction:column; align-items:center; gap:8px;">
+    <div class="ios-mask grayscale-test" style="width:180px;height:180px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="180" height="180" viewBox="0 0 1024 1024"><defs><filter id="gs2-g" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="30"/></filter><filter id="gs2-s" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="5"/></filter><linearGradient id="gs2-f" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#FFF" stop-opacity="0"/><stop offset="12%" stop-color="#FFF" stop-opacity="1"/><stop offset="88%" stop-color="#FFF" stop-opacity="1"/><stop offset="100%" stop-color="#FFF" stop-opacity="0"/></linearGradient><mask id="gs2-m"><rect width="1024" height="1024" fill="url(#gs2-f)"/></mask></defs><rect width="1024" height="1024" fill="#080C15"/><circle cx="512" cy="512" r="200" fill="#E8EAFF" opacity="0.05" filter="url(#gs2-g)"/><g mask="url(#gs2-m)"><path d="M0,512 Q256,385 512,512 T1024,512" fill="none" stroke="#9080C4" stroke-width="3.5" opacity="0.52" filter="url(#gs2-s)"/><path d="M0,512 Q170,425 340,512 T680,512 T1024,512" fill="none" stroke="#4EA8A6" stroke-width="3.5" opacity="0.58" filter="url(#gs2-s)"/><path d="M0,512 Q102,452 204,512 T408,512 T612,512 T816,512 T1024,512" fill="none" stroke="#5B6ABF" stroke-width="4.5" opacity="0.68" filter="url(#gs2-s)"/><path d="M0,512 Q52,472 104,512 T208,512 T312,512 T416,512 T520,512 T624,512 T728,512 T832,512 T936,512 T1024,512" fill="none" stroke="#F5A623" stroke-width="3" opacity="0.58" filter="url(#gs2-s)"/></g></svg>
+    </div>
+    <div class="size-label">F — Grayscale</div>
+  </div>
+</div>
+
+</body>
+</html>

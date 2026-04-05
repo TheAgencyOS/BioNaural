@@ -1,0 +1,119 @@
+name: BioNaural
+options:
+  bundleIdPrefix: com.bionaural
+  deploymentTarget:
+    iOS: "17.0"
+    watchOS: "10.0"
+  xcodeVersion: "26.2"
+  groupSortPosition: top
+  generateEmptyDirectories: true
+
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    DEVELOPMENT_TEAM: 2S67DD4AW8
+    CODE_SIGN_STYLE: Automatic
+    GENERATE_INFOPLIST_FILE: true
+    CODE_SIGNING_ALLOWED: "YES"
+
+packages:
+  Atomics:
+    url: https://github.com/apple/swift-atomics.git
+    from: "1.2.0"
+  Tonic:
+    url: https://github.com/AudioKit/Tonic.git
+    from: "2.0.0"
+  Vortex:
+    url: https://github.com/twostraws/Vortex.git
+    from: "1.0.0"
+  GlowGetter:
+    url: https://github.com/Aeastr/GlowGetter.git
+    from: "2.0.0"
+  # SF2Lib: Uncomment when switching from AVAudioUnitSampler to SF2Lib's AUv3
+  # SF2Lib:
+  #   url: https://github.com/bradhowes/SF2Lib.git
+  #   from: "11.0.0"
+  BioNauralShared:
+    path: BioNauralShared
+
+targets:
+  BioNaural:
+    type: application
+    platform: iOS
+    sources:
+      - path: BioNaural
+        excludes:
+          - "Resources/Ambience/**"
+    resources:
+      - path: BioNaural/Resources
+    dependencies:
+      - package: Atomics
+      - package: Tonic
+      - package: Vortex
+      - package: GlowGetter
+      # - package: SF2Lib
+      #   product: SF2Lib
+      - package: BioNauralShared
+      # - target: BioNauralWidgets  # Temporarily disabled — BioNauralShared module resolution issue
+      # - target: BioNauralWatch  # Temporarily disabled — Vortex watchOS build issue
+    settings:
+      base:
+        INFOPLIST_KEY_UIBackgroundModes: "audio"
+        INFOPLIST_KEY_NSHealthShareUsageDescription: "BioNaural reads your heart rate, HRV, sleep, activity, and blood oxygen data to personalize adaptive audio sessions in real time."
+        INFOPLIST_KEY_NSHealthUpdateUsageDescription: "BioNaural logs your mindfulness sessions, emotional state, and workout data to Apple Health to track your wellness journey."
+        INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription: "BioNaural reads your calendar to find the best time for sessions and logs completed sessions for tracking."
+        INFOPLIST_KEY_UILaunchScreen_Generation: true
+        INFOPLIST_KEY_UISupportedInterfaceOrientations: "UIInterfaceOrientationPortrait"
+        INFOPLIST_KEY_CFBundleDisplayName: "BioNaural"
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        TARGETED_DEVICE_FAMILY: "1,2"
+    entitlements:
+      path: BioNaural/BioNaural.entitlements
+
+  BioNauralWatch:
+    type: application
+    platform: watchOS
+    bundleId: com.bionaural.BioNaural.watchkitapp
+    sources:
+      - path: BioNauralWatch
+    dependencies:
+      - package: Atomics
+      - package: Tonic
+      - package: Vortex
+      - package: BioNauralShared
+    settings:
+      base:
+        SWIFT_STRICT_CONCURRENCY: minimal
+        INFOPLIST_KEY_WKCompanionAppBundleIdentifier: "com.bionaural.BioNaural"
+        INFOPLIST_KEY_NSHealthShareUsageDescription: "BioNaural Watch reads your heart rate to adapt audio sessions in real time."
+        INFOPLIST_KEY_NSHealthUpdateUsageDescription: "BioNaural Watch logs your workout sessions to Apple Health."
+
+  BioNauralWidgets:
+    type: app-extension
+    platform: iOS
+    bundleId: com.bionaural.BioNaural.widgets
+    sources:
+      - path: BioNauralWidgets
+      - path: BioNaural/Models
+        group: SharedModels
+    dependencies:
+      - package: BioNauralShared
+    info:
+      path: BioNauralWidgets/Info.plist
+      properties:
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension
+    settings:
+      base:
+        TARGETED_DEVICE_FAMILY: "1,2"
+
+schemes:
+  BioNaural:
+    build:
+      targets:
+        BioNaural: all
+        # BioNauralWatch: all  # Temporarily disabled — Vortex watchOS build issue
+        # BioNauralWidgets: all  # Temporarily disabled — BioNauralShared module resolution
+    run:
+      config: Debug
+      simulateLocation: false
