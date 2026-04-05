@@ -799,11 +799,9 @@ public actor SessionOutcomeRecorder {
 
         var timeInState: TimeInterval = 0
 
-        for i in 0..<(biometricStateHistory.count - 1) {
-            if biometricStateHistory[i].state == state {
-                let segmentDuration = biometricStateHistory[i + 1].timestamp - biometricStateHistory[i].timestamp
-                timeInState += segmentDuration
-            }
+        for i in 0..<(biometricStateHistory.count - 1) where biometricStateHistory[i].state == state {
+            let segmentDuration = biometricStateHistory[i + 1].timestamp - biometricStateHistory[i].timestamp
+            timeInState += segmentDuration
         }
 
         // Account for the last segment if it matches.

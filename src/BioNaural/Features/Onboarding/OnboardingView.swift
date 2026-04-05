@@ -26,10 +26,10 @@ private enum OnboardingKeys {
 /// The user's initial sound palette preference, set during onboarding.
 /// Maps to initial SoundProfile weights.
 enum SoundPreference: String, CaseIterable, Identifiable {
-    case nature = "nature"
-    case musical = "musical"
-    case minimal = "minimal"
-    case mixed = "mixed"
+    case nature
+    case musical
+    case minimal
+    case mixed
 
     var id: String { rawValue }
 

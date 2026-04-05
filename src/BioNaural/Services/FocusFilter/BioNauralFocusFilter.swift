@@ -64,17 +64,17 @@ enum FocusFilterConstants {
 
 // MARK: - FocusModeEntity (Focus Filter Variant)
 
-/// AppEntity wrapping `FocusMode` for the Focus Filter Intents system.
-///
-/// This mirrors the existing `FocusModeEntity` in AppIntents.swift but
-/// adds `systemImageName` to the display representation for richer
-/// rendering in the Settings > Focus > BioNaural configuration sheet.
-///
-/// Note: Because the AppIntents framework requires unique `AppEntity`
-/// types per intent context, and the existing `FocusModeEntity` is
-/// already registered for Shortcuts, we reuse the same type here.
-/// The `BioNauralFocusFilter` references `FocusModeEntity` from
-/// AppIntents.swift directly.
+// AppEntity wrapping `FocusMode` for the Focus Filter Intents system.
+//
+// This mirrors the existing `FocusModeEntity` in AppIntents.swift but
+// adds `systemImageName` to the display representation for richer
+// rendering in the Settings > Focus > BioNaural configuration sheet.
+//
+// Note: Because the AppIntents framework requires unique `AppEntity`
+// types per intent context, and the existing `FocusModeEntity` is
+// already registered for Shortcuts, we reuse the same type here.
+// The `BioNauralFocusFilter` references `FocusModeEntity` from
+// AppIntents.swift directly.
 
 // MARK: - BioNauralFocusFilter
 

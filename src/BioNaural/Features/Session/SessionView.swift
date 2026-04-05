@@ -518,7 +518,7 @@ struct SessionView: View {
                 .accessibilityLabel(isExpandedView ? "Collapse view" : "Expand view")
 
                 // Play/Pause (primary)
-                Button(action: { viewModel.togglePlayPause() }) {
+                Button { viewModel.togglePlayPause() } label: {
                     Image(systemName: viewModel.isPlaying ? "pause.fill" : "play.fill")
                         .font(.system(size: Theme.Typography.Size.headline))
                         .foregroundStyle(Theme.Colors.textPrimary)
@@ -543,7 +543,7 @@ struct SessionView: View {
                 .accessibilityLabel(viewModel.isPlaying ? "Pause" : "Play")
 
                 // Stop
-                Button(action: { viewModel.stopSession() }) {
+                Button { viewModel.stopSession() } label: {
                     Image(systemName: "square.fill")
                         .font(.system(size: Theme.Typography.Size.small, weight: .regular))
                         .foregroundStyle(Theme.Colors.textSecondary)

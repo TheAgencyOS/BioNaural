@@ -262,7 +262,7 @@ private struct RecommendationCarouselCard: View {
 
                     Spacer()
 
-                    Button(action: { toggleFlip() }) {
+                    Button { toggleFlip() } label: {
                         ZStack {
                             Circle()
                                 .fill(.ultraThinMaterial)
@@ -380,7 +380,7 @@ private struct RecommendationCarouselCard: View {
     // MARK: - Info Button
 
     private var infoButton: some View {
-        Button(action: { toggleFlip() }) {
+        Button { toggleFlip() } label: {
             ZStack {
                 Circle()
                     .fill(.ultraThinMaterial)
@@ -651,7 +651,7 @@ private struct ModeCarouselCard: View {
     // MARK: - Info Button
 
     private var infoButton: some View {
-        Button(action: { toggleFlip() }) {
+        Button { toggleFlip() } label: {
             ZStack {
                 Circle()
                     .fill(.ultraThinMaterial)

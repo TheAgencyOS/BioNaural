@@ -25,12 +25,12 @@ public enum BinauralBeatNode {
 
     // MARK: - Node Factory
 
-    /// Creates an `AVAudioSourceNode` wired to the given `AudioParameters`.
-    ///
-    /// - Important: The returned closure captures **only** the atomic
-    ///   references (value-type wrappers around `ManagedAtomicStorage`)
-    ///   and local mutable state. No class pointers cross the real-time
-    ///   boundary.
+    // Creates an `AVAudioSourceNode` wired to the given `AudioParameters`.
+    //
+    // - Important: The returned closure captures **only** the atomic
+    //   references (value-type wrappers around `ManagedAtomicStorage`)
+    //   and local mutable state. No class pointers cross the real-time
+    //   boundary.
     // swiftlint:disable:next function_body_length
     public static func makeNode(
         parameters: AudioParameters,

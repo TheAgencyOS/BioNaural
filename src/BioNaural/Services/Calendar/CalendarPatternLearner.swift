@@ -783,10 +783,8 @@ public actor CalendarPatternLearner: CalendarPatternLearnerProtocol {
     /// Parses a `FocusMode` from an action string like "relaxation_90min_before".
     private func parseModeFromAction(_ action: String) -> FocusMode? {
         let lowered = action.lowercased()
-        for mode in FocusMode.allCases {
-            if lowered.contains(mode.rawValue) {
-                return mode
-            }
+        for mode in FocusMode.allCases where lowered.contains(mode.rawValue) {
+            return mode
         }
         return nil
     }

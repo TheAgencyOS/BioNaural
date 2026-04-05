@@ -1178,10 +1178,8 @@ struct HealthView: View {
     /// Matches a calendar event title against known life event keywords.
     private func categoryFromTitle(_ title: String) -> LifeEventCategory? {
         let lowered = title.lowercased()
-        for (keyword, mapping) in Constants.Insights.lifeEventKeywords {
-            if lowered.contains(keyword) {
-                return mapping.category
-            }
+        for (keyword, mapping) in Constants.Insights.lifeEventKeywords where lowered.contains(keyword) {
+            return mapping.category
         }
         return nil
     }

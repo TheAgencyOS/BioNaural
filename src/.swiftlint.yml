@@ -13,7 +13,29 @@ identifier_name:
     - hr
     - hz
     - to
-  min_length: 2
+    # Math/graphics/audio: coordinates, loop indices, interpolation params
+    - x
+    - y
+    - i
+    - t
+    - a
+    - b
+    - f
+    - s
+    - p
+    - m
+    - n
+    - r
+    - c
+    - d
+    - e
+    - g
+    - h
+    - j
+    - w
+    - H
+    - W
+  min_length: 1
 
 # Theme.swift is the centralized design token system (1100+ lines intentional)
 file_length:

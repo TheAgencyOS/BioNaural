@@ -216,7 +216,7 @@ struct PredictiveHealthForecastCard: View {
             let animationIndex = forecast.predictions.count + 2
             let modeColor = Color.modeColor(for: mode)
 
-            Button(action: {}) {
+            Button(action: {}, label: {
                 HStack(spacing: Theme.Spacing.sm) {
                     Image(systemName: mode.systemImageName)
                         .font(.system(size: Theme.Typography.Size.callout, weight: .medium))
@@ -251,7 +251,7 @@ struct PredictiveHealthForecastCard: View {
                                 )
                         )
                 )
-            }
+            })
             .buttonStyle(.plain)
             .opacity(animatedOpacity(index: animationIndex))
             .offset(y: animatedOffset(index: animationIndex))

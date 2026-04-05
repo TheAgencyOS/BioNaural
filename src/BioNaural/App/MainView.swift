@@ -327,6 +327,7 @@ private struct HomeTab: View {
 
     // Check-in sheet state
     @State private var showCheckIn = false
+    @State private var showSoundDNA = false
     @State private var checkInMode: FocusMode = .focus
 
     // Entrance animation
@@ -394,8 +395,14 @@ private struct HomeTab: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                settingsButton
+                HStack(spacing: Theme.Spacing.md) {
+                    soundDNAButton
+                    settingsButton
+                }
             }
+        }
+        .sheet(isPresented: $showSoundDNA) {
+            soundDNACaptureSheet
         }
         .sheet(isPresented: $showCheckIn) {
             PreSessionCheckInSheet(
@@ -612,6 +619,33 @@ private struct HomeTab: View {
                     )
             )
         }
+    }
+
+    // MARK: - Sound DNA Button
+
+    private var soundDNAButton: some View {
+        Button {
+            showSoundDNA = true
+        } label: {
+            Image(systemName: "waveform.badge.magnifyingglass")
+                .font(Theme.Typography.caption)
+                .foregroundStyle(Theme.Colors.accent)
+        }
+        .accessibilityLabel("Sound DNA")
+    }
+
+    private var soundDNACaptureSheet: some View {
+        let service = SoundDNAService()
+        let store = SwiftDataSoundProfileStore(
+            modelContext: dependencies.modelContainer.mainContext
+        )
+        let manager = SoundProfileManager(store: store)
+        let vm = SoundDNACaptureViewModel(
+            service: service,
+            profileManager: manager,
+            modelContext: dependencies.modelContainer.mainContext
+        )
+        return SoundDNACaptureView(viewModel: vm)
     }
 
     // MARK: - Settings Button

@@ -175,14 +175,12 @@ struct PremiumSlider: View {
 
     /// Fires a light haptic tick when the thumb crosses a quarter-mark.
     private func fireHapticIfNeeded(fraction: Double) {
-        for tick in hapticFractions {
-            if abs(fraction - tick) < hapticTolerance {
-                guard lastHapticFraction != tick else { return }
-                lastHapticFraction = tick
-                let generator = UIImpactFeedbackGenerator(style: .light)
-                generator.impactOccurred()
-                return
-            }
+        for tick in hapticFractions where abs(fraction - tick) < hapticTolerance {
+            guard lastHapticFraction != tick else { return }
+            lastHapticFraction = tick
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+            return
         }
         // Reset when between ticks so the next crossing fires
         if let last = lastHapticFraction,
