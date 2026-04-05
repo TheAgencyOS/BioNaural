@@ -40,6 +40,11 @@ public final class AudioEngine: AudioEngineProtocol {
     /// Whether stem-based mixing is currently active.
     public var isStemMixingActive: Bool { stemAudioLayer?.currentPack != nil }
 
+    /// Learned sound preferences from the user's Sound DNA samples and
+    /// session outcomes. Set by the session launcher before calling `start()`.
+    /// When `nil`, the selector falls back to neutral defaults.
+    public var soundSelectionProfile: SoundSelectionProfile?
+
     // SF2 generative layer — stubbed until SF2MelodicRenderer ships.
     // public private(set) var sf2Renderer: SF2MelodicRenderer?
     // public private(set) var generativeMIDI: GenerativeMIDIEngine?
@@ -162,7 +167,7 @@ public final class AudioEngine: AudioEngineProtocol {
 
     /// Selects and starts a file-based melodic sound for the given mode.
     private func startMelodicLayer(for mode: FocusMode) {
-        let defaultProfile = SoundSelectionProfile()
+        let profile = soundSelectionProfile ?? SoundSelectionProfile()
         let defaultBiometricState = SoundSelectionBiometricState(
             heartRate: Theme.SF2.NeutralBiometrics.heartRate,
             hrv: Theme.SF2.NeutralBiometrics.hrv,
@@ -174,7 +179,7 @@ public final class AudioEngine: AudioEngineProtocol {
             mode: mode,
             biometricState: defaultBiometricState,
             mood: nil,
-            preferences: defaultProfile
+            preferences: profile
         )
 
         if let firstSound = candidates.first {

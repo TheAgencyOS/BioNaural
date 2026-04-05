@@ -449,7 +449,9 @@ struct PostSessionScienceInsightView: View {
         switch mode {
         case .focus:
             if adaptationCount > 0 {
-                return "Your session adapted \(adaptationCount) time\(adaptationCount == 1 ? "" : "s") to keep beta-range entrainment aligned with your focus state."
+                return "Your session adapted \(adaptationCount) "
+                    + "time\(adaptationCount == 1 ? "" : "s") to keep "
+                    + "beta-range entrainment aligned with your focus state."
             }
             return "Beta-range entrainment held steady through your session \u{2014} a sign your focus state was consistent."
         case .relaxation:
@@ -465,7 +467,10 @@ struct PostSessionScienceInsightView: View {
             return "Sleep mode traced your brain\u{2019}s natural descent from theta to delta over the session."
         case .energize:
             if adaptationCount > 0 {
-                return "Your Watch triggered \(adaptationCount) adaptation\(adaptationCount == 1 ? "" : "s") to keep your energy in the high-beta sweet spot without overdriving."
+                return "Your Watch triggered \(adaptationCount) "
+                    + "adaptation\(adaptationCount == 1 ? "" : "s") "
+                    + "to keep your energy in the high-beta sweet spot "
+                    + "without overdriving."
             }
             return "High-beta entrainment held steady. Your safety guardrails stayed green throughout."
         }
@@ -474,26 +479,66 @@ struct PostSessionScienceInsightView: View {
     private var scienceContext: String {
         switch mode {
         case .focus:
-            return "Your heart doesn\u{2019}t beat like a metronome \u{2014} and that variation is the signal. When HR stabilizes during focus, it suggests your autonomic nervous system has settled into a task-positive state."
+            return "Your heart doesn\u{2019}t beat like a metronome "
+                + "\u{2014} and that variation is the signal. "
+                + "When HR stabilizes during focus, it suggests your "
+                + "autonomic nervous system has settled into "
+                + "a task-positive state."
         case .relaxation:
-            return "Higher HRV means your nervous system is flexible and recovered. Alpha-range entrainment supports this parasympathetic shift \u{2014} the opposite of fight-or-flight."
+            return "Higher HRV means your nervous system is flexible "
+                + "and recovered. Alpha-range entrainment supports "
+                + "this parasympathetic shift "
+                + "\u{2014} the opposite of fight-or-flight."
         case .sleep:
-            return "Sleep onset follows a predictable brainwave descent: waking beta \u{2192} relaxed alpha \u{2192} drowsy theta \u{2192} deep delta. BioNaural paces that transition so your brain has a signal to follow."
+            return "Sleep onset follows a predictable brainwave "
+                + "descent: waking beta \u{2192} relaxed alpha "
+                + "\u{2192} drowsy theta \u{2192} deep delta. "
+                + "BioNaural paces that transition so your brain "
+                + "has a signal to follow."
         case .energize:
-            return "High-beta frequencies (18\u{2013}30 Hz) correspond to alertness and motor readiness. The adaptive engine reinforces that signal while your Watch ensures intensity stays in a safe range."
+            return "High-beta frequencies (18\u{2013}30 Hz) correspond "
+                + "to alertness and motor readiness. The adaptive "
+                + "engine reinforces that signal while your Watch "
+                + "ensures intensity stays in a safe range."
         }
     }
 
     private var deepDiveContext: String {
         switch mode {
         case .focus:
-            return "A 2016 University of Alberta study found beta-range binaural beats (14\u{2013}16 Hz) improved focus performance and strengthened brain connectivity patterns. The adaptive engine builds on this by adjusting in real time \u{2014} if your focus drifts, the system responds rather than playing a static tone."
+            return "A 2016 University of Alberta study found "
+                + "beta-range binaural beats (14\u{2013}16 Hz) "
+                + "improved focus performance and strengthened "
+                + "brain connectivity patterns. The adaptive "
+                + "engine builds on this by adjusting in real "
+                + "time \u{2014} if your focus drifts, the system "
+                + "responds rather than playing a static tone."
         case .relaxation:
-            return "Garcia-Argibay et al. (2019) pooled 22 studies and found alpha-range beats reliably reduce anxiety with small-to-moderate effect sizes \u{2014} comparable to a session of guided breathing. Combined with HRV biofeedback (Hedges\u{2019} g = 0.81), the adaptive approach nearly doubles the effect."
+            return "Garcia-Argibay et al. (2019) pooled 22 studies "
+                + "and found alpha-range beats reliably reduce "
+                + "anxiety with small-to-moderate effect sizes "
+                + "\u{2014} comparable to a session of guided "
+                + "breathing. Combined with HRV biofeedback "
+                + "(Hedges\u{2019} g = 0.81), the adaptive approach "
+                + "nearly doubles the effect."
         case .sleep:
-            return "Most studies finding significant effects used sessions of 15 minutes or longer. The theta-to-delta ramp takes 25 minutes by default because your brain needs time to detect the pattern and synchronize. The carrier frequency stays in the 100\u{2013}200 Hz range \u{2014} low enough to be comfortable for extended listening."
+            return "Most studies finding significant effects used "
+                + "sessions of 15 minutes or longer. The "
+                + "theta-to-delta ramp takes 25 minutes by "
+                + "default because your brain needs time to "
+                + "detect the pattern and synchronize. The "
+                + "carrier frequency stays in the "
+                + "100\u{2013}200 Hz range \u{2014} low enough to be "
+                + "comfortable for extended listening."
         case .energize:
-            return "Iaccarino et al. (2016, Nature) demonstrated that 40 Hz stimulation drives neural entrainment effectively. Energize uses the 18\u{2013}30 Hz high-beta range for alertness and activation, with safety guardrails (HR ceiling, HRV floor, rate-of-change limits) ensuring the session stays within healthy bounds."
+            return "Iaccarino et al. (2016, Nature) demonstrated "
+                + "that 40 Hz stimulation drives neural "
+                + "entrainment effectively. Energize uses the "
+                + "18\u{2013}30 Hz high-beta range for alertness "
+                + "and activation, with safety guardrails "
+                + "(HR ceiling, HRV floor, rate-of-change "
+                + "limits) ensuring the session stays within "
+                + "healthy bounds."
         }
     }
 

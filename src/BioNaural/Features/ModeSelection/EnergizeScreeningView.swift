@@ -253,7 +253,8 @@ struct EnergizeScreeningView: View {
                     .foregroundStyle(Theme.Colors.energize)
                     .accessibilityHidden(true)
 
-                Text("We recommend consulting your physician before using Energize mode. BioNaural monitors your heart rate throughout and will automatically reduce intensity if needed. You can continue or skip this mode.")
+                Text("We recommend consulting your physician before using Energize mode. BioNaural monitors your heart rate " +
+                    "throughout and will automatically reduce intensity if needed. You can continue or skip this mode.")
                     .font(Theme.Typography.body)
                     .foregroundStyle(Theme.Colors.textSecondary)
                     .multilineTextAlignment(.center)
@@ -297,7 +298,8 @@ struct EnergizeScreeningView: View {
                     .foregroundStyle(Theme.Colors.textPrimary)
                     .multilineTextAlignment(.center)
 
-                Text("During Energize sessions, BioNaural continuously monitors your heart rate. If it rises too high, the audio automatically shifts to calming frequencies. Every session ends with a mandatory cool-down.")
+                Text("During Energize sessions, BioNaural continuously monitors your heart rate. If it rises too high, " +
+                    "the audio automatically shifts to calming frequencies. Every session ends with a mandatory cool-down.")
                     .font(Theme.Typography.body)
                     .foregroundStyle(Theme.Colors.textSecondary)
                     .multilineTextAlignment(.center)

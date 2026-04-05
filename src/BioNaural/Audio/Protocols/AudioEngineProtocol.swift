@@ -21,6 +21,10 @@ public protocol AudioEngineProtocol: AnyObject {
     /// (may be true even while fading out).
     var isRunning: Bool { get }
 
+    /// Learned sound preferences from Sound DNA + session outcomes.
+    /// Set before calling `start()` to personalize melodic/ambient selection.
+    var soundSelectionProfile: SoundSelectionProfile? { get set }
+
     /// Build the audio graph and configure the audio session.
     /// Call once before first use.
     func setup() throws

@@ -62,6 +62,13 @@ line_length:
 large_tuple:
   warning: 4
 
+# Theme.swift uses 3-level nesting intentionally (Theme > Category > SubCategory)
+# e.g. Theme.Colors.Hex, Theme.Typography.Size, Theme.Spacing.Session
+nesting:
+  type_level: 3
+  function_level: 3
+
 # Exclude generated files and tests
 excluded:
   - BioNauralShared/Tests
+  - build

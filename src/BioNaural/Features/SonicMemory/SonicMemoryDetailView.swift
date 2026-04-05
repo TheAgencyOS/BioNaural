@@ -261,7 +261,8 @@ struct SonicMemoryDetailView: View {
     NavigationStack {
         SonicMemoryDetailView(
             memory: SonicMemory(
-                userDescription: "Rain on a tin roof at my grandmother's cabin in the mountains. The sound of drops hitting the metal, mixed with distant thunder.",
+                userDescription: "Rain on a tin roof at my grandmother's cabin in the mountains. " +
+                    "The sound of drops hitting the metal, mixed with distant thunder.",
                 extractedWarmth: 0.8,
                 extractedRhythm: 0.4,
                 extractedDensity: 0.6,

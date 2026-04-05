@@ -290,7 +290,8 @@ struct PaywallView: View {
 
     private var legalFooter: some View {
         VStack(spacing: Theme.Spacing.xs) {
-            Text("Subscriptions auto-renew unless cancelled at least 24 hours before the end of the current period. Manage in Settings > Subscriptions.")
+            Text("Subscriptions auto-renew unless cancelled at least 24 hours before the end of the current period. " +
+                "Manage in Settings > Subscriptions.")
                 .font(Theme.Typography.small)
                 .foregroundStyle(Theme.Colors.textTertiary)
                 .multilineTextAlignment(.center)

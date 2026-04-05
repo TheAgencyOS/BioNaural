@@ -136,7 +136,9 @@ struct FocusFilterSettingsView: View {
                 Image(systemName: "lock.shield")
                     .foregroundStyle(Theme.Colors.textTertiary)
             }
-            .accessibilityLabel("Privacy: Focus Filter runs on-device. BioNaural only sees which Focus mode is active, not your notification settings.")
+            .accessibilityLabel(
+                "Privacy: Focus Filter runs on-device. BioNaural only sees which Focus mode is active, not your notification settings."
+            )
         } header: {
             Text("Privacy")
                 .font(Theme.Typography.small)

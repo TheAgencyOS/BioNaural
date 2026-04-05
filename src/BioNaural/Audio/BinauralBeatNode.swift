@@ -108,13 +108,16 @@ public enum BinauralBeatNode {
         var rngState: UInt32 = 0xDEAD_BEEF
 
         // ---- Render closure ---------------------------------------------
-        let node = AVAudioSourceNode(format: makeFormat(sampleRate: sampleRate)) {
-            (
-                _: UnsafeMutablePointer<ObjCBool>,
-                _: UnsafePointer<AudioTimeStamp>,
-                frameCount: AVAudioFrameCount,
-                audioBufferList: UnsafeMutablePointer<AudioBufferList>
-            ) -> OSStatus in
+        // swiftlint:disable closure_parameter_position
+        let node = AVAudioSourceNode(
+            format: makeFormat(sampleRate: sampleRate)
+        ) { (
+            _: UnsafeMutablePointer<ObjCBool>,
+            _: UnsafePointer<AudioTimeStamp>,
+            frameCount: AVAudioFrameCount,
+            audioBufferList: UnsafeMutablePointer<AudioBufferList>
+        ) -> OSStatus in
+        // swiftlint:enable closure_parameter_position
 
             // If not playing, fill silence and bail.
             guard atomicPlaying.load(ordering: .relaxed) else {

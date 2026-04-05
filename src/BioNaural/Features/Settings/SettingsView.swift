@@ -385,7 +385,9 @@ struct SettingsView: View {
             .alert("Epilepsy & Photosensitivity", isPresented: $showEpilepsyDisclaimer) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text("Binaural beats involve rhythmic auditory stimulation. If you have epilepsy or a seizure disorder, consult your physician before use. BioNaural does not use visual flashing, but the audio frequencies may not be suitable for everyone.")
+                Text("Binaural beats involve rhythmic auditory stimulation. If you have epilepsy or a seizure disorder, " +
+                    "consult your physician before use. BioNaural does not use visual flashing, " +
+                    "but the audio frequencies may not be suitable for everyone.")
             }
 
             Button {
@@ -397,7 +399,9 @@ struct SettingsView: View {
             .alert("Energize Mode Safety", isPresented: $showEnergizeSafety) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text("Energize mode uses upward biometric feedback. Safety guardrails include HR ceiling limits, mandatory cool-down periods, and automatic session termination if heart rate exceeds safe thresholds. If you have a heart condition, consult your physician before using Energize mode.")
+                Text("Energize mode uses upward biometric feedback. Safety guardrails include HR ceiling limits, " +
+                    "mandatory cool-down periods, and automatic session termination if heart rate exceeds safe thresholds. " +
+                    "If you have a heart condition, consult your physician before using Energize mode.")
             }
         } header: {
             sectionHeader("Safety")

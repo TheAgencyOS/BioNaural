@@ -114,7 +114,9 @@ struct MelodicStepView: View {
             .overlay(
                 RoundedRectangle(cornerRadius: Theme.Radius.lg, style: .continuous)
                     .strokeBorder(
-                        isSelected ? Theme.Colors.accent.opacity(Theme.Opacity.accentStrong) : Theme.Colors.divider.opacity(Theme.Opacity.glassStroke),
+                        isSelected
+                            ? Theme.Colors.accent.opacity(Theme.Opacity.accentStrong)
+                            : Theme.Colors.divider.opacity(Theme.Opacity.glassStroke),
                         lineWidth: Theme.Radius.glassStroke
                     )
             )

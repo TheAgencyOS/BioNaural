@@ -120,7 +120,10 @@ struct SaveStepView: View {
                                     .fill(Theme.Colors.surface)
                                     .overlay(
                                         Capsule()
-                                            .strokeBorder(Theme.Colors.divider.opacity(Theme.Opacity.glassStroke), lineWidth: Theme.Radius.glassStroke)
+                                            .strokeBorder(
+                                                Theme.Colors.divider.opacity(Theme.Opacity.glassStroke),
+                                                lineWidth: Theme.Radius.glassStroke
+                                            )
                                     )
                             )
                     }

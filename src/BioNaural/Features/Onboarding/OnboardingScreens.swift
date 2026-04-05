@@ -280,7 +280,8 @@ struct HeadphoneCheckView: View {
                                 .textCase(.uppercase)
                         }
 
-                        Text("Binaural beats only work when each ear hears a different frequency. Through speakers, the tones mix in the air and the effect disappears entirely.")
+                        Text("Binaural beats only work when each ear hears a different frequency. " +
+                            "Through speakers, the tones mix in the air and the effect disappears entirely.")
                             .font(Theme.Typography.body)
                             .foregroundStyle(Theme.Colors.textSecondary)
                             .lineSpacing(Theme.Typography.LineSpacing.relaxed)
@@ -644,7 +645,8 @@ struct EpilepsyDisclaimerView: View {
                     .foregroundStyle(Theme.Colors.textPrimary)
                     .multilineTextAlignment(.center)
 
-                Text("Binaural beats use rhythmic auditory stimulation. In rare cases, rhythmic stimuli may trigger seizures in individuals with photosensitive epilepsy or similar conditions.")
+                Text("Binaural beats use rhythmic auditory stimulation. In rare cases, " +
+                    "rhythmic stimuli may trigger seizures in individuals with photosensitive epilepsy or similar conditions.")
                     .font(Theme.Typography.body)
                     .foregroundStyle(Theme.Colors.textSecondary)
                     .multilineTextAlignment(.center)
@@ -719,7 +721,8 @@ struct HealthKitPermissionView: View {
                     .foregroundStyle(Theme.Colors.textPrimary)
                     .multilineTextAlignment(.center)
 
-                Text("BioNaural reads your heart rate and HRV to adapt audio in real time. We also save mindful minutes to Health. Your data stays on-device.")
+                Text("BioNaural reads your heart rate and HRV to adapt audio in real time. " +
+                    "We also save mindful minutes to Health. Your data stays on-device.")
                     .font(Theme.Typography.body)
                     .foregroundStyle(Theme.Colors.textSecondary)
                     .multilineTextAlignment(.center)
@@ -815,7 +818,8 @@ struct WatchDetectionView: View {
                         .font(Theme.Typography.title)
                         .foregroundStyle(Theme.Colors.textPrimary)
 
-                    Text("No problem! BioNaural works great without a Watch using time-based arcs and your check-in responses. You can pair one anytime.")
+                    Text("No problem! BioNaural works great without a Watch using time-based arcs " +
+                        "and your check-in responses. You can pair one anytime.")
                         .font(Theme.Typography.body)
                         .foregroundStyle(Theme.Colors.textSecondary)
                         .multilineTextAlignment(.center)
@@ -905,7 +909,8 @@ struct CalibrationView: View {
                         .font(Theme.Typography.title)
                         .foregroundStyle(Theme.Colors.textPrimary)
 
-                    Text("We'll measure your resting heart rate for 2 minutes. This helps BioNaural personalize the adaptive experience to your body.")
+                    Text("We'll measure your resting heart rate for 2 minutes. " +
+                        "This helps BioNaural personalize the adaptive experience to your body.")
                         .font(Theme.Typography.body)
                         .foregroundStyle(Theme.Colors.textSecondary)
                         .multilineTextAlignment(.center)

@@ -282,7 +282,8 @@ struct AdaptationInsightOverlay: View {
             }
             return "Your nervous system is still settling \u{2014} the audio is holding steady to support the transition."
         case .sleep:
-            return "The session is descending through the brainwave bands \u{2014} theta toward delta, matching your brain\u{2019}s natural sleep onset."
+            return "The session is descending through the brainwave bands \u{2014} theta toward delta, " +
+                "matching your brain\u{2019}s natural sleep onset."
         case .energize:
             if newFrequency > oldFrequency {
                 return "Your body is responding \u{2014} the beat frequency is rising into the high-beta activation range."

@@ -237,8 +237,13 @@ private struct ModeScienceData {
         case .focus:
             return ModeScienceData(
                 title: "Beta Waves\n& Focus",
-                mechanism: "Beta brainwaves (14\u{2013}30 Hz) are associated with active, alert cognition. A binaural beat at 15 Hz encourages cortical entrainment toward this band, supporting sustained attention and working memory.",
-                adaptiveResponse: "When your heart rate rises, BioNaural shifts the beat frequency downward toward alpha, calming your nervous system without breaking concentration.",
+                mechanism: "Beta brainwaves (14\u{2013}30 Hz) are associated with active, "
+                    + "alert cognition. A binaural beat at 15 Hz encourages cortical "
+                    + "entrainment toward this band, supporting sustained attention "
+                    + "and working memory.",
+                adaptiveResponse: "When your heart rate rises, BioNaural shifts the "
+                    + "beat frequency downward toward alpha, calming your "
+                    + "nervous system without breaking concentration.",
                 metrics: [
                     ScienceMetric(value: "14\u{2013}16", label: "Hz target"),
                     ScienceMetric(value: "300\u{2013}450", label: "Hz carrier"),
@@ -250,8 +255,13 @@ private struct ModeScienceData {
         case .relaxation:
             return ModeScienceData(
                 title: "Alpha Waves\n& Calm",
-                mechanism: "Alpha brainwaves (8\u{2013}13 Hz) dominate during relaxed wakefulness. Binaural beats in this range promote parasympathetic activation, reducing cortisol and lowering heart rate.",
-                adaptiveResponse: "If your HR is elevated, the beat gently rises to 11\u{2013}12 Hz to meet you, then guides back down. The system catches you before calming you.",
+                mechanism: "Alpha brainwaves (8\u{2013}13 Hz) dominate during relaxed "
+                    + "wakefulness. Binaural beats in this range promote "
+                    + "parasympathetic activation, reducing cortisol and "
+                    + "lowering heart rate.",
+                adaptiveResponse: "If your HR is elevated, the beat gently rises to "
+                    + "11\u{2013}12 Hz to meet you, then guides back down. "
+                    + "The system catches you before calming you.",
                 metrics: [
                     ScienceMetric(value: "8\u{2013}11", label: "Hz target"),
                     ScienceMetric(value: "150\u{2013}250", label: "Hz carrier"),
@@ -263,8 +273,13 @@ private struct ModeScienceData {
         case .sleep:
             return ModeScienceData(
                 title: "Theta\u{2192}Delta\n& Sleep",
-                mechanism: "Natural sleep onset follows a theta (4\u{2013}8 Hz) to delta (0.5\u{2013}4 Hz) progression. The beat frequency ramps from 6 Hz to 2 Hz over 25 minutes, mirroring this natural descent.",
-                adaptiveResponse: "When sustained stillness and dropping heart rate indicate sleep onset, the audio begins a slow fade-out. If you stir, the frequency holds steady.",
+                mechanism: "Natural sleep onset follows a theta (4\u{2013}8 Hz) to "
+                    + "delta (0.5\u{2013}4 Hz) progression. The beat frequency "
+                    + "ramps from 6 Hz to 2 Hz over 25 minutes, mirroring "
+                    + "this natural descent.",
+                adaptiveResponse: "When sustained stillness and dropping heart rate "
+                    + "indicate sleep onset, the audio begins a slow "
+                    + "fade-out. If you stir, the frequency holds steady.",
                 metrics: [
                     ScienceMetric(value: "6\u{2192}2", label: "Hz ramp"),
                     ScienceMetric(value: "100\u{2013}200", label: "Hz carrier"),
@@ -276,8 +291,14 @@ private struct ModeScienceData {
         case .energize:
             return ModeScienceData(
                 title: "High-Beta\n& Arousal",
-                mechanism: "High-beta / low-gamma waves (18\u{2013}30 Hz) correlate with alertness and energetic cognition. The beat reinforces sympathetic activation, increasing arousal without inducing anxiety.",
-                adaptiveResponse: "As your heart rate rises, the system reinforces \u{2014} pushing toward higher beta. Unlike Focus mode, the feedback loop is positive: your body's activation is the goal.",
+                mechanism: "High-beta / low-gamma waves (18\u{2013}30 Hz) correlate "
+                    + "with alertness and energetic cognition. The beat "
+                    + "reinforces sympathetic activation, increasing "
+                    + "arousal without inducing anxiety.",
+                adaptiveResponse: "As your heart rate rises, the system reinforces "
+                    + "\u{2014} pushing toward higher beta. Unlike Focus mode, "
+                    + "the feedback loop is positive: your body's "
+                    + "activation is the goal.",
                 metrics: [
                     ScienceMetric(value: "18\u{2013}30", label: "Hz target"),
                     ScienceMetric(value: "350\u{2013}500", label: "Hz carrier"),

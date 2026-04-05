@@ -360,7 +360,10 @@ struct SessionView: View {
             WavelengthView(
                 biometricState: viewModel.currentState,
                 sessionMode: viewModel.sessionMode,
-                beatFrequency: max(viewModel.currentBeatFrequency / Constants.WaveZone.ambientFrequencyDivisor, Constants.WaveZone.ambientFrequencyFloor),
+                beatFrequency: max(
+                    viewModel.currentBeatFrequency / Constants.WaveZone.ambientFrequencyDivisor,
+                    Constants.WaveZone.ambientFrequencyFloor
+                ),
                 isPlaying: viewModel.isPlaying,
                 layerColor: Theme.Colors.signalCalm
             )
@@ -372,7 +375,10 @@ struct SessionView: View {
             WavelengthView(
                 biometricState: viewModel.currentState,
                 sessionMode: viewModel.sessionMode,
-                beatFrequency: max(viewModel.currentBeatFrequency / Constants.WaveZone.melodicFrequencyDivisor, Constants.WaveZone.melodicFrequencyFloor),
+                beatFrequency: max(
+                    viewModel.currentBeatFrequency / Constants.WaveZone.melodicFrequencyDivisor,
+                    Constants.WaveZone.melodicFrequencyFloor
+                ),
                 isPlaying: viewModel.isPlaying,
                 layerColor: Theme.Colors.accent
             )
@@ -582,9 +588,20 @@ struct SessionView: View {
                 // Warm-up
                 phaseSegment(filled: viewModel.energizePhase != .warmUp, flex: 1, color: Theme.Colors.energize)
                 // Ramp
-                phaseSegment(filled: viewModel.energizePhase == .sustain || viewModel.energizePhase == .coolDown || viewModel.energizePhase == .completed, flex: 1, color: Theme.Colors.energize)
+                phaseSegment(
+                    filled: viewModel.energizePhase == .sustain
+                        || viewModel.energizePhase == .coolDown
+                        || viewModel.energizePhase == .completed,
+                    flex: 1,
+                    color: Theme.Colors.energize
+                )
                 // Sustain
-                phaseSegment(filled: viewModel.energizePhase == .coolDown || viewModel.energizePhase == .completed, flex: 2, color: Theme.Colors.energize)
+                phaseSegment(
+                    filled: viewModel.energizePhase == .coolDown
+                        || viewModel.energizePhase == .completed,
+                    flex: 2,
+                    color: Theme.Colors.energize
+                )
                 // Cool-down
                 phaseSegment(filled: viewModel.energizePhase == .completed, flex: 1, color: Theme.Colors.signalCalm)
             }
@@ -933,36 +950,42 @@ struct SessionView: View {
                     scienceCard(
                         icon: "waveform.path",
                         title: "Binaural Beats",
+                        // swiftlint:disable:next line_length
                         body: "When each ear receives a slightly different frequency, your brain perceives a third tone — the binaural beat — at the difference frequency. Research suggests this can gently encourage your brainwaves toward that target frequency, a process called auditory entrainment."
                     )
 
                     scienceCard(
                         icon: "brain.head.profile",
                         title: "Brainwave Bands",
+                        // swiftlint:disable:next line_length
                         body: "Delta (1–4 Hz) for deep sleep, Theta (4–8 Hz) for drowsiness and meditation, Alpha (8–13 Hz) for relaxed awareness, Beta (13–30 Hz) for active focus, and Gamma (30+ Hz) for peak concentration. Your session targets the band that matches your goal."
                     )
 
                     scienceCard(
                         icon: "heart.text.clipboard",
                         title: "Adaptive Advantage",
+                        // swiftlint:disable:next line_length
                         body: "Your heart rate and HRV reveal your real-time autonomic state. BioNaural reads these signals and adjusts the beat frequency to meet you where you are — not where a static preset assumes you should be. The result is a session that adapts to your body."
                     )
 
                     scienceCard(
                         icon: "person.2",
                         title: "Individual Differences",
+                        // swiftlint:disable:next line_length
                         body: "Brainwave entrainment affects people differently. Factors like baseline anxiety, caffeine intake, and even genetics influence responsiveness. BioNaural learns your patterns over time, personalizing each session to what actually works for you."
                     )
 
                     scienceCard(
                         icon: "checkmark.shield",
                         title: "The Honest Truth",
+                        // swiftlint:disable:next line_length
                         body: "The effects of binaural beats are real but modest. Studies show small-to-medium effect sizes for focus and relaxation. The adaptive biometric engine is where the real science lives — closing the loop between what you hear and how your body responds."
                     )
 
                     scienceCard(
                         icon: "ear",
                         title: "Best Practices",
+                        // swiftlint:disable:next line_length
                         body: "Use stereo headphones — binaural beats require separate left/right channels. Keep volume comfortable, not loud. Sessions of 15–30 minutes are most studied. Consistency matters more than duration."
                     )
                 }
@@ -1038,12 +1061,16 @@ struct SessionView: View {
     private var scienceContextDescription: String {
         switch viewModel.sessionMode {
         case .focus:
+            // swiftlint:disable:next line_length
             return "Targeting the Beta band (13–30 Hz) to promote sustained attention. The adaptive engine uses negative feedback — if your heart rate rises, the frequency lowers to maintain calm focus."
         case .relaxation:
+            // swiftlint:disable:next line_length
             return "Guiding your brainwaves toward Alpha (8–13 Hz) — the band associated with relaxed awareness and recovery. A gentle downward bias nudges you toward your alpha peak."
         case .sleep:
+            // swiftlint:disable:next line_length
             return "Transitioning from Theta (4–8 Hz) down to Delta (1–4 Hz) over the session. This mimics the natural descent into deep sleep, with the rate guided by your biometrics."
         case .energize:
+            // swiftlint:disable:next line_length
             return "Driving toward high Beta and low Gamma (18–30 Hz) to boost alertness and energy. Safety guardrails monitor your heart rate and enforce a mandatory cool-down."
         }
     }

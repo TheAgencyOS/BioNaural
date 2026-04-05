@@ -391,7 +391,8 @@ struct StudyTrackSetupView: View {
                     .foregroundStyle(Theme.Colors.textPrimary)
             }
 
-            Text("Studying in a consistent auditory environment improves recall by 15\u{2013}20%. Your brain will associate this sound with the material.")
+            Text("Studying in a consistent auditory environment improves recall by 15\u{2013}20%. " +
+                "Your brain will associate this sound with the material.")
                 .font(Theme.Typography.caption)
                 .foregroundStyle(Theme.Colors.textSecondary)
                 .lineSpacing(Theme.Typography.LineSpacing.relaxed)

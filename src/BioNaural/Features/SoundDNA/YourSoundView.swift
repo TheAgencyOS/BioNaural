@@ -245,10 +245,12 @@ struct YourSoundView: View {
     }
 
     private func formatPreference(_ value: Double) -> String {
-        switch value {
-        case 0.0..<0.33: return "Low"
-        case 0.33..<0.66: return "Medium"
-        default: return "High"
+        if value < Theme.SoundDNA.featureLabelLowThreshold {
+            return "Low"
+        } else if value < Theme.SoundDNA.featureLabelHighThreshold {
+            return "Medium"
+        } else {
+            return "High"
         }
     }
 

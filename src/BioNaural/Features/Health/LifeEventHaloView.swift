@@ -251,7 +251,10 @@ struct LifeEventHaloView: View {
                 .symbolSize(Constants.LifeEventHalo.pointSymbolSize)
             }
         }
-        .chartXScale(domain: (sortedData.first?.dayOffset ?? -Constants.LifeEventHalo.defaultDayRange)...(sortedData.last?.dayOffset ?? Constants.LifeEventHalo.defaultDayRange))
+        .chartXScale(
+            domain: (sortedData.first?.dayOffset ?? -Constants.LifeEventHalo.defaultDayRange)
+                ...(sortedData.last?.dayOffset ?? Constants.LifeEventHalo.defaultDayRange)
+        )
         .chartYScale(domain: 0...1)
         .chartXAxis {
             AxisMarks(values: sortedData.map(\.dayOffset)) { value in
@@ -425,7 +428,12 @@ struct LifeEventHaloView: View {
                 )
         )
         .opacity(appeared ? Theme.Opacity.full : Theme.Opacity.transparent)
-        .animation(reduceMotion ? nil : Theme.Animation.staggeredFadeIn(index: sortedData.count + Constants.LifeEventHalo.pillStaggerOffset), value: appeared)
+        .animation(
+            reduceMotion ? nil : Theme.Animation.staggeredFadeIn(
+                index: sortedData.count + Constants.LifeEventHalo.pillStaggerOffset
+            ),
+            value: appeared
+        )
         .accessibilityLabel(recoveryInfo.text)
     }
 

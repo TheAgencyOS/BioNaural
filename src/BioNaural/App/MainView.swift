@@ -977,6 +977,9 @@ private struct HomeTab: View {
         durationMinutes: Int,
         isAdaptive: Bool
     ) {
+        // Load learned sound preferences into the audio engine
+        loadSoundProfileIntoEngine()
+
         // Setup and start audio engine
         do {
             try dependencies.audioEngine.setup()
@@ -993,6 +996,43 @@ private struct HomeTab: View {
         IntentDonation.donateStartSession(mode: mode, durationMinutes: durationMinutes)
 
         navigationPath.append(AppDestination.session(mode))
+    }
+
+    // MARK: - Sound Profile Loading
+
+    /// Loads the user's learned SoundProfile from SwiftData and converts
+    /// it to a SoundSelectionProfile for the audio engine's sound selector.
+    private func loadSoundProfileIntoEngine() {
+        let context = dependencies.modelContainer.mainContext
+        let descriptor = FetchDescriptor<SoundProfile>()
+        guard let profile = try? context.fetch(descriptor).first else { return }
+
+        let instrumentWeights: [Instrument: Double] = profile.instrumentWeights.reduce(into: [:]) { dict, pair in
+            if let instrument = Instrument(rawValue: pair.key) {
+                dict[instrument] = pair.value
+            }
+        }
+
+        let energyPreference: [FocusMode: Double] = profile.energyPreference.reduce(into: [:]) { dict, pair in
+            if let mode = FocusMode(rawValue: pair.key) {
+                dict[mode] = pair.value
+            }
+        }
+
+        let successfulSounds: [SoundID: Int] = profile.successfulSounds.reduce(into: [:]) { dict, pair in
+            dict[SoundID(pair.key)] = Int(pair.value)
+        }
+
+        let dislikedSounds = Set(profile.dislikedSounds.map { SoundID($0) })
+
+        dependencies.audioEngine.soundSelectionProfile = SoundSelectionProfile(
+            preferredInstruments: instrumentWeights,
+            energyPreference: energyPreference,
+            brightnessPreference: profile.brightnessPreference,
+            densityPreference: profile.densityPreference,
+            successfulSounds: successfulSounds,
+            dislikedSounds: dislikedSounds
+        )
     }
 
     // MARK: - Watch Status

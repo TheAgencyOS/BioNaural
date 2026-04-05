@@ -396,7 +396,8 @@ extension MorningBrief {
             suggestedCarrierFrequency: 350,
             contextTrackID: nil,
             greeting: "Good morning, Eric.",
-            bodyText: "Solid sleep at 7.2 hrs, HRV trending up. 5 meetings today. Save deep work for the 11:00 AM gap. You're primed for a long Focus session.",
+            bodyText: "Solid sleep at 7.2 hrs, HRV trending up. 5 meetings today. " +
+                "Save deep work for the 11:00 AM gap. You're primed for a long Focus session.",
             prescriptionText: "Focus for 20 min with rain",
             confidence: 0.82,
             dayOfWeekPattern: "Midweek energy dip is common. Prioritize your best block."

@@ -202,7 +202,9 @@ struct ModeSelectionView: View {
                 showDurationPicker = true
             }
         } message: {
-            Text("Your brain needs time to detect the binaural pattern and synchronize to it. Most studies that found significant effects used sessions of 15 minutes or longer. Shorter sessions may not build enough momentum.")
+            Text("Your brain needs time to detect the binaural pattern and synchronize to it. " +
+                "Most studies that found significant effects used sessions of 15 minutes or longer. " +
+                "Shorter sessions may not build enough momentum.")
         }
     }
 
@@ -799,11 +801,16 @@ struct ModeSelectionView: View {
     private func scienceText(for mode: FocusMode) -> String {
         switch mode {
         case .focus:
-            return "Beta-range binaural beats (14\u{2013}16 Hz) are associated with sustained attention and working memory. A 2016 University of Alberta study found they improved focus performance and strengthened brain connectivity patterns."
+            return "Beta-range binaural beats (14\u{2013}16 Hz) are associated with sustained attention and working memory. " +
+                "A 2016 University of Alberta study found they improved focus performance and strengthened brain connectivity patterns."
         case .relaxation:
-            return "Alpha-range beats (8\u{2013}12 Hz) have the strongest evidence of any binaural beat application. A 2019 meta-analysis of 22 studies found they reliably reduce anxiety \u{2014} comparable to a session of guided breathing."
+            return "Alpha-range beats (8\u{2013}12 Hz) have the strongest evidence of any binaural beat application. " +
+                "A 2019 meta-analysis of 22 studies found they reliably reduce anxiety " +
+                "\u{2014} comparable to a session of guided breathing."
         case .sleep:
-            return "Sleep mode mirrors your brain\u{2019}s natural descent \u{2014} starting at theta (drowsy) and gradually shifting to delta (deep sleep) over 25 minutes. The goal is to give your brain a pacing signal that matches the transition it\u{2019}s already trying to make."
+            return "Sleep mode mirrors your brain\u{2019}s natural descent \u{2014} starting at theta (drowsy) and gradually shifting " +
+                "to delta (deep sleep) over 25 minutes. The goal is to give your brain a pacing signal " +
+                "that matches the transition it\u{2019}s already trying to make."
         case .energize:
             // swiftlint:disable:next line_length
             return "Energize uses higher-frequency binaural beats (14\u{2013}30 Hz) combined with upbeat melodic content to help clear morning fog, beat the afternoon slump, or prep for a meeting. Your Apple Watch monitors your heart rate throughout \u{2014} if things get too intense, the audio automatically backs down."

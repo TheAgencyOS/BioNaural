@@ -195,7 +195,8 @@ struct NoWatchView: View {
                     .font(Theme.Typography.headline)
                     .foregroundStyle(Theme.Colors.textPrimary)
 
-                Text("BioNaural's time-based arcs adapt to your check-in responses and get smarter every session. Pair an Apple Watch anytime to add real-time biometric adaptation.")
+                Text("BioNaural's time-based arcs adapt to your check-in responses and get smarter " +
+                    "every session. Pair an Apple Watch anytime to add real-time biometric adaptation.")
                     .font(Theme.Typography.body)
                     .foregroundStyle(Theme.Colors.textSecondary)
                     .multilineTextAlignment(.center)
@@ -351,7 +352,8 @@ struct HealthKitDeniedView: View {
                     .font(Theme.Typography.headline)
                     .foregroundStyle(Theme.Colors.textPrimary)
 
-                Text("BioNaural uses heart rate and HRV to personalize your sessions in real time. All data stays on your device — it is never shared or sold.")
+                Text("BioNaural uses heart rate and HRV to personalize your sessions in real time. " +
+                    "All data stays on your device — it is never shared or sold.")
                     .font(Theme.Typography.body)
                     .foregroundStyle(Theme.Colors.textSecondary)
                     .multilineTextAlignment(.center)
