@@ -53,10 +53,17 @@ public final class StemAudioLayer {
     private var isPlaying = false
 
     /// Timer driving per-stem volume updates from AudioParameters.
-    private var volumeUpdateTimer: Timer?
+    /// Uses DispatchSourceTimer on a dedicated queue to avoid main-thread jank.
+    private var volumeUpdateTimer: DispatchSourceTimer?
 
     /// Timer driving pack crossfade envelope.
-    private var crossfadeTimer: Timer?
+    private var crossfadeTimer: DispatchSourceTimer?
+
+    /// Serial queue for volume and crossfade updates (off main thread).
+    private let mixQueue = DispatchQueue(
+        label: "com.bionaural.stems.mix",
+        qos: .userInteractive
+    )
 
     /// Current smoothed volumes per stem (for exponential smoothing).
     private var currentVolumes: [StemSlot: Float] = [
@@ -182,9 +189,15 @@ public final class StemAudioLayer {
 
         let outgoing = fadingPlayers
 
-        crossfadeTimer = Timer.scheduledTimer(withTimeInterval: stepInterval, repeats: true) { [weak self] timer in
+        let timer = DispatchSource.makeTimerSource(queue: mixQueue)
+        timer.schedule(
+            deadline: .now() + stepInterval,
+            repeating: stepInterval,
+            leeway: .milliseconds(5)
+        )
+        timer.setEventHandler { [weak self] in
             guard let self else {
-                timer.invalidate()
+                timer.cancel()
                 return
             }
 
@@ -206,11 +219,13 @@ public final class StemAudioLayer {
             }
 
             if currentStep >= totalSteps {
-                timer.invalidate()
+                timer.cancel()
                 self.crossfadeTimer = nil
                 self.teardownFadingPlayers()
             }
         }
+        crossfadeTimer = timer
+        timer.resume()
     }
 
     /// Stop all stem playback with a fade-out.
@@ -227,7 +242,13 @@ public final class StemAudioLayer {
         let playersToFade = activePlayers
         let startVolumes: [StemSlot: Float] = playersToFade.mapValues { $0.volume }
 
-        crossfadeTimer = Timer.scheduledTimer(withTimeInterval: stepInterval, repeats: true) { [weak self] timer in
+        let timer = DispatchSource.makeTimerSource(queue: mixQueue)
+        timer.schedule(
+            deadline: .now() + stepInterval,
+            repeating: stepInterval,
+            leeway: .milliseconds(5)
+        )
+        timer.setEventHandler { [weak self] in
             currentStep += 1
             let progress = Float(currentStep) / Float(totalSteps)
 
@@ -240,16 +261,18 @@ public final class StemAudioLayer {
             }
 
             if currentStep >= totalSteps {
-                timer.invalidate()
+                timer.cancel()
                 self?.crossfadeTimer = nil
-                self?.stopAllPlayers(self?.activePlayers ?? [:])
-                self?.stopAllPlayers(self?.fadingPlayers ?? [:])
-                self?.activePlayers = [:]
-                self?.fadingPlayers = [:]
-                self?.isPlaying = false
-                self?.currentPack = nil
+                    self?.stopAllPlayers(self?.activePlayers ?? [:])
+                    self?.stopAllPlayers(self?.fadingPlayers ?? [:])
+                    self?.activePlayers = [:]
+                    self?.fadingPlayers = [:]
+                    self?.isPlaying = false
+                    self?.currentPack = nil
             }
         }
+        crossfadeTimer = timer
+        timer.resume()
     }
 
     // MARK: - Volume Updates
@@ -262,7 +285,13 @@ public final class StemAudioLayer {
         let interval = Theme.Audio.StemMix.updateInterval
         let alpha = Theme.Audio.StemMix.volumeSmoothingAlpha
 
-        volumeUpdateTimer = Timer.scheduledTimer(withTimeInterval: interval, repeats: true) { [weak self] _ in
+        let timer = DispatchSource.makeTimerSource(queue: mixQueue)
+        timer.schedule(
+            deadline: .now() + interval,
+            repeating: interval,
+            leeway: .milliseconds(5)
+        )
+        timer.setEventHandler { [weak self] in
             guard let self, self.isPlaying else { return }
 
             let targets = self.parameters.stemVolumeTargets
@@ -279,10 +308,12 @@ public final class StemAudioLayer {
                 player.volume = smoothed
             }
         }
+        volumeUpdateTimer = timer
+        timer.resume()
     }
 
     private func stopVolumeUpdates() {
-        volumeUpdateTimer?.invalidate()
+        volumeUpdateTimer?.cancel()
         volumeUpdateTimer = nil
     }
 
@@ -351,7 +382,7 @@ public final class StemAudioLayer {
     }
 
     private func cancelCrossfade() {
-        crossfadeTimer?.invalidate()
+        crossfadeTimer?.cancel()
         crossfadeTimer = nil
         teardownFadingPlayers()
     }

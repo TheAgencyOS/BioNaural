@@ -200,8 +200,9 @@ public struct AdaptationEngine: AdaptationEngineProtocol {
 
         // Biometric modifier: if HR is elevated (>0.5 normalized), slow the
         // descent by blending back toward the start frequency proportionally.
-        let elevationFactor = max(0.0, hrNormalized - 0.5) * 2.0 // 0..1 above midpoint
-        let modifiedBeat = rampBeat + (p.beatFrequencyStart - rampBeat) * elevationFactor * 0.5
+        let sleepP = Theme.Audio.ModeDefaults.Sleep.self
+        let elevationFactor = max(0.0, hrNormalized - sleepP.elevationMidpoint) * sleepP.elevationScale
+        let modifiedBeat = rampBeat + (p.beatFrequencyStart - rampBeat) * elevationFactor * sleepP.elevationBlendFactor
 
         return max(modifiedBeat, p.beatFrequencyEnd)
     }
@@ -336,18 +337,16 @@ public struct AdaptationEngine: AdaptationEngineProtocol {
     /// Melodic level: mode-dependent. Focus/relaxation peak at moderate
     /// activation; sleep fades melodic content as delta deepens.
     private func computeMelodicLevel(hrNormalized: Double, mode: FocusMode) -> Double {
+        let m = Theme.Audio.SecondaryMapping.self
         switch mode {
         case .focus, .relaxation:
-            // Peaks at midrange activation, similar to binaural amplitude curve
             let centered = 2.0 * hrNormalized - 1.0
-            return min(max(0.4 + 0.4 * (1.0 - centered * centered), 0.0), 1.0)
+            return min(max(m.melodicFocusBase + m.melodicFocusScale * (1.0 - centered * centered), 0.0), 1.0)
         case .sleep:
-            // Fades as user enters deeper sleep state (lower HR)
-            return min(max(0.6 - 0.3 * (1.0 - hrNormalized), 0.0), 1.0)
+            return min(max(m.melodicSleepBase - m.melodicSleepScale * (1.0 - hrNormalized), 0.0), 1.0)
         case .energize:
-            // Higher melodic presence during energize — rises with activation
             let centered = 2.0 * hrNormalized - 1.0
-            return min(max(0.5 + 0.3 * (1.0 - centered * centered), 0.0), 1.0)
+            return min(max(m.melodicEnergizeBase + m.melodicEnergizeScale * (1.0 - centered * centered), 0.0), 1.0)
         }
     }
 

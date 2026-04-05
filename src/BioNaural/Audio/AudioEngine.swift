@@ -153,6 +153,11 @@ public final class AudioEngine: AudioEngineProtocol {
     // MARK: - Transport
 
     public func start(mode: FocusMode) throws {
+        // Cancel any pending stop timer from a previous session to prevent
+        // it from killing this newly started session.
+        fadeTimer?.cancel()
+        fadeTimer = nil
+
         if !isSetUp {
             try setup()
         }
@@ -201,8 +206,9 @@ public final class AudioEngine: AudioEngineProtocol {
     }
 
     public func stop() {
-        // Ramp amplitude to zero, then stop the engine after the fade.
-        parameters.isPlaying = false
+        // Set amplitude to zero — the render callback's per-sample smoothing
+        // (5ms time constant) creates an audible fade-out ramp. isPlaying
+        // stays true during the ramp so the callback keeps running.
         parameters.amplitude = 0.0
         currentMode = nil
 
@@ -214,11 +220,12 @@ public final class AudioEngine: AudioEngineProtocol {
 
         let fadeDuration = Theme.Audio.Fade.stopDuration
 
-        // Schedule engine stop after the fade completes.
+        // Schedule engine stop after the amplitude ramp completes.
         let timer = DispatchSource.makeTimerSource(queue: controlQueue)
         timer.schedule(deadline: .now() + fadeDuration)
         timer.setEventHandler { [weak self] in
             guard let self else { return }
+            self.parameters.isPlaying = false
             self.engine.stop()
             self.fadeTimer?.cancel()
             self.fadeTimer = nil
@@ -239,12 +246,18 @@ public final class AudioEngine: AudioEngineProtocol {
         do {
             try engine.start()
 
-            // Restart the melodic layer that was active before the pause/interruption.
+            // Restart all audio layers that were active before pause/interruption.
+            // The binaural beat node resumes automatically (it reads isPlaying).
+            // AmbienceLayer and MelodicLayer/StemAudioLayer need explicit restart.
             if let mode = currentMode {
                 startMelodicLayer(for: mode)
             }
+
+            // Restart volume sync timer.
+            startVolumeSyncTimer()
         } catch {
             Logger.audio.error("Resume failed: \(error.localizedDescription)")
+            parameters.isPlaying = false
         }
     }
 

@@ -44,8 +44,15 @@ public final class AmbienceLayer {
     /// Whether playback is active (not paused or stopped).
     private var isPlaying = false
 
-    /// Timer driving the crossfade envelope.
-    private var crossfadeTimer: Timer?
+    /// Timer driving the crossfade envelope. Uses DispatchSourceTimer
+    /// on a dedicated queue to avoid main-thread jank causing volume stutter.
+    private var crossfadeTimer: DispatchSourceTimer?
+
+    /// Serial queue for crossfade volume updates (off main thread).
+    private let crossfadeQueue = DispatchQueue(
+        label: "com.bionaural.ambience.crossfade",
+        qos: .userInteractive
+    )
 
     // MARK: - Dependencies
 
@@ -156,7 +163,8 @@ public final class AmbienceLayer {
         activeFile = file
         currentBedName = bedName
 
-        // Drive the crossfade envelope on the main thread via Timer.
+        // Drive the crossfade envelope on a dedicated queue to avoid
+        // main-thread jank causing audible volume stutter.
         let crossfadeDuration = Theme.Audio.ambientCrossfadeDuration
         let targetVolume = Float(parameters.ambientVolume)
         let stepInterval: TimeInterval = Theme.Audio.crossfadeStepInterval
@@ -166,9 +174,15 @@ public final class AmbienceLayer {
         let outgoing = fadingPlayer
         let incoming = incomingPlayer
 
-        crossfadeTimer = Timer.scheduledTimer(withTimeInterval: stepInterval, repeats: true) { [weak self] timer in
+        let timer = DispatchSource.makeTimerSource(queue: crossfadeQueue)
+        timer.schedule(
+            deadline: .now() + stepInterval,
+            repeating: stepInterval,
+            leeway: .milliseconds(5)
+        )
+        timer.setEventHandler { [weak self] in
             guard let self else {
-                timer.invalidate()
+                timer.cancel()
                 return
             }
 
@@ -180,11 +194,13 @@ public final class AmbienceLayer {
             incoming.volume = targetVolume * progress
 
             if currentStep >= totalSteps {
-                timer.invalidate()
+                timer.cancel()
                 self.crossfadeTimer = nil
                 self.teardownFadingPlayer()
             }
         }
+        crossfadeTimer = timer
+        timer.resume()
     }
 
     /// Stop all ambient playback immediately with a brief fade-out.
@@ -199,13 +215,19 @@ public final class AmbienceLayer {
         let playerToStop = activePlayer
         let startVolume = playerToStop?.volume ?? 0.0
 
-        crossfadeTimer = Timer.scheduledTimer(withTimeInterval: stepInterval, repeats: true) { [weak self] timer in
+        let timer = DispatchSource.makeTimerSource(queue: crossfadeQueue)
+        timer.schedule(
+            deadline: .now() + stepInterval,
+            repeating: stepInterval,
+            leeway: .milliseconds(5)
+        )
+        timer.setEventHandler { [weak self] in
             currentStep += 1
             let progress = Float(currentStep) / Float(totalSteps)
             playerToStop?.volume = startVolume * (1.0 - progress)
 
             if currentStep >= totalSteps {
-                timer.invalidate()
+                timer.cancel()
                 self?.crossfadeTimer = nil
                 self?.teardownActivePlayer()
                 self?.teardownFadingPlayer()
@@ -214,6 +236,8 @@ public final class AmbienceLayer {
                 self?.activeFile = nil
             }
         }
+        crossfadeTimer = timer
+        timer.resume()
     }
 
     /// Update the submixer volume to match the current `AudioParameters.ambientVolume`.
@@ -293,7 +317,7 @@ public final class AmbienceLayer {
     }
 
     private func cancelCrossfade() {
-        crossfadeTimer?.invalidate()
+        crossfadeTimer?.cancel()
         crossfadeTimer = nil
         teardownFadingPlayer()
     }

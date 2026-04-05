@@ -804,6 +804,12 @@ extension Theme {
                 static let carrierFrequencyInitial: Double = 150
                 static let beatFrequencyStart: Double = 6
                 static let beatFrequencyEnd: Double = 2
+                /// HR_normalized midpoint above which sleep descent is slowed.
+                static let elevationMidpoint: Double = 0.5
+                /// Scale factor mapping HR above midpoint to 0-1 range.
+                static let elevationScale: Double = 2.0
+                /// How much the elevation factor blends back toward start freq.
+                static let elevationBlendFactor: Double = 0.5
                 /// Duration over which the sleep ramp completes, in seconds.
                 static let rampDuration: Double = 25 * 60 // 25 minutes
             }
@@ -981,6 +987,18 @@ extension Theme {
             static let maxHR: Double = 185.0
         }
 
+        // MARK: Physiological Validation
+
+        /// Hard bounds for rejecting implausible heart rate readings.
+        /// Values outside this range are sensor noise, motion artifacts,
+        /// or initialization transients — never real human heart rates.
+        enum PhysiologicalRange {
+            /// Minimum plausible resting heart rate (BPM).
+            static let hrMin: Double = 30.0
+            /// Maximum plausible heart rate (BPM).
+            static let hrMax: Double = 220.0
+        }
+
         // MARK: Secondary Mappings
 
         enum SecondaryMapping {
@@ -993,6 +1011,16 @@ extension Theme {
             /// Harmonic content = base + scale * HR_normalized
             static let harmonicContentBase: Double = 0.1
             static let harmonicContentScale: Double = 0.6
+
+            /// Melodic level: focus/relaxation base + inverted-parabola scale
+            static let melodicFocusBase: Double = 0.4
+            static let melodicFocusScale: Double = 0.4
+            /// Melodic level: sleep base - fade scale
+            static let melodicSleepBase: Double = 0.6
+            static let melodicSleepScale: Double = 0.3
+            /// Melodic level: energize base + inverted-parabola scale
+            static let melodicEnergizeBase: Double = 0.5
+            static let melodicEnergizeScale: Double = 0.3
         }
 
         // MARK: - Ambient Layer

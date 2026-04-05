@@ -274,7 +274,7 @@ If you want to deliver in phases, ship Presets 0+2 first. We can go live with th
 
 ## ACE-Step: The Other Half of v1.5
 
-Your SoundFont isn't the only new audio in v1.5. We're also integrating **ACE-Step** — an AI music generation model (Apache 2.0, open source) that produces evolving ambient texture loops from text prompts. Here's why this matters to you and how the two pieces fit together:
+Your SoundFont isn't the only new audio in v1.5. We're also integrating **ACE-Step 1.5** — an AI music generation model (MIT license, open source) that produces evolving ambient texture loops from text prompts. Here's why this matters to you and how the two pieces fit together:
 
 ### Two layers, two jobs
 
@@ -303,6 +303,17 @@ Headphones on, Focus mode, 25 minutes in:
 
 That's four layers breathing together. Your SoundFont is the only one responding to biometrics in real-time.
 
+### v2: Stem-Based Adaptive Mixing
+
+Beyond v1.5, we're building a **stem-based mixing system** (v2). Here's what you need to know:
+
+- ACE-Step generates full ambient tracks, then **Demucs** (MIT, Meta) separates them into stems: pads, texture, bass, rhythm
+- A **BiometricStemMixer** dynamically adjusts per-stem volumes based on the user's heart rate (e.g., HR rising in Focus → pads up, texture down, rhythm fades)
+- When stem packs are active, the SoundFont melodic layer **pauses** — the stems replace it
+- When no stem pack is loaded (free tier, no downloaded content), **your SoundFont is the melodic layer**
+
+**Your SoundFont is the foundation.** Stem mixing is a premium enhancement that sits on top. The SoundFont is what every user hears at launch and what premium users fall back to. Design it as the primary experience, not a fallback.
+
 ---
 
 ## Things to Know About the Engine
@@ -317,7 +328,7 @@ A few details that affect how your sounds will be heard:
 - **Cool-down (last 5 min):** Ramps back down to 8 Hz alpha. Sound becomes sparser, softer.
 - So Preset 3 needs to work at *both* the bright sustain phase and the gentler ramp phases.
 
-**Current renderer:** The code currently uses `AVAudioUnitSampler` (Apple's built-in SF2 player). We may migrate to SF2Lib (a third-party MIT renderer) if we hit stability issues. Either way, **standard SF2 spec is what matters** — if it plays correctly in Polyphone, it'll work in the app.
+**Current renderer:** The code uses **SF2Lib** (MIT license, third-party renderer). It was chosen over Apple's `AVAudioUnitSampler` for full SF2 v2 modulator support, three-bus output (dry + chorus + reverb sends), and pre-allocated voice pooling. **Standard SF2 spec is what matters** — if it plays correctly in Polyphone, it'll work in the app.
 
 **The reverb is applied by the app, not the SoundFont.** Medium hall, 15% wet/dry. Your presets set chorus and reverb *send levels* in the SF2 generators — the app's reverb unit receives those sends. Keep your samples bone dry.
 

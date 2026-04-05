@@ -167,7 +167,7 @@ The bridge between Swift and the audio thread is `AudioParameters` — lock-free
 | **Ambient** | Texture (rain, noise, wind) | Bundled files (AVAudioPlayerNode) | 0 dB (loudest) |
 | **Melodic** | Musical content (pads, piano, strings) | Curated from tagged sound library | -6 to -3 dB |
 
-- Entrainment: phase accumulators (Double precision), mode-dependent carrier (Focus 300-450, Relaxation 150-250, Sleep 100-200, Energize 350-500 Hz). v1 = binaural beats only. v1.1+ adds isochronic tones (amplitude-modulated single tone) for Focus/Energize modes where higher frequencies (beta/gamma) favor stronger cortical response. The adaptive engine selects the optimal method per mode, frequency target, and user preference.
+- Entrainment: phase accumulators (Double precision), mode-dependent carrier (Focus 300-450, Relaxation 150-250, Sleep 100-200, Energize 400-600 Hz). v1 = binaural beats only. v1.1+ adds isochronic tones (amplitude-modulated single tone) for Focus/Energize modes where higher frequencies (beta/gamma) favor stronger cortical response. The adaptive engine selects the optimal method per mode, frequency target, and user preference.
 - Melodic: AI-curated from tagged library based on biometrics + user preferences + learned outcomes. Changes at most every 3-5 min with 10-15s crossfades.
 - Three user sliders: Ambient, Melodic, Beats
 - Per-sample exponential smoothing on all binaural parameters (5ms amplitude, 20ms frequency)
@@ -294,15 +294,17 @@ All docs organized under `docs/`:
 docs/
 ├── science/          — 8 docs: Neuroscience, Focus, Exercise, Relaxation, Relaxation-Mode,
 │                       Sleep, AdaptiveAudio, IsochronicTones
-├── tech/             — 16 docs: AVAudioEngine, AudioEngine, AdaptiveAlgorithm, WatchPipeline,
+├── tech/             — 22 docs: AVAudioEngine, AudioEngine, AdaptiveAlgorithm, WatchPipeline,
 │                       BackgroundAudio, Architecture, MultiDevice, Wearables, OuraIntegration,
 │                       AI, MelodicLayer, FeedbackLoop, MLModels, SoundFontSynthesis,
-│                       SpessaSynth, ACEStep
-├── strategy/         — 6 docs: AppleFeaturing, Apple-Featuring-Deep-Dive, Growth,
-│                       Monetization, AppStore-ASO, Legal-Regulatory
-├── product/          — 9 docs: Concept, Validation, DesignLanguage, Focus-Categories,
+│                       SpessaSynth, ACEStep, AudioCraft, MubertAPI, OpenSourceAudioAI,
+│                       AI-Audio-Viability, AI-Audio-Architecture, AI-Audio-Implementation
+├── strategy/         — 7 docs: AppleFeaturing, Apple-Featuring-Deep-Dive, Growth,
+│                       Monetization, AppStore-ASO, Legal-Regulatory, Competitor-BrainFM
+├── product/          — 11 docs: Concept, Validation, DesignLanguage, Focus-Categories,
 │                       HealthKit-Research, Decisions-Resolved, KillerFeatures-Brainstorm,
-│                       Compose-Tab-Plan, InApp-Science
+│                       Compose-Tab-Plan, InApp-Science, MarketLandscape-2025-2026,
+│                       Feature-SoundSample, Feature-SoundSample-v2
 ├── execution/        — 7 docs: Build-Phases, Build-Plan-Detailed (48 phases + 12 post-launch),
 │                       Onboarding-Flow, Sound-Asset-Pipeline, Testing-Strategy,
 │                       Retention-Engagement, AUDIT_REPORT

@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C3D4E5F6A7B8C9D0E1F2A3B4 /* Inferno in Frameworks */ = {isa = PBXBuildFile; productRef = B2C3D4E5F6A7B8C9D0E1F2A3 /* Inferno */; };
+		C9D0E1F2A3B4C5D6E7F8A9B0 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = B8C9D0E1F2A3B4C5D6E7F8A9 /* Lottie */; };
 		0114940C61E3A10281291C96 /* PreSessionCheckInSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5B029434755FA68A021E452F /* PreSessionCheckInSheet.swift */; };
 		04103E17704930B353ED1065 /* MonthlySummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CCCAAD391D7EA345C906A6CF /* MonthlySummaryView.swift */; };
 		05BEF8A7294D40280F8549CC /* MockCalendarService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C77E0580100CF70319AE8CDA /* MockCalendarService.swift */; };
@@ -441,6 +443,8 @@
 				FC8292AF5065D72CA916B7D3 /* Vortex in Frameworks */,
 				104B06715923FBC70DCF4A69 /* GlowGetter in Frameworks */,
 				35E7888F999D07174E3E4BFD /* BioNauralShared in Frameworks */,
+				C3D4E5F6A7B8C9D0E1F2A3B4 /* Inferno in Frameworks */,
+				C9D0E1F2A3B4C5D6E7F8A9B0 /* Lottie in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1161,6 +1165,8 @@
 				993FB044E8F8CDA426D03271 /* Vortex */,
 				D41FC38D8881EB9CB5238D91 /* GlowGetter */,
 				4B6D91D177B4D77A59391637 /* BioNauralShared */,
+				B2C3D4E5F6A7B8C9D0E1F2A3 /* Inferno */,
+				B8C9D0E1F2A3B4C5D6E7F8A9 /* Lottie */,
 			);
 			productName = BioNaural;
 			productReference = 835DCFE52206D530BE593136 /* BioNaural.app */;
@@ -1225,6 +1231,8 @@
 				8B6468BF4A645B4ED4BD0ABD /* XCRemoteSwiftPackageReference "GlowGetter" */,
 				722D5727EF522CA229CF1252 /* XCRemoteSwiftPackageReference "Tonic" */,
 				54EA85F32ADD7898DE7EA46C /* XCRemoteSwiftPackageReference "Vortex" */,
+				A1B2C3D4E5F6A7B8C9D0E1F2 /* XCRemoteSwiftPackageReference "Inferno" */,
+				A7B8C9D0E1F2A3B4C5D6E7F8 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				1752D215767D7FF9979D0CDE /* XCLocalSwiftPackageReference "BioNauralShared" */,
 			);
 			preferredProjectObjectVersion = 77;
@@ -1785,6 +1793,22 @@
 				minimumVersion = 1.2.0;
 			};
 		};
+		A1B2C3D4E5F6A7B8C9D0E1F2 /* XCRemoteSwiftPackageReference "Inferno" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/twostraws/Inferno.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		A7B8C9D0E1F2A3B4C5D6E7F8 /* XCRemoteSwiftPackageReference "lottie-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1834,6 +1858,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 95002A32D29CDDD8AE8A3669 /* XCRemoteSwiftPackageReference "swift-atomics" */;
 			productName = Atomics;
+		};
+		B2C3D4E5F6A7B8C9D0E1F2A3 /* Inferno */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A1B2C3D4E5F6A7B8C9D0E1F2 /* XCRemoteSwiftPackageReference "Inferno" */;
+			productName = Inferno;
+		};
+		B8C9D0E1F2A3B4C5D6E7F8A9 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = A7B8C9D0E1F2A3B4C5D6E7F8 /* XCRemoteSwiftPackageReference "lottie-ios" */;
+			productName = Lottie;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

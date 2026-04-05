@@ -50,8 +50,15 @@ public final class MelodicLayer {
     /// Whether playback is active.
     private var isPlaying = false
 
-    /// Timer driving the crossfade envelope.
-    private var crossfadeTimer: Timer?
+    /// Timer driving the crossfade envelope. Uses DispatchSourceTimer
+    /// on a dedicated queue to avoid main-thread jank causing volume stutter.
+    private var crossfadeTimer: DispatchSourceTimer?
+
+    /// Serial queue for crossfade volume updates (off main thread).
+    private let crossfadeQueue = DispatchQueue(
+        label: "com.bionaural.melodic.crossfade",
+        qos: .userInteractive
+    )
 
     // MARK: - Dependencies
 
@@ -77,7 +84,7 @@ public final class MelodicLayer {
     }
 
     deinit {
-        crossfadeTimer?.invalidate()
+        crossfadeTimer?.cancel()
         crossfadeTimer = nil
         playerA.stop()
         playerB.stop()
@@ -160,9 +167,15 @@ public final class MelodicLayer {
 
         let outgoingStartVolume = outgoing.volume
 
-        crossfadeTimer = Timer.scheduledTimer(withTimeInterval: stepInterval, repeats: true) { [weak self] timer in
-            guard let self else {
-                timer.invalidate()
+        let timer = DispatchSource.makeTimerSource(queue: crossfadeQueue)
+        timer.schedule(
+            deadline: .now() + stepInterval,
+            repeating: stepInterval,
+            leeway: .milliseconds(5)
+        )
+        timer.setEventHandler { [weak self] in
+            guard self != nil else {
+                timer.cancel()
                 return
             }
 
@@ -177,13 +190,14 @@ public final class MelodicLayer {
             incoming.volume = fadeInGain
 
             if currentStep >= totalSteps {
-                timer.invalidate()
-                self.crossfadeTimer = nil
-
-                // Stop the outgoing player to free resources.
-                outgoing.stop()
+                timer.cancel()
+                self?.crossfadeTimer = nil
+                    outgoing.stop()
+                    self?.engine?.detach(outgoing)
             }
         }
+        crossfadeTimer = timer
+        timer.resume()
     }
 
     /// Stop all melodic playback with a fade-out.
@@ -199,20 +213,28 @@ public final class MelodicLayer {
         let playerToFade = activePlayer
         let startVolume = playerToFade.volume
 
-        crossfadeTimer = Timer.scheduledTimer(withTimeInterval: stepInterval, repeats: true) { [weak self] timer in
+        let timer = DispatchSource.makeTimerSource(queue: crossfadeQueue)
+        timer.schedule(
+            deadline: .now() + stepInterval,
+            repeating: stepInterval,
+            leeway: .milliseconds(5)
+        )
+        timer.setEventHandler { [weak self] in
             currentStep += 1
             let progress = Float(currentStep) / Float(totalSteps)
             playerToFade.volume = startVolume * (1.0 - progress)
 
             if currentStep >= totalSteps {
-                timer.invalidate()
+                timer.cancel()
                 self?.crossfadeTimer = nil
-                self?.playerA.stop()
-                self?.playerB.stop()
-                self?.isPlaying = false
-                self?.currentSoundID = nil
+                    self?.playerA.stop()
+                    self?.playerB.stop()
+                    self?.isPlaying = false
+                    self?.currentSoundID = nil
             }
         }
+        crossfadeTimer = timer
+        timer.resume()
     }
 
     /// Update the submixer volume to match `AudioParameters.melodicVolume`.
@@ -273,7 +295,7 @@ public final class MelodicLayer {
     // MARK: - Teardown
 
     private func cancelCrossfade() {
-        crossfadeTimer?.invalidate()
+        crossfadeTimer?.cancel()
         crossfadeTimer = nil
     }
 }

@@ -120,12 +120,12 @@ public final class SoundProfile {
     public func updateFromOutcome(_ outcome: BioNauralShared.SessionOutcome) {
         let score = outcome.biometricSuccessScore
         let modeKey = outcome.mode.rawValue
-        let learningRate = 0.3
 
         // Update success scores for all melodic sounds played
+        let lr = SoundLearningConfig.soundSuccessLearningRate
         for soundID in outcome.melodicLayerIDs {
             let current = successfulSounds[soundID] ?? 0.0
-            successfulSounds[soundID] = current * (1.0 - learningRate) + score * learningRate
+            successfulSounds[soundID] = current * (1.0 - lr) + score * lr
         }
 
         // Handle thumbs-down: add to disliked
@@ -145,13 +145,13 @@ public final class SoundProfile {
         // Update energy preference for mode
         if score > 0.0 {
             let currentEnergy = energyPreference[modeKey] ?? 0.5
-            let energyLearningRate = 0.2
-            energyPreference[modeKey] = currentEnergy * (1.0 - energyLearningRate) + score * energyLearningRate
+            let eLR = SoundLearningConfig.energyLearningRate
+            energyPreference[modeKey] = currentEnergy * (1.0 - eLR) + score * eLR
         }
 
         // Reinforce brightness/density on good sessions
-        if score > 0.6 {
-            let rate = 0.05
+        if score > SoundLearningConfig.timbralReinforcementThreshold {
+            let rate = SoundLearningConfig.timbralReinforcementRate
             brightnessPreference = min(max(brightnessPreference + (brightnessPreference - 0.5) * rate, 0.0), 1.0)
             densityPreference = min(max(densityPreference + (densityPreference - 0.5) * rate, 0.0), 1.0)
         }

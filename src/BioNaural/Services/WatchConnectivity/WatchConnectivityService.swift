@@ -8,6 +8,7 @@
 // across actor boundaries.
 
 import Foundation
+import os
 import WatchConnectivity
 import BioNauralShared
 
@@ -48,8 +49,13 @@ public final class WatchConnectivityService: NSObject, @unchecked Sendable {
     // MARK: - State
 
     /// Whether the Watch is currently reachable.
-    /// Updated by `sessionReachabilityDidChange`.
-    public private(set) var isWatchReachable: Bool = false
+    /// Updated from the WCSession delegate queue, read from any thread.
+    /// Protected by `OSAllocatedUnfairLock` to prevent data races.
+    private let _isWatchReachable = OSAllocatedUnfairLock(initialState: false)
+    public var isWatchReachable: Bool {
+        get { _isWatchReachable.withLock { $0 } }
+        set { _isWatchReachable.withLock { $0 = newValue } }
+    }
 
     /// Whether the iPhone is paired with an Apple Watch.
     public var isPaired: Bool {

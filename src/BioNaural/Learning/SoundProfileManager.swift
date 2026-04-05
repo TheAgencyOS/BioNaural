@@ -72,6 +72,18 @@ public enum SoundLearningConfig {
     /// Exponential moving average alpha for self-awareness score updates.
     /// Lower values make the running average more stable.
     static let selfAwarenessEMAAlpha: Double = 0.2
+
+    /// EMA learning rate for sound success score updates in `updateFromOutcome`.
+    static let soundSuccessLearningRate: Double = 0.3
+
+    /// EMA learning rate for per-mode energy preference updates.
+    static let energyLearningRate: Double = 0.2
+
+    /// Learning rate for brightness/density reinforcement on good sessions.
+    static let timbralReinforcementRate: Double = 0.05
+
+    /// Biometric success score above which brightness/density are reinforced.
+    static let timbralReinforcementThreshold: Double = 0.6
 }
 
 // MARK: - Sound Profile Manager

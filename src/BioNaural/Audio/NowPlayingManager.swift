@@ -194,6 +194,13 @@ final class NowPlayingManager {
     private func registerCommands(handlers: CommandHandlers) {
         let commandCenter = MPRemoteCommandCenter.shared()
 
+        // Remove any previously registered targets to prevent duplicates
+        // if configure() is called more than once (e.g., session restart).
+        commandCenter.playCommand.removeTarget(nil)
+        commandCenter.pauseCommand.removeTarget(nil)
+        commandCenter.stopCommand.removeTarget(nil)
+        commandCenter.togglePlayPauseCommand.removeTarget(nil)
+
         // Enable session-relevant commands.
         commandCenter.playCommand.isEnabled = true
         commandCenter.playCommand.addTarget { [weak self] _ in

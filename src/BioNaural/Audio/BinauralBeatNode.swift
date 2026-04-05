@@ -200,7 +200,10 @@ public enum BinauralBeatNode {
                 let lfo1: Double = lfoDepth * sin(lfoPhase1 * twoPi)
                 let lfo2: Double = lfoDepth * sin(lfoPhase2 * twoPi)
                 let lfo3: Double = lfoDepth * sin(lfoPhase3 * twoPi)
-                let lfo: Double = 1.0 + lfo1 + lfo2 + lfo3
+                // Clamp combined LFO to prevent clipping when all 3 align
+                // constructively (peak ~1.78) or destructively (trough ~0.22).
+                let lfoRaw: Double = 1.0 + lfo1 + lfo2 + lfo3
+                let lfo: Double = min(max(lfoRaw, 0.5), 1.5)
 
                 // --- Final sample -----------------------------------------
                 let gain: Double = smoothedAmplitude * binauralVol * normFactor * lfo

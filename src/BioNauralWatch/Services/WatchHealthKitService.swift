@@ -238,6 +238,10 @@ final class WatchHealthKitService: NSObject, ObservableObject {
 
         for sample in quantitySamples {
             let bpm = sample.quantity.doubleValue(for: bpmUnit)
+
+            // Reject implausible readings from sensor initialization or motion.
+            guard bpm >= 30.0, bpm <= 220.0 else { continue }
+
             let timestamp = sample.startDate.timeIntervalSince1970
 
             // Map HKHeartRateMotionContext to confidence (0-2).

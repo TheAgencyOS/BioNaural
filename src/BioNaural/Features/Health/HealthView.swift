@@ -111,8 +111,6 @@ struct HealthView: View {
         .task(id: dateRange) { await refreshLoop() }
     }
 
-    }
-
     // MARK: - Helpers
 
     private func sectionLabel(_ text: String) -> some View {

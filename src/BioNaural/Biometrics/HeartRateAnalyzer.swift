@@ -95,9 +95,16 @@ public final class HeartRateAnalyzer {
                 acceptedHR = rawHR
             }
         } else {
-            // First sample — always accept
-            wasArtifact = false
-            acceptedHR = rawHR
+            // First sample — accept only if physiologically plausible.
+            // Reject sensor initialization transients (0 BPM, 250+ BPM).
+            let range = Theme.Audio.PhysiologicalRange.hrMin...Theme.Audio.PhysiologicalRange.hrMax
+            if range.contains(rawHR) {
+                wasArtifact = false
+                acceptedHR = rawHR
+            } else {
+                wasArtifact = true
+                acceptedHR = Theme.Audio.PopulationDefaults.restingHR
+            }
         }
 
         // --- Dual EMA Update ---

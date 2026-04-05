@@ -43,6 +43,11 @@ public final class SoundDNAService: NSObject, SoundDNAServiceProtocol {
     private var capturedSamples: [Float] = []
     private var capturedSampleRate: Double = Theme.SoundDNA.captureSampleRate
 
+    /// Thread-safe buffer for accumulating samples from the audio tap.
+    /// The tap closure writes to this from the realtime thread; the main
+    /// actor reads from it after capture completes.
+    private let sampleBuffer = SampleBuffer()
+
     // MARK: - ShazamKit State
 
     private var shazamSession: SHSession?
@@ -173,25 +178,22 @@ public final class SoundDNAService: NSObject, SoundDNAServiceProtocol {
             Theme.SoundDNA.captureDurationSeconds * capturedSampleRate
         )
 
-        // Install tap to accumulate samples
+        // Install tap to accumulate samples. The closure runs on the
+        // realtime audio thread — capture into a Sendable buffer to avoid
+        // @MainActor isolation violations.
+        let buffer = sampleBuffer
         inputNode.installTap(
             onBus: 0,
             bufferSize: AVAudioFrameCount(Theme.SoundDNA.fftSize),
             format: format
-        ) { [weak self] buffer, _ in
-            guard let self else { return }
-            let channelData = buffer.floatChannelData?[0]
-            let frameCount = Int(buffer.frameLength)
-            guard let channelData else { return }
-
+        ) { pcmBuffer, _ in
+            guard let channelData = pcmBuffer.floatChannelData?[0] else { return }
+            let frameCount = Int(pcmBuffer.frameLength)
             let samples = Array(UnsafeBufferPointer(
                 start: channelData,
                 count: frameCount
             ))
-
-            Task { @MainActor in
-                self.capturedSamples.append(contentsOf: samples)
-            }
+            buffer.append(samples)
         }
 
         // Start the engine (audio session already configured above).
@@ -208,6 +210,9 @@ public final class SoundDNAService: NSObject, SoundDNAServiceProtocol {
         try? await Task.sleep(for: .seconds(captureDuration))
 
         stopCaptureEngine()
+
+        // Transfer samples from thread-safe buffer to main actor property
+        capturedSamples = sampleBuffer.drain()
 
         // Restore audio session
         try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
@@ -304,5 +309,32 @@ extension SoundDNAService: SHSessionDelegate {
             self.shazamContinuation?.resume(returning: nil)
             self.shazamContinuation = nil
         }
+    }
+}
+
+// MARK: - Thread-Safe Sample Buffer
+
+/// Lock-protected buffer for accumulating audio samples from the
+/// realtime audio tap thread. Sendable so it can be captured in the
+/// `installTap` closure without @MainActor isolation issues.
+final class SampleBuffer: @unchecked Sendable {
+
+    private var samples: [Float] = []
+    private let lock = NSLock()
+
+    /// Append samples from the audio tap (called on realtime thread).
+    func append(_ newSamples: [Float]) {
+        lock.lock()
+        samples.append(contentsOf: newSamples)
+        lock.unlock()
+    }
+
+    /// Drain all accumulated samples and reset (called on main thread).
+    func drain() -> [Float] {
+        lock.lock()
+        let result = samples
+        samples = []
+        lock.unlock()
+        return result
     }
 }

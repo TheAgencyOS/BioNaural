@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import WatchConnectivity
 import BioNauralShared
 
 // MARK: - Mode Card Descriptor
@@ -320,13 +321,12 @@ struct ModeSelectionView: View {
     @ViewBuilder
     private var watchStatusView: some View {
         if !watchDismissed {
-            // Reads Watch connectivity state from AppDependencies (injected via environment)
-            let isConnected = false // Resolved at runtime via WatchConnectivityProtocol.isWatchReachable
+            let isConnected = WCSession.default.isReachable
 
             if isConnected {
                 HStack(spacing: Theme.Spacing.xs) {
                     Circle()
-                        .fill(.green)
+                        .fill(Theme.Colors.confirmationGreen)
                         .frame(width: Theme.Spacing.sm, height: Theme.Spacing.sm)
                     Text("Apple Watch connected")
                         .font(Theme.Typography.caption)

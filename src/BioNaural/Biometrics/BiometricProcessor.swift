@@ -38,6 +38,16 @@ public struct LocalBiometricSample: Sendable {
         self.signalQuality = min(max(signalQuality, 0.0), 1.0)
         self.timestamp = timestamp
     }
+
+    /// Convenience initializer bridging from the shared `BiometricSample` type
+    /// received via WatchConnectivity. Maps `confidence` (Int 0/1/2) to
+    /// `signalQuality` (Double 0.0/0.5/1.0).
+    public init(from shared: BiometricSample) {
+        self.heartRate = shared.bpm
+        self.hrv = nil
+        self.signalQuality = min(Double(shared.confidence) / 2.0, 1.0)
+        self.timestamp = Date(timeIntervalSince1970: shared.timestamp)
+    }
 }
 
 // MARK: - BiometricSnapshot
@@ -309,6 +319,12 @@ public actor BiometricProcessor {
     /// Safe to call from any isolation context — the actor serializes access.
     /// The sample is stored and consumed on the next control loop tick.
     public func ingest(_ sample: LocalBiometricSample) {
+        // Reject samples with implausible HR values — sensor noise,
+        // initialization transients, or NaN/Infinity from corrupt data.
+        let range = Theme.Audio.PhysiologicalRange.hrMin...Theme.Audio.PhysiologicalRange.hrMax
+        guard sample.heartRate.isFinite, range.contains(sample.heartRate) else {
+            return
+        }
         latestSample = sample
         lastSampleTimestamp = sample.timestamp
     }
