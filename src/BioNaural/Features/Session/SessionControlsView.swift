@@ -36,6 +36,7 @@ struct SessionControlsView: View {
                 Image(systemName: isPlaying ? "pause.fill" : "play.fill")
                     .font(.system(size: Theme.Typography.Size.caption, weight: .medium))
                     .foregroundStyle(Theme.Colors.textTertiary)
+                    .contentTransition(.symbolEffect(.replace))
                     .frame(
                         width: pauseButtonSize,
                         height: pauseButtonSize
@@ -43,6 +44,7 @@ struct SessionControlsView: View {
                     .contentShape(Circle())
             }
             .buttonStyle(PremiumSessionButtonStyle())
+            .sensoryFeedback(.impact(flexibility: .soft), trigger: isPlaying)
             .accessibilityLabel(isPlaying ? "Pause" : "Resume")
             .accessibilityHint(isPlaying ? "Pauses the current session" : "Resumes the paused session")
 

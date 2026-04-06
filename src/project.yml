@@ -73,18 +73,17 @@ targets:
   BioNauralWatch:
     type: application
     platform: watchOS
-    bundleId: com.bionaural.BioNaural.watchkitapp
     sources:
       - path: BioNauralWatch
     dependencies:
       - package: Atomics
-      - package: Tonic
-      - package: Vortex
       - package: BioNauralShared
     settings:
       base:
         SWIFT_STRICT_CONCURRENCY: minimal
+        PRODUCT_BUNDLE_IDENTIFIER: com.bionaural.BioNaural.watchkitapp
         INFOPLIST_KEY_WKCompanionAppBundleIdentifier: "com.bionaural.BioNaural"
+        INFOPLIST_KEY_UIBackgroundModes: "audio"
         INFOPLIST_KEY_NSHealthShareUsageDescription: "BioNaural Watch reads your heart rate to adapt audio sessions in real time."
         INFOPLIST_KEY_NSHealthUpdateUsageDescription: "BioNaural Watch logs your workout sessions to Apple Health."
 
@@ -112,8 +111,15 @@ schemes:
     build:
       targets:
         BioNaural: all
-        # BioNauralWatch: all  # Temporarily disabled — Vortex watchOS build issue
+        BioNauralWatch: all
         # BioNauralWidgets: all  # Temporarily disabled — BioNauralShared module resolution
+    run:
+      config: Debug
+      simulateLocation: false
+  BioNauralWatch:
+    build:
+      targets:
+        BioNauralWatch: all
     run:
       config: Debug
       simulateLocation: false

@@ -15,6 +15,7 @@
 
 import Foundation
 import AVFoundation
+import os
 import ShazamKit
 import Observation
 
@@ -39,14 +40,8 @@ public final class SoundDNAService: NSObject, SoundDNAServiceProtocol {
 
     // MARK: - Audio Capture State
 
-    private var captureEngine: AVAudioEngine?
     private var capturedSamples: [Float] = []
     private var capturedSampleRate: Double = Theme.SoundDNA.captureSampleRate
-
-    /// Thread-safe buffer for accumulating samples from the audio tap.
-    /// The tap closure writes to this from the realtime thread; the main
-    /// actor reads from it after capture completes.
-    private let sampleBuffer = SampleBuffer()
 
     // MARK: - ShazamKit State
 
@@ -134,7 +129,6 @@ public final class SoundDNAService: NSObject, SoundDNAServiceProtocol {
 
     public func cancelCapture() {
         isCancelled = true
-        stopCaptureEngine()
         shazamContinuation?.resume(returning: nil)
         shazamContinuation = nil
         state = .idle
@@ -149,82 +143,20 @@ public final class SoundDNAService: NSObject, SoundDNAServiceProtocol {
     // MARK: - Audio Capture
 
     /// Capture audio from the microphone for the configured duration.
+    /// Delegates to ``AudioCapturer`` which is non-isolated to avoid
+    /// @MainActor assertions in the realtime audio tap closure.
     private func performCapture() async -> Bool {
-        let engine = AVAudioEngine()
-        self.captureEngine = engine
-
-        // Configure audio session for recording BEFORE accessing inputNode.
-        // This ensures the hardware is activated and the input format is valid.
-        let audioSession = AVAudioSession.sharedInstance()
-        do {
-            try audioSession.setCategory(.record, mode: .measurement)
-            try audioSession.setActive(true)
-        } catch {
-            return false
-        }
-
-        let inputNode = engine.inputNode
-        let format = inputNode.outputFormat(forBus: 0)
-
-        // Validate format — simulator or denied mic returns 0 Hz / 0 channels.
-        guard format.sampleRate > 0, format.channelCount > 0 else {
-            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
-            return false
-        }
-
-        capturedSampleRate = format.sampleRate
-
-        let targetSampleCount = Int(
-            Theme.SoundDNA.captureDurationSeconds * capturedSampleRate
+        let capturer = AudioCapturer()
+        let result = await capturer.capture(
+            durationSeconds: Theme.SoundDNA.captureDurationSeconds,
+            bufferSize: AVAudioFrameCount(Theme.SoundDNA.fftSize)
         )
 
-        // Install tap to accumulate samples. The closure runs on the
-        // realtime audio thread — capture into a Sendable buffer to avoid
-        // @MainActor isolation violations.
-        let buffer = sampleBuffer
-        inputNode.installTap(
-            onBus: 0,
-            bufferSize: AVAudioFrameCount(Theme.SoundDNA.fftSize),
-            format: format
-        ) { pcmBuffer, _ in
-            guard let channelData = pcmBuffer.floatChannelData?[0] else { return }
-            let frameCount = Int(pcmBuffer.frameLength)
-            let samples = Array(UnsafeBufferPointer(
-                start: channelData,
-                count: frameCount
-            ))
-            buffer.append(samples)
-        }
+        guard let result else { return false }
 
-        // Start the engine (audio session already configured above).
-        do {
-            try engine.start()
-        } catch {
-            stopCaptureEngine()
-            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
-            return false
-        }
-
-        // Wait for capture duration
-        let captureDuration = Theme.SoundDNA.captureDurationSeconds
-        try? await Task.sleep(for: .seconds(captureDuration))
-
-        stopCaptureEngine()
-
-        // Transfer samples from thread-safe buffer to main actor property
-        capturedSamples = sampleBuffer.drain()
-
-        // Restore audio session
-        try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
-
-        return capturedSamples.count >= targetSampleCount / 2
-    }
-
-    /// Stop the capture engine and remove the tap.
-    private func stopCaptureEngine() {
-        captureEngine?.inputNode.removeTap(onBus: 0)
-        captureEngine?.stop()
-        captureEngine = nil
+        capturedSamples = result.samples
+        capturedSampleRate = result.sampleRate
+        return true
     }
 
     // MARK: - ShazamKit Identification
@@ -312,29 +244,109 @@ extension SoundDNAService: SHSessionDelegate {
     }
 }
 
-// MARK: - Thread-Safe Sample Buffer
+// MARK: - Audio Capturer (Non-Isolated)
 
-/// Lock-protected buffer for accumulating audio samples from the
-/// realtime audio tap thread. Sendable so it can be captured in the
-/// `installTap` closure without @MainActor isolation issues.
-final class SampleBuffer: @unchecked Sendable {
+/// Handles microphone capture entirely outside @MainActor isolation.
+/// The `installTap` closure runs on the realtime audio thread — this
+/// class is deliberately NOT actor-isolated so the closure doesn't
+/// trigger Swift 6 strict concurrency assertions.
+final class AudioCapturer: @unchecked Sendable {
 
-    private var samples: [Float] = []
-    private let lock = NSLock()
-
-    /// Append samples from the audio tap (called on realtime thread).
-    func append(_ newSamples: [Float]) {
-        lock.lock()
-        samples.append(contentsOf: newSamples)
-        lock.unlock()
+    struct CaptureResult {
+        let samples: [Float]
+        let sampleRate: Double
     }
 
-    /// Drain all accumulated samples and reset (called on main thread).
-    func drain() -> [Float] {
-        lock.lock()
-        let result = samples
-        samples = []
-        lock.unlock()
-        return result
+    private var engine: AVAudioEngine?
+    private nonisolated let lock = OSAllocatedUnfairLock(initialState: [Float]())
+
+    /// Appends samples to the lock-protected buffer (sync context).
+    private nonisolated func appendSamples(_ samples: [Float]) {
+        lock.withLock { $0.append(contentsOf: samples) }
+    }
+
+    /// Drains and returns all accumulated samples (sync context).
+    private nonisolated func drainSamples() -> [Float] {
+        lock.withLock { state in
+            let drained = state
+            state = []
+            return drained
+        }
+    }
+
+    /// Capture audio from the microphone for the given duration.
+    /// Returns nil if the microphone is unavailable or the format is invalid.
+    func capture(
+        durationSeconds: Double,
+        bufferSize: AVAudioFrameCount
+    ) async -> CaptureResult? {
+        let engine = AVAudioEngine()
+        self.engine = engine
+
+        // Configure audio session before accessing inputNode.
+        let audioSession = AVAudioSession.sharedInstance()
+        do {
+            try audioSession.setCategory(.record, mode: .measurement)
+            try audioSession.setActive(true)
+        } catch {
+            return nil
+        }
+
+        let inputNode = engine.inputNode
+        let format = inputNode.outputFormat(forBus: 0)
+
+        // Validate format — simulator or denied mic returns 0 Hz / 0 channels.
+        guard format.sampleRate > 0, format.channelCount > 0 else {
+            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+            return nil
+        }
+
+        let sampleRate = format.sampleRate
+        let targetCount = Int(durationSeconds * sampleRate)
+
+        // Install tap — this closure runs on the realtime audio thread.
+        // Because AudioCapturer is NOT @MainActor, there's no isolation assertion.
+        inputNode.installTap(
+            onBus: 0,
+            bufferSize: bufferSize,
+            format: format
+        ) { [weak self] pcmBuffer, _ in
+            guard let self,
+                  let channelData = pcmBuffer.floatChannelData?[0] else { return }
+            let frameCount = Int(pcmBuffer.frameLength)
+            let samples = Array(UnsafeBufferPointer(
+                start: channelData,
+                count: frameCount
+            ))
+            self.appendSamples(samples)
+        }
+
+        // Start the engine.
+        do {
+            try engine.start()
+        } catch {
+            stop()
+            try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+            return nil
+        }
+
+        // Wait for capture duration.
+        try? await Task.sleep(for: .seconds(durationSeconds))
+
+        stop()
+        try? audioSession.setActive(false, options: .notifyOthersOnDeactivation)
+
+        // Drain accumulated samples.
+        let result = drainSamples()
+
+        guard result.count >= targetCount / 2 else { return nil }
+
+        return CaptureResult(samples: result, sampleRate: sampleRate)
+    }
+
+    private func stop() {
+        engine?.inputNode.removeTap(onBus: 0)
+        engine?.stop()
+        engine = nil
     }
 }

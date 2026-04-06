@@ -243,6 +243,9 @@ extension Theme {
         /// Screen headers, primary section titles.
         static var title: Font { satoshi(.medium, size: 28, relativeTo: .title) }
 
+        /// Carousel card titles — unified size across all card types.
+        static var cardTitle: Font { satoshi(.medium, size: 24, relativeTo: .title2) }
+
         /// Card hooks, section headers that need visual punch.
         static var headline: Font { satoshi(.bold, size: 20, relativeTo: .headline) }
 
@@ -610,7 +613,7 @@ extension Theme {
             static let morningBriefCardReveal: Double = 0.3
 
             // Context Tracks
-            static let studyTrackStepTransition: Double = 0.35
+            static let flowStateStepTransition: Double = 0.35
 
             // Body Music
             static let adaptationWaveDrawSpeed: Double = 2.0  // seconds to draw full wave
@@ -1301,6 +1304,9 @@ extension Theme {
 
             /// Energize — tighter waves (more cycles visible).
             static let energize: CGFloat = 4.5
+
+            /// Sleep — slow, gentle wave.
+            static let sleep: CGFloat = 0.6
         }
 
         /// Opacity for each biometric state.
@@ -1334,6 +1340,10 @@ extension Theme {
         static let wavelengthHeight: CGFloat = 24
         /// Height of the active indicator dot.
         static let indicatorSize: CGFloat = 6
+        /// Height of the waveform progress bar.
+        static let waveformHeight: CGFloat = 20
+        /// Vertical padding inside the mini player card.
+        static let verticalPadding: CGFloat = 10
     }
 }
 
@@ -1483,6 +1493,8 @@ extension Theme {
         enum AuroraDrift {
             /// Pillar half-width (pts) for vertical glow bars behind wave peaks.
             static let pillarHalfWidth: CGFloat = 20
+            /// Maximum number of blurred pillar rects per frame (performance cap).
+            static let maxPillars: Int = 12
             /// Gaussian blur for pillar glow bars.
             static let pillarBlur: CGFloat = 25
             /// Gaussian blur for the undulating wash fill.
@@ -1545,6 +1557,10 @@ extension Theme {
             static let harmonicPhaseOffset: Double = 0.8
             /// Stroke opacity for the harmonic line.
             static let harmonicStrokeOpacity: Double = 0.04
+            /// Color time offset for harmonic vs. main wave (palette space).
+            static let harmonicColorOffset: Double = 0.5
+            /// Stroke width scale for harmonic relative to glassStroke.
+            static let harmonicStrokeScale: Double = 0.5
         }
     }
 }
@@ -1590,6 +1606,8 @@ extension Theme {
         static let pressOpacity: Double = 0.85
         /// Small optical offset for centered play icon (px).
         static let playIconOffset: CGFloat = 2
+        /// Speed multiplier for ambient symbol pulse on mode icons (0.3 = subtle, slow).
+        static let symbolPulseSpeed: Double = 0.3
     }
 }
 
@@ -1763,6 +1781,34 @@ extension Theme {
         }
     }
 
+    // MARK: - Mode Card Visuals
+
+    /// Tokens for the premium mode card treatment on the home screen.
+    enum ModeCard {
+        /// Ambient glow opacity beneath each card. Subtle — felt, not seen.
+        static let ambientGlowOpacity: Double = 0.12
+        /// Ambient glow blur radius (points).
+        static let ambientGlowBlurRadius: CGFloat = 30
+        /// Shadow color opacity for floating depth.
+        static let shadowOpacity: Double = 0.15
+        /// Shadow blur radius (points).
+        static let shadowRadius: CGFloat = 20
+        /// Shadow Y offset (points).
+        static let shadowY: CGFloat = 8
+        /// Left border gradient width — fades from mode color to transparent.
+        static let borderGradientWidth: CGFloat = 12
+        /// Scale on press for depth feel.
+        static let pressedScale: CGFloat = 0.97
+        /// Shadow radius when pressed (shrinks for "depress" effect).
+        static let pressedShadowRadius: CGFloat = 8
+        /// Shadow Y offset when pressed.
+        static let pressedShadowY: CGFloat = 4
+        /// Width of the colored accent bar on science caveat cards.
+        static let caveatBarWidth: CGFloat = 3
+        /// Scale for card entrance animation (0.95 = slight zoom-in on appear).
+        static let entranceScale: CGFloat = 0.95
+    }
+
     enum SF2 {
         /// Maximum simultaneous voices for the SF2 renderer.
         static let voiceCount: Int = 32
@@ -1903,15 +1949,15 @@ extension Theme {
 
     /// Layout constants for Context Tracks feature.
     enum ContextTracks {
-        /// Maximum active study tracks allowed.
-        static let maxActiveStudyTracks: Int = 5
-        /// Number of steps in the study track setup flow.
+        /// Maximum active Flow State tracks allowed.
+        static let maxActiveFlowStateTracks: Int = 5
+        /// Number of steps in the Flow State setup flow.
         static let setupStepCount: Int = 3
         /// Step indicator dot size.
         static let stepDotSize: CGFloat = 8
         /// Step indicator dot spacing.
         static let stepDotSpacing: CGFloat = 12
-        /// Duration options for study tracks (minutes).
+        /// Duration options for Flow State tracks (minutes).
         static let durationOptions: [Int] = [30, 60, 90, 120]
     }
 
@@ -2079,6 +2125,92 @@ extension Theme {
 
         /// Delay before starting analysis after capture completes (seconds).
         static let analysisStartDelay: Double = 0.3
+    }
+}
+
+// MARK: - Core Haptics
+
+extension Theme {
+
+    enum Haptics {
+
+        // MARK: Engine
+
+        /// Whether the haptic engine should reset on app foreground.
+        static let resetOnForeground: Bool = true
+
+        // MARK: Breathing Pattern (iPhone)
+
+        /// Duration of one inhale-exhale haptic cycle (seconds).
+        /// Matches standard resonant breathing (~5.5 breaths/min).
+        static let breathingCycleDuration: TimeInterval = 11.0
+
+        /// Inhale phase as a fraction of the breathing cycle.
+        static let breathingInhaleRatio: Double = 0.4
+
+        /// Number of haptic events during the inhale ramp-up.
+        static let breathingInhaleTapCount: Int = 4
+
+        /// Number of haptic events during the exhale ramp-down.
+        static let breathingExhaleTapCount: Int = 5
+
+        /// Haptic intensity at the peak of inhale (0...1).
+        static let breathingPeakIntensity: Float = 0.7
+
+        /// Haptic intensity at the trough of exhale (0...1).
+        static let breathingTroughIntensity: Float = 0.15
+
+        /// Haptic sharpness for breathing events (0...1).
+        /// Lower = rounder, softer feel.
+        static let breathingSharpness: Float = 0.3
+
+        // MARK: Beat Pulse
+
+        /// Intensity for the beat-synced transient pulse (0...1).
+        static let beatPulseIntensity: Float = 0.5
+
+        /// Sharpness for beat-synced transient (0...1).
+        /// Higher = more percussive, more noticeable.
+        static let beatPulseSharpness: Float = 0.6
+
+        /// Duration of each beat pulse transient (seconds).
+        static let beatPulseDuration: TimeInterval = 0.08
+
+        // MARK: Session Events
+
+        /// Intensity for the session-start haptic pattern (0...1).
+        static let sessionStartIntensity: Float = 0.8
+
+        /// Sharpness for the session-start pattern (0...1).
+        static let sessionStartSharpness: Float = 0.5
+
+        /// Duration of the session-start crescendo pattern (seconds).
+        static let sessionStartDuration: TimeInterval = 0.6
+
+        /// Intensity for the session-end success pattern (0...1).
+        static let sessionEndIntensity: Float = 0.9
+
+        /// Sharpness for the session-end pattern (0...1).
+        static let sessionEndSharpness: Float = 0.4
+
+        /// Duration of the session-end celebration pattern (seconds).
+        static let sessionEndDuration: TimeInterval = 1.0
+
+        // MARK: Adaptation Event
+
+        /// Intensity for subtle adaptation-change haptic (0...1).
+        static let adaptationIntensity: Float = 0.35
+
+        /// Sharpness for adaptation-change haptic (0...1).
+        static let adaptationSharpness: Float = 0.4
+
+        // MARK: Button
+
+        /// Intensity for button press haptic (0...1).
+        static let buttonIntensity: Float = 0.5
+
+        /// Sharpness for button press haptic (0...1).
+        static let buttonSharpness: Float = 0.5
     }
 }
 

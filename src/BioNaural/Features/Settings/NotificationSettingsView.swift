@@ -123,12 +123,12 @@ struct NotificationSettingsView: View {
     private var studyRemindersSection: some View {
         Section {
             Toggle(
-                "Study Track Reminders",
+                "Flow State Reminders",
                 isOn: $studyRemindersEnabled
             )
-            .accessibilityLabel("Enable study track reminder notifications")
+            .accessibilityLabel("Enable Flow State reminder notifications")
 
-            Text("Daily reminders during active study periods.")
+            Text("Daily reminders during active Flow State periods.")
                 .font(Theme.Typography.caption)
                 .foregroundStyle(Theme.Colors.textTertiary)
         } header: {

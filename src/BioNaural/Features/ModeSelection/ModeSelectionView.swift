@@ -120,6 +120,7 @@ struct ModeSelectionView: View {
     // MARK: Environment
 
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     // MARK: Queries
 
@@ -164,7 +165,7 @@ struct ModeSelectionView: View {
             }
             .padding(.horizontal, Theme.Spacing.pageMargin)
         }
-        .background(Theme.Colors.canvas.ignoresSafeArea())
+        .background { NebulaBokehBackground() }
         .sheet(isPresented: $checkIn.isPresented) {
             checkInSheet
         }
@@ -225,6 +226,7 @@ struct ModeSelectionView: View {
                     Image(systemName: descriptor.icon)
                         .font(.system(size: Theme.Typography.Size.title, weight: .light))
                         .foregroundStyle(descriptor.color)
+                        .symbolEffect(.pulse, options: .repeating.speed(Theme.Interaction.symbolPulseSpeed), isActive: !reduceMotion)
                         .padding(.bottom, Theme.Spacing.lg)
 
                     Text(descriptor.mode.displayName)
@@ -248,6 +250,7 @@ struct ModeSelectionView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(cardBackground)
             .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.xl, style: .continuous))
+            // Gradient left border — fades from mode color to transparent
             .overlay(
                 RoundedRectangle(cornerRadius: Theme.Radius.xl, style: .continuous)
                     .fill(.clear)
@@ -258,13 +261,28 @@ struct ModeSelectionView: View {
                             bottomTrailingRadius: .zero,
                             topTrailingRadius: .zero
                         )
-                        .fill(descriptor.color)
-                        .frame(width: leftBorderWidth)
+                        .fill(
+                            LinearGradient(
+                                colors: [descriptor.color, descriptor.color.opacity(0)],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .frame(width: Theme.ModeCard.borderGradientWidth)
                     }
                     .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.xl, style: .continuous))
             )
+            // Glass effect on iOS 26+
+            .modifier(GlassEffectModifier())
+            // Ambient glow beneath card
+            .background(
+                RoundedRectangle(cornerRadius: Theme.Radius.xl, style: .continuous)
+                    .fill(descriptor.color.opacity(Theme.ModeCard.ambientGlowOpacity))
+                    .blur(radius: Theme.ModeCard.ambientGlowBlurRadius)
+            )
         }
-        .buttonStyle(ModeCardButtonStyle())
+        .buttonStyle(ModeCardButtonStyle(modeColor: descriptor.color))
+        .sensoryFeedback(.impact(flexibility: .soft, intensity: Theme.Opacity.accentStrong), trigger: checkIn.isPresented)
         .contextMenu {
             Button {
                 durationPickerMode = descriptor.mode
@@ -278,8 +296,7 @@ struct ModeSelectionView: View {
         .accessibilityHint("\(descriptor.subtitle). \(descriptor.frequencyLabel). Double tap to start session. Long press for duration options.")
     }
 
-    /// Width of the colored left border on mode cards.
-    private var leftBorderWidth: CGFloat { 3 }
+    // Left border width is now Theme.ModeCard.borderGradientWidth (gradient, not solid).
 
     /// Card background — glass material on iOS 26+, surface color otherwise.
     @ViewBuilder
@@ -308,11 +325,20 @@ struct ModeSelectionView: View {
     // MARK: - Card Button Style
 
     private struct ModeCardButtonStyle: ButtonStyle {
+        let modeColor: Color
+
         func makeBody(configuration: Configuration) -> some View {
+            let pressed = configuration.isPressed
             configuration.label
-                .scaleEffect(configuration.isPressed ? 0.98 : 1.0)
-                .opacity(configuration.isPressed ? Theme.Opacity.translucent : Theme.Opacity.full)
-                .animation(Theme.Animation.press, value: configuration.isPressed)
+                .scaleEffect(pressed ? Theme.ModeCard.pressedScale : 1.0)
+                .opacity(pressed ? Theme.Opacity.translucent : Theme.Opacity.full)
+                .shadow(
+                    color: modeColor.opacity(Theme.ModeCard.shadowOpacity),
+                    radius: pressed ? Theme.ModeCard.pressedShadowRadius : Theme.ModeCard.shadowRadius,
+                    x: 0,
+                    y: pressed ? Theme.ModeCard.pressedShadowY : Theme.ModeCard.shadowY
+                )
+                .animation(Theme.Animation.press, value: pressed)
         }
     }
 
@@ -690,7 +716,7 @@ struct ModeSelectionView: View {
             HStack(alignment: .top, spacing: Theme.Spacing.sm) {
                 RoundedRectangle(cornerRadius: Theme.Radius.sm)
                     .fill(color.opacity(Theme.Opacity.accentLight))
-                    .frame(width: 3)
+                    .frame(width: Theme.ModeCard.caveatBarWidth)
 
                 Text(scienceCaveat(for: mode))
                     .font(Theme.Typography.caption)
@@ -762,7 +788,7 @@ struct ModeSelectionView: View {
         switch mode {
         case .focus:      freq = Theme.Wavelength.Frequency.focused
         case .relaxation: freq = Theme.Wavelength.Frequency.calm
-        case .sleep:      freq = 0.6
+        case .sleep:      freq = Theme.Wavelength.Frequency.sleep
         case .energize:   freq = Theme.Wavelength.Frequency.elevated
         }
 

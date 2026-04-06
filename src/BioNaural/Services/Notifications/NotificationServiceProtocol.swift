@@ -53,10 +53,10 @@ public protocol NotificationServiceProtocol: AnyObject, Sendable {
         eventDate: Date
     ) async
 
-    /// Schedules a daily repeating study reminder.
+    /// Schedules a daily repeating Flow State reminder.
     ///
     /// - Parameters:
-    ///   - trackName: The name of the study track or session type.
+    ///   - trackName: The name of the Flow State or session type.
     ///   - time: The `Date` whose hour/minute components define the daily trigger.
     func scheduleStudyReminder(trackName: String, at time: Date) async
 

@@ -5,6 +5,7 @@
 // the app. Injected into the SwiftUI environment as an @Observable object
 // so any view can pull dependencies via @Environment(AppDependencies.self).
 
+import CloudKit
 import Foundation
 import SwiftUI
 import Observation
@@ -70,6 +71,7 @@ final class AppDependencies {
     let spotlightIndexer: any SpotlightIndexerProtocol
     let journalService: any JournalSuggestionServiceProtocol
     let weatherService: any WeatherServiceProtocol
+    let cloudKitSyncService: any CloudKitSyncServiceProtocol
 
     // MARK: - Watch Status
 
@@ -108,7 +110,8 @@ final class AppDependencies {
         ])
         let configuration = ModelConfiguration(
             schema: schema,
-            isStoredInMemoryOnly: false
+            isStoredInMemoryOnly: false,
+            cloudKitDatabase: .automatic
         )
         do {
             self.modelContainer = try ModelContainer(
@@ -140,6 +143,7 @@ final class AppDependencies {
         self.spotlightIndexer = SpotlightIndexer()
         self.journalService = JournalSuggestionServiceFactory.create()
         self.weatherService = LiveWeatherService()
+        self.cloudKitSyncService = CloudKitSyncService()
     }
 
     // MARK: - Test Init
@@ -196,5 +200,6 @@ final class AppDependencies {
         self.spotlightIndexer = MockSpotlightIndexer()
         self.journalService = MockJournalSuggestionService()
         self.weatherService = MockWeatherService()
+        self.cloudKitSyncService = MockCloudKitSyncService()
     }
 }

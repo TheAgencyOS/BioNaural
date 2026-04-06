@@ -2,8 +2,9 @@
 // BioNauralWidgets
 //
 // StandBy-optimized widget for the always-on bedside display.
-// Large, glanceable layout with the Orb, a start label, and
-// last session time. Dark background optimized for OLED StandBy mode.
+// Dramatic multi-layer orb with nebula-depth bloom, decorative
+// wavelength accent, and premium typography. Dark background
+// optimized for OLED StandBy mode.
 
 import AppIntents
 import SwiftData
@@ -94,12 +95,13 @@ struct StandByEntry: TimelineEntry {
         return formatter.localizedString(for: endDate, relativeTo: .now)
     }
 
-    var lastModeColorHex: UInt {
+    var modeColor: Color {
         switch lastModeName {
-        case "focus":       return WidgetConstants.ModeHex.focus
-        case "relaxation":  return WidgetConstants.ModeHex.relaxation
-        case "sleep":       return WidgetConstants.ModeHex.sleep
-        default:            return WidgetConstants.ModeHex.accent
+        case "focus":       return Color(hex: WidgetConstants.ModeHex.focus)
+        case "relaxation":  return Color(hex: WidgetConstants.ModeHex.relaxation)
+        case "sleep":       return Color(hex: WidgetConstants.ModeHex.sleep)
+        case "energize":    return Color(hex: WidgetConstants.ModeHex.energize)
+        default:            return Color(hex: WidgetConstants.ModeHex.accent)
         }
     }
 
@@ -124,21 +126,17 @@ struct StandByWidget: Widget {
             provider: StandByProvider()
         ) { entry in
             StandByWidgetView(entry: entry)
-                .containerBackground(
-                    WidgetConstants.Colors.canvas,
-                    for: .widget
-                )
+                .containerBackground(for: .widget) {
+                    WidgetConstants.Colors.canvas
+                }
         }
         .configurationDisplayName("BioNaural StandBy")
         .description("Start a session from StandBy mode.")
         .supportedFamilies(standByFamilies)
     }
 
-    /// Supported widget families including StandBy-appropriate sizes.
-    /// `.accessoryRectangular` is used for Smart Stack / StandBy contexts.
-    /// `.systemLarge` provides the full StandBy-optimized layout.
     private var standByFamilies: [WidgetFamily] {
-        [.systemLarge, .accessoryRectangular]
+        [.systemLarge]
     }
 }
 
@@ -146,149 +144,251 @@ struct StandByWidget: Widget {
 
 struct StandByWidgetView: View {
 
-    @Environment(\.widgetFamily) private var family
     let entry: StandByEntry
 
     var body: some View {
-        switch family {
-        case .accessoryRectangular:
-            accessoryRectangularView
-        default:
-            standByLargeView
-        }
+        standByLargeView
     }
 
     // MARK: - Large StandBy Layout
 
-    /// Full StandBy-optimized view: Orb + Start label + last session.
-    /// Dark background for OLED efficiency.
+    /// Full StandBy-optimized view: dramatic multi-layer orb with nebula
+    /// bloom, decorative wavelength, and premium typography.
     private var standByLargeView: some View {
         Button(intent: StartSessionIntent(mode: .focus)) {
-            VStack(spacing: WidgetConstants.Spacing.xxl) {
-                Spacer()
+            ZStack {
+                // Layer 1: Deep ambient wash — nebula-style canvas tint
+                nebulaWash
 
-                // Large Orb representation
-                ZStack {
-                    // Outer bloom
-                    Circle()
-                        .fill(
-                            RadialGradient(
-                                colors: [
-                                    orbColor
-                                        .opacity(WidgetConstants.Opacity.subtle),
-                                    Color.clear
-                                ],
-                                center: .center,
-                                startRadius: 0,
-                                endRadius: WidgetConstants.StandBy.outerBloomRadius
-                            )
-                        )
-                        .frame(
-                            width: WidgetConstants.StandBy.outerBloomDiameter,
-                            height: WidgetConstants.StandBy.outerBloomDiameter
-                        )
+                // Layer 2: Multi-layer orb — the hero element
+                orbStack
+                    .offset(y: -WidgetConstants.Spacing.xxl)
 
-                    // Mid bloom
-                    Circle()
-                        .fill(
-                            RadialGradient(
-                                colors: [
-                                    orbColor
-                                        .opacity(WidgetConstants.Opacity.accentLight),
-                                    orbColor
-                                        .opacity(WidgetConstants.Opacity.subtle),
-                                    Color.clear
-                                ],
-                                center: .center,
-                                startRadius: 0,
-                                endRadius: WidgetConstants.StandBy.midBloomRadius
-                            )
-                        )
-                        .frame(
-                            width: WidgetConstants.StandBy.midBloomDiameter,
-                            height: WidgetConstants.StandBy.midBloomDiameter
-                        )
+                // Layer 3: Content overlay
+                VStack(spacing: 0) {
+                    Spacer()
 
-                    // Core orb
-                    Circle()
-                        .fill(
-                            RadialGradient(
-                                colors: [
-                                    orbColor
-                                        .opacity(WidgetConstants.Opacity.accentStrong),
-                                    orbColor
-                                        .opacity(WidgetConstants.Opacity.medium),
-                                    Color.clear
-                                ],
-                                center: .center,
-                                startRadius: 0,
-                                endRadius: WidgetConstants.StandBy.coreOrbRadius
-                            )
-                        )
-                        .frame(
-                            width: WidgetConstants.StandBy.coreOrbDiameter,
-                            height: WidgetConstants.StandBy.coreOrbDiameter
-                        )
-                }
+                    // Decorative wavelength accent
+                    wavelengthAccent
+                        .padding(.bottom, WidgetConstants.Spacing.xl)
 
-                // "Start" label
-                Text("Start")
-                    .font(WidgetConstants.Fonts.headline)
-                    .foregroundStyle(WidgetConstants.Colors.textPrimary)
-                    .tracking(WidgetConstants.Tracking.uppercase)
-                    .textCase(.uppercase)
+                    // Start label — elegant uppercase
+                    Text("START")
+                        .font(WidgetConstants.Fonts.title)
+                        .foregroundStyle(WidgetConstants.Colors.textPrimary)
+                        .tracking(WidgetConstants.Tracking.uppercase * 2)
 
-                // Last session time ago
-                if let timeAgo = entry.lastSessionTimeAgo {
-                    Text("Last session \(timeAgo)")
-                        .font(WidgetConstants.Fonts.small)
-                        .foregroundStyle(WidgetConstants.Colors.textTertiary)
-                }
-
-                Spacer()
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-        }
-        .buttonStyle(.plain)
-    }
-
-    // MARK: - Accessory Rectangular (Smart Stack / StandBy secondary)
-
-    private var accessoryRectangularView: some View {
-        Button(intent: StartSessionIntent(mode: .focus)) {
-            HStack(spacing: WidgetConstants.Spacing.sm) {
-                Circle()
-                    .fill(orbColor)
-                    .frame(
-                        width: WidgetConstants.StandBy.accessoryOrbSize,
-                        height: WidgetConstants.StandBy.accessoryOrbSize
-                    )
-
-                VStack(alignment: .leading, spacing: WidgetConstants.Spacing.xxs) {
-                    Text("BioNaural")
-                        .font(WidgetConstants.Fonts.caption)
-                        .fontWeight(.medium)
-
-                    if let timeAgo = entry.lastSessionTimeAgo {
-                        Text(timeAgo)
-                            .font(WidgetConstants.Fonts.small)
-                            .foregroundStyle(.secondary)
-                    } else {
-                        Text("Start session")
-                            .font(WidgetConstants.Fonts.small)
-                            .foregroundStyle(.secondary)
+                    // Mode hint
+                    if let modeName = entry.lastModeName {
+                        Text(modeName.capitalized)
+                            .font(WidgetConstants.Fonts.caption)
+                            .foregroundStyle(entry.modeColor.opacity(WidgetConstants.Opacity.textSecondary))
+                            .tracking(WidgetConstants.Tracking.uppercase)
+                            .textCase(.uppercase)
+                            .padding(.top, WidgetConstants.Spacing.xxs)
                     }
+
+                    // Last session time ago
+                    if let timeAgo = entry.lastSessionTimeAgo {
+                        Text("Last session \(timeAgo)")
+                            .font(WidgetConstants.Fonts.small)
+                            .foregroundStyle(WidgetConstants.Colors.textTertiary)
+                            .padding(.top, WidgetConstants.Spacing.sm)
+                    }
+
+                    Spacer()
+                        .frame(height: WidgetConstants.Spacing.xxl)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .buttonStyle(.plain)
     }
 
-    // MARK: - Helpers
+    // MARK: - Nebula Wash
 
-    private var orbColor: Color {
-        Color(hex: entry.lastModeColorHex)
+    /// Multi-layer radial gradient creating deep-space depth on the canvas.
+    private var nebulaWash: some View {
+        ZStack {
+            // Deep layer — large, soft, off-center
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            entry.modeColor.opacity(WidgetConstants.Nebula.deepOpacity),
+                            Color.clear
+                        ],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: WidgetConstants.Nebula.deepSize / 2
+                    )
+                )
+                .frame(
+                    width: WidgetConstants.Nebula.deepSize,
+                    height: WidgetConstants.Nebula.deepSize
+                )
+                .blur(radius: WidgetConstants.Nebula.deepBlur)
+                .offset(y: -WidgetConstants.Spacing.xxxl)
+
+            // Mid layer — secondary color offset
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            Color(hex: WidgetConstants.ModeHex.accent)
+                                .opacity(WidgetConstants.Nebula.midOpacity),
+                            Color.clear
+                        ],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: WidgetConstants.Nebula.midSize / 2
+                    )
+                )
+                .frame(
+                    width: WidgetConstants.Nebula.midSize,
+                    height: WidgetConstants.Nebula.midSize
+                )
+                .blur(radius: WidgetConstants.Nebula.midBlur)
+                .offset(
+                    x: WidgetConstants.Spacing.xxl,
+                    y: -WidgetConstants.Spacing.jumbo
+                )
+        }
     }
+
+    // MARK: - Orb Stack
+
+    /// Five-layer orb: ambient wash → outer bloom → mid glow → core → hotspot.
+    private var orbStack: some View {
+        ZStack {
+            // Ambient wash — barely perceptible, very large
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            entry.modeColor.opacity(WidgetConstants.Opacity.subtle),
+                            Color.clear
+                        ],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: WidgetConstants.StandBy.ambientWashRadius
+                    )
+                )
+                .frame(
+                    width: WidgetConstants.StandBy.ambientWashDiameter,
+                    height: WidgetConstants.StandBy.ambientWashDiameter
+                )
+
+            // Outer bloom
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            entry.modeColor.opacity(WidgetConstants.Opacity.light),
+                            entry.modeColor.opacity(WidgetConstants.Opacity.subtle),
+                            Color.clear
+                        ],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: WidgetConstants.StandBy.outerBloomRadius
+                    )
+                )
+                .frame(
+                    width: WidgetConstants.StandBy.outerBloomDiameter,
+                    height: WidgetConstants.StandBy.outerBloomDiameter
+                )
+
+            // Mid bloom
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            entry.modeColor.opacity(WidgetConstants.Opacity.medium),
+                            entry.modeColor.opacity(WidgetConstants.Opacity.accentLight),
+                            Color.clear
+                        ],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: WidgetConstants.StandBy.midBloomRadius
+                    )
+                )
+                .frame(
+                    width: WidgetConstants.StandBy.midBloomDiameter,
+                    height: WidgetConstants.StandBy.midBloomDiameter
+                )
+
+            // Core orb — solid presence
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            entry.modeColor.opacity(WidgetConstants.Opacity.accentStrong),
+                            entry.modeColor.opacity(WidgetConstants.Opacity.medium),
+                            Color.clear
+                        ],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: WidgetConstants.StandBy.coreOrbRadius
+                    )
+                )
+                .frame(
+                    width: WidgetConstants.StandBy.coreOrbDiameter,
+                    height: WidgetConstants.StandBy.coreOrbDiameter
+                )
+
+            // Hotspot — bright white center
+            Circle()
+                .fill(
+                    RadialGradient(
+                        colors: [
+                            .white.opacity(WidgetConstants.Opacity.accentStrong),
+                            entry.modeColor.opacity(WidgetConstants.Opacity.half),
+                            Color.clear
+                        ],
+                        center: .center,
+                        startRadius: 0,
+                        endRadius: WidgetConstants.StandBy.hotspotDiameter / 2
+                    )
+                )
+                .frame(
+                    width: WidgetConstants.StandBy.hotspotDiameter,
+                    height: WidgetConstants.StandBy.hotspotDiameter
+                )
+        }
+        .accessibilityHidden(true)
+    }
+
+    // MARK: - Wavelength Accent
+
+    /// Decorative sine-wave line in mode color, centered beneath the orb.
+    private var wavelengthAccent: some View {
+        GeometryReader { geo in
+            let inset = WidgetConstants.StandBy.wavelengthInset
+            let width = geo.size.width - inset * 2
+
+            WidgetConstants.wavelengthPath(
+                width: width,
+                height: WidgetConstants.StandBy.wavelengthHeight,
+                cycles: 2.5
+            )
+            .stroke(
+                LinearGradient(
+                    colors: [
+                        Color.clear,
+                        entry.modeColor.opacity(WidgetConstants.StandBy.wavelengthOpacity),
+                        entry.modeColor.opacity(WidgetConstants.StandBy.wavelengthOpacity),
+                        Color.clear
+                    ],
+                    startPoint: .leading,
+                    endPoint: .trailing
+                ),
+                lineWidth: WidgetConstants.StandBy.wavelengthStroke
+            )
+            .offset(x: inset)
+        }
+        .frame(height: WidgetConstants.StandBy.wavelengthHeight)
+    }
+
 }
 
 // MARK: - Previews
@@ -299,8 +399,3 @@ struct StandByWidgetView: View {
     StandByEntry.placeholder
 }
 
-#Preview("Accessory Rectangular", as: .accessoryRectangular) {
-    StandByWidget()
-} timeline: {
-    StandByEntry.placeholder
-}

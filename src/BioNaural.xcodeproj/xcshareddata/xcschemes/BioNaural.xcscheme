@@ -21,6 +21,20 @@
                ReferencedContainer = "container:BioNaural.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "EF6955A6E48242060716B81E"
+               BuildableName = "BioNauralWatch.app"
+               BlueprintName = "BioNauralWatch"
+               ReferencedContainer = "container:BioNaural.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

@@ -3,6 +3,7 @@
 //
 // @main entry point for the watchOS target. Activates WCSession for
 // iPhone communication and presents the root Watch interface.
+// Routes between idle, active session, and post-session screens.
 
 import SwiftUI
 import WatchConnectivity
@@ -13,7 +14,7 @@ struct BioNauralWatchApp: App {
     // MARK: - Dependencies
 
     /// The shared session manager owns the HealthKit workout session,
-    /// connectivity, and session lifecycle for the entire Watch app.
+    /// connectivity, audio engine, and session lifecycle for the entire Watch app.
     @State private var sessionManager = WatchSessionManager()
 
     // MARK: - WCSession Activation
@@ -26,9 +27,33 @@ struct BioNauralWatchApp: App {
 
     var body: some Scene {
         WindowGroup {
-            WatchMainView()
+            WatchRootView()
                 .environment(sessionManager)
         }
+    }
+}
+
+// MARK: - WatchRootView
+
+/// Routes between the three main screens based on session state.
+struct WatchRootView: View {
+
+    @Environment(WatchSessionManager.self) private var sessionManager
+
+    var body: some View {
+        Group {
+            if sessionManager.showPostSession, let result = sessionManager.lastSessionResult {
+                WatchPostSessionView(result: result) {
+                    sessionManager.dismissPostSession()
+                }
+            } else if sessionManager.isSessionActive {
+                WatchSessionView()
+            } else {
+                WatchIdleView()
+            }
+        }
+        .animation(.easeInOut(duration: WatchDesign.Animation.standardDuration), value: sessionManager.isSessionActive)
+        .animation(.easeInOut(duration: WatchDesign.Animation.standardDuration), value: sessionManager.showPostSession)
     }
 }
 

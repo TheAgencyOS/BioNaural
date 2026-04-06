@@ -35,6 +35,12 @@ struct MainView: View {
     @State private var selectedTab: AppTab = .home
     @State private var homeNavigationPath = NavigationPath()
 
+    /// Whether the full SessionView is currently on the navigation stack.
+    /// When true, the mini player hides to avoid overlapping the session UI.
+    private var isSessionViewVisible: Bool {
+        !homeNavigationPath.isEmpty && dependencies.activeSessionMode != nil
+    }
+
     var body: some View {
         if #available(iOS 26.0, *) {
             ios26TabView
@@ -47,8 +53,8 @@ struct MainView: View {
 
     @available(iOS 26.0, *)
     private var ios26TabView: some View {
-        TabView {
-            Tab("Home", systemImage: "waveform.circle.fill") {
+        TabView(selection: $selectedTab) {
+            Tab("Home", systemImage: "waveform.circle.fill", value: AppTab.home) {
                 NavigationStack(path: $homeNavigationPath) {
                     HomeTab(navigationPath: $homeNavigationPath)
                         .navigationDestination(for: AppDestination.self) { destination in
@@ -57,7 +63,7 @@ struct MainView: View {
                 }
             }
 
-            Tab("Compose", systemImage: "slider.horizontal.2.square") {
+            Tab("Compose", systemImage: "slider.horizontal.2.square", value: AppTab.compose) {
                 NavigationStack {
                     ComposerView()
                         .navigationDestination(for: AppDestination.self) { destination in
@@ -66,7 +72,7 @@ struct MainView: View {
                 }
             }
 
-            Tab("Library", systemImage: "books.vertical") {
+            Tab("Library", systemImage: "books.vertical", value: AppTab.library) {
                 NavigationStack {
                     LibraryView()
                         .navigationDestination(for: AppDestination.self) { destination in
@@ -75,7 +81,7 @@ struct MainView: View {
                 }
             }
 
-            Tab("Insights", systemImage: "chart.line.uptrend.xyaxis") {
+            Tab("Insights", systemImage: "chart.line.uptrend.xyaxis", value: AppTab.insights) {
                 NavigationStack {
                     InsightsView()
                 }
@@ -83,12 +89,12 @@ struct MainView: View {
         }
         .tint(Theme.Colors.accent)
         .overlay(alignment: .bottom) {
-            if dependencies.audioEngine.isPlaying, dependencies.activeSessionMode != nil {
+            if dependencies.activeSessionMode != nil, !isSessionViewVisible {
                 sessionMiniPlayer
                     .padding(.bottom, Theme.Spacing.mega + Theme.Spacing.xl)
                     .padding(.horizontal, Theme.Spacing.pageMargin)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .animation(Theme.Animation.standard, value: dependencies.activeSessionMode != nil)
+                    .animation(Theme.Animation.standard, value: dependencies.activeSessionMode)
             }
         }
     }
@@ -132,11 +138,12 @@ struct MainView: View {
         }
         .tint(Theme.Colors.accent)
         .overlay(alignment: .bottom) {
-            if dependencies.audioEngine.isPlaying, dependencies.activeSessionMode != nil {
+            if dependencies.activeSessionMode != nil, !isSessionViewVisible {
                 sessionMiniPlayer
                     .padding(.bottom, Theme.Spacing.mega) // clear the tab bar
+                    .padding(.horizontal, Theme.Spacing.pageMargin)
                     .transition(.move(edge: .bottom).combined(with: .opacity))
-                    .animation(Theme.Animation.standard, value: dependencies.audioEngine.isPlaying)
+                    .animation(Theme.Animation.standard, value: dependencies.activeSessionMode)
             }
         }
     }
@@ -144,76 +151,28 @@ struct MainView: View {
     // MARK: - Session Mini Player
 
     private var sessionMiniPlayer: some View {
-        let mode = dependencies.activeSessionMode ?? .focus
-        let modeColor = Color.modeColor(for: mode)
-        let beatFrequency = dependencies.audioEngine.parameters.beatFrequency
-        let elapsed = dependencies.activeSessionElapsed
-
-        return Button {
-            selectedTab = .home
-        } label: {
-            HStack(spacing: Theme.Spacing.sm) {
-                // Active indicator dot — mode-colored
-                Circle()
-                    .fill(modeColor)
-                    .frame(
-                        width: Theme.MiniPlayer.indicatorSize,
-                        height: Theme.MiniPlayer.indicatorSize
-                    )
-
-                // Mode name
-                Text(mode.displayName)
-                    .font(Theme.Typography.small)
-                    .foregroundStyle(Theme.Colors.textPrimary)
-
-                // Compact wavelength
-                WavelengthView(
-                    biometricState: .calm,
-                    sessionMode: mode,
-                    beatFrequency: beatFrequency,
-                    isPlaying: true,
-                    layerColor: modeColor,
-                    isCompact: true
-                )
-                .frame(height: Theme.MiniPlayer.wavelengthHeight)
-                .clipShape(Capsule())
-
-                // Elapsed time
-                Text(formatMiniPlayerTime(elapsed))
-                    .font(Theme.Typography.dataSmall)
-                    .foregroundStyle(Theme.Colors.textSecondary)
-                    .monospacedDigit()
-
-                // Stop button
-                Button {
-                    stopActiveSession()
-                } label: {
-                    Image(systemName: "stop.fill")
-                        .font(.system(size: Theme.Typography.Size.small, weight: .medium))
-                        .foregroundStyle(Theme.Colors.textSecondary)
-                }
-                .accessibilityLabel("Stop session")
-            }
-            .padding(.horizontal, Theme.Spacing.lg)
-            .padding(.vertical, Theme.Spacing.xs)
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel("\(mode.displayName) session active, \(formatMiniPlayerTime(elapsed)) elapsed. Tap to return.")
+        SessionMiniPlayerView(
+            mode: dependencies.activeSessionMode ?? .focus,
+            beatFrequency: dependencies.audioEngine.parameters.beatFrequency,
+            elapsed: dependencies.activeSessionElapsed,
+            targetDuration: nil,
+            isAdaptive: dependencies.isWatchConnected,
+            heartRate: 0,
+            onTap: { selectedTab = .home },
+            onStop: { stopActiveSession() }
+        )
     }
 
     // MARK: - Mini Player Helpers
 
     private func stopActiveSession() {
         dependencies.audioEngine.stop()
-        dependencies.activeSessionMode = nil
-        dependencies.activeSessionElapsed = 0
-    }
-
-    private func formatMiniPlayerTime(_ interval: TimeInterval) -> String {
-        let totalSeconds = Int(interval)
-        let minutes = totalSeconds / 60
-        let seconds = totalSeconds % 60
-        return String(format: "%d:%02d", minutes, seconds)
+        // Delay state cleanup until audio fade completes so the mini
+        // player doesn't vanish before the audio actually stops.
+        DispatchQueue.main.asyncAfter(deadline: .now() + Theme.Audio.Fade.stopDuration) {
+            dependencies.activeSessionMode = nil
+            dependencies.activeSessionElapsed = 0
+        }
     }
 }
 

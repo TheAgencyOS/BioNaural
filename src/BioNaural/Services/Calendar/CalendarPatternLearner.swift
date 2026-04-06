@@ -66,6 +66,10 @@ public struct CalendarPattern: Codable, Sendable, Identifiable {
 @Model
 public final class CalendarPatternStore {
 
+    /// Stable singleton identifier for CloudKit deduplication.
+    @Attribute(.unique)
+    public var id: String = "singleton"
+
     /// JSON-encoded `[CalendarPattern]`.
     public var patternsData: Data
 
@@ -73,6 +77,7 @@ public final class CalendarPatternStore {
     public var lastUpdated: Date
 
     public init(patternsData: Data = Data(), lastUpdated: Date = .distantPast) {
+        self.id = "singleton"
         self.patternsData = patternsData
         self.lastUpdated = lastUpdated
     }

@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural — Watch Companion Mockups</title>
+<style>
+  @import url('https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --canvas: #080C15;
+    --surface: #111520;
+    --surface-raised: #1A1F2E;
+    --accent: #6E7CF7;
+    --focus: #5B6ABF;
+    --relaxation: #4EA8A6;
+    --sleep: #9080C4;
+    --energize: #F5A623;
+    --text-primary: #E2E6F0;
+    --text-secondary: rgba(226, 230, 240, 0.55);
+    --text-tertiary: rgba(226, 230, 240, 0.30);
+    --calm: #4EA8A6;
+    --focused-signal: #6E7CF7;
+    --elevated: #D4954A;
+    --peak: #D46A5A;
+    --watch-w: 198px;
+    --watch-h: 242px;
+    --watch-radius: 48px;
+    --bezel-w: 230px;
+    --bezel-h: 280px;
+    --bezel-radius: 58px;
+  }
+
+  body {
+    background: #050810;
+    color: var(--text-primary);
+    font-family: 'Satoshi', -apple-system, sans-serif;
+    padding: 40px 20px 80px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 4px;
+    background: linear-gradient(135deg, var(--accent), #9B8AFF);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    text-align: center;
+    font-size: 14px;
+    color: var(--text-tertiary);
+    margin-bottom: 48px;
+    letter-spacing: 0.5px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 48px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .mockup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .mockup-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+    text-align: center;
+  }
+
+  .mockup-sublabel {
+    font-size: 10px;
+    color: var(--text-tertiary);
+    margin-top: 8px;
+    text-align: center;
+    max-width: 200px;
+    line-height: 1.4;
+  }
+
+  /* Watch bezel */
+  .watch {
+    width: var(--bezel-w);
+    height: var(--bezel-h);
+    border-radius: var(--bezel-radius);
+    background: #1C1C1E;
+    padding: 3px;
+    position: relative;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 8px 32px rgba(0,0,0,0.6),
+      inset 0 1px 0 rgba(255,255,255,0.05);
+  }
+
+  /* Side button */
+  .watch::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 60px;
+    width: 4px;
+    height: 28px;
+    background: #2A2A2C;
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.04);
+  }
+
+  /* Digital crown */
+  .watch::before {
+    content: '';
+    position: absolute;
+    right: -5px;
+    top: 100px;
+    width: 5px;
+    height: 20px;
+    background: linear-gradient(180deg, #3A3A3C 0%, #2A2A2C 100%);
+    border-radius: 0 3px 3px 0;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06);
+  }
+
+  .screen {
+    width: var(--watch-w);
+    height: var(--watch-h);
+    border-radius: calc(var(--watch-radius) - 2px);
+    background: var(--canvas);
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ===== IDLE SCREENS ===== */
+
+  .idle-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 16px 14px;
+    position: relative;
+  }
+
+  /* Screen 1: First Use - Learning */
+  .learning-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 10px;
+  }
+
+  .learning-dots {
+    display: flex;
+    gap: 3px;
+  }
+
+  .learning-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.3;
+  }
+
+  .learning-dot.active {
+    opacity: 1;
+  }
+
+  .learning-dot:nth-child(1) { animation: pulse-dot 2s ease-in-out infinite; }
+  .learning-dot:nth-child(2) { animation: pulse-dot 2s ease-in-out 0.3s infinite; }
+  .learning-dot:nth-child(3) { animation: pulse-dot 2s ease-in-out 0.6s infinite; }
+
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 0.8; }
+  }
+
+  .learning-label {
+    font-size: 9px;
+    color: var(--accent);
+    opacity: 0.6;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+
+  .suggestion-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-primary);
+    line-height: 1.35;
+    margin-bottom: 4px;
+  }
+
+  .suggestion-context {
+    font-size: 9.5px;
+    color: var(--text-tertiary);
+    line-height: 1.4;
+    margin-bottom: 12px;
+  }
+
+  .start-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 0;
+    border-radius: 12px;
+    font-size: 13px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 12px;
+  }
+
+  .start-btn .icon {
+    font-size: 11px;
+  }
+
+  .quick-modes {
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    padding-top: 6px;
+    border-top: 1px solid rgba(226,230,240,0.06);
+  }
+
+  .quick-mode {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .quick-mode-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+  }
+
+  .quick-mode-label {
+    font-size: 7px;
+    color: var(--text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .today-summary {
+    font-size: 9px;
+    color: var(--text-tertiary);
+    text-align: center;
+    margin-top: auto;
+    padding-top: 6px;
+  }
+
+  /* Screen 2: Learned - Confident */
+  .confidence-ring {
+    width: 24px;
+    height: 24px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  .confidence-ring svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .biometric-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 9px;
+    font-weight: 500;
+    margin-bottom: 6px;
+  }
+
+  .biometric-pill .heart {
+    font-size: 8px;
+  }
+
+  /* ===== SESSION SCREENS ===== */
+
+  .session-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .session-mode {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.5;
+    position: absolute;
+    top: 22px;
+    left: 0;
+    right: 0;
+    text-align: center;
+  }
+
+  /* Wavelength */
+  .wavelength-container {
+    width: 100%;
+    height: 60px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+  }
+
+  .wavelength-svg {
+    width: 100%;
+    height: 60px;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  /* Session controls - glass pill */
+  .session-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 14px;
+    border-radius: 20px;
+    background: rgba(226, 230, 240, 0.08);
+    border: 1px solid rgba(226, 230, 240, 0.12);
+    backdrop-filter: blur(8px);
+    position: absolute;
+    bottom: 18px;
+  }
+
+  .control-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    color: var(--text-secondary);
+    background: transparent;
+  }
+
+  .control-btn.stop {
+    background: rgba(255, 59, 48, 0.2);
+    color: #FF3B30;
+  }
+
+  .session-timer {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-secondary);
+    letter-spacing: 0.5px;
+  }
+
+  /* Tap reveal overlay */
+  .tap-reveal {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    z-index: 10;
+  }
+
+  .reveal-hr {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 36px;
+    font-weight: 300;
+    letter-spacing: -1px;
+  }
+
+  .reveal-hr-unit {
+    font-size: 11px;
+    font-weight: 400;
+    opacity: 0.5;
+    margin-left: 2px;
+  }
+
+  .reveal-state {
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    opacity: 0.7;
+  }
+
+  /* Session background gradients */
+  .session-bg {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    pointer-events: none;
+  }
+
+  /* ===== POST SESSION ===== */
+  .post-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 18px 14px 14px;
+  }
+
+  .post-header {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+  }
+
+  .post-duration {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 28px;
+    font-weight: 300;
+    margin-bottom: 2px;
+  }
+
+  .post-mode {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+
+  .post-metrics {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .post-metric {
+    padding: 8px;
+    border-radius: 10px;
+    background: var(--surface);
+    border: 1px solid rgba(226,230,240,0.06);
+  }
+
+  .post-metric-label {
+    font-size: 7.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--text-tertiary);
+    margin-bottom: 3px;
+  }
+
+  .post-metric-value {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 14px;
+    font-weight: 500;
+  }
+
+  .post-feedback {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding-top: 8px;
+    border-top: 1px solid rgba(226,230,240,0.06);
+    margin-top: auto;
+  }
+
+  .feedback-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    background: var(--surface);
+    border: 1px solid rgba(226,230,240,0.08);
+  }
+
+  /* ===== AOD SCREEN ===== */
+  .aod-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    opacity: 0.6;
+  }
+
+  .aod-wave {
+    width: 100%;
+    height: 30px;
+    margin-bottom: 4px;
+  }
+
+  .aod-timer {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 22px;
+    font-weight: 300;
+    color: var(--text-secondary);
+  }
+
+  .aod-mode {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    color: var(--text-tertiary);
+  }
+
+  /* ===== COMPLICATION ===== */
+  .complication-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    padding-top: 8px;
+  }
+
+  .watch-face {
+    width: var(--bezel-w);
+    height: var(--bezel-h);
+    border-radius: var(--bezel-radius);
+    background: #1C1C1E;
+    padding: 3px;
+    position: relative;
+    box-shadow:
+      0 0 0 1px rgba(255,255,255,0.06),
+      0 8px 32px rgba(0,0,0,0.6);
+  }
+
+  .watch-face::after {
+    content: '';
+    position: absolute;
+    right: -4px;
+    top: 60px;
+    width: 4px;
+    height: 28px;
+    background: #2A2A2C;
+    border-radius: 0 3px 3px 0;
+  }
+
+  .watch-face::before {
+    content: '';
+    position: absolute;
+    right: -5px;
+    top: 100px;
+    width: 5px;
+    height: 20px;
+    background: linear-gradient(180deg, #3A3A3C 0%, #2A2A2C 100%);
+    border-radius: 0 3px 3px 0;
+  }
+
+  .watch-face-screen {
+    width: var(--watch-w);
+    height: var(--watch-h);
+    border-radius: calc(var(--watch-radius) - 2px);
+    background: #000;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .wf-time {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -55%);
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 52px;
+    font-weight: 200;
+    color: white;
+    letter-spacing: -2px;
+  }
+
+  .wf-date {
+    position: absolute;
+    top: 50%;
+    right: 22px;
+    transform: translateY(-55%);
+    font-size: 14px;
+    font-weight: 500;
+    color: #FF6347;
+  }
+
+  .complication-rect {
+    position: absolute;
+    bottom: 32px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 160px;
+    height: 44px;
+    border-radius: 12px;
+    background: rgba(110, 124, 247, 0.12);
+    border: 1px solid rgba(110, 124, 247, 0.2);
+    display: flex;
+    align-items: center;
+    padding: 0 12px;
+    gap: 8px;
+    overflow: hidden;
+  }
+
+  .comp-wave-mini {
+    width: 40px;
+    height: 24px;
+    flex-shrink: 0;
+  }
+
+  .comp-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .comp-title {
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+
+  .comp-sub {
+    font-size: 8px;
+    color: var(--text-tertiary);
+  }
+
+  .complication-corner {
+    position: absolute;
+    top: 32px;
+    left: 22px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .corner-icon {
+    font-size: 11px;
+    color: var(--accent);
+  }
+
+  .corner-label {
+    font-size: 9px;
+    color: var(--accent);
+    font-weight: 500;
+  }
+
+  /* Responsive */
+  @media (max-width: 1400px) {
+    .grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 40px 24px;
+    }
+  }
+
+  @media (max-width: 1100px) {
+    .grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  @media (max-width: 800px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  /* Subtle ambient animation on wavelengths */
+  @keyframes wave-drift {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .wave-animated {
+    animation: wave-drift 4s linear infinite;
+  }
+
+  .wave-animated-slow {
+    animation: wave-drift 8s linear infinite;
+  }
+
+  .wave-animated-fast {
+    animation: wave-drift 1.5s linear infinite;
+  }
+</style>
+</head>
+<body>
+
+<h1>BioNaural Watch</h1>
+<p class="subtitle">Companion App — 10 Screen Concepts</p>
+
+<div class="grid">
+
+  <!-- ==================== SCREEN 1: IDLE - FIRST USE ==================== -->
+  <div class="mockup">
+    <div class="mockup-label">1 · First Session</div>
+    <div class="watch">
+      <div class="screen">
+        <div class="idle-content">
+          <div class="learning-indicator">
+            <div class="learning-dots">
+              <div class="learning-dot active"></div>
+              <div class="learning-dot"></div>
+              <div class="learning-dot"></div>
+              <div class="learning-dot"></div>
+              <div class="learning-dot"></div>
+            </div>
+            <span class="learning-label">Learning your rhythm</span>
+          </div>
+
+          <div class="suggestion-text">Try a Focus session</div>
+          <div class="suggestion-context">Your first session helps me learn how your body responds.</div>
+
+          <div class="start-btn" style="background: var(--focus);">
+            <span class="icon">▶</span>
+            Start Focus
+          </div>
+
+          <div class="quick-modes">
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(91,106,191,0.15);">
+                <span style="color: var(--focus);">🧠</span>
+              </div>
+            </div>
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(78,168,166,0.15);">
+                <span style="color: var(--relaxation);">🍃</span>
+              </div>
+            </div>
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(144,128,196,0.15);">
+                <span style="color: var(--sleep);">🌙</span>
+              </div>
+            </div>
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(245,166,35,0.15);">
+                <span style="color: var(--energize);">⚡</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-sublabel">Cold start. Learning dots fill as the app builds a biometric profile.</div>
+  </div>
+
+  <!-- ==================== SCREEN 2: IDLE - LEARNING (5 SESSIONS) ==================== -->
+  <div class="mockup">
+    <div class="mockup-label">2 · Getting Smarter</div>
+    <div class="watch">
+      <div class="screen">
+        <div class="idle-content">
+          <div class="learning-indicator">
+            <div class="learning-dots">
+              <div class="learning-dot active"></div>
+              <div class="learning-dot active"></div>
+              <div class="learning-dot active"></div>
+              <div class="learning-dot"></div>
+              <div class="learning-dot"></div>
+            </div>
+            <span class="learning-label">5 sessions in</span>
+          </div>
+
+          <div class="suggestion-text">Relaxation looks right</div>
+          <div class="suggestion-context">
+            <span style="color: var(--elevated); font-weight: 500;">HR 78</span> · Slightly elevated for 2pm. A short reset could help.
+          </div>
+
+          <div class="start-btn" style="background: var(--relaxation);">
+            <span class="icon">▶</span>
+            Start Relaxation
+          </div>
+
+          <div class="quick-modes">
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(91,106,191,0.15);">
+                <span style="color: var(--focus);">🧠</span>
+              </div>
+            </div>
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(78,168,166,0.15);">
+                <span style="color: var(--relaxation);">🍃</span>
+              </div>
+            </div>
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(144,128,196,0.15);">
+                <span style="color: var(--sleep);">🌙</span>
+              </div>
+            </div>
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(245,166,35,0.15);">
+                <span style="color: var(--energize);">⚡</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="today-summary">1 session · 22 min today</div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-sublabel">Mid-learning. Suggestions get contextual — references HR and time of day.</div>
+  </div>
+
+  <!-- ==================== SCREEN 3: IDLE - CONFIDENT (20+ SESSIONS) ==================== -->
+  <div class="mockup">
+    <div class="mockup-label">3 · Knows You</div>
+    <div class="watch">
+      <div class="screen">
+        <div class="idle-content">
+
+          <div style="display: flex; align-items: center; gap: 5px; margin-bottom: 8px;">
+            <svg width="16" height="16" viewBox="0 0 16 16">
+              <circle cx="8" cy="8" r="6" fill="none" stroke="var(--accent)" stroke-width="1.5" opacity="0.2"/>
+              <circle cx="8" cy="8" r="6" fill="none" stroke="var(--accent)" stroke-width="1.5"
+                stroke-dasharray="37.7" stroke-dashoffset="0" stroke-linecap="round"/>
+              <circle cx="8" cy="8" r="2.5" fill="var(--accent)"/>
+            </svg>
+            <span class="learning-label" style="opacity: 0.8;">Tuned to you</span>
+          </div>
+
+          <div class="suggestion-text" style="font-size: 15px; margin-bottom: 2px;">
+            Focus. You're ready.
+          </div>
+          <div class="suggestion-context" style="margin-bottom: 4px;">
+            <span style="color: var(--calm); font-weight: 500;">HRV is high</span> · resting HR is 4 below your average. Mornings like this are your best sessions.
+          </div>
+
+          <div class="biometric-pill" style="background: rgba(78,168,166,0.12); color: var(--calm); margin-bottom: 10px; align-self: flex-start;">
+            <span class="heart">♡</span> 58 · Calm
+          </div>
+
+          <div class="start-btn" style="background: var(--focus);">
+            <span class="icon">▶</span>
+            Start Focus · 25 min
+          </div>
+
+          <div class="quick-modes">
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(91,106,191,0.15);">
+                <span style="color: var(--focus);">🧠</span>
+              </div>
+            </div>
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(78,168,166,0.15);">
+                <span style="color: var(--relaxation);">🍃</span>
+              </div>
+            </div>
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(144,128,196,0.15);">
+                <span style="color: var(--sleep);">🌙</span>
+              </div>
+            </div>
+            <div class="quick-mode">
+              <div class="quick-mode-icon" style="background: rgba(245,166,35,0.15);">
+                <span style="color: var(--energize);">⚡</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="today-summary">3-day streak · 1h 12m this week</div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-sublabel">Full confidence. Knows your patterns. Suggests duration, references personal trends.</div>
+  </div>
+
+  <!-- ==================== SCREEN 4: SESSION - FOCUS (CALM) ==================== -->
+  <div class="mockup">
+    <div class="mockup-label">4 · Focus · Calm</div>
+    <div class="watch">
+      <div class="screen">
+        <div class="session-content">
+          <!-- Background gradient -->
+          <div class="session-bg" style="background: radial-gradient(ellipse at 50% 45%, rgba(91,106,191,0.08) 0%, var(--canvas) 70%);"></div>
+
+          <div class="session-mode" style="color: var(--focus);">Focus</div>
+
+          <!-- Wavelength -->
+          <div class="wavelength-container">
+            <svg class="wavelength-svg" viewBox="0 0 198 60" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="wave-focus-calm" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: var(--focus); stop-opacity: 0"/>
+                  <stop offset="20%" style="stop-color: var(--focus); stop-opacity: 0.25"/>
+                  <stop offset="50%" style="stop-color: var(--focus); stop-opacity: 0.35"/>
+                  <stop offset="80%" style="stop-color: var(--focus); stop-opacity: 0.25"/>
+                  <stop offset="100%" style="stop-color: var(--focus); stop-opacity: 0"/>
+                </linearGradient>
+                <filter id="glow-focus">
+                  <feGaussianBlur stdDeviation="2" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <!-- Calm: long, gentle waves ~1.5 cycles, low amplitude -->
+              <path d="M0,30 C16,22 33,18 49,22 C66,26 82,38 99,38 C115,38 132,22 148,18 C165,14 182,22 198,30"
+                fill="none" stroke="url(#wave-focus-calm)" stroke-width="1.5" filter="url(#glow-focus)"/>
+              <!-- Secondary wave, offset -->
+              <path d="M0,32 C20,26 40,22 60,26 C80,30 100,36 120,36 C140,36 160,26 180,22 C190,20 195,24 198,28"
+                fill="none" stroke="var(--focus)" stroke-width="0.5" opacity="0.12"/>
+            </svg>
+          </div>
+
+          <!-- Controls pill -->
+          <div class="session-controls">
+            <div class="control-btn" style="font-size: 10px;">❚❚</div>
+            <div class="session-timer">12:34</div>
+            <div class="control-btn stop" style="font-size: 8px;">■</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-sublabel">Active session, calm state. Gentle wave, minimal UI. Tap wave to reveal HR.</div>
+  </div>
+
+  <!-- ==================== SCREEN 5: SESSION - FOCUS (ELEVATED) ==================== -->
+  <div class="mockup">
+    <div class="mockup-label">5 · Focus · Elevated</div>
+    <div class="watch">
+      <div class="screen">
+        <div class="session-content">
+          <div class="session-bg" style="background: radial-gradient(ellipse at 50% 45%, rgba(212,149,74,0.10) 0%, var(--canvas) 65%);"></div>
+
+          <div class="session-mode" style="color: var(--elevated);">Focus</div>
+
+          <!-- Wavelength - elevated: tighter frequency, higher amplitude, warmer -->
+          <div class="wavelength-container">
+            <svg class="wavelength-svg" viewBox="0 0 198 60" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="wave-focus-elev" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: var(--elevated); stop-opacity: 0"/>
+                  <stop offset="15%" style="stop-color: var(--elevated); stop-opacity: 0.3"/>
+                  <stop offset="50%" style="stop-color: var(--elevated); stop-opacity: 0.45"/>
+                  <stop offset="85%" style="stop-color: var(--elevated); stop-opacity: 0.3"/>
+                  <stop offset="100%" style="stop-color: var(--elevated); stop-opacity: 0"/>
+                </linearGradient>
+                <filter id="glow-elev">
+                  <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <!-- Elevated: ~3 cycles, higher amplitude -->
+              <path d="M0,30 C10,18 20,12 33,16 C46,20 52,40 66,44 C80,48 86,20 99,14 C112,8 120,40 132,46 C144,52 152,18 165,12 C178,6 188,22 198,30"
+                fill="none" stroke="url(#wave-focus-elev)" stroke-width="1.8" filter="url(#glow-elev)"/>
+              <path d="M0,33 C12,22 24,16 36,20 C48,24 56,42 70,44 C84,46 92,18 106,14 C120,10 128,38 142,44 C156,50 164,20 178,14 C190,10 196,24 198,30"
+                fill="none" stroke="var(--elevated)" stroke-width="0.6" opacity="0.15"/>
+            </svg>
+          </div>
+
+          <div class="session-controls">
+            <div class="control-btn" style="font-size: 10px;">❚❚</div>
+            <div class="session-timer">32:15</div>
+            <div class="control-btn stop" style="font-size: 8px;">■</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-sublabel">HR rising. Wave tightens and shifts warm. Background gains amber. Audio is counter-adapting.</div>
+  </div>
+
+  <!-- ==================== SCREEN 6: SESSION - TAP REVEAL ==================== -->
+  <div class="mockup">
+    <div class="mockup-label">6 · Tap to Reveal</div>
+    <div class="watch">
+      <div class="screen">
+        <div class="session-content">
+          <div class="session-bg" style="background: radial-gradient(ellipse at 50% 45%, rgba(91,106,191,0.12) 0%, var(--canvas) 65%);"></div>
+
+          <div class="session-mode" style="color: var(--focus);">Focus</div>
+
+          <!-- Wavelength - still visible but dimmed behind overlay -->
+          <div class="wavelength-container" style="opacity: 0.3;">
+            <svg class="wavelength-svg" viewBox="0 0 198 60" preserveAspectRatio="none">
+              <path d="M0,30 C16,22 33,18 49,22 C66,26 82,38 99,38 C115,38 132,22 148,18 C165,14 182,22 198,30"
+                fill="none" stroke="var(--focus)" stroke-width="1.5" opacity="0.4"/>
+            </svg>
+          </div>
+
+          <!-- Revealed data -->
+          <div class="tap-reveal">
+            <div class="reveal-hr" style="color: var(--focus);">
+              64<span class="reveal-hr-unit">bpm</span>
+            </div>
+            <div class="reveal-state" style="color: var(--calm);">● Calm</div>
+          </div>
+
+          <div class="session-controls">
+            <div class="control-btn" style="font-size: 10px;">❚❚</div>
+            <div class="session-timer">18:42</div>
+            <div class="control-btn stop" style="font-size: 8px;">■</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-sublabel">Tapped wavelength. HR + biometric state revealed for 3 seconds, then fades back.</div>
+  </div>
+
+  <!-- ==================== SCREEN 7: SESSION - RELAXATION ==================== -->
+  <div class="mockup">
+    <div class="mockup-label">7 · Relaxation</div>
+    <div class="watch">
+      <div class="screen">
+        <div class="session-content">
+          <div class="session-bg" style="background: radial-gradient(ellipse at 50% 45%, rgba(78,168,166,0.10) 0%, var(--canvas) 70%);"></div>
+
+          <div class="session-mode" style="color: var(--relaxation);">Relaxation</div>
+
+          <!-- Wavelength - relaxation: very slow, gentle, teal -->
+          <div class="wavelength-container">
+            <svg class="wavelength-svg" viewBox="0 0 198 60" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="wave-relax" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: var(--relaxation); stop-opacity: 0"/>
+                  <stop offset="25%" style="stop-color: var(--relaxation); stop-opacity: 0.2"/>
+                  <stop offset="50%" style="stop-color: var(--relaxation); stop-opacity: 0.3"/>
+                  <stop offset="75%" style="stop-color: var(--relaxation); stop-opacity: 0.2"/>
+                  <stop offset="100%" style="stop-color: var(--relaxation); stop-opacity: 0"/>
+                </linearGradient>
+                <filter id="glow-relax">
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <!-- Relaxation: ~1 cycle, very gentle, wide -->
+              <path d="M0,30 C33,24 55,20 80,22 C105,24 115,36 130,38 C145,40 170,34 198,30"
+                fill="none" stroke="url(#wave-relax)" stroke-width="1.2" filter="url(#glow-relax)"/>
+            </svg>
+          </div>
+
+          <!-- Breathing indicator - subtle dots -->
+          <div style="position: absolute; bottom: 52px; left: 50%; transform: translateX(-50%); display: flex; gap: 8px; align-items: center;">
+            <svg width="14" height="14" viewBox="0 0 14 14" style="opacity: 0.4;">
+              <circle cx="7" cy="7" r="5" fill="none" stroke="var(--relaxation)" stroke-width="1"/>
+              <circle cx="7" cy="7" r="3" fill="var(--relaxation)" opacity="0.3"/>
+            </svg>
+            <span style="font-size: 8px; color: var(--relaxation); opacity: 0.4; text-transform: uppercase; letter-spacing: 0.8px;">Breathe</span>
+          </div>
+
+          <div class="session-controls">
+            <div class="control-btn" style="font-size: 10px;">❚❚</div>
+            <div class="session-timer">8:20</div>
+            <div class="control-btn stop" style="font-size: 8px;">■</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-sublabel">Relaxation mode. Slowest wave. Subtle breathing indicator synced to haptic cues.</div>
+  </div>
+
+  <!-- ==================== SCREEN 8: SESSION - SLEEP ==================== -->
+  <div class="mockup">
+    <div class="mockup-label">8 · Sleep</div>
+    <div class="watch">
+      <div class="screen">
+        <div class="session-content">
+          <div class="session-bg" style="background: radial-gradient(ellipse at 50% 50%, rgba(144,128,196,0.08) 0%, var(--canvas) 60%);"></div>
+
+          <div class="session-mode" style="color: var(--sleep); opacity: 0.35;">Sleep</div>
+
+          <!-- Wavelength - sleep: very slow, deep, almost flat -->
+          <div class="wavelength-container">
+            <svg class="wavelength-svg" viewBox="0 0 198 60" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="wave-sleep" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: var(--sleep); stop-opacity: 0"/>
+                  <stop offset="30%" style="stop-color: var(--sleep); stop-opacity: 0.15"/>
+                  <stop offset="50%" style="stop-color: var(--sleep); stop-opacity: 0.22"/>
+                  <stop offset="70%" style="stop-color: var(--sleep); stop-opacity: 0.15"/>
+                  <stop offset="100%" style="stop-color: var(--sleep); stop-opacity: 0"/>
+                </linearGradient>
+                <filter id="glow-sleep">
+                  <feGaussianBlur stdDeviation="4" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <!-- Sleep: barely moving, very low amplitude, dreamy -->
+              <path d="M0,30 C40,27 70,26 99,27 C128,28 160,32 198,30"
+                fill="none" stroke="url(#wave-sleep)" stroke-width="1" filter="url(#glow-sleep)"/>
+            </svg>
+          </div>
+
+          <!-- Everything dimmer for sleep -->
+          <div class="session-controls" style="opacity: 0.5;">
+            <div class="control-btn" style="font-size: 10px;">❚❚</div>
+            <div class="session-timer">22:08</div>
+            <div class="control-btn stop" style="font-size: 8px;">■</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-sublabel">Sleep mode. Wave nearly flat — approaching delta. Entire UI dims as user descends.</div>
+  </div>
+
+  <!-- ==================== SCREEN 9: SESSION - ENERGIZE ==================== -->
+  <div class="mockup">
+    <div class="mockup-label">9 · Energize · Peak</div>
+    <div class="watch">
+      <div class="screen">
+        <div class="session-content">
+          <div class="session-bg" style="background: radial-gradient(ellipse at 50% 40%, rgba(245,166,35,0.14) 0%, rgba(212,106,90,0.06) 40%, var(--canvas) 70%);"></div>
+
+          <div class="session-mode" style="color: var(--energize);">Energize</div>
+
+          <!-- Wavelength - energize: tight, fast, high amplitude, amber -->
+          <div class="wavelength-container">
+            <svg class="wavelength-svg" viewBox="0 0 198 60" preserveAspectRatio="none">
+              <defs>
+                <linearGradient id="wave-energize" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: var(--energize); stop-opacity: 0"/>
+                  <stop offset="10%" style="stop-color: var(--energize); stop-opacity: 0.35"/>
+                  <stop offset="50%" style="stop-color: var(--energize); stop-opacity: 0.5"/>
+                  <stop offset="90%" style="stop-color: var(--energize); stop-opacity: 0.35"/>
+                  <stop offset="100%" style="stop-color: var(--energize); stop-opacity: 0"/>
+                </linearGradient>
+                <linearGradient id="wave-energize-2" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" style="stop-color: var(--peak); stop-opacity: 0"/>
+                  <stop offset="30%" style="stop-color: var(--peak); stop-opacity: 0.15"/>
+                  <stop offset="70%" style="stop-color: var(--peak); stop-opacity: 0.15"/>
+                  <stop offset="100%" style="stop-color: var(--peak); stop-opacity: 0"/>
+                </linearGradient>
+                <filter id="glow-energize">
+                  <feGaussianBlur stdDeviation="2" result="blur"/>
+                  <feMerge>
+                    <feMergeNode in="blur"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <!-- Energize: 5+ cycles, high amplitude, aggressive -->
+              <path d="M0,30 C5,16 10,8 16,12 C22,16 26,44 33,48 C40,52 44,12 50,8 C56,4 62,44 66,50 C70,56 76,10 82,6 C88,2 94,46 99,50 C104,54 110,10 116,6 C122,2 128,46 132,50 C136,54 142,12 148,8 C154,4 160,44 165,48 C170,52 176,14 182,10 C188,6 194,24 198,30"
+                fill="none" stroke="url(#wave-energize)" stroke-width="2" filter="url(#glow-energize)"/>
+              <!-- Secondary harmonic -->
+              <path d="M0,30 C8,20 16,14 24,18 C32,22 38,42 46,44 C54,46 60,16 68,12 C76,8 84,42 92,46 C100,50 106,16 114,12 C122,8 130,42 138,46 C146,50 152,16 160,12 C168,8 176,38 184,34 C192,30 196,30 198,30"
+                fill="none" stroke="url(#wave-energize-2)" stroke-width="0.8" opacity="0.5"/>
+            </svg>
+          </div>
+
+          <div class="session-controls">
+            <div class="control-btn" style="font-size: 10px;">❚❚</div>
+            <div class="session-timer">6:45</div>
+            <div class="control-btn stop" style="font-size: 8px; background: rgba(245,166,35,0.2); color: var(--energize);">■</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-sublabel">Peak state. Tight, aggressive waves. Double harmonics. Stop button matches mode energy.</div>
+  </div>
+
+  <!-- ==================== SCREEN 10: POST-SESSION ==================== -->
+  <div class="mockup">
+    <div class="mockup-label">10 · Post-Session</div>
+    <div class="watch">
+      <div class="screen">
+        <div class="post-content">
+          <div class="post-header">Session complete</div>
+          <div class="post-duration" style="color: var(--text-primary);">25:00</div>
+          <div class="post-mode" style="color: var(--focus);">Focus</div>
+
+          <div class="post-metrics">
+            <div class="post-metric">
+              <div class="post-metric-label">Avg HR</div>
+              <div class="post-metric-value" style="color: var(--focus);">62</div>
+            </div>
+            <div class="post-metric">
+              <div class="post-metric-label">HR Delta</div>
+              <div class="post-metric-value" style="color: var(--calm);">-6</div>
+            </div>
+            <div class="post-metric">
+              <div class="post-metric-label">Adapted</div>
+              <div class="post-metric-value" style="color: var(--accent);">4×</div>
+            </div>
+            <div class="post-metric">
+              <div class="post-metric-label">Deep Focus</div>
+              <div class="post-metric-value" style="color: var(--accent);">18m</div>
+            </div>
+          </div>
+
+          <div class="post-feedback">
+            <div class="feedback-btn">👎</div>
+            <div class="feedback-btn" style="background: rgba(91,106,191,0.15); border-color: rgba(91,106,191,0.3);">👍</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mockup-sublabel">Post-session. Key metrics at a glance. Thumbs feedback trains the learning model.</div>
+  </div>
+
+</div>
+
+</body>
+</html>

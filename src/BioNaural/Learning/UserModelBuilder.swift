@@ -183,6 +183,10 @@ public protocol PatternsStoreProtocol: AnyObject, Sendable {
 @Model
 public final class UserBehavioralPatternsModel {
 
+    /// Stable singleton identifier for CloudKit deduplication.
+    @Attribute(.unique)
+    public var id: String = "singleton"
+
     /// JSON-encoded patterns data.
     public var patternsData: Data
 
@@ -190,6 +194,7 @@ public final class UserBehavioralPatternsModel {
     public var lastUpdated: Date
 
     public init(from patterns: UserBehavioralPatterns, updatedAt: Date) {
+        self.id = "singleton"
         self.patternsData = (try? JSONEncoder().encode(patterns)) ?? Data()
         self.lastUpdated = updatedAt
     }

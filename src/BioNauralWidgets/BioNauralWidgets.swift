@@ -20,6 +20,9 @@ struct BioNauralWidgets: WidgetBundle {
         // Home screen widget — quick launch + last session summary
         SessionSummaryWidget()
 
+        // Lock Screen widget — circular orb, rectangular info, inline status
+        LockScreenWidget()
+
         // StandBy / always-on display widget
         StandByWidget()
     }

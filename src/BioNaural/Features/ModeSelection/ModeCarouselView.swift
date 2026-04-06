@@ -76,41 +76,37 @@ struct ModeCarouselView: View {
             }
             .padding(.leading, leadingPadding)
             .offset(x: -CGFloat(currentIndex) * totalCardWidth + dragOffset)
-            .animation(
-                isDragging ? .none : Theme.Carousel.snapAnimation,
-                value: currentIndex
-            )
-            .animation(
-                isDragging ? .none : Theme.Carousel.snapAnimation,
-                value: dragOffset
-            )
             .gesture(
                 DragGesture()
                     .onChanged { value in
-                        isDragging = true
+                        if !isDragging { isDragging = true }
                         dragOffset = value.translation.width
                     }
                     .onEnded { value in
-                        isDragging = false
                         let threshold: CGFloat = Theme.Carousel.dragThreshold
-                        if value.translation.width < -threshold, currentIndex < totalCards - 1 {
-                            currentIndex += 1
-                        } else if value.translation.width > threshold, currentIndex > 0 {
-                            currentIndex -= 1
+                        withAnimation(Theme.Carousel.snapAnimation) {
+                            isDragging = false
+                            if value.translation.width < -threshold, currentIndex < totalCards - 1 {
+                                currentIndex += 1
+                            } else if value.translation.width > threshold, currentIndex > 0 {
+                                currentIndex -= 1
+                            }
+                            dragOffset = 0
                         }
-                        dragOffset = 0
                     }
             )
         }
         .frame(height: Theme.Carousel.cardHeight)
         .accessibilityElement(children: .contain)
         .accessibilityAdjustableAction { direction in
-            switch direction {
-            case .increment:
-                if currentIndex < totalCards - 1 { currentIndex += 1 }
-            case .decrement:
-                if currentIndex > 0 { currentIndex -= 1 }
-            @unknown default: break
+            withAnimation(Theme.Carousel.snapAnimation) {
+                switch direction {
+                case .increment:
+                    if currentIndex < totalCards - 1 { currentIndex += 1 }
+                case .decrement:
+                    if currentIndex > 0 { currentIndex -= 1 }
+                @unknown default: break
+                }
             }
         }
     }
@@ -126,8 +122,11 @@ struct ModeCarouselView: View {
                         width: index == currentIndex ? Theme.Spacing.xxl : Theme.Spacing.sm,
                         height: Theme.Spacing.sm
                     )
-                    .animation(Theme.Carousel.snapAnimation, value: currentIndex)
-                    .onTapGesture { currentIndex = index }
+                    .onTapGesture {
+                        withAnimation(Theme.Carousel.snapAnimation) {
+                            currentIndex = index
+                        }
+                    }
             }
         }
         .accessibilityHidden(true)
@@ -160,7 +159,7 @@ private struct RecommendationCarouselCard: View {
                     perspective: Theme.Carousel.flipPerspective
                 )
 
-            // Back face — explains the recommendation
+            // Back face
             cardBack
                 .opacity(isFlipped ? 1 : 0)
                 .rotation3DEffect(
@@ -172,7 +171,6 @@ private struct RecommendationCarouselCard: View {
         .frame(height: Theme.Carousel.cardHeight)
         .scaleEffect(isActive ? 1.0 : Theme.Carousel.inactiveScale)
         .opacity(isActive ? 1.0 : Theme.Carousel.inactiveOpacity)
-        .animation(Theme.Carousel.snapAnimation, value: isActive)
         .onChange(of: isActive) { _, active in
             if !active && isFlipped {
                 withAnimation(Theme.Carousel.flipAnimation) {
@@ -195,19 +193,30 @@ private struct RecommendationCarouselCard: View {
             RoundedRectangle(cornerRadius: Theme.Radius.sheet, style: .continuous)
                 .fill(cardGradient)
 
-            // Brand wave signature — four converging waves, recommended mode glows
-            BrandWaveCanvas(highlightedMode: recommendation.mode)
-                .frame(height: Theme.Carousel.cardHeight * Theme.Carousel.auroraHeightRatio)
-                .frame(maxHeight: .infinity)
-                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sheet, style: .continuous))
+            // Brand wave signature — four converging waves, recommended mode glows.
+            // Only render when active to avoid off-screen 30 FPS Canvas overhead.
+            Group {
+                if isActive {
+                    BrandWaveCanvas(highlightedMode: recommendation.mode)
+                }
+            }
+            .frame(height: Theme.Carousel.cardHeight * Theme.Carousel.auroraHeightRatio)
+            .frame(maxHeight: .infinity)
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sheet, style: .continuous))
 
             // Content overlay
             VStack(alignment: .leading, spacing: 0) {
                 // Top: heading + info button
                 HStack(alignment: .top) {
                     Text("Your Signal")
-                        .font(Theme.Typography.display)
-                        .foregroundStyle(Theme.Colors.textPrimary)
+                        .font(Theme.Typography.cardTitle)
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [Theme.Colors.textPrimary, Theme.Colors.textSecondary],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
                         .tracking(Theme.Typography.Tracking.display)
 
                     Spacer()
@@ -245,6 +254,12 @@ private struct RecommendationCarouselCard: View {
             .padding(Theme.Spacing.xxl + Theme.Spacing.xs)
         }
         .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sheet, style: .continuous))
+        .carouselCardGlass()
+        .background(
+            RoundedRectangle(cornerRadius: Theme.Radius.sheet, style: .continuous)
+                .fill(modeColor.opacity(Theme.ModeCard.ambientGlowOpacity))
+                .blur(radius: Theme.ModeCard.ambientGlowBlurRadius)
+        )
     }
 
     // MARK: - Card Back (Recommendation Explanation)
@@ -320,6 +335,7 @@ private struct RecommendationCarouselCard: View {
             .padding(Theme.Spacing.xxl + Theme.Spacing.xs)
         }
         .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sheet, style: .continuous))
+        .carouselCardGlass()
     }
 
     // MARK: - Explanation Row
@@ -501,18 +517,26 @@ private struct RecommendationCarouselCard: View {
     private var playButton: some View {
         Button(action: onPlay) {
             ZStack {
+                // Ambient glow behind the button
                 Circle()
-                    .fill(modeColor)
-                    .shadow(color: modeColor.opacity(Theme.Opacity.medium), radius: Theme.Spacing.lg)
+                    .fill(modeColor.opacity(Theme.Opacity.medium))
+                    .blur(radius: Theme.Spacing.lg)
+                    .frame(width: Theme.Spacing.jumbo, height: Theme.Spacing.jumbo)
+
+                // Main button circle
+                Circle()
+                    .fill(modeColor.opacity(Theme.Opacity.accentStrong))
                     .frame(width: Theme.Spacing.jumbo, height: Theme.Spacing.jumbo)
 
                 Image(systemName: "play.fill")
                     .font(.system(size: Theme.Typography.Size.body, weight: .medium))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Theme.Colors.textOnAccent)
                     .offset(x: Theme.Interaction.playIconOffset)
             }
+            .frame(width: Theme.Spacing.jumbo, height: Theme.Spacing.jumbo)
         }
         .buttonStyle(CardPressStyle())
+        .playButtonGlass(modeColor: modeColor)
         .accessibilityLabel("Begin \(recommendation.mode.displayName) session")
     }
 
@@ -564,7 +588,6 @@ private struct ModeCarouselCard: View {
         .frame(height: Theme.Carousel.cardHeight)
         .scaleEffect(isActive ? 1.0 : Theme.Carousel.inactiveScale)
         .opacity(isActive ? 1.0 : Theme.Carousel.inactiveOpacity)
-        .animation(Theme.Carousel.snapAnimation, value: isActive)
         .onChange(of: isActive) { _, active in
             if !active && isFlipped {
                 withAnimation(Theme.Carousel.flipAnimation) {
@@ -587,10 +610,12 @@ private struct ModeCarouselCard: View {
             RoundedRectangle(cornerRadius: Theme.Radius.sheet, style: .continuous)
                 .fill(cardGradient)
 
-            AuroraDriftCanvas(mode: mode)
-                .frame(height: Theme.Carousel.cardHeight * Theme.Carousel.auroraHeightRatio)
-                .frame(maxHeight: .infinity)
-                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sheet, style: .continuous))
+            if isActive {
+                AuroraDriftCanvas(mode: mode)
+                    .frame(height: Theme.Carousel.cardHeight * Theme.Carousel.auroraHeightRatio)
+                    .frame(maxHeight: .infinity)
+                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sheet, style: .continuous))
+            }
 
             VStack {
                 HStack {
@@ -603,7 +628,7 @@ private struct ModeCarouselCard: View {
 
             VStack(alignment: .leading, spacing: 0) {
                 Text(mode.displayName)
-                    .font(Theme.Typography.display)
+                    .font(Theme.Typography.cardTitle)
                     .foregroundStyle(Theme.Colors.textPrimary)
                     .tracking(Theme.Typography.Tracking.display)
 
@@ -631,6 +656,12 @@ private struct ModeCarouselCard: View {
             .padding(Theme.Spacing.xxl + Theme.Spacing.xs)
         }
         .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sheet, style: .continuous))
+        .carouselCardGlass()
+        .background(
+            RoundedRectangle(cornerRadius: Theme.Radius.sheet, style: .continuous)
+                .fill(modeColor.opacity(Theme.ModeCard.ambientGlowOpacity))
+                .blur(radius: Theme.ModeCard.ambientGlowBlurRadius)
+        )
     }
 
     // MARK: - Gradient
@@ -675,22 +706,26 @@ private struct ModeCarouselCard: View {
     private var playButton: some View {
         Button(action: onPlay) {
             ZStack {
+                // Ambient glow behind the button
                 Circle()
-                    .fill(modeColor)
-                    .shadow(color: modeColor.opacity(Theme.Opacity.medium), radius: Theme.Spacing.lg)
+                    .fill(modeColor.opacity(Theme.Opacity.medium))
+                    .blur(radius: Theme.Spacing.lg)
+                    .frame(width: Theme.Spacing.jumbo, height: Theme.Spacing.jumbo)
 
+                // Main button circle
                 Circle()
-                    .fill(modeColor)
+                    .fill(modeColor.opacity(Theme.Opacity.accentStrong))
                     .frame(width: Theme.Spacing.jumbo, height: Theme.Spacing.jumbo)
 
                 Image(systemName: "play.fill")
                     .font(.system(size: Theme.Typography.Size.body, weight: .medium))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Theme.Colors.textOnAccent)
                     .offset(x: Theme.Interaction.playIconOffset) // optical centering
             }
             .frame(width: Theme.Spacing.jumbo, height: Theme.Spacing.jumbo)
         }
         .buttonStyle(CardPressStyle())
+        .playButtonGlass(modeColor: modeColor)
         .accessibilityLabel("Begin \(mode.displayName) listening")
     }
 }
@@ -799,7 +834,7 @@ private struct AuroraDriftCanvas: View {
     }
 
     private func drawPillars(context: GraphicsContext, W: CGFloat, centerY: CGFloat, amplitude: CGFloat, ps: Double, colorTime: Double) {
-        let totalPillars: Int = Int(cycles * 2)
+        let totalPillars: Int = min(Int(cycles * 2), Theme.CardWave.AuroraDrift.maxPillars)
         let pillarH: CGFloat = amplitude * 2.5
         for i in 0..<totalPillars {
             let denom: Double = cycles * 2
@@ -842,28 +877,31 @@ private struct AuroraDriftCanvas: View {
     }
 
     private func drawWaveLines(context: GraphicsContext, W: CGFloat, centerY: CGFloat, amplitude: CGFloat, ps: Double, colorTime: Double) {
-        let segW = Theme.CardWave.AuroraDrift.segmentWidth
         let ob = Theme.CardWave.AuroraDrift.edgeOverbleed
+        let step = Theme.CardWave.AuroraDrift.sampleStride
         let freqBase: Double = cycles * 2 * .pi
         let passes = Theme.CardWave.AuroraDrift.wavePasses
+        // Use midpoint color for the entire wave — eliminates per-segment color allocation.
+        let midColorT: Double = colorTime + 0.5 * Theme.CardWave.AuroraDrift.colorTimeMultiplier
+
         for pass in passes {
-            for x in Swift.stride(from: -ob, through: W + ob, by: segW) {
-                let t1: Double = x / W
-                let t2: Double = (x + segW) / W
-                let angle1: Double = t1 * freqBase + ps
-                let angle2: Double = t2 * freqBase + ps
-                let y1: CGFloat = centerY - amplitude * sin(angle1)
-                let y2: CGFloat = centerY - amplitude * sin(angle2)
-                let colorT: Double = colorTime + t1 * Theme.CardWave.AuroraDrift.colorTimeMultiplier
-                let color = paletteColor(at: colorT, opacity: pass.opacity)
-                var segPath = Path()
-                segPath.move(to: CGPoint(x: x, y: y1))
-                segPath.addLine(to: CGPoint(x: x + segW, y: y2))
-                var ctx = context
-                if pass.blur > 0 { ctx.addFilter(.blur(radius: pass.blur)) }
-                let style = StrokeStyle(lineWidth: pass.lineWidth, lineCap: .round)
-                ctx.stroke(segPath, with: .color(color), style: style)
+            var wavePath = Path()
+            var isFirst = true
+            for x in Swift.stride(from: -ob, through: W + ob, by: step) {
+                let tx: Double = x / W
+                let angle: Double = tx * freqBase + ps
+                let y: CGFloat = centerY - amplitude * sin(angle)
+                if isFirst {
+                    wavePath.move(to: CGPoint(x: x, y: y))
+                    isFirst = false
+                } else {
+                    wavePath.addLine(to: CGPoint(x: x, y: y))
+                }
             }
+            let color = paletteColor(at: midColorT, opacity: pass.opacity)
+            var ctx = context
+            if pass.blur > 0 { ctx.addFilter(.blur(radius: pass.blur)) }
+            ctx.stroke(wavePath, with: .color(color), style: StrokeStyle(lineWidth: pass.lineWidth, lineCap: .round))
         }
     }
 
@@ -881,8 +919,8 @@ private struct AuroraDriftCanvas: View {
             let pt = CGPoint(x: x, y: y)
             if x <= -ob + 1 { path.move(to: pt) } else { path.addLine(to: pt) }
         }
-        let color = paletteColor(at: colorTime + 0.5, opacity: Theme.CardWave.AuroraDrift.harmonicStrokeOpacity)
-        context.stroke(path, with: .color(color), style: StrokeStyle(lineWidth: Theme.Radius.glassStroke * 0.5))
+        let color = paletteColor(at: colorTime + Theme.CardWave.AuroraDrift.harmonicColorOffset, opacity: Theme.CardWave.AuroraDrift.harmonicStrokeOpacity)
+        context.stroke(path, with: .color(color), style: StrokeStyle(lineWidth: Theme.Radius.glassStroke * Theme.CardWave.AuroraDrift.harmonicStrokeScale))
     }
 }
 
@@ -932,4 +970,51 @@ extension FocusMode {
         }
     }
     .preferredColorScheme(.dark)
+}
+
+// MARK: - Carousel Glass Modifier
+
+private extension View {
+    /// Applies Liquid Glass on iOS 26+ to carousel cards.
+    /// Falls through to unmodified on earlier versions.
+    func carouselCardGlass() -> some View {
+        modifier(CarouselGlassModifier())
+    }
+}
+
+private struct CarouselGlassModifier: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content.glassEffect(.regular.interactive(), in: .rect(cornerRadius: Theme.Radius.sheet))
+        } else {
+            content
+        }
+    }
+}
+
+// MARK: - Play Button Glass Modifier
+
+private extension View {
+    /// Applies Liquid Glass to the play button on iOS 26+.
+    /// Mode-tinted glass creates a translucent, refractive surface over
+    /// the solid mode color — feels like a liquid droplet catching light.
+    func playButtonGlass(modeColor: Color) -> some View {
+        modifier(PlayButtonGlassModifier(modeColor: modeColor))
+    }
+}
+
+private struct PlayButtonGlassModifier: ViewModifier {
+    let modeColor: Color
+
+    func body(content: Content) -> some View {
+        if #available(iOS 26.0, *) {
+            content
+                .glassEffect(
+                    .regular.interactive().tint(modeColor),
+                    in: .circle
+                )
+        } else {
+            content
+        }
+    }
 }

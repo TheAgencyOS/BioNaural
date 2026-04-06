@@ -57,7 +57,7 @@ final class WatchHealthKitService: NSObject, ObservableObject {
     private var sampleBuffer: [[String: Any]] = []
 
     /// Maximum buffer size before oldest samples are dropped.
-    private let maxBufferSize: Int = 500
+    private let maxBufferSize: Int = WatchDesign.Session.maxSampleBuffer
 
     // MARK: - Heartbeat Ping
 
@@ -240,7 +240,7 @@ final class WatchHealthKitService: NSObject, ObservableObject {
             let bpm = sample.quantity.doubleValue(for: bpmUnit)
 
             // Reject implausible readings from sensor initialization or motion.
-            guard bpm >= 30.0, bpm <= 220.0 else { continue }
+            guard bpm >= WatchDesign.Session.hrMinValid, bpm <= WatchDesign.Session.hrMaxValid else { continue }
 
             let timestamp = sample.startDate.timeIntervalSince1970
 
@@ -339,7 +339,7 @@ final class WatchHealthKitService: NSObject, ObservableObject {
     /// Starts a periodic ping to verify connection health.
     private func startHeartbeatPing() {
         heartbeatTimer = Timer.scheduledTimer(
-            withTimeInterval: WatchLayout.heartbeatPingInterval,
+            withTimeInterval: WatchDesign.Session.heartbeatPingInterval,
             repeats: true
         ) { [weak self] _ in
             Task { @MainActor in

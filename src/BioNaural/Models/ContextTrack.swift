@@ -4,8 +4,9 @@
 // SwiftData model for purpose-built audio tracks tied to life events.
 // A ContextTrack locks specific audio parameters (ambient bed, carrier,
 // beat range, melodic palette) so the user gets a consistent sonic
-// experience for recurring situations like exam prep or pre-performance
-// routines. Tracks can auto-archive after an event date passes.
+// experience for recurring situations — deep work, creative flow,
+// pre-performance routines, or any goal that benefits from sonic
+// consistency. Tracks can auto-archive after an event date passes.
 
 import Foundation
 import BioNauralShared
@@ -20,6 +21,7 @@ import SwiftData
 public enum TrackPurpose: String, Codable, CaseIterable, Identifiable, Sendable {
 
     case study
+    case flowState
     case prePerformance
     case recovery
     case sleepPrep
@@ -30,7 +32,8 @@ public enum TrackPurpose: String, Codable, CaseIterable, Identifiable, Sendable 
     /// Human-readable label for display in the UI.
     public var displayName: String {
         switch self {
-        case .study:          return "Study"
+        case .study:          return "Flow State"
+        case .flowState:      return "Flow State"
         case .prePerformance: return "Pre-Performance"
         case .recovery:       return "Recovery"
         case .sleepPrep:      return "Sleep Prep"
@@ -41,7 +44,8 @@ public enum TrackPurpose: String, Codable, CaseIterable, Identifiable, Sendable 
     /// SF Symbol name representing the track purpose.
     public var systemImageName: String {
         switch self {
-        case .study:          return "book.fill"
+        case .study:          return "bolt.fill"
+        case .flowState:      return "bolt.fill"
         case .prePerformance: return "figure.run"
         case .recovery:       return "heart.fill"
         case .sleepPrep:      return "moon.fill"
@@ -68,7 +72,7 @@ public final class ContextTrack {
 
     // MARK: - User Configuration
 
-    /// User-given name for the track (e.g., "Organic Chemistry Study Track").
+    /// User-given name for the track (e.g., "Deep Work Monday").
     public var name: String
 
     /// The track's purpose category, stored as a `TrackPurpose` raw value string.

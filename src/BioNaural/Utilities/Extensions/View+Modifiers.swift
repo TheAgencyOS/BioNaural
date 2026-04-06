@@ -208,6 +208,27 @@ private struct GlassCardModifier: ViewModifier {
     }
 }
 
+// MARK: - Ambient Glow
+
+extension View {
+
+    /// Adds a subtle color glow beneath the view. Static — rasterized once.
+    func ambientGlow(_ color: Color, cornerRadius: CGFloat = Theme.Radius.card) -> some View {
+        self.background(
+            RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
+                .fill(color.opacity(Theme.ModeCard.ambientGlowOpacity))
+                .blur(radius: Theme.ModeCard.ambientGlowBlurRadius)
+        )
+    }
+
+    /// Applies glass card treatment + ambient glow together.
+    func premiumCard(glowColor: Color) -> some View {
+        self
+            .glassCard()
+            .ambientGlow(glowColor)
+    }
+}
+
 // MARK: - Reduce Motion Modifier
 
 private struct ReduceMotionModifier<Replacement: View>: ViewModifier {

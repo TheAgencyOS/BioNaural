@@ -170,6 +170,19 @@ struct SessionView: View {
             // Ensure shared session state is set for the mini player,
             // covering both HomeTab-initiated and Compose-initiated sessions.
             dependencies.activeSessionMode = viewModel.sessionMode
+
+            // Start the session timer and audio (audio may already be
+            // running from MainView.startSession — that's safe).
+            viewModel.startSession()
+
+            // Core Haptics: session start pattern + breathing loop
+            dependencies.hapticService.sessionStart()
+            if viewModel.sessionMode == .focus || viewModel.sessionMode == .relaxation {
+                dependencies.hapticService.startBreathingPattern()
+            }
+        }
+        .onDisappear {
+            dependencies.hapticService.stopBreathingPattern()
         }
         .onChange(of: viewModel.adaptationCount) { _, newCount in
             guard newCount > 0 else { return }
@@ -195,11 +208,15 @@ struct SessionView: View {
             dependencies.activeSessionElapsed = newElapsed
         }
         .onChange(of: viewModel.isSessionComplete) { _, isComplete in
-            // When the session completes, clear active session state so the
-            // mini player disappears.
             if isComplete {
-                dependencies.activeSessionMode = nil
-                dependencies.activeSessionElapsed = 0
+                dependencies.hapticService.stopBreathingPattern()
+                dependencies.hapticService.sessionEnd()
+                // Delay state cleanup until audio fade completes so the
+                // mini player doesn't vanish before the audio stops.
+                DispatchQueue.main.asyncAfter(deadline: .now() + Theme.Audio.Fade.stopDuration) {
+                    dependencies.activeSessionMode = nil
+                    dependencies.activeSessionElapsed = 0
+                }
             }
         }
         .sheet(isPresented: $showMixLevels) {

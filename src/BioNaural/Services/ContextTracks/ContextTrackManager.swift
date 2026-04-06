@@ -17,8 +17,8 @@ import BioNauralShared
 /// No hardcoded values — every threshold and default lives here.
 public enum TrackManagerConfig {
 
-    /// Maximum number of active study tracks a user can maintain simultaneously.
-    static let maxActiveStudyTracks: Int = 5
+    /// Maximum number of active Flow State tracks a user can maintain simultaneously.
+    static let maxActiveFlowStateTracks: Int = 5
 
     /// Days after an event's `activeUntil` date before auto-archival runs.
     static let autoArchiveDaysAfterEvent: Int = 7
@@ -26,11 +26,11 @@ public enum TrackManagerConfig {
     /// Minimum sessions required before a track's `averageSuccessScore` is meaningful.
     static let minimumSessionsForScoring: Int = 3
 
-    /// How locked the sonic signature should be for study track consistency (0-1).
-    static let studyTrackConsistencyThreshold: Double = 0.8
+    /// How locked the sonic signature should be for Flow State consistency (0-1).
+    static let flowStateConsistencyThreshold: Double = 0.8
 
-    /// Default study session duration in minutes.
-    static let defaultStudyDurationMinutes: Int = 60
+    /// Default Flow State session duration in minutes.
+    static let defaultFlowStateDurationMinutes: Int = 60
 
     /// Default pre-performance prep duration in minutes.
     static let defaultPrepDurationMinutes: Int = 15
@@ -48,9 +48,10 @@ public enum TrackManagerConfig {
 @MainActor
 public protocol ContextTrackManagerProtocol: AnyObject {
 
-    /// Creates a study track with locked audio parameters for state-dependent
-    /// learning consistency.
-    func createStudyTrack(
+    /// Creates a Flow State track with locked audio parameters for sonic
+    /// anchoring — consistent environments that train the brain to enter
+    /// the target state faster.
+    func createFlowStateTrack(
         name: String,
         eventKeywords: [String],
         mode: FocusMode,
@@ -141,15 +142,16 @@ public final class ContextTrackManager: ContextTrackManagerProtocol {
 
     // MARK: - Creation
 
-    /// Creates a study track with locked audio parameters for state-dependent
-    /// learning consistency.
+    /// Creates a Flow State track with locked audio parameters for sonic
+    /// anchoring — consistent environments that train the brain to enter
+    /// the target state faster.
     ///
-    /// Study tracks lock the ambient bed, carrier frequency, beat frequency
-    /// range, and melodic tags so that repeated study sessions trigger the
-    /// same sonic environment — reinforcing context-dependent memory encoding.
+    /// Flow State tracks lock the ambient bed, carrier frequency, beat frequency
+    /// range, and melodic tags so that repeated sessions trigger the same sonic
+    /// environment — reinforcing context-dependent state encoding.
     ///
     /// - Parameters:
-    ///   - name: User-given track name (e.g., "Organic Chemistry").
+    ///   - name: User-given track name (e.g., "Deep Work Monday").
     ///   - eventKeywords: Calendar keywords for auto-selection.
     ///   - mode: The focus mode for the track.
     ///   - ambientBedID: Locked ambient bed identifier, or `nil` for adaptive.
@@ -158,7 +160,7 @@ public final class ContextTrackManager: ContextTrackManagerProtocol {
     ///   - sonicMemoryID: Linked `SonicMemory` UUID, or `nil`.
     ///   - activeUntil: Auto-archive date, or `nil` for permanent.
     /// - Returns: The newly created and persisted `ContextTrack`.
-    public func createStudyTrack(
+    public func createFlowStateTrack(
         name: String,
         eventKeywords: [String],
         mode: FocusMode,
@@ -173,7 +175,7 @@ public final class ContextTrackManager: ContextTrackManagerProtocol {
 
         let track = ContextTrack(
             name: name,
-            purpose: TrackPurpose.study.rawValue,
+            purpose: TrackPurpose.flowState.rawValue,
             linkedEventKeywords: eventKeywords,
             lockedAmbientBedID: ambientBedID,
             lockedCarrierFrequency: carrierFrequency,
@@ -185,10 +187,10 @@ public final class ContextTrackManager: ContextTrackManagerProtocol {
         )
 
         modelContext.insert(track)
-        save(context: "createStudyTrack")
+        save(context: "createFlowStateTrack")
 
         Logger.contextTracks.info(
-            "Created study track '\(name)' with mode \(mode.rawValue)"
+            "Created Flow State track '\(name)' with mode \(mode.rawValue)"
         )
 
         return track

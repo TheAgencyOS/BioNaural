@@ -32,7 +32,7 @@ struct MorningBriefCardView: View {
             quickStartButton
         }
         .padding(Theme.Spacing.lg)
-        .background(Theme.Colors.surface, in: RoundedRectangle(cornerRadius: Theme.Radius.card))
+        .premiumCard(glowColor: Color.modeColor(for: brief.suggestedMode))
         .contentShape(Rectangle())
         .onTapGesture {
             onTap()

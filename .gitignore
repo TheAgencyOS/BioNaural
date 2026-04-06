@@ -14,6 +14,7 @@ DerivedData/
 
 # Swift Package Manager
 .build/
+**/build/
 .swiftpm/
 src/SourcePackages/
 

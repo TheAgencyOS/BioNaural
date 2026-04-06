@@ -31,28 +31,28 @@ final class WatchBreathingHaptics {
     private static let supportedModes: Set<FocusMode> = [.relaxation, .sleep]
 
     /// Initial total cycle duration in seconds (inhale + exhale).
-    private static let initialCycleDuration: TimeInterval = 10.0
+    private static let initialCycleDuration: TimeInterval = WatchDesign.BreathingHaptics.initialCycleDuration
 
     /// Target total cycle duration after full adaptation (inhale + exhale).
-    private static let targetCycleDuration: TimeInterval = 12.0
+    private static let targetCycleDuration: TimeInterval = WatchDesign.BreathingHaptics.targetCycleDuration
 
     /// Initial inhale phase duration in seconds.
-    private static let initialInhaleDuration: TimeInterval = 4.0
+    private static let initialInhaleDuration: TimeInterval = WatchDesign.BreathingHaptics.initialInhaleDuration
 
     /// Target inhale phase duration after full adaptation.
-    private static let targetInhaleDuration: TimeInterval = 5.0
+    private static let targetInhaleDuration: TimeInterval = WatchDesign.BreathingHaptics.targetInhaleDuration
 
     /// Initial exhale phase duration in seconds (initialCycle - initialInhale).
-    private static let initialExhaleDuration: TimeInterval = 6.0
+    private static let initialExhaleDuration: TimeInterval = WatchDesign.BreathingHaptics.initialExhaleDuration
 
     /// Target exhale phase duration after full adaptation (targetCycle - targetInhale).
-    private static let targetExhaleDuration: TimeInterval = 7.0
+    private static let targetExhaleDuration: TimeInterval = WatchDesign.BreathingHaptics.targetExhaleDuration
 
     /// Number of haptic taps per inhale phase.
-    private static let tapsPerInhale: Int = 4
+    private static let tapsPerInhale: Int = WatchDesign.BreathingHaptics.tapsPerInhale
 
     /// Seconds of sustained calm required before auto-stopping.
-    private static let sustainedCalmThreshold: TimeInterval = 60.0
+    private static let sustainedCalmThreshold: TimeInterval = WatchDesign.BreathingHaptics.sustainedCalmThreshold
 
     /// UserDefaults key for the user's haptic breathing preference.
     private static let hapticsEnabledKey = "com.bionaural.watch.breathingHapticsEnabled"
@@ -185,7 +185,7 @@ final class WatchBreathingHaptics {
         let drop = max(baseline - bpm, 0.0)
 
         // Full adaptation at 10 BPM decrease
-        let fullAdaptationDropBPM: Double = 10.0
+        let fullAdaptationDropBPM: Double = WatchDesign.BreathingHaptics.fullAdaptationDropBPM
         adaptationFactor = min(drop / fullAdaptationDropBPM, 1.0)
     }
 

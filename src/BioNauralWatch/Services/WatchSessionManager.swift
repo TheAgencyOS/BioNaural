@@ -5,25 +5,31 @@
 // algorithm on Watch. Supports both companion mode (iPhone drives
 // adaptation, Watch streams HR) and standalone mode (Watch runs the
 // adaptive algorithm locally).
+//
+// Integrates the Watch audio engine, adaptation engine, pause/resume,
+// and post-session flow.
 
 import Foundation
 import BioNauralShared
 import SwiftUI
 @preconcurrency import WatchConnectivity
 import HealthKit
+import WatchKit
 import os
 
 /// Central coordinator for the Watch app's session lifecycle.
 ///
 /// Responsibilities:
 /// - Owns `WatchHealthKitService` for HR streaming.
+/// - Owns `WatchAudioEngine` for binaural beat playback.
+/// - Owns `WatchAdaptationEngine` for real-time parameter mapping.
 /// - Receives commands from iPhone via WCSession delegate.
 /// - Can initiate sessions locally (standalone mode).
-/// - In standalone mode: runs a simplified adaptive algorithm on-Watch,
+/// - In standalone mode: runs the adaptive algorithm on-Watch,
 ///   reads HR directly from local HealthKit, and syncs summary to iPhone
 ///   when connectivity is restored.
-/// - Manages: start -> stream HR -> detect stop -> end workout ->
-///   save to HealthKit -> sync summary to iPhone.
+/// - Manages: start -> stream HR -> adapt audio -> detect stop ->
+///   end workout -> build results -> show post-session -> sync to iPhone.
 @MainActor
 @Observable
 final class WatchSessionManager: NSObject {
@@ -48,11 +54,39 @@ final class WatchSessionManager: NSObject {
     /// Whether the Watch is running in standalone mode (no iPhone).
     private(set) var isStandaloneMode: Bool = false
 
+    /// Whether the session is currently paused.
+    private(set) var isPaused: Bool = false
+
+    /// Current binaural beat frequency being produced (Hz).
+    private(set) var currentBeatFrequency: Double = 0
+
+    /// Results from the last completed session (for post-session view).
+    private(set) var lastSessionResult: WatchSessionResult?
+
+    /// Whether the post-session summary screen should be shown.
+    private(set) var showPostSession: Bool = false
+
+    /// Whether a battery warning alert should be shown.
+    private(set) var showBatteryWarning: Bool = false
+
+    /// The battery warning message, if applicable.
+    private(set) var batteryWarningMessage: String = ""
+
+    /// The mode pending behind a battery warning confirmation.
+    private(set) var pendingSessionMode: FocusMode?
+    private var pendingSessionDuration: Int?
+
     // MARK: - Dependencies
 
     private let healthKitService: WatchHealthKitService
     private let healthStore: HKHealthStore
     private let logger = Logger(subsystem: "com.bionaural.watch", category: "SessionManager")
+
+    // MARK: - Audio
+
+    private let audioEngine = WatchAudioEngine()
+    private var adaptationEngine = WatchAdaptationEngine()
+    private var adaptationTimer: Timer?
 
     // MARK: - Session State
 
@@ -78,6 +112,20 @@ final class WatchSessionManager: NSObject {
 
     /// Heart rate at session start (for outcome recording).
     private var startHeartRate: Double?
+
+    // MARK: - Adaptation Tracking
+
+    /// Date when calm/deep state was first entered (for time-to-calm).
+    private var calmEntryDate: Date?
+
+    /// Accumulated seconds in deep biometric state.
+    private var deepStateSeconds: TimeInterval = 0
+
+    /// Time elapsed before first calm state was reached.
+    private var timeToCalm: TimeInterval?
+
+    /// All HR samples collected during the session (for average).
+    private var hrSamples: [Double] = []
 
     // MARK: - Persistence Keys
 
@@ -126,7 +174,8 @@ final class WatchSessionManager: NSObject {
     ///
     /// Determines whether to run in companion mode (iPhone reachable)
     /// or standalone mode (Watch only). In both cases, starts the
-    /// HealthKit workout session for HR streaming.
+    /// HealthKit workout session for HR streaming, the audio engine,
+    /// and the adaptation timer.
     ///
     /// - Parameters:
     ///   - mode: The focus mode to use.
@@ -137,13 +186,38 @@ final class WatchSessionManager: NSObject {
             return
         }
 
+        // Battery safety check
+        let device = WKInterfaceDevice.current()
+        device.isBatteryMonitoringEnabled = true
+        let battery = device.batteryLevel
+
+        if battery >= 0 && battery < WatchDesign.Battery.blockThreshold {
+            batteryWarningMessage = "Battery too low for a session. Charge your Watch first."
+            showBatteryWarning = true
+            return
+        }
+
+        if battery >= 0 && battery < WatchDesign.Battery.warningThreshold {
+            pendingSessionMode = mode
+            pendingSessionDuration = durationMinutes
+            batteryWarningMessage = "Battery at \(Int(battery * 100))%. Session may end unexpectedly."
+            showBatteryWarning = true
+            return
+        }
+
         activeMode = mode
         isSessionActive = true
+        isPaused = false
         sessionStartDate = Date()
         elapsedSeconds = 0
         adaptationCount = 0
         startHeartRate = nil
         currentHeartRate = nil
+        calmEntryDate = nil
+        deepStateSeconds = 0
+        timeToCalm = nil
+        hrSamples = []
+        currentBeatFrequency = mode.defaultBeatFrequency
 
         if let minutes = durationMinutes {
             targetDurationSeconds = TimeInterval(minutes * 60)
@@ -161,9 +235,17 @@ final class WatchSessionManager: NSObject {
         } else {
             // Initialize standalone adaptive state
             heartRateAnalyzer = WatchHeartRateAnalyzer()
+            adaptationEngine = WatchAdaptationEngine()
             currentBiometricState = .calm
             logger.info("Starting standalone session — adaptive algorithm on Watch.")
         }
+
+        // Start audio engine
+        audioEngine.start(mode: mode)
+        audioEngine.parameters.configure(for: mode)
+
+        // Start adaptation timer at 10 Hz
+        startAdaptationTimer()
 
         // Start workout + HR streaming
         Task {
@@ -181,10 +263,66 @@ final class WatchSessionManager: NSObject {
         logger.info("Session started: mode=\(mode.rawValue), standalone=\(self.isStandaloneMode)")
     }
 
+    // MARK: - Battery Warning
+
+    /// Called when user confirms they want to proceed despite low battery.
+    func confirmBatteryWarning() {
+        showBatteryWarning = false
+        if let mode = pendingSessionMode {
+            let duration = pendingSessionDuration
+            pendingSessionMode = nil
+            pendingSessionDuration = nil
+            startSession(mode: mode, durationMinutes: duration)
+        }
+    }
+
+    /// Called when user dismisses the battery warning.
+    func dismissBatteryWarning() {
+        showBatteryWarning = false
+        pendingSessionMode = nil
+        pendingSessionDuration = nil
+    }
+
+    // MARK: - Volume Control
+
+    /// Sets the entrainment (binaural beat) volume via Digital Crown.
+    ///
+    /// - Parameter volume: Normalized volume [0.0 ... 1.0].
+    func setEntrainmentVolume(_ volume: Double) {
+        audioEngine.parameters.amplitude = volume
+    }
+
+    // MARK: - Pause Session
+
+    /// Pauses the current session. Stops audio and adaptation but keeps
+    /// the elapsed timer and HR streaming active.
+    func pauseSession() {
+        guard isSessionActive, !isPaused else { return }
+
+        isPaused = true
+        audioEngine.pause()
+        stopAdaptationTimer()
+
+        logger.info("Session paused.")
+    }
+
+    // MARK: - Resume Session
+
+    /// Resumes a paused session. Restarts audio and adaptation timer.
+    func resumeSession() {
+        guard isSessionActive, isPaused else { return }
+
+        isPaused = false
+        audioEngine.resume()
+        startAdaptationTimer()
+
+        logger.info("Session resumed.")
+    }
+
     // MARK: - Stop Session
 
-    /// Stops the current session, saves the workout, records the summary,
-    /// and syncs to iPhone.
+    /// Stops the current session, saves the workout, builds session results,
+    /// records the summary, and syncs to iPhone.
     func stopSession() {
         guard isSessionActive else { return }
 
@@ -193,12 +331,36 @@ final class WatchSessionManager: NSObject {
         let mode = activeMode ?? .focus
 
         stopElapsedTimer()
+        stopAdaptationTimer()
         breathingHaptics.stop()
+        audioEngine.stop()
 
         Task {
             await healthKitService.stopWorkout()
 
-            // Record session summary
+            // Build post-session result
+            let averageHR: Double? = hrSamples.isEmpty ? nil : hrSamples.reduce(0, +) / Double(hrSamples.count)
+            let hrDelta: Double?
+            if let start = startHeartRate, let avg = averageHR {
+                hrDelta = avg - start
+            } else {
+                hrDelta = nil
+            }
+
+            let result = WatchSessionResult(
+                mode: mode,
+                durationSeconds: duration,
+                averageHR: averageHR,
+                hrDelta: hrDelta,
+                adaptationCount: adaptationCount,
+                deepStateMinutes: deepStateSeconds / 60.0,
+                timeToCalm: timeToCalm
+            )
+
+            lastSessionResult = result
+            showPostSession = true
+
+            // Record session summary (for idle screen last-session card)
             let summary = WatchSessionSummary(
                 mode: mode,
                 durationSeconds: duration,
@@ -206,6 +368,11 @@ final class WatchSessionManager: NSObject {
             )
             lastSessionSummary = summary
             saveLastSessionSummary(summary)
+
+            // Update learning profile
+            var profile = WatchLearningProfile.load()
+            profile.recordSession(mode: mode, duration: duration, date: endDate)
+            profile.save()
 
             // Sync summary to iPhone
             syncSessionSummaryToiPhone(
@@ -224,10 +391,21 @@ final class WatchSessionManager: NSObject {
         }
     }
 
+    // MARK: - Post-Session Dismissal
+
+    /// Dismisses the post-session summary screen.
+    func dismissPostSession() {
+        showPostSession = false
+        lastSessionResult = nil
+    }
+
     // MARK: - Heart Rate Handling
 
     private func handleHeartRateSample(_ sample: BiometricSample) {
         currentHeartRate = sample.bpm
+
+        // Collect for average calculation
+        hrSamples.append(sample.bpm)
 
         if startHeartRate == nil {
             startHeartRate = sample.bpm
@@ -255,6 +433,101 @@ final class WatchSessionManager: NSObject {
 
             // Auto-stop breathing cues when sustained calm is reached
             _ = breathingHaptics.checkSustainedCalm(state: currentBiometricState)
+        }
+    }
+
+    // MARK: - Adaptation Timer
+
+    /// Starts the adaptation timer at 10 Hz to drive real-time audio parameter updates.
+    private func startAdaptationTimer() {
+        adaptationTimer = Timer.scheduledTimer(
+            withTimeInterval: WatchDesign.Audio.adaptationTickInterval,
+            repeats: true
+        ) { [weak self] _ in
+            Task { @MainActor in
+                self?.processAdaptationTick()
+            }
+        }
+    }
+
+    private func stopAdaptationTimer() {
+        adaptationTimer?.invalidate()
+        adaptationTimer = nil
+    }
+
+    /// Called at 10 Hz to compute adaptive audio targets from current biometrics.
+    private func processAdaptationTick() {
+        guard isSessionActive, !isPaused else { return }
+        guard let mode = activeMode else { return }
+
+        // If no HR yet, hold current parameters
+        guard let hr = currentHeartRate else { return }
+
+        // Compute HR normalized via Karvonen method
+        let hrNormalized = FrequencyMath.heartRateReserveNormalized(
+            current: hr,
+            resting: WatchDesign.Audio.defaultRestingHR,
+            max: WatchDesign.Audio.defaultMaxHR
+        )
+
+        // Compute HR trend from dual-EMA (fast - slow)
+        let hrTrend: Double
+        if let analyzer = heartRateAnalyzer {
+            // Use the analyzer's EMA state if available
+            hrTrend = analyzer.currentTrend
+        } else {
+            hrTrend = 0
+        }
+
+        // Compute session progress
+        let sessionProgress: Double
+        if mode == .sleep {
+            sessionProgress = min(elapsedSeconds / WatchDesign.Audio.SleepRamp.rampDuration, 1.0)
+        } else if let target = targetDurationSeconds, target > 0 {
+            sessionProgress = min(elapsedSeconds / target, 1.0)
+        } else {
+            sessionProgress = 0
+        }
+
+        // Compute adapted targets
+        let targets = adaptationEngine.computeTargets(
+            hrNormalized: hrNormalized,
+            hrTrend: hrTrend,
+            mode: mode,
+            sessionProgress: sessionProgress
+        )
+
+        // Write targets to audio engine parameters
+        audioEngine.parameters.beatFrequency = targets.beatFrequency
+        audioEngine.parameters.baseFrequency = targets.carrierFrequency
+        audioEngine.parameters.amplitude = targets.amplitude
+
+        // Update UI-facing beat frequency
+        currentBeatFrequency = targets.beatFrequency
+
+        // Track deep state time
+        trackDeepState()
+    }
+
+    /// Tracks accumulated time in a calm/deep biometric state and time-to-calm.
+    private func trackDeepState() {
+        let isInDeepState = (currentBiometricState == .calm || currentBiometricState == .focused)
+
+        if isInDeepState {
+            if calmEntryDate == nil {
+                calmEntryDate = Date()
+
+                // Record time-to-calm on first entry
+                if timeToCalm == nil, let start = sessionStartDate {
+                    timeToCalm = Date().timeIntervalSince(start)
+                    // Haptic celebration for reaching calm
+                    WKInterfaceDevice.current().play(.success)
+                }
+            }
+            // Accumulate deep state time (0.1s per tick)
+            deepStateSeconds += WatchDesign.Audio.adaptationTickInterval
+        } else {
+            calmEntryDate = nil
         }
     }
 
@@ -342,11 +615,17 @@ final class WatchSessionManager: NSObject {
         elapsedSeconds = 0
         currentHeartRate = nil
         isStandaloneMode = false
+        isPaused = false
         sessionStartDate = nil
         targetDurationSeconds = nil
         heartRateAnalyzer = nil
         adaptationCount = 0
         startHeartRate = nil
+        calmEntryDate = nil
+        deepStateSeconds = 0
+        timeToCalm = nil
+        hrSamples = []
+        currentBeatFrequency = 0
     }
 
     // MARK: - Persistence
@@ -468,10 +747,9 @@ extension WatchSessionManager: WCSessionDelegate {
         case .stop:
             stopSession()
         case .pause:
-            // Future: implement pause/resume for workout session
-            logger.info("Pause command received — not yet implemented.")
+            pauseSession()
         case .resume:
-            logger.info("Resume command received — not yet implemented.")
+            resumeSession()
         }
     }
 
@@ -509,35 +787,42 @@ struct WatchHeartRateAnalyzer {
     // MARK: - EMA Parameters
 
     /// Fast EMA alpha — responsive (~2.5s effective window).
-    /// Matches Theme.Audio.EMA.fast on iPhone.
-    private let alphaFast: Double = 0.4
+    /// Matches WatchDesign.Audio.EMA.fast.
+    private let alphaFast: Double = WatchDesign.Audio.EMA.fast
 
     /// Slow EMA alpha — stable (~10s effective window).
-    /// Matches Theme.Audio.EMA.slow on iPhone.
-    private let alphaSlow: Double = 0.1
+    /// Matches WatchDesign.Audio.EMA.slow.
+    private let alphaSlow: Double = WatchDesign.Audio.EMA.slow
 
     // MARK: - User Baseline
 
-    /// Default resting heart rate (BPM). In a full implementation this
-    /// would come from HealthKit's resting HR query.
-    private let restingHR: Double = 65
+    /// Default resting heart rate (BPM).
+    private let restingHR: Double = WatchDesign.Audio.defaultRestingHR
 
-    /// Estimated maximum heart rate (BPM). In a full implementation this
-    /// would use the Tanaka formula with the user's age.
-    private let estimatedMaxHR: Double = 190
+    /// Estimated maximum heart rate (BPM).
+    private let estimatedMaxHR: Double = WatchDesign.Audio.defaultMaxHR
 
     // MARK: - Hysteresis
 
     /// Band width for state transition hysteresis.
-    /// Matches Theme.Audio.Hysteresis.band on iPhone.
-    private let hysteresisBand: Double = 0.03
+    /// Matches WatchDesign.Audio.Hysteresis.band.
+    private let hysteresisBand: Double = WatchDesign.Audio.Hysteresis.band
 
     /// Minimum dwell time before a state transition is accepted (seconds).
-    /// Matches Theme.Audio.Hysteresis.minDwellTime on iPhone.
-    private let minDwellTime: TimeInterval = 5.0
+    /// Matches WatchDesign.Audio.Hysteresis.minDwellTime.
+    private let minDwellTime: TimeInterval = WatchDesign.Audio.Hysteresis.minDwellTime
 
     private var lastState: BiometricState = .calm
     private var stateEntryDate: Date = Date()
+
+    // MARK: - Trend Access
+
+    /// Current HR trend magnitude (fast EMA - slow EMA, in BPM).
+    /// Positive means HR is rising, negative means falling.
+    var currentTrend: Double {
+        guard let fast = hrFast, let slow = hrSlow else { return 0 }
+        return fast - slow
+    }
 
     // MARK: - Classification
 
@@ -580,5 +865,38 @@ struct WatchHeartRateAnalyzer {
         }
 
         return lastState
+    }
+}
+
+// MARK: - WatchSessionSummary
+
+/// Lightweight summary of the last completed session, stored by
+/// `WatchSessionManager` for display on the idle screen.
+struct WatchSessionSummary: Codable, Sendable {
+    let mode: FocusMode
+    let durationSeconds: TimeInterval
+    let endDate: Date
+
+    var formattedDuration: String {
+        let minutes = Int(durationSeconds) / 60
+        let seconds = Int(durationSeconds) % 60
+        return String(format: "%d:%02d", minutes, seconds)
+    }
+
+    var formattedTimeAgo: String {
+        let interval = Date().timeIntervalSince(endDate)
+        let minutes = Int(interval) / 60
+        let hours = minutes / 60
+        let days = hours / 24
+
+        if days > 0 {
+            return "\(days)d ago"
+        } else if hours > 0 {
+            return "\(hours)h ago"
+        } else if minutes > 0 {
+            return "\(minutes)m ago"
+        } else {
+            return "Just now"
+        }
     }
 }

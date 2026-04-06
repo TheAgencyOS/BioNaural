@@ -1141,6 +1141,25 @@ Screen 2: "What are you trying to do?"
 
 ---
 
+## PRE-LAUNCH SLAM DUNK PHASES (Between CP5 and Phase 43)
+
+> **See `Launch-SlamDunk.md` for full specs, acceptance criteria, and implementation details.**
+> These phases close the gap between "code complete" and "category definer."
+
+| Phase | Item | Timeline | Depends On |
+|-------|------|----------|------------|
+| ~~43B~~ | ~~**Study Track creation flow**~~ → **Flow State** | ~~3-4 days~~ | **DONE** (Apr 5) — Repositioned as "Flow State." FlowStateSetupView, all refs renamed. |
+| ~~43C~~ | ~~**Energize safety as feature**~~ | ~~1 day~~ | **DONE** (Apr 5) — EnergizeSafetyEducationView + EnergizeSafetyIndicator |
+| 43D | **Professional sound assets** — 40-60 commissioned loops across all 4 modes | 1-2 weeks | Phase 17 (melodic layer), Phase 14 (ambient beds) |
+| ~~43E~~ | ~~**Visible adaptation toasts**~~ | ~~1 day~~ | **DONE** (Apr 5) — AdaptationToast with per-mode messages |
+| ~~43F~~ | ~~**Post-session share card**~~ | ~~2 days~~ | **DONE** (Apr 5) — ShareCardRenderer (Stories + Square) |
+| ~~43G~~ | ~~Morning Brief notification~~ | ~~2 days~~ | **DEFERRED** — generator built, wire post-launch if retention demands it |
+| 44A | **StoreKit 2 full wiring** — subscriptions, trials, restore, Family Sharing | 2-3 days | Phase 44 (paywall), Phase 5 (settings) |
+| 44B | **Japanese & Korean localization** — String Catalogs + App Store listing | 3-5 days | All view code stable |
+| 48A | **Apple Featuring nomination** — submit same day as App Store submission | 1 hour | Phase 48 |
+
+---
+
 ## POST-LAUNCH PHASES (Future)
 
 | Phase | Version | Feature |

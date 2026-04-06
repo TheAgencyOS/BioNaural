@@ -1,7 +1,9 @@
-// StudyTrackSetupView.swift
+// FlowStateSetupView.swift
 // BioNaural
 //
-// Three-step sheet flow for creating a new study-focused context track.
+// Three-step sheet flow for creating a new Flow State context track.
+// Locks a consistent sonic fingerprint so the brain learns to enter
+// flow faster when it recognizes the sound.
 // Step 1: Name, calendar keywords, optional event date.
 // Step 2: Mode, ambient sound, optional Sonic Memory link, duration.
 // Step 3: Review summary and create.
@@ -20,7 +22,7 @@ private struct AmbientOption: Identifiable {
     let systemImage: String
 }
 
-/// The available ambient options for the study track setup.
+/// The available ambient options for the Flow State setup.
 private let ambientOptions: [AmbientOption] = [
     AmbientOption(id: "rain", label: "Rain", systemImage: "cloud.rain.fill"),
     AmbientOption(id: "ocean", label: "Ocean", systemImage: "water.waves"),
@@ -33,9 +35,9 @@ private let ambientOptions: [AmbientOption] = [
 /// The selectable session durations in minutes.
 private let durationOptions: [Int] = [30, 60, 90, 120]
 
-// MARK: - StudyTrackSetupView
+// MARK: - FlowStateSetupView
 
-struct StudyTrackSetupView: View {
+struct FlowStateSetupView: View {
 
     @Environment(\.dismiss) private var dismiss
     @Environment(\.modelContext) private var modelContext
@@ -144,24 +146,24 @@ struct StudyTrackSetupView: View {
     private var stepOne: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.Spacing.xxl) {
-                Text("What are you studying?")
+                Text("What are you locking in for?")
                     .font(Theme.Typography.title)
                     .foregroundStyle(Theme.Colors.textPrimary)
 
                 VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
-                    Text("Track name")
+                    Text("Flow State name")
                         .font(Theme.Typography.caption)
                         .foregroundStyle(Theme.Colors.textSecondary)
 
                     TextField(
-                        "Organic Chemistry, Bar Exam, Spanish Vocab",
+                        "Deep Work, Creative Writing, Pitch Prep",
                         text: $trackName
                     )
                     .font(Theme.Typography.body)
                     .foregroundStyle(Theme.Colors.textPrimary)
                     .padding(Theme.Spacing.md)
                     .background(Theme.Colors.surface)
-                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md))
+                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md, style: .continuous))
                 }
 
                 VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
@@ -170,16 +172,16 @@ struct StudyTrackSetupView: View {
                         .foregroundStyle(Theme.Colors.textSecondary)
 
                     TextField(
-                        "exam, final, organic chemistry",
+                        "deadline, sprint, writing",
                         text: $eventKeywords
                     )
                     .font(Theme.Typography.body)
                     .foregroundStyle(Theme.Colors.textPrimary)
                     .padding(Theme.Spacing.md)
                     .background(Theme.Colors.surface)
-                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md))
+                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md, style: .continuous))
 
-                    Text("We'll match these keywords against your calendar to suggest this track automatically.")
+                    Text("We\u{2019}ll match these keywords against your calendar to suggest this Flow State automatically.")
                         .font(Theme.Typography.caption)
                         .foregroundStyle(Theme.Colors.textTertiary)
                 }
@@ -294,7 +296,7 @@ struct StudyTrackSetupView: View {
                     .pickerStyle(.segmented)
                 }
 
-                Text("This sonic signature stays consistent across all study sessions for maximum recall anchoring.")
+                Text("This sonic signature stays consistent across sessions \u{2014} your brain learns to enter flow faster when it recognizes the sound.")
                     .font(Theme.Typography.caption)
                     .foregroundStyle(Theme.Colors.textTertiary)
 
@@ -374,7 +376,7 @@ struct StudyTrackSetupView: View {
         }
         .padding(Theme.Spacing.xl)
         .background(Theme.Colors.surface)
-        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.card))
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
     }
 
     // MARK: - Science Callout
@@ -386,20 +388,20 @@ struct StudyTrackSetupView: View {
                     .font(Theme.Typography.callout)
                     .foregroundStyle(Theme.Colors.accent)
 
-                Text("State-Dependent Learning")
+                Text("Sonic Anchoring")
                     .font(Theme.Typography.caption)
                     .foregroundStyle(Theme.Colors.textPrimary)
             }
 
-            Text("Studying in a consistent auditory environment improves recall by 15\u{2013}20%. " +
-                "Your brain will associate this sound with the material.")
+            Text("A consistent auditory environment trains your brain to enter the target state faster. " +
+                "Research shows 15\u{2013}20% improvement in cognitive recall with matched sonic environments.")
                 .font(Theme.Typography.caption)
                 .foregroundStyle(Theme.Colors.textSecondary)
                 .lineSpacing(Theme.Typography.LineSpacing.relaxed)
         }
         .padding(Theme.Spacing.xl)
         .background(Theme.Colors.surfaceRaised)
-        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.card))
+        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
     }
 
     // MARK: - Subviews
@@ -481,9 +483,9 @@ struct StudyTrackSetupView: View {
                     ? Theme.Colors.accent.opacity(Theme.Opacity.accentLight)
                     : Theme.Colors.surface
             )
-            .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.lg))
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.lg, style: .continuous))
             .overlay(
-                RoundedRectangle(cornerRadius: Theme.Radius.lg)
+                RoundedRectangle(cornerRadius: Theme.Radius.lg, style: .continuous)
                     .strokeBorder(
                         isSelected
                             ? Theme.Colors.accent.opacity(Theme.Opacity.medium)
@@ -516,7 +518,7 @@ struct StudyTrackSetupView: View {
                             ? Theme.Colors.accent.opacity(Theme.Opacity.accentLight)
                             : Theme.Colors.surfaceRaised
                     )
-                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sm))
+                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.sm, style: .continuous))
 
                 VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
                     Text(memory.userDescription)
@@ -541,7 +543,7 @@ struct StudyTrackSetupView: View {
             }
             .padding(Theme.Spacing.md)
             .background(Theme.Colors.surface)
-            .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md))
+            .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md, style: .continuous))
         }
         .buttonStyle(.plain)
         .accessibilityLabel("\(memory.userDescription)\(isSelected ? ", selected" : "")")
@@ -607,7 +609,7 @@ struct StudyTrackSetupView: View {
                         ? Theme.Colors.accent
                         : Theme.Colors.surface
                 )
-                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.lg))
+                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.lg, style: .continuous))
         }
         .disabled(!enabled)
         .padding(.bottom, Theme.Spacing.xl)
@@ -615,13 +617,13 @@ struct StudyTrackSetupView: View {
 
     private var createButton: some View {
         Button(action: createTrack) {
-            Text("Create Study Track")
+            Text("Create Flow State")
                 .font(Theme.Typography.headline)
                 .foregroundStyle(Theme.Colors.textOnAccent)
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, Theme.Spacing.lg)
                 .background(Theme.Colors.accent)
-                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.lg))
+                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.lg, style: .continuous))
         }
         .padding(.bottom, Theme.Spacing.xl)
     }
@@ -665,7 +667,7 @@ struct StudyTrackSetupView: View {
 
         let track = ContextTrack(
             name: trackName.trimmingCharacters(in: .whitespaces),
-            purpose: TrackPurpose.study.rawValue,
+            purpose: TrackPurpose.flowState.rawValue,
             linkedEventKeywords: parsedKeywords,
             lockedAmbientBedID: selectedAmbient,
             sonicMemoryID: useExistingSonicMemory ? selectedSonicMemoryID : nil,
@@ -681,10 +683,10 @@ struct StudyTrackSetupView: View {
 
 // MARK: - Preview
 
-#Preview("Study Track Setup") {
+#Preview("Flow State Setup") {
     Color.clear
         .sheet(isPresented: .constant(true)) {
-            StudyTrackSetupView { _ in }
+            FlowStateSetupView { _ in }
         }
         .preferredColorScheme(.dark)
 }

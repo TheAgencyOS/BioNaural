@@ -82,6 +82,7 @@ struct HistoryView: View {
     // MARK: - Environment
 
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @Environment(\.modelContext) private var modelContext
 
     // MARK: - Computed
 
@@ -192,6 +193,7 @@ struct HistoryView: View {
         .buttonStyle(.plain)
         .scaleEffect(isSelected ? Theme.Animation.OrbScale.breathingMax : Theme.Animation.OrbScale.breathingMin)
         .animation(Theme.Animation.press, value: isSelected)
+        .sensoryFeedback(.selection, trigger: selectedFilter)
         .accessibilityLabel("\(filter.displayName) filter")
         .accessibilityAddTraits(isSelected ? .isSelected : [])
     }
@@ -208,11 +210,43 @@ struct HistoryView: View {
                         SessionRowView(session: session)
                     }
                     .buttonStyle(GlassRowButtonStyle())
+                    .swipeActions(edge: .trailing, allowsFullSwipe: false) {
+                        Button(role: .destructive) {
+                            deleteSession(session)
+                        } label: {
+                            Label("Delete", systemImage: "trash")
+                        }
+                    }
+                    .swipeActions(edge: .leading, allowsFullSwipe: true) {
+                        Button {
+                            toggleFavorite(session)
+                        } label: {
+                            Label(
+                                session.thumbsRating == 1 ? "Unfavorite" : "Favorite",
+                                systemImage: session.thumbsRating == 1 ? "heart.slash" : "heart.fill"
+                            )
+                        }
+                        .tint(Theme.Colors.accent)
+                    }
                     .staggeredFadeIn(index: index, isVisible: cardsAppeared)
                 }
             }
             .padding(.horizontal, Theme.Spacing.pageMargin)
             .padding(.bottom, Theme.Spacing.jumbo)
+        }
+    }
+
+    // MARK: - Swipe Action Helpers
+
+    private func deleteSession(_ session: FocusSession) {
+        withAnimation(Theme.Animation.standard) {
+            modelContext.delete(session)
+        }
+    }
+
+    private func toggleFavorite(_ session: FocusSession) {
+        withAnimation(Theme.Animation.press) {
+            session.thumbsRating = session.thumbsRating == 1 ? nil : 1
         }
     }
 

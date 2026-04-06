@@ -38,7 +38,7 @@ struct PreEventSessionCardView: View {
     // MARK: - Computed
 
     /// Derives a purpose-driven title from event context.
-    /// Examples: "Your Exam Prep Session", "Your Study Track Session",
+    /// Examples: "Your Exam Prep Session", "Your Flow State Session",
     /// "Your Pre-Meeting Session".
     private var sessionTitle: String {
         if let trackName = contextTrackName {
@@ -78,8 +78,8 @@ struct PreEventSessionCardView: View {
         .padding(Theme.Spacing.pageMargin)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Theme.Colors.canvas)
-        .opacity(isVisible ? 1 : 0)
-        .scaleEffect(isVisible ? 1 : 0.95)
+        .opacity(isVisible ? Theme.Opacity.full : Theme.Opacity.transparent)
+        .scaleEffect(isVisible ? 1.0 : Theme.ModeCard.entranceScale)
         .onAppear {
             if reduceMotion {
                 isVisible = true
@@ -144,10 +144,7 @@ struct PreEventSessionCardView: View {
         }
         .padding(Theme.Spacing.xxl)
         .frame(maxWidth: .infinity)
-        .background(
-            RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous)
-                .fill(Theme.Colors.surface)
-        )
+        .premiumCard(glowColor: Color.modeColor(for: suggestedMode))
     }
 
     /// Duration and mode labels.

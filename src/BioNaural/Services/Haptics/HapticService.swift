@@ -1,72 +1,391 @@
 // HapticService.swift
 // BioNaural
 //
-// Thin wrapper around UIKit haptic feedback generators.
-// Respects the system haptic setting — UIFeedbackGenerator automatically
-// suppresses output when the user has disabled haptics.
+// Core Haptics engine with patterned haptic feedback synced to
+// binaural beat frequency and breathing cadence. Replaces the
+// basic UIKit feedback generators with rich, temporal patterns.
+//
+// Falls back to UIKit generators on devices without Core Haptics
+// support (pre-iPhone 8). Respects the system haptic setting and
+// the user's in-app hapticFeedbackEnabled preference.
 
+import CoreHaptics
+import OSLog
 import UIKit
+
+// MARK: - Protocol
 
 /// Protocol for haptic feedback, enabling mock injection in tests.
 @MainActor
 public protocol HapticServiceProtocol: AnyObject {
 
-    /// Soft haptic played when a session begins.
+    /// Soft crescendo played when a session begins.
     func sessionStart()
 
-    /// Success notification played when a session ends.
+    /// Celebratory pattern played when a session ends.
     func sessionEnd()
 
-    /// Light haptic played when the adaptive engine makes a parameter change.
+    /// Subtle pulse when the adaptive engine changes parameters.
     func adaptationEvent()
 
-    /// Light impact haptic for standard button presses.
+    /// Crisp tap for standard button presses.
     func buttonPress()
+
+    /// Start a continuous breathing haptic pattern (inhale/exhale
+    /// ramp) that loops until stopped. For Focus/Relaxation sessions.
+    func startBreathingPattern()
+
+    /// Stop the looping breathing pattern.
+    func stopBreathingPattern()
+
+    /// Fire a single transient pulse synced to the binaural beat
+    /// frequency. Called by the session timer at the beat rate.
+    func beatPulse()
 }
 
-/// Production haptic service using `UIImpactFeedbackGenerator` and
-/// `UINotificationFeedbackGenerator`.
+// MARK: - HapticService
+
+/// Production haptic service using Core Haptics for rich, temporal
+/// patterns. Falls back to UIKit generators when Core Haptics is
+/// unavailable.
 ///
-/// All generators are lazily prepared on first use. The system automatically
-/// respects the user's haptic preferences — no manual check is needed.
+/// Thread safety: All public methods are `@MainActor`-isolated.
+/// The `CHHapticEngine` is created and used exclusively on the
+/// main thread.
 @MainActor
 public final class HapticService: HapticServiceProtocol {
 
-    // MARK: - Generators
+    // MARK: - Private State
 
-    /// Soft impact for session start — gentle, non-intrusive.
+    private var engine: CHHapticEngine?
+    private var breathingPlayer: CHHapticAdvancedPatternPlayer?
+    private var isBreathingActive = false
+
+    /// Whether the device supports Core Haptics.
+    private let supportsHaptics: Bool
+
+    /// Fallback UIKit generators for devices without Core Haptics.
     private lazy var softGenerator = UIImpactFeedbackGenerator(style: .soft)
-
-    /// Light impact for button presses and adaptation events.
     private lazy var lightGenerator = UIImpactFeedbackGenerator(style: .light)
-
-    /// Notification generator for success feedback on session completion.
     private lazy var notificationGenerator = UINotificationFeedbackGenerator()
+
+    private let logger = Logger(
+        subsystem: Bundle.main.bundleIdentifier ?? "com.bionaural",
+        category: "Haptics"
+    )
 
     // MARK: - Initialization
 
-    public init() {}
+    public init() {
+        self.supportsHaptics = CHHapticEngine.capabilitiesForHardware().supportsHaptics
+        if supportsHaptics {
+            createEngine()
+        }
+    }
 
-    // MARK: - HapticServiceProtocol
+    // MARK: - Engine Lifecycle
+
+    private func createEngine() {
+        do {
+            let hapticEngine = try CHHapticEngine()
+
+            // Auto-restart on reset (e.g., app returning to foreground).
+            hapticEngine.resetHandler = { [weak self] in
+                Task { @MainActor in
+                    self?.restartEngine()
+                }
+            }
+
+            // The engine stopped unexpectedly — log it.
+            hapticEngine.stoppedHandler = { [weak self] reason in
+                Task { @MainActor in
+                    self?.logger.warning("Haptic engine stopped: \(String(describing: reason))")
+                }
+            }
+
+            // Start immediately so patterns play without latency.
+            try hapticEngine.start()
+            self.engine = hapticEngine
+        } catch {
+            logger.error("Failed to create haptic engine: \(error.localizedDescription)")
+        }
+    }
+
+    private func restartEngine() {
+        guard supportsHaptics else { return }
+        do {
+            try engine?.start()
+        } catch {
+            logger.error("Failed to restart haptic engine: \(error.localizedDescription)")
+            // Recreate from scratch.
+            createEngine()
+        }
+    }
+
+    /// Ensures the engine is running before playing a pattern.
+    private func ensureEngineRunning() {
+        guard supportsHaptics else { return }
+        if engine == nil {
+            createEngine()
+        }
+    }
+
+    // MARK: - Session Events
 
     public func sessionStart() {
-        softGenerator.prepare()
-        softGenerator.impactOccurred()
+        guard supportsHaptics, let engine else {
+            softGenerator.prepare()
+            softGenerator.impactOccurred()
+            return
+        }
+
+        // Three-tap crescendo: soft → medium → full
+        let t = Theme.Haptics.self
+        let stepDuration = t.sessionStartDuration / 3.0
+        var events: [CHHapticEvent] = []
+
+        for i in 0..<3 {
+            let time = Double(i) * stepDuration
+            let intensity = t.sessionStartIntensity * Float(i + 1) / 3.0
+            events.append(
+                CHHapticEvent(
+                    eventType: .hapticTransient,
+                    parameters: [
+                        CHHapticEventParameter(parameterID: .hapticIntensity, value: intensity),
+                        CHHapticEventParameter(parameterID: .hapticSharpness, value: t.sessionStartSharpness)
+                    ],
+                    relativeTime: time
+                )
+            )
+        }
+
+        playPattern(events: events, on: engine)
     }
 
     public func sessionEnd() {
-        notificationGenerator.prepare()
-        notificationGenerator.notificationOccurred(.success)
+        guard supportsHaptics, let engine else {
+            notificationGenerator.prepare()
+            notificationGenerator.notificationOccurred(.success)
+            return
+        }
+
+        // Celebration: quick double-tap then a sustained bloom.
+        let t = Theme.Haptics.self
+        var events: [CHHapticEvent] = []
+
+        // Two quick transients
+        events.append(
+            CHHapticEvent(
+                eventType: .hapticTransient,
+                parameters: [
+                    CHHapticEventParameter(parameterID: .hapticIntensity, value: t.sessionEndIntensity * 0.6),
+                    CHHapticEventParameter(parameterID: .hapticSharpness, value: t.sessionEndSharpness)
+                ],
+                relativeTime: 0
+            )
+        )
+        events.append(
+            CHHapticEvent(
+                eventType: .hapticTransient,
+                parameters: [
+                    CHHapticEventParameter(parameterID: .hapticIntensity, value: t.sessionEndIntensity * 0.8),
+                    CHHapticEventParameter(parameterID: .hapticSharpness, value: t.sessionEndSharpness)
+                ],
+                relativeTime: 0.12
+            )
+        )
+
+        // Sustained bloom
+        events.append(
+            CHHapticEvent(
+                eventType: .hapticContinuous,
+                parameters: [
+                    CHHapticEventParameter(parameterID: .hapticIntensity, value: t.sessionEndIntensity),
+                    CHHapticEventParameter(parameterID: .hapticSharpness, value: t.sessionEndSharpness * 0.5)
+                ],
+                relativeTime: 0.3,
+                duration: t.sessionEndDuration - 0.3
+            )
+        )
+
+        playPattern(events: events, on: engine)
     }
 
     public func adaptationEvent() {
-        lightGenerator.prepare()
-        lightGenerator.impactOccurred(intensity: 0.5)
+        guard supportsHaptics, let engine else {
+            lightGenerator.prepare()
+            lightGenerator.impactOccurred(intensity: 0.5)
+            return
+        }
+
+        let t = Theme.Haptics.self
+        let event = CHHapticEvent(
+            eventType: .hapticTransient,
+            parameters: [
+                CHHapticEventParameter(parameterID: .hapticIntensity, value: t.adaptationIntensity),
+                CHHapticEventParameter(parameterID: .hapticSharpness, value: t.adaptationSharpness)
+            ],
+            relativeTime: 0
+        )
+
+        playPattern(events: [event], on: engine)
     }
 
     public func buttonPress() {
-        lightGenerator.prepare()
-        lightGenerator.impactOccurred()
+        guard supportsHaptics, let engine else {
+            lightGenerator.prepare()
+            lightGenerator.impactOccurred()
+            return
+        }
+
+        let t = Theme.Haptics.self
+        let event = CHHapticEvent(
+            eventType: .hapticTransient,
+            parameters: [
+                CHHapticEventParameter(parameterID: .hapticIntensity, value: t.buttonIntensity),
+                CHHapticEventParameter(parameterID: .hapticSharpness, value: t.buttonSharpness)
+            ],
+            relativeTime: 0
+        )
+
+        playPattern(events: [event], on: engine)
+    }
+
+    // MARK: - Beat Pulse
+
+    public func beatPulse() {
+        guard supportsHaptics, let engine else { return }
+
+        let t = Theme.Haptics.self
+        let event = CHHapticEvent(
+            eventType: .hapticTransient,
+            parameters: [
+                CHHapticEventParameter(parameterID: .hapticIntensity, value: t.beatPulseIntensity),
+                CHHapticEventParameter(parameterID: .hapticSharpness, value: t.beatPulseSharpness)
+            ],
+            relativeTime: 0
+        )
+
+        playPattern(events: [event], on: engine)
+    }
+
+    // MARK: - Breathing Pattern
+
+    public func startBreathingPattern() {
+        guard supportsHaptics, let engine else { return }
+        guard !isBreathingActive else { return }
+
+        isBreathingActive = true
+
+        do {
+            let pattern = try buildBreathingPattern()
+            let player = try engine.makeAdvancedPlayer(with: pattern)
+            player.loopEnabled = true
+
+            // Handle player completion (shouldn't fire while looping,
+            // but defensive).
+            player.completionHandler = { [weak self] _ in
+                Task { @MainActor in
+                    self?.isBreathingActive = false
+                    self?.breathingPlayer = nil
+                }
+            }
+
+            try player.start(atTime: CHHapticTimeImmediate)
+            self.breathingPlayer = player
+        } catch {
+            logger.error("Failed to start breathing pattern: \(error.localizedDescription)")
+            isBreathingActive = false
+        }
+    }
+
+    public func stopBreathingPattern() {
+        guard isBreathingActive else { return }
+
+        do {
+            try breathingPlayer?.stop(atTime: CHHapticTimeImmediate)
+        } catch {
+            logger.warning("Failed to stop breathing player: \(error.localizedDescription)")
+        }
+
+        breathingPlayer = nil
+        isBreathingActive = false
+    }
+
+    // MARK: - Breathing Pattern Builder
+
+    /// Builds a CHHapticPattern that ramps intensity up (inhale) then
+    /// down (exhale) over one full breathing cycle.
+    private func buildBreathingPattern() throws -> CHHapticPattern {
+        let t = Theme.Haptics.self
+        let cycleDuration = t.breathingCycleDuration
+        let inhaleDuration = cycleDuration * t.breathingInhaleRatio
+        let exhaleDuration = cycleDuration * (1.0 - t.breathingInhaleRatio)
+
+        var events: [CHHapticEvent] = []
+
+        // Inhale phase: taps ramping from trough to peak intensity
+        let inhaleCount = t.breathingInhaleTapCount
+        let inhaleStep = inhaleDuration / Double(inhaleCount)
+        for i in 0..<inhaleCount {
+            let progress = Float(i) / Float(max(inhaleCount - 1, 1))
+            let intensity = t.breathingTroughIntensity + (t.breathingPeakIntensity - t.breathingTroughIntensity) * progress
+            events.append(
+                CHHapticEvent(
+                    eventType: .hapticTransient,
+                    parameters: [
+                        CHHapticEventParameter(parameterID: .hapticIntensity, value: intensity),
+                        CHHapticEventParameter(parameterID: .hapticSharpness, value: t.breathingSharpness)
+                    ],
+                    relativeTime: Double(i) * inhaleStep
+                )
+            )
+        }
+
+        // Exhale phase: taps ramping from peak back to trough
+        let exhaleCount = t.breathingExhaleTapCount
+        let exhaleStep = exhaleDuration / Double(exhaleCount)
+        for i in 0..<exhaleCount {
+            let progress = Float(i) / Float(max(exhaleCount - 1, 1))
+            let intensity = t.breathingPeakIntensity - (t.breathingPeakIntensity - t.breathingTroughIntensity) * progress
+            events.append(
+                CHHapticEvent(
+                    eventType: .hapticTransient,
+                    parameters: [
+                        CHHapticEventParameter(parameterID: .hapticIntensity, value: intensity),
+                        CHHapticEventParameter(parameterID: .hapticSharpness, value: t.breathingSharpness)
+                    ],
+                    relativeTime: inhaleDuration + Double(i) * exhaleStep
+                )
+            )
+        }
+
+        return try CHHapticPattern(events: events, parameters: [])
+    }
+
+    // MARK: - Pattern Playback
+
+    /// Plays a one-shot pattern from the given events.
+    private func playPattern(events: [CHHapticEvent], on engine: CHHapticEngine) {
+        ensureEngineRunning()
+        do {
+            let pattern = try CHHapticPattern(events: events, parameters: [])
+            let player = try engine.makePlayer(with: pattern)
+            try player.start(atTime: CHHapticTimeImmediate)
+        } catch {
+            logger.warning("Failed to play haptic pattern: \(error.localizedDescription)")
+        }
+    }
+
+    // MARK: - Cleanup
+
+    /// Tears down the haptic engine and stops all players.
+    /// Call before releasing the service.
+    func tearDown() {
+        try? breathingPlayer?.stop(atTime: CHHapticTimeImmediate)
+        breathingPlayer = nil
+        engine?.stop()
+        engine = nil
     }
 }
 

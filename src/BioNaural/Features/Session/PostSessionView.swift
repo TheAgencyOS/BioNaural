@@ -298,6 +298,7 @@ struct PostSessionView: View {
                 thumbsButton(value: 1, symbol: "hand.thumbsup.fill")
                 thumbsButton(value: -1, symbol: "hand.thumbsdown.fill")
             }
+            .sensoryFeedback(.impact(flexibility: .soft), trigger: thumbsRating)
         }
         .opacity(feedbackVisible ? Theme.Opacity.full : Theme.Opacity.transparent)
         .offset(y: feedbackVisible ? .zero : Theme.Spacing.sm)

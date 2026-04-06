@@ -3,7 +3,7 @@
 //
 // Library view showing all context tracks grouped by active/archived status.
 // Each track appears as a card with mode color, purpose icon, session stats,
-// and expiry date. Supports creating new study tracks, archiving, and deleting.
+// and expiry date. Supports creating new Flow State tracks, archiving, and deleting.
 // All values from Theme tokens. Native SwiftUI. Dark-first.
 
 import SwiftUI
@@ -62,7 +62,7 @@ struct ContextTrackLibraryView: View {
                 }
             }
             .sheet(isPresented: $showingSetup) {
-                StudyTrackSetupView { _ in }
+                FlowStateSetupView { _ in }
             }
             .alert(
                 "Delete Track?",
@@ -187,7 +187,7 @@ struct ContextTrackLibraryView: View {
                 .font(Theme.Typography.headline)
                 .foregroundStyle(Theme.Colors.textPrimary)
 
-            Text("Create a study track to boost your recall.")
+            Text("Create a Flow State to lock in your peak performance sound.")
                 .font(Theme.Typography.callout)
                 .foregroundStyle(Theme.Colors.textSecondary)
                 .multilineTextAlignment(.center)

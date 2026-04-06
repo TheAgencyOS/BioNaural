@@ -45,8 +45,7 @@ struct MetricCardView: View {
         .padding(.vertical, Theme.Spacing.lg)
         .padding(.horizontal, Theme.Spacing.xl)
         .frame(maxWidth: .infinity)
-        .background(Theme.Colors.surface)
-        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.md))
+        .glassCard()
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(label), \(value)")
     }

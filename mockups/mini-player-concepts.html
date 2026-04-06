@@ -1,0 +1,1367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BioNaural Mini Player — 10 Concepts</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+  :root {
+    --canvas: #080C15;
+    --surface: #111520;
+    --surface-raised: #1A1F2E;
+    --divider: #1E2336;
+    --text-primary: #E2E6F0;
+    --text-secondary: rgba(226, 230, 240, 0.55);
+    --text-tertiary: rgba(226, 230, 240, 0.30);
+    --accent: #6E7CF7;
+    --accent-wash: rgba(110, 124, 247, 0.05);
+    --accent-light: rgba(110, 124, 247, 0.15);
+    --focus: #5B6ABF;
+    --relaxation: #4EA8A6;
+    --sleep: #9080C4;
+    --energize: #F5A623;
+    --confirmation: #4EA87A;
+    --signal-calm: #4EA8A6;
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-xxl: 24px;
+    --radius-full: 9999px;
+    --spacing-xxs: 4px;
+    --spacing-xs: 6px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-xxl: 24px;
+    --spacing-xxxl: 32px;
+    --font-small: 11px;
+    --font-caption: 13px;
+    --font-body: 15px;
+    --font-headline: 17px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #050810;
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, system-ui, sans-serif;
+    padding: 40px 20px 80px;
+    min-height: 100vh;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 8px;
+    background: linear-gradient(135deg, var(--accent) 0%, #A78BFA 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    text-align: center;
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 48px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(390px, 1fr));
+    gap: 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .concept-card {
+    background: var(--surface);
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--divider);
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+  }
+
+  .concept-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(110, 124, 247, 0.25);
+  }
+
+  .concept-card.current {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(110, 124, 247, 0.15);
+  }
+
+  .card-header {
+    padding: 16px 20px 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: var(--accent-light);
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .concept-card.current .card-number {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .card-title {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .card-tag {
+    margin-left: auto;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: var(--radius-full);
+    background: var(--accent-light);
+    color: var(--accent);
+  }
+
+  .concept-card.current .card-tag {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  .card-description {
+    padding: 0 20px 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* iPhone frame */
+  .phone-frame {
+    position: relative;
+    width: 100%;
+    padding: 0 20px 20px;
+  }
+
+  .phone-screen {
+    background: var(--canvas);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    position: relative;
+    height: 140px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  /* Tab bar */
+  .tab-bar {
+    display: flex;
+    justify-content: space-around;
+    padding: 8px 0 12px;
+    background: rgba(17, 21, 32, 0.95);
+    border-top: 1px solid var(--divider);
+    backdrop-filter: blur(20px);
+  }
+
+  .tab-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    opacity: 0.5;
+    font-size: 10px;
+    color: var(--text-secondary);
+  }
+
+  .tab-item.active {
+    opacity: 1;
+    color: var(--accent);
+  }
+
+  .tab-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    background: currentColor;
+    opacity: 0.3;
+  }
+
+  .tab-item.active .tab-icon { opacity: 0.5; }
+
+  /* Shared mini player base */
+  .mini-player {
+    margin: 0 12px 8px;
+    position: relative;
+  }
+
+  /* ============================================ */
+  /* CONCEPT STYLES                               */
+  /* ============================================ */
+
+  /* 0. Current Design */
+  .mp-current {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 16px;
+  }
+
+  .mp-current .indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--focus);
+    flex-shrink: 0;
+  }
+
+  .mp-current .mode-name {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  .mp-current .wavelength {
+    flex: 1;
+    height: 24px;
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    position: relative;
+  }
+
+  .mp-current .wave-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg,
+      transparent 0%,
+      var(--focus) 20%,
+      rgba(91, 106, 191, 0.3) 50%,
+      var(--focus) 80%,
+      transparent 100%
+    );
+    animation: waveShift 3s linear infinite;
+  }
+
+  .mp-current .elapsed {
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .mp-current .stop-btn {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    background: var(--text-secondary);
+    flex-shrink: 0;
+  }
+
+  /* 1. Glass Capsule */
+  .mp-glass {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    background: rgba(17, 21, 32, 0.75);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(110, 124, 247, 0.12);
+    border-radius: var(--radius-full);
+  }
+
+  .mp-glass .orb {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(91, 106, 191, 0.8), rgba(91, 106, 191, 0.2));
+    box-shadow: 0 0 12px rgba(91, 106, 191, 0.4);
+    animation: orbPulse 4s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  .mp-glass .info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .mp-glass .mode-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .mp-glass .meta {
+    font-size: 11px;
+    color: var(--text-secondary);
+    display: flex;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .mp-glass .elapsed {
+    font-family: 'SF Mono', 'Menlo', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  .mp-glass .controls {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .ctrl-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(226, 230, 240, 0.08);
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+
+  .ctrl-btn:hover { background: rgba(226, 230, 240, 0.15); }
+
+  .ctrl-icon {
+    color: var(--text-primary);
+    font-size: 12px;
+  }
+
+  /* 2. Progress Arc */
+  .mp-arc {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 16px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--divider);
+  }
+
+  .mp-arc .ring-container {
+    width: 36px;
+    height: 36px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .mp-arc .ring-bg {
+    fill: none;
+    stroke: var(--surface-raised);
+    stroke-width: 3;
+  }
+
+  .mp-arc .ring-progress {
+    fill: none;
+    stroke: var(--focus);
+    stroke-width: 3;
+    stroke-linecap: round;
+    stroke-dasharray: 100.53;
+    stroke-dashoffset: 49.26;
+    transform: rotate(-90deg);
+    transform-origin: center;
+    filter: drop-shadow(0 0 4px rgba(91, 106, 191, 0.5));
+  }
+
+  .mp-arc .ring-time {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 9px;
+    font-weight: 700;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--text-primary);
+  }
+
+  .mp-arc .info {
+    flex: 1;
+  }
+
+  .mp-arc .mode-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .mp-arc .hz-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 1px;
+  }
+
+  .mp-arc .hz-value {
+    color: var(--focus);
+    font-weight: 600;
+    font-family: 'SF Mono', 'Menlo', monospace;
+  }
+
+  /* 3. Floating Island */
+  .mp-island {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    background: #000;
+    border-radius: var(--radius-xxl);
+    width: fit-content;
+    margin: 0 auto 8px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+  }
+
+  .mp-island .pulse-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--focus);
+    box-shadow: 0 0 8px var(--focus);
+    animation: islandPulse 2s ease-in-out infinite;
+  }
+
+  .mp-island .mode-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .mp-island .divider {
+    width: 1px;
+    height: 16px;
+    background: rgba(255,255,255,0.15);
+  }
+
+  .mp-island .elapsed {
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .mp-island .wave-bar {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    height: 16px;
+  }
+
+  .mp-island .wave-bar span {
+    width: 2px;
+    border-radius: 1px;
+    background: var(--focus);
+    animation: barBounce 1.2s ease-in-out infinite;
+  }
+
+  .mp-island .wave-bar span:nth-child(1) { height: 6px; animation-delay: 0s; }
+  .mp-island .wave-bar span:nth-child(2) { height: 10px; animation-delay: 0.15s; }
+  .mp-island .wave-bar span:nth-child(3) { height: 14px; animation-delay: 0.3s; }
+  .mp-island .wave-bar span:nth-child(4) { height: 10px; animation-delay: 0.45s; }
+  .mp-island .wave-bar span:nth-child(5) { height: 6px; animation-delay: 0.6s; }
+
+  /* 4. Waveform Bar */
+  .mp-waveform {
+    padding: 10px 16px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--divider);
+  }
+
+  .mp-waveform .top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+
+  .mp-waveform .left-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .mp-waveform .indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--focus);
+    animation: islandPulse 2s ease-in-out infinite;
+  }
+
+  .mp-waveform .mode-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .mp-waveform .right-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .mp-waveform .elapsed {
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--text-secondary);
+  }
+
+  .mp-waveform .progress-wave {
+    height: 20px;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    background: var(--surface-raised);
+  }
+
+  .mp-waveform .wave-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 51%;
+    height: 100%;
+    background: linear-gradient(90deg, rgba(91, 106, 191, 0.15), rgba(91, 106, 191, 0.35));
+    border-radius: 4px;
+  }
+
+  .mp-waveform .wave-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* 5. Gradient Ribbon */
+  .mp-ribbon {
+    position: relative;
+    padding: 10px 16px;
+    background: linear-gradient(135deg, rgba(91, 106, 191, 0.12) 0%, rgba(91, 106, 191, 0.03) 100%);
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(91, 106, 191, 0.15);
+    overflow: hidden;
+  }
+
+  .mp-ribbon::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--focus), transparent);
+    animation: ribbonGlow 3s ease-in-out infinite;
+  }
+
+  .mp-ribbon .content {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mp-ribbon .mode-badge {
+    padding: 4px 10px;
+    border-radius: var(--radius-full);
+    background: rgba(91, 106, 191, 0.2);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--focus);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .mp-ribbon .center-info {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .mp-ribbon .hz {
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--text-primary);
+  }
+
+  .mp-ribbon .hz-unit {
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .mp-ribbon .elapsed {
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--text-secondary);
+  }
+
+  /* 6. Biometric Strip */
+  .mp-biometric {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    background: var(--surface);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--divider);
+  }
+
+  .mp-biometric .heart-ring {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--signal-calm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .mp-biometric .hr-value {
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--signal-calm);
+  }
+
+  .mp-biometric .info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .mp-biometric .mode-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .mp-biometric .state-label {
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--signal-calm);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+
+  .mp-biometric .elapsed {
+    font-size: 13px;
+    font-weight: 500;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* 7. Minimal Notch */
+  .mp-notch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 6px 20px;
+    width: fit-content;
+    margin: 0 auto 8px;
+    background: var(--surface-raised);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--divider);
+  }
+
+  .mp-notch .dot {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--focus);
+    box-shadow: 0 0 6px var(--focus);
+    animation: islandPulse 2s ease-in-out infinite;
+  }
+
+  .mp-notch .elapsed {
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--text-primary);
+    letter-spacing: 1px;
+  }
+
+  .mp-notch .dot-trail {
+    display: flex;
+    gap: 3px;
+  }
+
+  .mp-notch .dot-trail span {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--focus);
+  }
+
+  .mp-notch .dot-trail span:nth-child(1) { opacity: 0.2; }
+  .mp-notch .dot-trail span:nth-child(2) { opacity: 0.4; }
+  .mp-notch .dot-trail span:nth-child(3) { opacity: 0.6; }
+
+  /* 8. Orb + Text */
+  .mp-orb-text {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 14px;
+    background: rgba(17, 21, 32, 0.85);
+    backdrop-filter: blur(20px);
+    border-radius: var(--radius-xl);
+    border: 1px solid rgba(91, 106, 191, 0.08);
+  }
+
+  .mp-orb-text .mini-orb {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle at 40% 40%,
+      rgba(91, 106, 191, 0.6),
+      rgba(91, 106, 191, 0.15) 60%,
+      rgba(91, 106, 191, 0.05) 100%
+    );
+    box-shadow:
+      0 0 20px rgba(91, 106, 191, 0.3),
+      inset 0 0 12px rgba(91, 106, 191, 0.2);
+    animation: orbPulse 4s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+
+  .mp-orb-text .text-stack {
+    flex: 1;
+  }
+
+  .mp-orb-text .mode-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .mp-orb-text .sub-info {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 2px;
+  }
+
+  .mp-orb-text .hz {
+    font-size: 12px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--focus);
+    font-weight: 500;
+  }
+
+  .mp-orb-text .separator {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--text-tertiary);
+  }
+
+  .mp-orb-text .elapsed {
+    font-size: 12px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--text-secondary);
+  }
+
+  .mp-orb-text .controls {
+    display: flex;
+    gap: 8px;
+  }
+
+  /* 9. Spectrum Bar */
+  .mp-spectrum {
+    padding: 10px 14px;
+    background: var(--surface);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--divider);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .mp-spectrum .mode-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: var(--radius-sm);
+    background: rgba(91, 106, 191, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .mp-spectrum .mode-icon span {
+    font-size: 14px;
+  }
+
+  .mp-spectrum .info {
+    flex: 1;
+  }
+
+  .mp-spectrum .top-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .mp-spectrum .mode-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .mp-spectrum .elapsed {
+    font-size: 12px;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--text-secondary);
+  }
+
+  .mp-spectrum .spectrum-bars {
+    display: flex;
+    gap: 1.5px;
+    height: 8px;
+    align-items: flex-end;
+    margin-top: 6px;
+  }
+
+  .mp-spectrum .spectrum-bars span {
+    width: 3px;
+    border-radius: 1px;
+    background: var(--focus);
+    animation: spectrumPulse 2s ease-in-out infinite;
+  }
+
+  /* 10. Breathing Ring */
+  .mp-breathing {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 14px;
+    background: var(--surface);
+    border-radius: var(--radius-full);
+    border: 1px solid var(--divider);
+  }
+
+  .mp-breathing .breath-ring {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid rgba(91, 106, 191, 0.3);
+    position: relative;
+    flex-shrink: 0;
+    animation: breatheRing 4s ease-in-out infinite;
+  }
+
+  .mp-breathing .breath-ring::after {
+    content: '';
+    position: absolute;
+    top: 3px; left: 3px; right: 3px; bottom: 3px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(91, 106, 191, 0.3), transparent 70%);
+    animation: breatheInner 4s ease-in-out infinite;
+  }
+
+  .mp-breathing .info {
+    flex: 1;
+  }
+
+  .mp-breathing .mode-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .mp-breathing .sub {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 1px;
+  }
+
+  .mp-breathing .elapsed {
+    font-size: 15px;
+    font-weight: 600;
+    font-family: 'SF Mono', 'Menlo', monospace;
+    color: var(--text-primary);
+    white-space: nowrap;
+  }
+
+  /* ============================================ */
+  /* ANIMATIONS                                    */
+  /* ============================================ */
+
+  @keyframes waveShift {
+    0% { transform: translateY(-50%) translateX(-10px); }
+    50% { transform: translateY(-50%) translateX(10px); }
+    100% { transform: translateY(-50%) translateX(-10px); }
+  }
+
+  @keyframes orbPulse {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.05); opacity: 1; }
+  }
+
+  @keyframes islandPulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  @keyframes barBounce {
+    0%, 100% { transform: scaleY(0.5); }
+    50% { transform: scaleY(1); }
+  }
+
+  @keyframes ribbonGlow {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+
+  @keyframes spectrumPulse {
+    0%, 100% { transform: scaleY(0.4); opacity: 0.5; }
+    50% { transform: scaleY(1); opacity: 1; }
+  }
+
+  @keyframes breatheRing {
+    0%, 100% { transform: scale(0.92); border-color: rgba(91, 106, 191, 0.2); }
+    50% { transform: scale(1); border-color: rgba(91, 106, 191, 0.5); }
+  }
+
+  @keyframes breatheInner {
+    0%, 100% { transform: scale(0.7); opacity: 0.3; }
+    50% { transform: scale(1); opacity: 0.7; }
+  }
+</style>
+</head>
+<body>
+
+<h1>Mini Player Concepts</h1>
+<p class="subtitle">BioNaural &mdash; 10 design directions + current implementation</p>
+
+<div class="grid">
+
+  <!-- 0. CURRENT DESIGN -->
+  <div class="concept-card current">
+    <div class="card-header">
+      <span class="card-number">0</span>
+      <span class="card-title">Current Design</span>
+      <span class="card-tag">Shipped</span>
+    </div>
+    <p class="card-description">Flat HStack with indicator dot, mode name, compact wavelength, elapsed time, and stop button. No background, no border. Transparent overlay above the tab bar.</p>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="mini-player mp-current">
+          <div class="indicator"></div>
+          <span class="mode-name">Focus</span>
+          <div class="wavelength">
+            <div class="wave-line"></div>
+          </div>
+          <span class="elapsed">12:45</span>
+          <div class="stop-btn"></div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-icon"></div><span>Home</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Compose</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Library</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Insights</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 1. GLASS CAPSULE -->
+  <div class="concept-card">
+    <div class="card-header">
+      <span class="card-number">1</span>
+      <span class="card-title">Glass Capsule</span>
+      <span class="card-tag">Premium</span>
+    </div>
+    <p class="card-description">Frosted glass capsule with a mini orb that pulses with the beat, two-line info stack, and circular pause/stop controls. Feels like a premium music player.</p>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="mini-player mp-glass">
+          <div class="orb"></div>
+          <div class="info">
+            <span class="mode-name">Focus</span>
+            <span class="meta">14 Hz &middot; <span style="color: var(--signal-calm);">Calm</span></span>
+          </div>
+          <span class="elapsed">12:45</span>
+          <div class="controls">
+            <div class="ctrl-btn"><span class="ctrl-icon">&#10074;&#10074;</span></div>
+            <div class="ctrl-btn"><span class="ctrl-icon">&#9632;</span></div>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-icon"></div><span>Home</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Compose</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Library</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Insights</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. PROGRESS ARC -->
+  <div class="concept-card">
+    <div class="card-header">
+      <span class="card-number">2</span>
+      <span class="card-title">Progress Arc</span>
+      <span class="card-tag">Data-Rich</span>
+    </div>
+    <p class="card-description">Circular progress ring shows session completion. Time inside the ring. Mode name and live Hz readout alongside. Compact but information-dense.</p>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="mini-player mp-arc">
+          <div class="ring-container">
+            <svg viewBox="0 0 36 36" style="width:36px;height:36px;">
+              <circle class="ring-bg" cx="18" cy="18" r="16"/>
+              <circle class="ring-progress" cx="18" cy="18" r="16"/>
+            </svg>
+            <span class="ring-time">12:45</span>
+          </div>
+          <div class="info">
+            <span class="mode-name">Focus</span>
+            <span class="hz-label"><span class="hz-value">14</span> Hz &middot; Beta</span>
+          </div>
+          <div class="controls">
+            <div class="ctrl-btn"><span class="ctrl-icon">&#10074;&#10074;</span></div>
+            <div class="ctrl-btn"><span class="ctrl-icon">&#9632;</span></div>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-icon"></div><span>Home</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Compose</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Library</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Insights</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. FLOATING ISLAND -->
+  <div class="concept-card">
+    <div class="card-header">
+      <span class="card-number">3</span>
+      <span class="card-title">Floating Island</span>
+      <span class="card-tag">Dynamic Island</span>
+    </div>
+    <p class="card-description">Compact black pill inspired by Dynamic Island. Audio bars animate with the beat. Centered above tab bar. Expands on tap. Feels native to iOS 16+.</p>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="mini-player mp-island">
+          <div class="pulse-dot"></div>
+          <span class="mode-name">Focus</span>
+          <div class="divider"></div>
+          <div class="wave-bar">
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+          <div class="divider"></div>
+          <span class="elapsed">12:45</span>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-icon"></div><span>Home</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Compose</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Library</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Insights</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. WAVEFORM BAR -->
+  <div class="concept-card">
+    <div class="card-header">
+      <span class="card-number">4</span>
+      <span class="card-title">Waveform Bar</span>
+      <span class="card-tag">Visual</span>
+    </div>
+    <p class="card-description">Two-row design: info row on top, full-width waveform progress bar below. The wave fill acts as a progress indicator while showing live entrainment amplitude.</p>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="mini-player mp-waveform">
+          <div class="top-row">
+            <div class="left-group">
+              <div class="indicator"></div>
+              <span class="mode-name">Focus</span>
+            </div>
+            <div class="right-group">
+              <span class="elapsed">12:45</span>
+              <div class="ctrl-btn"><span class="ctrl-icon">&#9632;</span></div>
+            </div>
+          </div>
+          <div class="progress-wave">
+            <div class="wave-fill"></div>
+            <svg class="wave-svg" viewBox="0 0 350 20" preserveAspectRatio="none">
+              <path d="M0,10 Q20,4 40,10 Q60,16 80,10 Q100,4 120,10 Q140,16 160,10 Q180,4 200,10 Q220,16 240,10 Q260,4 280,10 Q300,16 320,10 Q340,4 350,10"
+                fill="none" stroke="rgba(91,106,191,0.5)" stroke-width="1.5"/>
+            </svg>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-icon"></div><span>Home</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Compose</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Library</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Insights</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. GRADIENT RIBBON -->
+  <div class="concept-card">
+    <div class="card-header">
+      <span class="card-number">5</span>
+      <span class="card-title">Gradient Ribbon</span>
+      <span class="card-tag">Bold</span>
+    </div>
+    <p class="card-description">Mode-colored gradient background with a glowing top edge. Mode badge on the left, live Hz readout center stage. Strongly branded, high visual weight.</p>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="mini-player mp-ribbon">
+          <div class="content">
+            <span class="mode-badge">Focus</span>
+            <div class="center-info">
+              <span class="hz">14.0</span>
+              <span class="hz-unit">Hz</span>
+            </div>
+            <span class="elapsed">12:45</span>
+            <div class="ctrl-btn"><span class="ctrl-icon">&#9632;</span></div>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-icon"></div><span>Home</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Compose</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Library</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Insights</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. BIOMETRIC STRIP -->
+  <div class="concept-card">
+    <div class="card-header">
+      <span class="card-number">6</span>
+      <span class="card-title">Biometric Strip</span>
+      <span class="card-tag">Health</span>
+    </div>
+    <p class="card-description">Heart rate ring on the left shows live BPM with state-colored border. Mode name and biometric state label. Bridges health data and audio session.</p>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="mini-player mp-biometric">
+          <div class="heart-ring">
+            <span class="hr-value">68</span>
+          </div>
+          <div class="info">
+            <span class="mode-name">Focus</span>
+            <span class="state-label">Calm &middot; Adapting</span>
+          </div>
+          <span class="elapsed">12:45</span>
+          <div class="ctrl-btn"><span class="ctrl-icon">&#9632;</span></div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-icon"></div><span>Home</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Compose</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Library</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Insights</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. MINIMAL NOTCH -->
+  <div class="concept-card">
+    <div class="card-header">
+      <span class="card-number">7</span>
+      <span class="card-title">Minimal Notch</span>
+      <span class="card-tag">Zen</span>
+    </div>
+    <p class="card-description">Ultra-minimal centered pill. Just a pulsing dot, the time, and a trailing dot cluster. Maximum zen, minimum distraction. The anti-mini-player.</p>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="mini-player mp-notch">
+          <div class="dot"></div>
+          <span class="elapsed">12:45</span>
+          <div class="dot-trail">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-icon"></div><span>Home</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Compose</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Library</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Insights</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. ORB + TEXT -->
+  <div class="concept-card">
+    <div class="card-header">
+      <span class="card-number">8</span>
+      <span class="card-title">Orb + Text</span>
+      <span class="card-tag">Signature</span>
+    </div>
+    <p class="card-description">Larger mini-orb with the session's actual glow. Two-line text (mode + Hz/time). Orb pulses with breathing rhythm. The session's soul in miniature.</p>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="mini-player mp-orb-text">
+          <div class="mini-orb"></div>
+          <div class="text-stack">
+            <span class="mode-name">Focus</span>
+            <div class="sub-info">
+              <span class="hz">14 Hz</span>
+              <span class="separator"></span>
+              <span class="elapsed">12:45</span>
+            </div>
+          </div>
+          <div class="controls">
+            <div class="ctrl-btn"><span class="ctrl-icon">&#10074;&#10074;</span></div>
+            <div class="ctrl-btn"><span class="ctrl-icon">&#9632;</span></div>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-icon"></div><span>Home</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Compose</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Library</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Insights</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. SPECTRUM BAR -->
+  <div class="concept-card">
+    <div class="card-header">
+      <span class="card-number">9</span>
+      <span class="card-title">Spectrum Bar</span>
+      <span class="card-tag">Audio</span>
+    </div>
+    <p class="card-description">Mode icon, info row, and a full-width spectrum visualization below. Each bar represents a frequency band. Feels like a pro audio tool. Science-forward.</p>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="mini-player mp-spectrum">
+          <div class="mode-icon"><span>🧠</span></div>
+          <div class="info">
+            <div class="top-line">
+              <span class="mode-name">Focus</span>
+              <span class="elapsed">12:45</span>
+            </div>
+            <div class="spectrum-bars">
+              <span style="height:3px;animation-delay:0s"></span>
+              <span style="height:5px;animation-delay:0.05s"></span>
+              <span style="height:7px;animation-delay:0.1s"></span>
+              <span style="height:8px;animation-delay:0.15s"></span>
+              <span style="height:7px;animation-delay:0.2s"></span>
+              <span style="height:6px;animation-delay:0.25s"></span>
+              <span style="height:8px;animation-delay:0.3s"></span>
+              <span style="height:7px;animation-delay:0.35s"></span>
+              <span style="height:5px;animation-delay:0.4s"></span>
+              <span style="height:6px;animation-delay:0.45s"></span>
+              <span style="height:8px;animation-delay:0.5s"></span>
+              <span style="height:7px;animation-delay:0.55s"></span>
+              <span style="height:5px;animation-delay:0.6s"></span>
+              <span style="height:6px;animation-delay:0.65s"></span>
+              <span style="height:8px;animation-delay:0.7s"></span>
+              <span style="height:7px;animation-delay:0.75s"></span>
+              <span style="height:5px;animation-delay:0.8s"></span>
+              <span style="height:4px;animation-delay:0.85s"></span>
+              <span style="height:6px;animation-delay:0.9s"></span>
+              <span style="height:7px;animation-delay:0.95s"></span>
+              <span style="height:8px;animation-delay:1s"></span>
+              <span style="height:6px;animation-delay:1.05s"></span>
+              <span style="height:5px;animation-delay:1.1s"></span>
+              <span style="height:7px;animation-delay:1.15s"></span>
+              <span style="height:8px;animation-delay:1.2s"></span>
+              <span style="height:6px;animation-delay:1.25s"></span>
+              <span style="height:5px;animation-delay:1.3s"></span>
+              <span style="height:4px;animation-delay:1.35s"></span>
+              <span style="height:6px;animation-delay:1.4s"></span>
+              <span style="height:7px;animation-delay:1.45s"></span>
+              <span style="height:5px;animation-delay:1.5s"></span>
+              <span style="height:3px;animation-delay:1.55s"></span>
+              <span style="height:5px;animation-delay:1.6s"></span>
+              <span style="height:7px;animation-delay:1.65s"></span>
+              <span style="height:8px;animation-delay:1.7s"></span>
+              <span style="height:6px;animation-delay:1.75s"></span>
+              <span style="height:5px;animation-delay:1.8s"></span>
+              <span style="height:7px;animation-delay:1.85s"></span>
+              <span style="height:6px;animation-delay:1.9s"></span>
+              <span style="height:4px;animation-delay:1.95s"></span>
+            </div>
+          </div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-icon"></div><span>Home</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Compose</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Library</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Insights</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10. BREATHING RING -->
+  <div class="concept-card">
+    <div class="card-header">
+      <span class="card-number">10</span>
+      <span class="card-title">Breathing Ring</span>
+      <span class="card-tag">Wellness</span>
+    </div>
+    <p class="card-description">A ring that expands and contracts with the breathing cadence. Glows with mode color. Sub-label shows current guidance. Deeply calming, uniquely BioNaural.</p>
+    <div class="phone-frame">
+      <div class="phone-screen">
+        <div class="mini-player mp-breathing">
+          <div class="breath-ring"></div>
+          <div class="info">
+            <span class="mode-name">Focus</span>
+            <span class="sub">Breathe in&hellip;</span>
+          </div>
+          <span class="elapsed">12:45</span>
+          <div class="ctrl-btn"><span class="ctrl-icon">&#9632;</span></div>
+        </div>
+        <div class="tab-bar">
+          <div class="tab-item active"><div class="tab-icon"></div><span>Home</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Compose</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Library</span></div>
+          <div class="tab-item"><div class="tab-icon"></div><span>Insights</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>
