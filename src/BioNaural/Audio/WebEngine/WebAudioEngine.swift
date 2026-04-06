@@ -28,7 +28,7 @@ import WebKit
 
 // MARK: - WebAudioEngine
 
-public final class WebAudioEngine: NSObject, WKScriptMessageHandler {
+public final class WebAudioEngine: NSObject, WKScriptMessageHandler, WKNavigationDelegate {
 
     // MARK: - Properties
 
@@ -44,6 +44,10 @@ public final class WebAudioEngine: NSObject, WKScriptMessageHandler {
 
     /// Whether the web engine is currently playing.
     private(set) var isPlaying = false
+
+    /// Base64-encoded SoundFont data to inject after page loads.
+    /// We inject from Swift because JS fetch() can't access file:// on iOS.
+    private var pendingSoundFontBase64: String?
 
     // MARK: - Init
 
@@ -69,29 +73,44 @@ public final class WebAudioEngine: NSObject, WKScriptMessageHandler {
         contentController.add(self, name: "engineStatus")
 
         let wv = WKWebView(frame: CGRect(x: 0, y: 0, width: 1, height: 1), configuration: config)
-        wv.isHidden = true // Not visible — audio only
+        wv.isHidden = true
+        wv.navigationDelegate = self
 
         // WKWebView MUST be in a window hierarchy to execute JS and play audio.
-        // Add it to the key window's root view.
+        var addedToWindow = false
         if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
            let window = windowScene.windows.first {
             window.addSubview(wv)
+            addedToWindow = true
         }
 
-        // Load the bundled HTML+JS engine (files are in Resources root)
+        if !addedToWindow {
+            logger.error("WebEngine: Could not add WKWebView to window hierarchy — JS will not execute")
+        }
+
+        // Load the bundled HTML+JS engine
         guard let bundleURL = Bundle.main.url(forResource: "webengine-index", withExtension: "html") else {
             logger.error("WebEngine HTML not found in app bundle")
             self.webView = wv
             return
         }
 
-        // Allow read access to the entire bundle directory so the JS can
-        // load the SoundFont and engine bundle JS
         let bundleDir = Bundle.main.bundleURL
         wv.loadFileURL(bundleURL, allowingReadAccessTo: bundleDir)
 
         self.webView = wv
-        logger.info("WebAudioEngine setup — HTML loaded from \(bundleURL.lastPathComponent)")
+        logger.info("WebAudioEngine setup — HTML loading, addedToWindow=\(addedToWindow)")
+
+        // After page loads, inject the SoundFont as base64 data.
+        // This bypasses the fetch() file:// restriction on iOS WKWebView.
+        if let sf2URL = Bundle.main.url(forResource: "BioNaural-Melodic", withExtension: "sf2"),
+           let sf2Data = try? Data(contentsOf: sf2URL) {
+            let base64 = sf2Data.base64EncodedString()
+            self.pendingSoundFontBase64 = base64
+            logger.info("WebEngine: SoundFont loaded (\(sf2Data.count) bytes), will inject after page loads")
+        } else {
+            logger.error("WebEngine: BioNaural-Melodic.sf2 not found in bundle!")
+        }
     }
 
     // MARK: - WKScriptMessageHandler
@@ -123,6 +142,46 @@ public final class WebAudioEngine: NSObject, WKScriptMessageHandler {
         default:
             break
         }
+    }
+
+    // MARK: - WKNavigationDelegate
+
+    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        logger.info("WebEngine: Page loaded successfully")
+
+        // Inject the SoundFont as base64 data — bypasses fetch() file:// restriction.
+        if let base64 = pendingSoundFontBase64 {
+            let injectScript = """
+            (async function() {
+                try {
+                    const b64 = "\(base64)";
+                    const binary = atob(b64);
+                    const bytes = new Uint8Array(binary.length);
+                    for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+                    window._injectedSF2 = bytes.buffer;
+                    console.log('[Swift] SoundFont injected: ' + bytes.length + ' bytes');
+                } catch(e) {
+                    console.error('[Swift] SF2 injection failed:', e);
+                }
+            })();
+            """
+            webView.evaluateJavaScript(injectScript) { _, error in
+                if let error {
+                    self.logger.error("SF2 injection failed: \(error.localizedDescription)")
+                } else {
+                    self.logger.info("SF2 data injected into WebView")
+                    self.pendingSoundFontBase64 = nil // Free memory
+                }
+            }
+        }
+    }
+
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        logger.error("WebEngine: Page load FAILED: \(error.localizedDescription)")
+    }
+
+    public func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
+        logger.error("WebEngine: Provisional navigation FAILED: \(error.localizedDescription)")
     }
 
     // MARK: - Public API
