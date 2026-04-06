@@ -54,6 +54,13 @@ public final class AudioEngine: AudioEngineProtocol {
     public private(set) var bassLine: BassLineGenerator?
     public private(set) var drums: DrumPatternGenerator?
 
+    /// WebView-based SpessaSynth engine for genre-aware, beat-locked
+    /// musical content. Replaces native MIDI for all melodic generation.
+    public private(set) var webEngine: WebAudioEngine?
+
+    /// User's selected genre preference (from onboarding or per-session).
+    public var genrePreference: String?
+
     /// Master tonality for the current session. All layers reference this
     /// to ensure harmonic coherence (same key, scale, tempo).
     public private(set) var sessionTonality: SessionTonality?
@@ -141,6 +148,13 @@ public final class AudioEngine: AudioEngineProtocol {
         // -- SF2 generative melodic layer (SoundFont + MIDI) ----------------
         setupSF2Layer()
 
+        // -- WebView audio engine (SpessaSynth + genre-aware patterns) ------
+        let web = WebAudioEngine(parameters: parameters)
+        self.webEngine = web
+        DispatchQueue.main.async {
+            web.setup()
+        }
+
         // -- Output configuration -----------------------------------------
         // Spatial Audio MUST be disabled to preserve stereo binaural beat
         // separation. HRTF processing corrupts the precise L/R frequency
@@ -210,6 +224,15 @@ public final class AudioEngine: AudioEngineProtocol {
 
         // Start drum pattern (Focus/Energize only, locked to session tempo).
         startDrumPattern(tonality: tonality)
+
+        // Start WebView audio engine (SpessaSynth — genre-aware music).
+        // This produces beat-locked, cohesive musical content.
+        webEngine?.start(
+            mode: mode,
+            genre: genrePreference,
+            key: "\(tonality.root)",
+            bpm: tonality.tempo
+        )
 
         // Start volume sync so user slider changes reach player nodes.
         startVolumeSyncTimer()
@@ -313,6 +336,7 @@ public final class AudioEngine: AudioEngineProtocol {
 
         // Stop volume sync and audio layers gracefully.
         stopVolumeSyncTimer()
+        webEngine?.stop()
         drums?.stop()
         bassLine?.stop()
         generativeMIDI?.stop()
@@ -416,6 +440,8 @@ public final class AudioEngine: AudioEngineProtocol {
             if let mv = self?.multiVoice, let params = self?.parameters {
                 mv.syncVolumes(parameters: params)
             }
+            // Sync WebView engine volumes from sliders
+            self?.webEngine?.syncVolumes()
         }
     }
 

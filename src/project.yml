@@ -47,16 +47,21 @@ targets:
       - path: BioNaural
         excludes:
           - "Resources/Sounds/**"
+          - "Resources/WebEngine/**"
+          - "Audio/WebEngine/bundle/**"
     resources:
       - path: BioNaural/Resources
         excludes:
           - "Sounds/**"
+          - "WebEngine/**"
       - path: BioNaural/Resources
         includes:
           - "*.caf"
           - "*.m4a"
         buildPhase: resources
         type: file
+      - path: BioNaural/Resources/WebEngine
+        buildPhase: resources
     dependencies:
       - package: Atomics
       - package: Tonic
