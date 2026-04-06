@@ -623,4 +623,63 @@ final class SessionViewModel {
             sleepCalmAccumulatedSeconds = 0
         }
     }
+
+    // MARK: - Biometric Simulation
+
+    /// Inject a simulated biometric reading as if it came from Apple Watch.
+    /// Used by BiometricSimulatorView for testing adaptive audio responses.
+    func injectSimulatedBiometric(hr: Double, hrv: Double) {
+        // Update displayed values immediately
+        currentHR = hr
+        currentHRV = hrv
+
+        // Classify biometric state from HR
+        let state: BiometricState
+        if hr > 120 { state = .peak }
+        else if hr > 90 { state = .elevated }
+        else if hr > 70 { state = .focused }
+        else { state = .calm }
+        currentState = state
+
+        // Compute normalized HR (Karvonen method)
+        let restingHR: Double = 60
+        let maxHR: Double = 185
+        let hrNormalized = max(0, min(1, (hr - restingHR) / (maxHR - restingHR)))
+
+        // Compute target beat frequency based on mode
+        let beatFreq: Double
+        switch sessionMode {
+        case .sleep:
+            // Theta→Delta: 6→2 Hz, lower HR = lower frequency
+            beatFreq = 6.0 - hrNormalized * 4.0
+        case .relaxation:
+            // Alpha: 8-12 Hz, lower HR = lower (deeper relaxation)
+            beatFreq = 12.0 - hrNormalized * 4.0
+        case .focus:
+            // Beta: 14-18 Hz, negative feedback (HR up → freq down to calm)
+            beatFreq = 18.0 - hrNormalized * 4.0
+        case .energize:
+            // Beta-Gamma: 18-30 Hz, positive feedback (HR up → freq up)
+            beatFreq = 18.0 + hrNormalized * 12.0
+        }
+
+        // Apply to audio parameters
+        audioEngine.parameters.beatFrequency = beatFreq
+        currentBeatFrequency = beatFreq
+
+        // Adjust binaural amplitude based on HRV (higher HRV = deeper state = stronger entrainment)
+        let hrvNormalized = max(0, min(1, hrv / 80.0))
+        audioEngine.parameters.binauralVolume = 0.08 + hrvNormalized * 0.12
+
+        // Adjust melodic density via stem volumes
+        // Higher HR in sleep/relax = increase pad volume (calming)
+        // Higher HR in energize = increase all volumes (positive feedback)
+        if sessionMode == .sleep || sessionMode == .relaxation {
+            audioEngine.parameters.melodicVolume = 0.5 + (1 - hrNormalized) * 0.3
+            audioEngine.parameters.ambientVolume = 0.7 + (1 - hrNormalized) * 0.2
+        } else {
+            audioEngine.parameters.melodicVolume = 0.5 + hrNormalized * 0.3
+            audioEngine.parameters.ambientVolume = 0.6 + hrNormalized * 0.2
+        }
+    }
 }

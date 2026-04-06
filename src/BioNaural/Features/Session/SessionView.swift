@@ -48,6 +48,8 @@ struct SessionView: View {
     @State private var showMixLevels = false
     /// Controls presentation of the session settings sheet.
     @State private var showSessionSettings = false
+    /// Controls presentation of the biometric simulator.
+    @State private var showSimulator = false
     /// Controls presentation of the science sheet.
     @State private var showScience = false
     /// Whether the expanded biometric view is active.
@@ -222,6 +224,9 @@ struct SessionView: View {
         .sheet(isPresented: $showMixLevels) {
             mixLevelsSheet
         }
+        .sheet(isPresented: $showSimulator) {
+            BiometricSimulatorView(viewModel: viewModel)
+        }
         .sheet(isPresented: $showSessionSettings) {
             sessionSettingsSheet
         }
@@ -293,6 +298,12 @@ extension SessionView {
                     showMixLevels = true
                 } label: {
                     Label("Mix Levels", systemImage: "slider.horizontal.3")
+                }
+
+                Button {
+                    showSimulator = true
+                } label: {
+                    Label("Biometric Simulator", systemImage: "waveform.path.ecg")
                 }
 
                 Button {
