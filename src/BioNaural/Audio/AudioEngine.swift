@@ -430,6 +430,9 @@ public final class AudioEngine: AudioEngineProtocol {
     /// Uses SF2MelodicRenderer (AVAudioUnitSampler) to render notes
     /// produced by GenerativeMIDIEngine using Tonic-powered ScaleMapper.
     private func setupSF2Layer() {
+        // Only create once — reuse across session starts.
+        guard sf2Renderer == nil else { return }
+
         guard let sf2URL = Bundle.main.url(
             forResource: Theme.SF2.resourceName,
             withExtension: Theme.SF2.resourceExtension
@@ -438,22 +441,22 @@ public final class AudioEngine: AudioEngineProtocol {
             return
         }
 
-        // Create legacy single-voice renderer (for backward compat)
+        // Create single-voice renderer for melody (GenerativeMIDIEngine uses this)
         let renderer = SF2MelodicRenderer(engine: engine, parameters: parameters)
         do {
             try renderer.setup(sf2URL: sf2URL, presetIndex: Theme.SF2.PresetIndex.focusPad)
             self.sf2Renderer = renderer
         } catch {
-            Logger.audio.error("SF2 single-voice setup failed: \(error.localizedDescription)")
+            Logger.audio.error("SF2 setup failed: \(error.localizedDescription)")
+            return
         }
 
-        // Create multi-voice renderer (melody + bass + drums, each with own sampler)
+        // Create multi-voice renderer (separate samplers for melody, bass, drums)
         let mv = MultiVoiceRenderer(engine: engine)
         engine.connect(mv.outputNode, to: engine.mainMixerNode, format: nil)
         self.multiVoice = mv
 
-        // GenerativeMIDIEngine uses the melody voice from multi-voice renderer
-        // (still needs SF2MelodicRenderer interface — we wrap the melody voice)
+        // GenerativeMIDIEngine drives the melody voice
         let midi = GenerativeMIDIEngine(renderer: renderer, parameters: parameters)
         self.generativeMIDI = midi
 

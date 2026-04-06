@@ -127,42 +127,30 @@ public final class BassLineGenerator: @unchecked Sendable {
 
     /// Mode-specific bass patterns using the session tonality's scale.
     /// All notes are guaranteed to be in the session's key/scale.
-    /// Focus: steady root on beats 1 & 3 (stable foundation)
-    /// Energize: syncopated root-5th-octave (driving forward motion)
+    /// Focus: steady root on beats 1 & 3 (stable, minimal)
+    /// Energize: root-fifth on downbeats (solid groove, not busy)
     private func bassNoteForPattern(tonality: SessionTonality) -> UInt8 {
-        // Use the chord root from the current chord progression (updated by GenerativeMIDIEngine)
-        // Fall back to tonality root in octave 2
+        // Use the chord root from the current chord progression
         let rootNote = currentChordRoot > 0 ? currentChordRoot : tonality.rootMIDI(octave: 2)
 
-        // Get scale-valid notes in bass range for passing tones
+        // Get scale-valid notes in bass range
         let bassNotes = tonality.validNotes(octaveRange: 1...3)
         let fifth = closestNote(to: Int(rootNote) + 7, in: bassNotes)
-        let fourth = closestNote(to: Int(rootNote) + 5, in: bassNotes)
-        let octaveUp = closestNote(to: Int(rootNote) + 12, in: bassNotes)
 
         switch tonality.mode {
         case .focus:
-            // Simple root-fifth pattern. Steady, non-distracting.
-            let step = patternStep % 4
-            switch step {
-            case 0, 2: return rootNote              // Root on beats 1 & 3
-            case 1:    return fifth                  // 5th (in scale)
-            case 3:    return rootNote               // Root again
-            default:   return rootNote
-            }
+            // Just root notes on beats 1 and 3. Simple and steady.
+            return rootNote
 
         case .energize:
-            // Syncopated root-5th-octave pattern (in scale)
-            let step = patternStep % 8
+            // Root on beat 1, fifth on beat 3. Simple, solid groove.
+            // No busy 8th-note patterns — let the drums handle rhythm.
+            let step = patternStep % 4
             switch step {
-            case 0:    return rootNote               // Root (downbeat)
-            case 1:    return rootNote               // Root (hold)
-            case 2:    return fifth                   // 5th (in scale)
-            case 3:    return octaveUp               // Octave up
-            case 4:    return fifth                   // 5th
-            case 5:    return rootNote               // Root
-            case 6:    return fourth                  // 4th (in scale, approach)
-            case 7:    return fifth                   // 5th (resolve)
+            case 0:    return rootNote          // Beat 1: root
+            case 1:    return rootNote          // Beat 2: root (sustain)
+            case 2:    return fifth              // Beat 3: fifth
+            case 3:    return rootNote          // Beat 4: root (resolve back)
             default:   return rootNote
             }
 
@@ -180,13 +168,13 @@ public final class BassLineGenerator: @unchecked Sendable {
     private func bassNoteInterval(tonality: SessionTonality) -> TimeInterval {
         switch tonality.mode {
         case .focus:
-            // Half notes (beats 1 & 3) at session tempo
-            return tonality.beatDuration * 2.0
+            // Whole notes — one bass note per bar (minimal, non-distracting)
+            return tonality.barDuration
         case .energize:
-            // Eighth notes for syncopated feel
-            return tonality.beatDuration * 0.5
-        default:
+            // Quarter notes — one note per beat (solid groove, not busy)
             return tonality.beatDuration
+        default:
+            return tonality.barDuration
         }
     }
 
@@ -201,16 +189,14 @@ public final class BassLineGenerator: @unchecked Sendable {
     private func bassDuration(tonality: SessionTonality) -> TimeInterval {
         switch tonality.mode {
         case .focus:
-            // Sustained notes — nearly legato, warm foundation
-            return tonality.beatDuration * 1.8
+            // Whole-bar sustain — warm, continuous foundation
+            return tonality.barDuration * 0.9
         case .energize:
-            // Full, resonant bass notes — NOT short clicks.
-            // Duration covers most of the note interval so notes connect.
-            // At 120 BPM with 8th-note pattern: beatDuration = 0.5s,
-            // interval = 0.25s, so duration = 0.9 × 0.5 = 0.45s (resonant)
-            return tonality.beatDuration * 0.9
+            // Nearly legato quarter notes — sustain almost to the next note.
+            // At 120 BPM: beatDuration=0.5s, duration=0.45s (smooth, connected)
+            return tonality.beatDuration * 0.85
         default:
-            return tonality.beatDuration * 1.5
+            return tonality.barDuration * 0.9
         }
     }
 }
