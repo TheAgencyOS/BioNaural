@@ -1,0 +1,341 @@
+{
+  "genre": "rock",
+  "mode": "sleep",
+  "tracks": [
+    {
+      "name": "Overdriven Lead Guitar",
+      "program": 29,
+      "role": "melody",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 52,
+          "velocity": 42,
+          "startTime": 0,
+          "duration": 3.2
+        },
+        {
+          "note": 50,
+          "velocity": 38,
+          "startTime": 3.4,
+          "duration": 2.0
+        },
+        {
+          "note": 48,
+          "velocity": 44,
+          "startTime": 5.6,
+          "duration": 4.8
+        },
+        {
+          "note": 45,
+          "velocity": 40,
+          "startTime": 10.6,
+          "duration": 2.4
+        },
+        {
+          "note": 48,
+          "velocity": 43,
+          "startTime": 13.2,
+          "duration": 3.6
+        },
+        {
+          "note": 50,
+          "velocity": 45,
+          "startTime": 17.0,
+          "duration": 2.8
+        },
+        {
+          "note": 52,
+          "velocity": 50,
+          "startTime": 20.0,
+          "duration": 5.6
+        },
+        {
+          "note": 48,
+          "velocity": 42,
+          "startTime": 26.0,
+          "duration": 2.2
+        },
+        {
+          "note": 45,
+          "velocity": 38,
+          "startTime": 28.4,
+          "duration": 3.8
+        },
+        {
+          "note": 43,
+          "velocity": 44,
+          "startTime": 32.4,
+          "duration": 6.0
+        },
+        {
+          "note": 45,
+          "velocity": 40,
+          "startTime": 38.6,
+          "duration": 2.4
+        },
+        {
+          "note": 48,
+          "velocity": 46,
+          "startTime": 41.2,
+          "duration": 3.2
+        },
+        {
+          "note": 50,
+          "velocity": 43,
+          "startTime": 44.6,
+          "duration": 2.6
+        },
+        {
+          "note": 52,
+          "velocity": 48,
+          "startTime": 47.4,
+          "duration": 4.0
+        },
+        {
+          "note": 48,
+          "velocity": 36,
+          "startTime": 51.6,
+          "duration": 4.2
+        }
+      ]
+    },
+    {
+      "name": "Electric Bass",
+      "program": 33,
+      "role": "bass",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 28,
+          "velocity": 50,
+          "startTime": 0.1,
+          "duration": 5.6
+        },
+        {
+          "note": 28,
+          "velocity": 48,
+          "startTime": 6.0,
+          "duration": 5.4
+        },
+        {
+          "note": 33,
+          "velocity": 52,
+          "startTime": 12.0,
+          "duration": 5.6
+        },
+        {
+          "note": 31,
+          "velocity": 50,
+          "startTime": 18.0,
+          "duration": 5.8
+        },
+        {
+          "note": 28,
+          "velocity": 51,
+          "startTime": 24.0,
+          "duration": 5.6
+        },
+        {
+          "note": 28,
+          "velocity": 48,
+          "startTime": 30.0,
+          "duration": 5.4
+        },
+        {
+          "note": 33,
+          "velocity": 52,
+          "startTime": 36.0,
+          "duration": 5.6
+        },
+        {
+          "note": 31,
+          "velocity": 50,
+          "startTime": 42.0,
+          "duration": 5.8
+        },
+        {
+          "note": 28,
+          "velocity": 46,
+          "startTime": 48.0,
+          "duration": 7.8
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Chords",
+      "program": 89,
+      "role": "chords",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 40,
+          "velocity": 44,
+          "startTime": 0.2,
+          "duration": 11.4
+        },
+        {
+          "note": 43,
+          "velocity": 42,
+          "startTime": 0.2,
+          "duration": 11.4
+        },
+        {
+          "note": 47,
+          "velocity": 40,
+          "startTime": 0.2,
+          "duration": 11.4
+        },
+        {
+          "note": 52,
+          "velocity": 38,
+          "startTime": 0.2,
+          "duration": 11.4
+        },
+        {
+          "note": 45,
+          "velocity": 44,
+          "startTime": 12.0,
+          "duration": 11.6
+        },
+        {
+          "note": 48,
+          "velocity": 42,
+          "startTime": 12.0,
+          "duration": 11.6
+        },
+        {
+          "note": 52,
+          "velocity": 40,
+          "startTime": 12.0,
+          "duration": 11.6
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 12.0,
+          "duration": 11.6
+        },
+        {
+          "note": 43,
+          "velocity": 44,
+          "startTime": 24.0,
+          "duration": 11.4
+        },
+        {
+          "note": 46,
+          "velocity": 42,
+          "startTime": 24.0,
+          "duration": 11.4
+        },
+        {
+          "note": 50,
+          "velocity": 40,
+          "startTime": 24.0,
+          "duration": 11.4
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 24.0,
+          "duration": 11.4
+        },
+        {
+          "note": 45,
+          "velocity": 44,
+          "startTime": 36.0,
+          "duration": 11.6
+        },
+        {
+          "note": 48,
+          "velocity": 42,
+          "startTime": 36.0,
+          "duration": 11.6
+        },
+        {
+          "note": 52,
+          "velocity": 40,
+          "startTime": 36.0,
+          "duration": 11.6
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 36.0,
+          "duration": 11.6
+        },
+        {
+          "note": 40,
+          "velocity": 40,
+          "startTime": 48.0,
+          "duration": 7.8
+        },
+        {
+          "note": 43,
+          "velocity": 38,
+          "startTime": 48.0,
+          "duration": 7.8
+        },
+        {
+          "note": 47,
+          "velocity": 36,
+          "startTime": 48.0,
+          "duration": 7.8
+        },
+        {
+          "note": 52,
+          "velocity": 34,
+          "startTime": 48.0,
+          "duration": 7.8
+        }
+      ]
+    },
+    {
+      "name": "Distortion Texture",
+      "program": 30,
+      "role": "texture",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 40,
+          "velocity": 30,
+          "startTime": 0.4,
+          "duration": 23.0
+        },
+        {
+          "note": 47,
+          "velocity": 28,
+          "startTime": 0.4,
+          "duration": 23.0
+        },
+        {
+          "note": 45,
+          "velocity": 30,
+          "startTime": 24.2,
+          "duration": 23.0
+        },
+        {
+          "note": 52,
+          "velocity": 28,
+          "startTime": 24.2,
+          "duration": 23.0
+        },
+        {
+          "note": 40,
+          "velocity": 26,
+          "startTime": 48.2,
+          "duration": 7.6
+        },
+        {
+          "note": 47,
+          "velocity": 24,
+          "startTime": 48.2,
+          "duration": 7.6
+        }
+      ]
+    }
+  ],
+  "key": "Em",
+  "bpm": 48,
+  "scale": "natural minor"
+}

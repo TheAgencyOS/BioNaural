@@ -1,0 +1,353 @@
+{
+  "genre": "hiphop",
+  "mode": "sleep",
+  "tracks": [
+    {
+      "name": "Vibraphone Melody",
+      "program": 11,
+      "role": "melody",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 60,
+          "velocity": 52,
+          "startTime": 2.05,
+          "duration": 1.8
+        },
+        {
+          "note": 63,
+          "velocity": 48,
+          "startTime": 4.12,
+          "duration": 2.4
+        },
+        {
+          "note": 65,
+          "velocity": 45,
+          "startTime": 7.08,
+          "duration": 1.5
+        },
+        {
+          "note": 63,
+          "velocity": 50,
+          "startTime": 9.55,
+          "duration": 3.2
+        },
+        {
+          "note": 58,
+          "velocity": 42,
+          "startTime": 13.2,
+          "duration": 2.1
+        },
+        {
+          "note": 60,
+          "velocity": 50,
+          "startTime": 16.07,
+          "duration": 1.7
+        },
+        {
+          "note": 63,
+          "velocity": 47,
+          "startTime": 18.1,
+          "duration": 2.6
+        },
+        {
+          "note": 65,
+          "velocity": 44,
+          "startTime": 21.05,
+          "duration": 1.4
+        },
+        {
+          "note": 63,
+          "velocity": 52,
+          "startTime": 23.58,
+          "duration": 3.5
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 27.6,
+          "duration": 2.2
+        },
+        {
+          "note": 56,
+          "velocity": 38,
+          "startTime": 30.9,
+          "duration": 3.8
+        },
+        {
+          "note": 58,
+          "velocity": 46,
+          "startTime": 35.14,
+          "duration": 1.9
+        },
+        {
+          "note": 60,
+          "velocity": 51,
+          "startTime": 37.8,
+          "duration": 2.0
+        },
+        {
+          "note": 63,
+          "velocity": 48,
+          "startTime": 40.06,
+          "duration": 2.5
+        },
+        {
+          "note": 65,
+          "velocity": 44,
+          "startTime": 43.12,
+          "duration": 1.6
+        },
+        {
+          "note": 63,
+          "velocity": 50,
+          "startTime": 45.55,
+          "duration": 3.1
+        },
+        {
+          "note": 60,
+          "velocity": 43,
+          "startTime": 49.8,
+          "duration": 2.3
+        },
+        {
+          "note": 58,
+          "velocity": 38,
+          "startTime": 53.1,
+          "duration": 4.5
+        }
+      ]
+    },
+    {
+      "name": "Electric Piano Chords",
+      "program": 4,
+      "role": "chords",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 48,
+          "velocity": 44,
+          "startTime": 0,
+          "duration": 10.8
+        },
+        {
+          "note": 55,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 10.8
+        },
+        {
+          "note": 60,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 10.8
+        },
+        {
+          "note": 63,
+          "velocity": 36,
+          "startTime": 0,
+          "duration": 10.8
+        },
+        {
+          "note": 44,
+          "velocity": 43,
+          "startTime": 11.0,
+          "duration": 10.5
+        },
+        {
+          "note": 51,
+          "velocity": 39,
+          "startTime": 11.0,
+          "duration": 10.5
+        },
+        {
+          "note": 56,
+          "velocity": 37,
+          "startTime": 11.0,
+          "duration": 10.5
+        },
+        {
+          "note": 60,
+          "velocity": 35,
+          "startTime": 11.0,
+          "duration": 10.5
+        },
+        {
+          "note": 46,
+          "velocity": 43,
+          "startTime": 21.7,
+          "duration": 10.8
+        },
+        {
+          "note": 53,
+          "velocity": 39,
+          "startTime": 21.7,
+          "duration": 10.8
+        },
+        {
+          "note": 58,
+          "velocity": 37,
+          "startTime": 21.7,
+          "duration": 10.8
+        },
+        {
+          "note": 62,
+          "velocity": 35,
+          "startTime": 21.7,
+          "duration": 10.8
+        },
+        {
+          "note": 48,
+          "velocity": 44,
+          "startTime": 32.7,
+          "duration": 11.0
+        },
+        {
+          "note": 55,
+          "velocity": 40,
+          "startTime": 32.7,
+          "duration": 11.0
+        },
+        {
+          "note": 60,
+          "velocity": 38,
+          "startTime": 32.7,
+          "duration": 11.0
+        },
+        {
+          "note": 63,
+          "velocity": 36,
+          "startTime": 32.7,
+          "duration": 11.0
+        },
+        {
+          "note": 44,
+          "velocity": 42,
+          "startTime": 43.9,
+          "duration": 12.1
+        },
+        {
+          "note": 51,
+          "velocity": 38,
+          "startTime": 43.9,
+          "duration": 12.1
+        },
+        {
+          "note": 56,
+          "velocity": 36,
+          "startTime": 43.9,
+          "duration": 12.1
+        },
+        {
+          "note": 60,
+          "velocity": 34,
+          "startTime": 43.9,
+          "duration": 12.1
+        }
+      ]
+    },
+    {
+      "name": "Synth Sub Bass",
+      "program": 38,
+      "role": "bass",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 36,
+          "velocity": 52,
+          "startTime": 0.05,
+          "duration": 10.6
+        },
+        {
+          "note": 32,
+          "velocity": 50,
+          "startTime": 11.1,
+          "duration": 10.3
+        },
+        {
+          "note": 34,
+          "velocity": 51,
+          "startTime": 21.8,
+          "duration": 10.6
+        },
+        {
+          "note": 36,
+          "velocity": 53,
+          "startTime": 32.8,
+          "duration": 10.8
+        },
+        {
+          "note": 32,
+          "velocity": 49,
+          "startTime": 43.95,
+          "duration": 11.8
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Texture",
+      "program": 89,
+      "role": "texture",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 48,
+          "velocity": 30,
+          "startTime": 0,
+          "duration": 22.0
+        },
+        {
+          "note": 55,
+          "velocity": 27,
+          "startTime": 0,
+          "duration": 22.0
+        },
+        {
+          "note": 60,
+          "velocity": 25,
+          "startTime": 0,
+          "duration": 22.0
+        },
+        {
+          "note": 46,
+          "velocity": 30,
+          "startTime": 21.5,
+          "duration": 22.5
+        },
+        {
+          "note": 53,
+          "velocity": 27,
+          "startTime": 21.5,
+          "duration": 22.5
+        },
+        {
+          "note": 58,
+          "velocity": 25,
+          "startTime": 21.5,
+          "duration": 22.5
+        },
+        {
+          "note": 48,
+          "velocity": 28,
+          "startTime": 43.8,
+          "duration": 12.2
+        },
+        {
+          "note": 55,
+          "velocity": 25,
+          "startTime": 43.8,
+          "duration": 12.2
+        },
+        {
+          "note": 60,
+          "velocity": 23,
+          "startTime": 43.8,
+          "duration": 12.2
+        }
+      ]
+    }
+  ],
+  "key": "Cm",
+  "bpm": 48,
+  "scale": "minor pentatonic"
+}

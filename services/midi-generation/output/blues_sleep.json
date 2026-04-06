@@ -1,0 +1,395 @@
+{
+  "genre": "blues",
+  "mode": "sleep",
+  "tracks": [
+    {
+      "name": "Steel Guitar Melody",
+      "program": 25,
+      "role": "melody",
+      "totalDuration": 56.0,
+      "notes": [
+        {
+          "note": 52,
+          "velocity": 42,
+          "startTime": 2.1,
+          "duration": 3.2
+        },
+        {
+          "note": 50,
+          "velocity": 38,
+          "startTime": 5.5,
+          "duration": 2.8
+        },
+        {
+          "note": 48,
+          "velocity": 35,
+          "startTime": 8.6,
+          "duration": 4.1
+        },
+        {
+          "note": 52,
+          "velocity": 44,
+          "startTime": 14.2,
+          "duration": 3.0
+        },
+        {
+          "note": 53,
+          "velocity": 40,
+          "startTime": 17.5,
+          "duration": 2.5
+        },
+        {
+          "note": 52,
+          "velocity": 36,
+          "startTime": 20.3,
+          "duration": 5.0
+        },
+        {
+          "note": 55,
+          "velocity": 46,
+          "startTime": 27.0,
+          "duration": 3.4
+        },
+        {
+          "note": 53,
+          "velocity": 43,
+          "startTime": 30.7,
+          "duration": 2.9
+        },
+        {
+          "note": 52,
+          "velocity": 39,
+          "startTime": 33.9,
+          "duration": 4.6
+        },
+        {
+          "note": 52,
+          "velocity": 42,
+          "startTime": 40.1,
+          "duration": 3.1
+        },
+        {
+          "note": 50,
+          "velocity": 37,
+          "startTime": 43.5,
+          "duration": 2.7
+        },
+        {
+          "note": 48,
+          "velocity": 33,
+          "startTime": 46.5,
+          "duration": 7.2
+        }
+      ]
+    },
+    {
+      "name": "Walking Bass",
+      "program": 33,
+      "role": "bass",
+      "totalDuration": 56.0,
+      "notes": [
+        {
+          "note": 40,
+          "velocity": 50,
+          "startTime": 0,
+          "duration": 2.8
+        },
+        {
+          "note": 43,
+          "velocity": 45,
+          "startTime": 3.1,
+          "duration": 2.6
+        },
+        {
+          "note": 45,
+          "velocity": 48,
+          "startTime": 6.0,
+          "duration": 2.9
+        },
+        {
+          "note": 44,
+          "velocity": 43,
+          "startTime": 9.1,
+          "duration": 2.7
+        },
+        {
+          "note": 45,
+          "velocity": 50,
+          "startTime": 12.2,
+          "duration": 2.8
+        },
+        {
+          "note": 48,
+          "velocity": 45,
+          "startTime": 15.3,
+          "duration": 2.6
+        },
+        {
+          "note": 50,
+          "velocity": 47,
+          "startTime": 18.2,
+          "duration": 2.9
+        },
+        {
+          "note": 49,
+          "velocity": 42,
+          "startTime": 21.3,
+          "duration": 2.7
+        },
+        {
+          "note": 47,
+          "velocity": 52,
+          "startTime": 24.4,
+          "duration": 2.8
+        },
+        {
+          "note": 50,
+          "velocity": 47,
+          "startTime": 27.5,
+          "duration": 2.7
+        },
+        {
+          "note": 45,
+          "velocity": 49,
+          "startTime": 30.5,
+          "duration": 2.8
+        },
+        {
+          "note": 44,
+          "velocity": 44,
+          "startTime": 33.6,
+          "duration": 2.6
+        },
+        {
+          "note": 40,
+          "velocity": 50,
+          "startTime": 36.6,
+          "duration": 2.8
+        },
+        {
+          "note": 43,
+          "velocity": 45,
+          "startTime": 39.7,
+          "duration": 2.7
+        },
+        {
+          "note": 45,
+          "velocity": 47,
+          "startTime": 42.7,
+          "duration": 2.9
+        },
+        {
+          "note": 44,
+          "velocity": 42,
+          "startTime": 45.8,
+          "duration": 2.7
+        },
+        {
+          "note": 40,
+          "velocity": 38,
+          "startTime": 48.8,
+          "duration": 7.2
+        }
+      ]
+    },
+    {
+      "name": "Piano Chord Pads",
+      "program": 0,
+      "role": "chords",
+      "totalDuration": 56.0,
+      "notes": [
+        {
+          "note": 40,
+          "velocity": 38,
+          "startTime": 0.2,
+          "duration": 11.5
+        },
+        {
+          "note": 44,
+          "velocity": 35,
+          "startTime": 0.2,
+          "duration": 11.5
+        },
+        {
+          "note": 47,
+          "velocity": 33,
+          "startTime": 0.2,
+          "duration": 11.5
+        },
+        {
+          "note": 50,
+          "velocity": 30,
+          "startTime": 0.2,
+          "duration": 11.5
+        },
+        {
+          "note": 45,
+          "velocity": 38,
+          "startTime": 12.2,
+          "duration": 11.5
+        },
+        {
+          "note": 49,
+          "velocity": 35,
+          "startTime": 12.2,
+          "duration": 11.5
+        },
+        {
+          "note": 52,
+          "velocity": 33,
+          "startTime": 12.2,
+          "duration": 11.5
+        },
+        {
+          "note": 55,
+          "velocity": 30,
+          "startTime": 12.2,
+          "duration": 11.5
+        },
+        {
+          "note": 47,
+          "velocity": 40,
+          "startTime": 24.4,
+          "duration": 5.8
+        },
+        {
+          "note": 51,
+          "velocity": 37,
+          "startTime": 24.4,
+          "duration": 5.8
+        },
+        {
+          "note": 54,
+          "velocity": 35,
+          "startTime": 24.4,
+          "duration": 5.8
+        },
+        {
+          "note": 57,
+          "velocity": 32,
+          "startTime": 24.4,
+          "duration": 5.8
+        },
+        {
+          "note": 45,
+          "velocity": 38,
+          "startTime": 30.5,
+          "duration": 5.8
+        },
+        {
+          "note": 49,
+          "velocity": 35,
+          "startTime": 30.5,
+          "duration": 5.8
+        },
+        {
+          "note": 52,
+          "velocity": 33,
+          "startTime": 30.5,
+          "duration": 5.8
+        },
+        {
+          "note": 55,
+          "velocity": 30,
+          "startTime": 30.5,
+          "duration": 5.8
+        },
+        {
+          "note": 40,
+          "velocity": 36,
+          "startTime": 36.6,
+          "duration": 11.5
+        },
+        {
+          "note": 44,
+          "velocity": 33,
+          "startTime": 36.6,
+          "duration": 11.5
+        },
+        {
+          "note": 47,
+          "velocity": 31,
+          "startTime": 36.6,
+          "duration": 11.5
+        },
+        {
+          "note": 50,
+          "velocity": 28,
+          "startTime": 36.6,
+          "duration": 11.5
+        },
+        {
+          "note": 40,
+          "velocity": 30,
+          "startTime": 48.8,
+          "duration": 7.0
+        },
+        {
+          "note": 44,
+          "velocity": 27,
+          "startTime": 48.8,
+          "duration": 7.0
+        },
+        {
+          "note": 47,
+          "velocity": 25,
+          "startTime": 48.8,
+          "duration": 7.0
+        },
+        {
+          "note": 50,
+          "velocity": 22,
+          "startTime": 48.8,
+          "duration": 7.0
+        }
+      ]
+    },
+    {
+      "name": "Organ Texture",
+      "program": 16,
+      "role": "texture",
+      "totalDuration": 56.0,
+      "notes": [
+        {
+          "note": 36,
+          "velocity": 28,
+          "startTime": 0.5,
+          "duration": 24.0
+        },
+        {
+          "note": 40,
+          "velocity": 24,
+          "startTime": 0.5,
+          "duration": 24.0
+        },
+        {
+          "note": 41,
+          "velocity": 28,
+          "startTime": 25.0,
+          "duration": 11.0
+        },
+        {
+          "note": 45,
+          "velocity": 24,
+          "startTime": 25.0,
+          "duration": 11.0
+        },
+        {
+          "note": 36,
+          "velocity": 26,
+          "startTime": 36.8,
+          "duration": 18.5
+        },
+        {
+          "note": 40,
+          "velocity": 22,
+          "startTime": 36.8,
+          "duration": 18.5
+        }
+      ]
+    }
+  ],
+  "key": "E",
+  "bpm": 46,
+  "scale": "blues pentatonic"
+}

@@ -1,0 +1,347 @@
+{
+  "genre": "lofi",
+  "mode": "sleep",
+  "tracks": [
+    {
+      "name": "Vibraphone Melody",
+      "program": 11,
+      "role": "melody",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 65,
+          "velocity": 48,
+          "startTime": 2.05,
+          "duration": 2.8
+        },
+        {
+          "note": 64,
+          "velocity": 44,
+          "startTime": 5.1,
+          "duration": 1.6
+        },
+        {
+          "note": 62,
+          "velocity": 42,
+          "startTime": 7.0,
+          "duration": 3.2
+        },
+        {
+          "note": 60,
+          "velocity": 46,
+          "startTime": 10.55,
+          "duration": 4.5
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 16.08,
+          "duration": 2.4
+        },
+        {
+          "note": 65,
+          "velocity": 46,
+          "startTime": 19.2,
+          "duration": 1.8
+        },
+        {
+          "note": 64,
+          "velocity": 43,
+          "startTime": 21.35,
+          "duration": 2.6
+        },
+        {
+          "note": 62,
+          "velocity": 48,
+          "startTime": 24.1,
+          "duration": 4.8
+        },
+        {
+          "note": 65,
+          "velocity": 47,
+          "startTime": 30.05,
+          "duration": 2.9
+        },
+        {
+          "note": 64,
+          "velocity": 43,
+          "startTime": 33.2,
+          "duration": 1.7
+        },
+        {
+          "note": 65,
+          "velocity": 45,
+          "startTime": 35.4,
+          "duration": 1.4
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 37.15,
+          "duration": 3.0
+        },
+        {
+          "note": 65,
+          "velocity": 44,
+          "startTime": 40.6,
+          "duration": 5.2
+        },
+        {
+          "note": 65,
+          "velocity": 46,
+          "startTime": 47.05,
+          "duration": 2.6
+        },
+        {
+          "note": 64,
+          "velocity": 41,
+          "startTime": 50.2,
+          "duration": 2.0
+        },
+        {
+          "note": 62,
+          "velocity": 40,
+          "startTime": 52.8,
+          "duration": 4.8
+        }
+      ]
+    },
+    {
+      "name": "Rhodes Bass",
+      "program": 4,
+      "role": "bass",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 41,
+          "velocity": 62,
+          "startTime": 0.05,
+          "duration": 7.5
+        },
+        {
+          "note": 38,
+          "velocity": 60,
+          "startTime": 8.05,
+          "duration": 7.5
+        },
+        {
+          "note": 43,
+          "velocity": 63,
+          "startTime": 16.08,
+          "duration": 7.5
+        },
+        {
+          "note": 41,
+          "velocity": 61,
+          "startTime": 24.1,
+          "duration": 7.5
+        },
+        {
+          "note": 41,
+          "velocity": 60,
+          "startTime": 32.05,
+          "duration": 7.5
+        },
+        {
+          "note": 38,
+          "velocity": 58,
+          "startTime": 40.08,
+          "duration": 7.5
+        },
+        {
+          "note": 43,
+          "velocity": 62,
+          "startTime": 48.08,
+          "duration": 7.8
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Chords",
+      "program": 89,
+      "role": "chords",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 53,
+          "velocity": 45,
+          "startTime": 0.1,
+          "duration": 15.5
+        },
+        {
+          "note": 57,
+          "velocity": 43,
+          "startTime": 0.1,
+          "duration": 15.5
+        },
+        {
+          "note": 60,
+          "velocity": 42,
+          "startTime": 0.1,
+          "duration": 15.5
+        },
+        {
+          "note": 64,
+          "velocity": 40,
+          "startTime": 0.1,
+          "duration": 15.5
+        },
+        {
+          "note": 50,
+          "velocity": 45,
+          "startTime": 16.1,
+          "duration": 15.5
+        },
+        {
+          "note": 53,
+          "velocity": 43,
+          "startTime": 16.1,
+          "duration": 15.5
+        },
+        {
+          "note": 57,
+          "velocity": 42,
+          "startTime": 16.1,
+          "duration": 15.5
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 16.1,
+          "duration": 15.5
+        },
+        {
+          "note": 53,
+          "velocity": 44,
+          "startTime": 32.1,
+          "duration": 15.5
+        },
+        {
+          "note": 57,
+          "velocity": 42,
+          "startTime": 32.1,
+          "duration": 15.5
+        },
+        {
+          "note": 60,
+          "velocity": 41,
+          "startTime": 32.1,
+          "duration": 15.5
+        },
+        {
+          "note": 64,
+          "velocity": 39,
+          "startTime": 32.1,
+          "duration": 15.5
+        },
+        {
+          "note": 50,
+          "velocity": 43,
+          "startTime": 48.1,
+          "duration": 8.0
+        },
+        {
+          "note": 53,
+          "velocity": 41,
+          "startTime": 48.1,
+          "duration": 8.0
+        },
+        {
+          "note": 57,
+          "velocity": 40,
+          "startTime": 48.1,
+          "duration": 8.0
+        },
+        {
+          "note": 60,
+          "velocity": 38,
+          "startTime": 48.1,
+          "duration": 8.0
+        }
+      ]
+    },
+    {
+      "name": "Ambient Piano Texture",
+      "program": 0,
+      "role": "texture",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 48,
+          "velocity": 35,
+          "startTime": 3.55,
+          "duration": 6.0
+        },
+        {
+          "note": 52,
+          "velocity": 33,
+          "startTime": 3.55,
+          "duration": 6.0
+        },
+        {
+          "note": 55,
+          "velocity": 32,
+          "startTime": 3.55,
+          "duration": 6.0
+        },
+        {
+          "note": 45,
+          "velocity": 36,
+          "startTime": 19.6,
+          "duration": 6.5
+        },
+        {
+          "note": 48,
+          "velocity": 34,
+          "startTime": 19.6,
+          "duration": 6.5
+        },
+        {
+          "note": 52,
+          "velocity": 32,
+          "startTime": 19.6,
+          "duration": 6.5
+        },
+        {
+          "note": 48,
+          "velocity": 34,
+          "startTime": 35.7,
+          "duration": 6.0
+        },
+        {
+          "note": 52,
+          "velocity": 32,
+          "startTime": 35.7,
+          "duration": 6.0
+        },
+        {
+          "note": 55,
+          "velocity": 31,
+          "startTime": 35.7,
+          "duration": 6.0
+        },
+        {
+          "note": 45,
+          "velocity": 33,
+          "startTime": 51.2,
+          "duration": 5.5
+        },
+        {
+          "note": 48,
+          "velocity": 31,
+          "startTime": 51.2,
+          "duration": 5.5
+        },
+        {
+          "note": 52,
+          "velocity": 30,
+          "startTime": 51.2,
+          "duration": 5.5
+        }
+      ]
+    }
+  ],
+  "key": "F",
+  "bpm": 48,
+  "scale": "dorian"
+}

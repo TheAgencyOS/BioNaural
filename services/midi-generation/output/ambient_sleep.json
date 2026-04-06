@@ -1,0 +1,215 @@
+{
+  "genre": "ambient",
+  "mode": "sleep",
+  "tracks": [
+    {
+      "name": "Melody \u2014 New Age Pad",
+      "program": 88,
+      "role": "melody",
+      "totalDuration": 60,
+      "notes": [
+        {
+          "note": 65,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 7.2
+        },
+        {
+          "note": 62,
+          "velocity": 32,
+          "startTime": 8.1,
+          "duration": 6.8
+        },
+        {
+          "note": 67,
+          "velocity": 40,
+          "startTime": 16.3,
+          "duration": 8.0
+        },
+        {
+          "note": 65,
+          "velocity": 35,
+          "startTime": 25.6,
+          "duration": 6.5
+        },
+        {
+          "note": 60,
+          "velocity": 30,
+          "startTime": 33.4,
+          "duration": 7.8
+        },
+        {
+          "note": 62,
+          "velocity": 36,
+          "startTime": 42.5,
+          "duration": 7.0
+        },
+        {
+          "note": 65,
+          "velocity": 33,
+          "startTime": 51.0,
+          "duration": 8.5
+        }
+      ]
+    },
+    {
+      "name": "Bass Drone \u2014 Warm Pad",
+      "program": 89,
+      "role": "bass",
+      "totalDuration": 60,
+      "notes": [
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 0,
+          "duration": 14.5
+        },
+        {
+          "note": 41,
+          "velocity": 38,
+          "startTime": 15.0,
+          "duration": 14.8
+        },
+        {
+          "note": 36,
+          "velocity": 40,
+          "startTime": 30.2,
+          "duration": 14.5
+        },
+        {
+          "note": 41,
+          "velocity": 36,
+          "startTime": 45.2,
+          "duration": 14.5
+        }
+      ]
+    },
+    {
+      "name": "Chord Pad \u2014 Choir Pad",
+      "program": 91,
+      "role": "chords",
+      "totalDuration": 60,
+      "notes": [
+        {
+          "note": 53,
+          "velocity": 44,
+          "startTime": 0,
+          "duration": 14.0
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 14.0
+        },
+        {
+          "note": 67,
+          "velocity": 36,
+          "startTime": 0,
+          "duration": 14.0
+        },
+        {
+          "note": 53,
+          "velocity": 40,
+          "startTime": 15.2,
+          "duration": 14.5
+        },
+        {
+          "note": 60,
+          "velocity": 36,
+          "startTime": 15.2,
+          "duration": 14.5
+        },
+        {
+          "note": 65,
+          "velocity": 32,
+          "startTime": 15.2,
+          "duration": 14.5
+        },
+        {
+          "note": 48,
+          "velocity": 42,
+          "startTime": 30.5,
+          "duration": 14.0
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 30.5,
+          "duration": 14.0
+        },
+        {
+          "note": 62,
+          "velocity": 34,
+          "startTime": 30.5,
+          "duration": 14.0
+        },
+        {
+          "note": 53,
+          "velocity": 38,
+          "startTime": 45.3,
+          "duration": 14.5
+        },
+        {
+          "note": 60,
+          "velocity": 34,
+          "startTime": 45.3,
+          "duration": 14.5
+        },
+        {
+          "note": 67,
+          "velocity": 30,
+          "startTime": 45.3,
+          "duration": 14.5
+        }
+      ]
+    },
+    {
+      "name": "Texture \u2014 Sweep Pad",
+      "program": 95,
+      "role": "texture",
+      "totalDuration": 60,
+      "notes": [
+        {
+          "note": 55,
+          "velocity": 28,
+          "startTime": 3.5,
+          "duration": 18.0
+        },
+        {
+          "note": 62,
+          "velocity": 24,
+          "startTime": 4.0,
+          "duration": 16.0
+        },
+        {
+          "note": 53,
+          "velocity": 26,
+          "startTime": 22.0,
+          "duration": 18.5
+        },
+        {
+          "note": 60,
+          "velocity": 22,
+          "startTime": 23.0,
+          "duration": 16.0
+        },
+        {
+          "note": 50,
+          "velocity": 28,
+          "startTime": 40.5,
+          "duration": 19.0
+        },
+        {
+          "note": 57,
+          "velocity": 24,
+          "startTime": 41.5,
+          "duration": 18.0
+        }
+      ]
+    }
+  ],
+  "key": "F",
+  "bpm": 48,
+  "scale": "suspended"
+}

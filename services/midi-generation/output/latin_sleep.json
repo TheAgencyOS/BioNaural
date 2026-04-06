@@ -1,0 +1,353 @@
+{
+  "genre": "latin",
+  "mode": "sleep",
+  "tracks": [
+    {
+      "name": "Nylon Guitar Melody",
+      "program": 24,
+      "role": "melody",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 60,
+          "velocity": 45,
+          "startTime": 0,
+          "duration": 2.5
+        },
+        {
+          "note": 62,
+          "velocity": 42,
+          "startTime": 2.6,
+          "duration": 1.8
+        },
+        {
+          "note": 65,
+          "velocity": 48,
+          "startTime": 4.5,
+          "duration": 3.2
+        },
+        {
+          "note": 64,
+          "velocity": 44,
+          "startTime": 8.1,
+          "duration": 2.0
+        },
+        {
+          "note": 62,
+          "velocity": 40,
+          "startTime": 10.3,
+          "duration": 4.5
+        },
+        {
+          "note": 60,
+          "velocity": 43,
+          "startTime": 15.2,
+          "duration": 2.5
+        },
+        {
+          "note": 64,
+          "velocity": 46,
+          "startTime": 17.9,
+          "duration": 1.9
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 19.9,
+          "duration": 3.5
+        },
+        {
+          "note": 65,
+          "velocity": 44,
+          "startTime": 23.6,
+          "duration": 2.2
+        },
+        {
+          "note": 64,
+          "velocity": 41,
+          "startTime": 26.0,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 45,
+          "startTime": 31.5,
+          "duration": 2.4
+        },
+        {
+          "note": 62,
+          "velocity": 42,
+          "startTime": 34.0,
+          "duration": 1.8
+        },
+        {
+          "note": 65,
+          "velocity": 47,
+          "startTime": 36.0,
+          "duration": 3.0
+        },
+        {
+          "note": 64,
+          "velocity": 43,
+          "startTime": 39.2,
+          "duration": 2.1
+        },
+        {
+          "note": 62,
+          "velocity": 39,
+          "startTime": 41.5,
+          "duration": 3.8
+        },
+        {
+          "note": 60,
+          "velocity": 44,
+          "startTime": 45.8,
+          "duration": 2.6
+        },
+        {
+          "note": 64,
+          "velocity": 46,
+          "startTime": 48.6,
+          "duration": 2.0
+        },
+        {
+          "note": 65,
+          "velocity": 48,
+          "startTime": 50.8,
+          "duration": 5.2
+        }
+      ]
+    },
+    {
+      "name": "Tumbao Bass",
+      "program": 33,
+      "role": "bass",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 36,
+          "velocity": 52,
+          "startTime": 0,
+          "duration": 6.0
+        },
+        {
+          "note": 33,
+          "velocity": 48,
+          "startTime": 6.1,
+          "duration": 5.8
+        },
+        {
+          "note": 34,
+          "velocity": 50,
+          "startTime": 12.1,
+          "duration": 5.9
+        },
+        {
+          "note": 33,
+          "velocity": 47,
+          "startTime": 18.1,
+          "duration": 5.8
+        },
+        {
+          "note": 36,
+          "velocity": 52,
+          "startTime": 24.2,
+          "duration": 5.9
+        },
+        {
+          "note": 33,
+          "velocity": 48,
+          "startTime": 30.2,
+          "duration": 5.8
+        },
+        {
+          "note": 34,
+          "velocity": 50,
+          "startTime": 36.2,
+          "duration": 5.8
+        },
+        {
+          "note": 33,
+          "velocity": 47,
+          "startTime": 42.1,
+          "duration": 5.9
+        },
+        {
+          "note": 36,
+          "velocity": 52,
+          "startTime": 48.2,
+          "duration": 7.8
+        }
+      ]
+    },
+    {
+      "name": "Piano Chord Pads",
+      "program": 0,
+      "role": "chords",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 48,
+          "velocity": 38,
+          "startTime": 0.2,
+          "duration": 11.5
+        },
+        {
+          "note": 52,
+          "velocity": 36,
+          "startTime": 0.2,
+          "duration": 11.5
+        },
+        {
+          "note": 55,
+          "velocity": 34,
+          "startTime": 0.2,
+          "duration": 11.5
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 0.2,
+          "duration": 11.5
+        },
+        {
+          "note": 45,
+          "velocity": 37,
+          "startTime": 12.0,
+          "duration": 11.8
+        },
+        {
+          "note": 48,
+          "velocity": 35,
+          "startTime": 12.0,
+          "duration": 11.8
+        },
+        {
+          "note": 52,
+          "velocity": 33,
+          "startTime": 12.0,
+          "duration": 11.8
+        },
+        {
+          "note": 57,
+          "velocity": 32,
+          "startTime": 12.0,
+          "duration": 11.8
+        },
+        {
+          "note": 46,
+          "velocity": 37,
+          "startTime": 24.1,
+          "duration": 11.8
+        },
+        {
+          "note": 50,
+          "velocity": 35,
+          "startTime": 24.1,
+          "duration": 11.8
+        },
+        {
+          "note": 53,
+          "velocity": 33,
+          "startTime": 24.1,
+          "duration": 11.8
+        },
+        {
+          "note": 57,
+          "velocity": 32,
+          "startTime": 24.1,
+          "duration": 11.8
+        },
+        {
+          "note": 45,
+          "velocity": 37,
+          "startTime": 36.1,
+          "duration": 11.8
+        },
+        {
+          "note": 48,
+          "velocity": 35,
+          "startTime": 36.1,
+          "duration": 11.8
+        },
+        {
+          "note": 52,
+          "velocity": 33,
+          "startTime": 36.1,
+          "duration": 11.8
+        },
+        {
+          "note": 57,
+          "velocity": 32,
+          "startTime": 36.1,
+          "duration": 11.8
+        },
+        {
+          "note": 48,
+          "velocity": 38,
+          "startTime": 48.1,
+          "duration": 7.9
+        },
+        {
+          "note": 52,
+          "velocity": 36,
+          "startTime": 48.1,
+          "duration": 7.9
+        },
+        {
+          "note": 55,
+          "velocity": 34,
+          "startTime": 48.1,
+          "duration": 7.9
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 48.1,
+          "duration": 7.9
+        }
+      ]
+    },
+    {
+      "name": "Flute Texture",
+      "program": 73,
+      "role": "texture",
+      "totalDuration": 56,
+      "notes": [
+        {
+          "note": 67,
+          "velocity": 32,
+          "startTime": 3.5,
+          "duration": 7.5
+        },
+        {
+          "note": 65,
+          "velocity": 30,
+          "startTime": 15.8,
+          "duration": 8.0
+        },
+        {
+          "note": 69,
+          "velocity": 33,
+          "startTime": 27.5,
+          "duration": 7.0
+        },
+        {
+          "note": 67,
+          "velocity": 31,
+          "startTime": 39.2,
+          "duration": 7.5
+        },
+        {
+          "note": 65,
+          "velocity": 29,
+          "startTime": 50.5,
+          "duration": 5.5
+        }
+      ]
+    }
+  ],
+  "key": "Am",
+  "bpm": 48,
+  "scale": "harmonic minor"
+}
