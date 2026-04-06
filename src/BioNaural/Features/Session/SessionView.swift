@@ -948,6 +948,41 @@ extension SessionView {
                     )
                 }
 
+                // Genre selector — change genre mid-session
+                VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+                    Text("Genre")
+                        .font(Theme.Typography.caption)
+                        .foregroundStyle(Theme.Colors.textSecondary)
+
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: Theme.Spacing.xs) {
+                            ForEach(WebAudioEngine.availableGenres, id: \.id) { genre in
+                                let isSelected = viewModel.audioEngine.webEngine?.currentGenre == genre.id
+                                Button {
+                                    viewModel.audioEngine.genrePreference = genre.id
+                                    viewModel.audioEngine.webEngine?.start(
+                                        mode: viewModel.sessionMode,
+                                        genre: genre.id,
+                                        key: viewModel.audioEngine.sessionTonality.map { "\($0.root)" },
+                                        bpm: viewModel.audioEngine.sessionTonality?.tempo
+                                    )
+                                } label: {
+                                    Text(genre.label)
+                                        .font(Theme.Typography.caption)
+                                        .padding(.horizontal, Theme.Spacing.sm)
+                                        .padding(.vertical, Theme.Spacing.xxs)
+                                        .background(
+                                            Capsule().fill(isSelected ? Theme.Colors.accent.opacity(0.3) : Theme.Colors.surface)
+                                        )
+                                        .overlay(Capsule().stroke(isSelected ? Theme.Colors.accent : Color.clear, lineWidth: 1.5))
+                                        .foregroundStyle(isSelected ? Theme.Colors.textPrimary : Theme.Colors.textSecondary)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                    }
+                }
+
                 Spacer()
             }
             .padding(.horizontal, Theme.Spacing.pageMargin)

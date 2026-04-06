@@ -183,10 +183,11 @@ public final class WebAudioEngine: NSObject, WKScriptMessageHandler {
     // MARK: - Genre Helpers
 
     /// Default genre for each mode (can be overridden by user preference).
+    /// Relaxation uses "lofi" (actual melody + chords) not "ambient" (static drones).
     private func defaultGenre(for mode: FocusMode) -> String {
         switch mode {
         case .sleep:       return "ambient"
-        case .relaxation:  return "ambient"
+        case .relaxation:  return "lofi"     // Lo-fi has actual melody; ambient is too static
         case .focus:       return "lofi"
         case .energize:    return "electronic"
         }

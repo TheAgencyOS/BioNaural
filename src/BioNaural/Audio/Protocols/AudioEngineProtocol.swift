@@ -25,6 +25,16 @@ public protocol AudioEngineProtocol: AnyObject {
     /// Set before calling `start()` to personalize melodic/ambient selection.
     var soundSelectionProfile: SoundSelectionProfile? { get set }
 
+    /// User's preferred genre (from SoundProfile.genrePreferences).
+    /// Passed to WebAudioEngine to select genre-appropriate patterns.
+    var genrePreference: String? { get set }
+
+    /// WebView-based SpessaSynth audio engine for genre-aware music.
+    var webEngine: WebAudioEngine? { get }
+
+    /// Master tonality for the current session (key, scale, tempo).
+    var sessionTonality: SessionTonality? { get }
+
     /// Build the audio graph and configure the audio session.
     /// Call once before first use.
     func setup() throws

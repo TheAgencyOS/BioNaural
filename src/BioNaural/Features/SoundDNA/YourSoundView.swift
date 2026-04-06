@@ -19,10 +19,12 @@ struct YourSoundView: View {
 
     @State private var profile: SoundProfile?
     @State private var showCapture = false
+    @State private var selectedGenres: Set<String> = []
 
     var body: some View {
         ScrollView {
             VStack(spacing: Theme.Spacing.xl) {
+                genrePreferencesSection
                 profileSummarySection
                 soundDNASection
                 sonicMemoriesSection
@@ -36,6 +38,26 @@ struct YourSoundView: View {
         .task { await loadProfile() }
         .sheet(isPresented: $showCapture) {
             soundDNACaptureSheet
+        }
+    }
+
+    // MARK: - Genre Preferences
+
+    private var genrePreferencesSection: some View {
+        VStack(spacing: Theme.Spacing.md) {
+            sectionHeader(title: "Genre Preferences", icon: "music.note.list")
+
+            GenrePickerView(selectedGenres: $selectedGenres, maxSelections: 3, compact: true)
+                .onChange(of: selectedGenres) { _, newValue in
+                    // Save to SoundProfile
+                    guard let profile else { return }
+                    profile.genrePreferences = Array(newValue)
+                    try? deps.modelContainer.mainContext.save()
+                    // Also update the audio engine's preference immediately
+                    if let first = newValue.first {
+                        deps.audioEngine.genrePreference = first
+                    }
+                }
         }
     }
 
@@ -259,6 +281,10 @@ struct YourSoundView: View {
         let context = deps.modelContainer.mainContext
         let descriptor = FetchDescriptor<SoundProfile>()
         profile = try? context.fetch(descriptor).first
+        // Initialize genre selection from saved preferences
+        if let genres = profile?.genrePreferences {
+            selectedGenres = Set(genres)
+        }
     }
 
     private var soundDNACaptureSheet: some View {

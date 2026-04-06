@@ -992,6 +992,12 @@ private struct HomeTab: View {
             successfulSounds: successfulSounds,
             dislikedSounds: dislikedSounds
         )
+
+        // Pass genre preferences to audio engine for WebAudioEngine.
+        // First genre in the list is the primary preference.
+        if let primaryGenre = profile.genrePreferences.first {
+            dependencies.audioEngine.genrePreference = primaryGenre
+        }
     }
 
     // MARK: - Watch Status
