@@ -1,0 +1,340 @@
+{
+  "genre": "electronic",
+  "mode": "sleep",
+  "mixStrategy": "SLEEP MODE Electronic/House \u2014 Ultra-gentle, dark, warm, enveloping ambient wash. NO drums. Three tracks occupy distinct frequency bands to create a rich but sleepy sonic blanket.\n\nFREQUENCY SEPARATION:\n- BASS (Synth Bass, 20-300Hz, MIDI 33-45): Ultra-slow, quiet root notes with long sustains (4-8s). Provides a warm, dark foundation like a distant heartbeat. Plays chord roots only (A, D, F, G in low octaves). Velocity 25-40 \u2014 barely felt, more like a subsonic hum.\n- CHORDS (Warm Pad, 300Hz-2kHz, MIDI 48-67): Lush sustained minor chord voicings (8-16s sustains). These are the harmonic body \u2014 slow-moving, overlapping pads that breathe gently. Velocity 30-45. Voicings use root-3rd-5th with occasional 7ths for warmth.\n- MELODY (Sawtooth Lead used as soft high texture, 1kHz+, MIDI 64-79): Sparse, lonely high notes \u2014 one every 3-5 seconds. Like distant stars twinkling. Very low velocity (25-40). These are chord tones and gentle passing tones from A natural minor scale. No arpeggiation \u2014 just floating single notes.\n\nHARMONIC UNITY: All tracks follow the same slow progression: Am \u2192 Dm \u2192 F \u2192 G \u2192 Am \u2192 Dm \u2192 Am (i \u2192 iv \u2192 bVI \u2192 bVII \u2192 i \u2192 iv \u2192 i). Chord changes happen every ~6-8 seconds, giving each chord time to breathe and settle.\n\nENERGY ARC (6 segments, ~7.5s each):\nSeg1 (0-7.5s): 0.3 \u2014 Bass and pad fade in gently on Am. Melody silent or one note.\nSeg2 (7.5-15s): 0.4 \u2014 Dm chord, melody enters with sparse notes. Slightly fuller.\nSeg3 (15-22.5s): 0.5 \u2014 F chord, peak warmth. All three layers present but still whisper-quiet.\nSeg4 (22.5-30s): 0.5 \u2014 G chord, sustained gentle peak. Melody slightly more active.\nSeg5 (30-37.5s): 0.4 \u2014 Return to Am then Dm, energy receding. Melody thins.\nSeg6 (37.5-45s): 0.3 \u2014 Final Am, everything fades to near-silence. Long held tones dissolving.\n\nRHYTHMIC APPROACH: No rhythmic pulse. Everything floats freely with long overlapping sustains. This is ambient sleep music \u2014 time should feel suspended. Notes drift in and out like breathing.",
+  "tracks": [
+    {
+      "name": "Deep Synth Bass",
+      "program": 38,
+      "role": "bass",
+      "frequencyRole": "sub-bass(20-100Hz) and bass(100-300Hz)",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 33,
+          "velocity": 30,
+          "startTime": 0,
+          "duration": 7.0
+        },
+        {
+          "note": 33,
+          "velocity": 25,
+          "startTime": 3.5,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 32,
+          "startTime": 7.5,
+          "duration": 7.0
+        },
+        {
+          "note": 38,
+          "velocity": 28,
+          "startTime": 11.0,
+          "duration": 5.0
+        },
+        {
+          "note": 41,
+          "velocity": 35,
+          "startTime": 15.0,
+          "duration": 7.0
+        },
+        {
+          "note": 41,
+          "velocity": 30,
+          "startTime": 18.5,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 35,
+          "startTime": 22.5,
+          "duration": 7.0
+        },
+        {
+          "note": 43,
+          "velocity": 30,
+          "startTime": 26.0,
+          "duration": 5.0
+        },
+        {
+          "note": 33,
+          "velocity": 32,
+          "startTime": 30.0,
+          "duration": 6.0
+        },
+        {
+          "note": 33,
+          "velocity": 28,
+          "startTime": 33.0,
+          "duration": 4.5
+        },
+        {
+          "note": 38,
+          "velocity": 28,
+          "startTime": 34.5,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 25,
+          "startTime": 37.0,
+          "duration": 4.0
+        },
+        {
+          "note": 33,
+          "velocity": 25,
+          "startTime": 38.5,
+          "duration": 6.5
+        },
+        {
+          "note": 45,
+          "velocity": 25,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 33,
+          "velocity": 20,
+          "startTime": 42.0,
+          "duration": 3.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Chords",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz) and high-mid(1-5kHz)",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 57,
+          "velocity": 30,
+          "startTime": 0.5,
+          "duration": 7.5
+        },
+        {
+          "note": 60,
+          "velocity": 28,
+          "startTime": 0.5,
+          "duration": 7.5
+        },
+        {
+          "note": 64,
+          "velocity": 26,
+          "startTime": 0.5,
+          "duration": 7.5
+        },
+        {
+          "note": 62,
+          "velocity": 35,
+          "startTime": 8.0,
+          "duration": 7.0
+        },
+        {
+          "note": 65,
+          "velocity": 32,
+          "startTime": 8.0,
+          "duration": 7.0
+        },
+        {
+          "note": 69,
+          "velocity": 30,
+          "startTime": 8.0,
+          "duration": 7.0
+        },
+        {
+          "note": 65,
+          "velocity": 38,
+          "startTime": 15.5,
+          "duration": 7.0
+        },
+        {
+          "note": 69,
+          "velocity": 35,
+          "startTime": 15.5,
+          "duration": 7.0
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 15.5,
+          "duration": 7.0
+        },
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 23.0,
+          "duration": 7.0
+        },
+        {
+          "note": 59,
+          "velocity": 35,
+          "startTime": 23.0,
+          "duration": 7.0
+        },
+        {
+          "note": 62,
+          "velocity": 33,
+          "startTime": 23.0,
+          "duration": 7.0
+        },
+        {
+          "note": 57,
+          "velocity": 32,
+          "startTime": 30.5,
+          "duration": 6.5
+        },
+        {
+          "note": 60,
+          "velocity": 30,
+          "startTime": 30.5,
+          "duration": 6.5
+        },
+        {
+          "note": 64,
+          "velocity": 28,
+          "startTime": 30.5,
+          "duration": 6.5
+        },
+        {
+          "note": 62,
+          "velocity": 28,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 65,
+          "velocity": 26,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 57,
+          "velocity": 25,
+          "startTime": 39.0,
+          "duration": 6.0
+        },
+        {
+          "note": 60,
+          "velocity": 23,
+          "startTime": 39.0,
+          "duration": 6.0
+        },
+        {
+          "note": 64,
+          "velocity": 22,
+          "startTime": 39.0,
+          "duration": 6.0
+        }
+      ]
+    },
+    {
+      "name": "Floating Melody",
+      "program": 81,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz) and presence(5kHz+)",
+      "suggestedVolume": 0.3,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 76,
+          "velocity": 25,
+          "startTime": 2.0,
+          "duration": 5.0
+        },
+        {
+          "note": 72,
+          "velocity": 28,
+          "startTime": 5.5,
+          "duration": 4.0
+        },
+        {
+          "note": 74,
+          "velocity": 30,
+          "startTime": 9.0,
+          "duration": 4.5
+        },
+        {
+          "note": 77,
+          "velocity": 32,
+          "startTime": 12.0,
+          "duration": 4.0
+        },
+        {
+          "note": 72,
+          "velocity": 35,
+          "startTime": 15.5,
+          "duration": 4.0
+        },
+        {
+          "note": 76,
+          "velocity": 38,
+          "startTime": 18.0,
+          "duration": 5.0
+        },
+        {
+          "note": 69,
+          "velocity": 36,
+          "startTime": 20.5,
+          "duration": 3.5
+        },
+        {
+          "note": 79,
+          "velocity": 38,
+          "startTime": 23.5,
+          "duration": 5.0
+        },
+        {
+          "note": 74,
+          "velocity": 36,
+          "startTime": 26.0,
+          "duration": 4.0
+        },
+        {
+          "note": 76,
+          "velocity": 35,
+          "startTime": 28.5,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 32,
+          "startTime": 31.0,
+          "duration": 4.5
+        },
+        {
+          "note": 69,
+          "velocity": 30,
+          "startTime": 34.0,
+          "duration": 4.0
+        },
+        {
+          "note": 74,
+          "velocity": 28,
+          "startTime": 36.5,
+          "duration": 4.0
+        },
+        {
+          "note": 72,
+          "velocity": 25,
+          "startTime": 39.5,
+          "duration": 4.0
+        },
+        {
+          "note": 76,
+          "velocity": 22,
+          "startTime": 42.0,
+          "duration": 3.0
+        }
+      ]
+    }
+  ],
+  "key": "Am",
+  "bpm": 48,
+  "scale": "minor"
+}

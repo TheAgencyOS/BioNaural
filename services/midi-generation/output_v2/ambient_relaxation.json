@@ -1,0 +1,452 @@
+{
+  "genre": "ambient",
+  "mode": "relaxation",
+  "mixStrategy": "This ambient/atmospheric relaxation score in D Lydian is built as a unified, breathing organism across four frequency layers. FREQUENCY SEPARATION: The Warm Pad bass (MIDI 38-50, 20-300Hz) provides the gravitational foundation with long drone roots; the Choir Pad chords (MIDI 54-69, 300Hz-2kHz) fill the harmonic body with open sus2/maj7 voicings spaced widely; the New Age Pad melody (MIDI 66-81, 1-8kHz) floats above with sparse, singing tones that trace chord tones on downbeats; and the Sweep Pad texture (MIDI 72-88, 3kHz+) adds crystalline shimmer in the highest register. HARMONIC COHESION: All four tracks follow the same slow chord progression \u2014 Dsus2 (0-11s) \u2192 Gmaj7 (11-22s) \u2192 Dmaj7 (22-33s) \u2192 Bm (33-45s). Every chord change happens simultaneously across all tracks. Bass always plays roots (D, G, D, B). Chords voice the full harmony. Melody plays chord tones on strong entries and Lydian passing tones between. ENERGY ARC: Segments roughly divide into 7.5s blocks. Energy starts sparse and quiet (vel 35-45), builds gently through the middle (vel 50-65), peaks at segment 4, then recedes to a whisper. The piece breathes \u2014 no rhythmic pulse, just overlapping sustains that drift freely. Notes enter at irregular intervals to avoid mechanical feel. RHYTHMIC INTERLOCK: Bass notes sustain 8-12s, chords overlap in 4-6s waves, melody notes last 3-6s with gentle gaps, and texture sparkles appear every 3-5s with long 5-8s tails. The staggered entries create a shimmering, cloud-like effect where no two tracks attack simultaneously, giving each voice space to emerge.",
+  "tracks": [
+    {
+      "name": "Warm Bass Drone",
+      "program": 89,
+      "role": "bass",
+      "frequencyRole": "sub-bass(20-100Hz), bass(100-300Hz)",
+      "suggestedVolume": 0.5,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 11.0
+        },
+        {
+          "note": 45,
+          "velocity": 35,
+          "startTime": 3.5,
+          "duration": 7.0
+        },
+        {
+          "note": 38,
+          "velocity": 38,
+          "startTime": 8.0,
+          "duration": 4.0
+        },
+        {
+          "note": 43,
+          "velocity": 45,
+          "startTime": 11.0,
+          "duration": 11.0
+        },
+        {
+          "note": 50,
+          "velocity": 42,
+          "startTime": 14.5,
+          "duration": 7.0
+        },
+        {
+          "note": 43,
+          "velocity": 48,
+          "startTime": 19.0,
+          "duration": 4.0
+        },
+        {
+          "note": 38,
+          "velocity": 52,
+          "startTime": 22.0,
+          "duration": 11.0
+        },
+        {
+          "note": 45,
+          "velocity": 50,
+          "startTime": 25.5,
+          "duration": 7.0
+        },
+        {
+          "note": 38,
+          "velocity": 55,
+          "startTime": 29.0,
+          "duration": 4.5
+        },
+        {
+          "note": 47,
+          "velocity": 58,
+          "startTime": 33.0,
+          "duration": 12.0
+        },
+        {
+          "note": 42,
+          "velocity": 52,
+          "startTime": 36.0,
+          "duration": 6.0
+        },
+        {
+          "note": 47,
+          "velocity": 48,
+          "startTime": 38.5,
+          "duration": 6.5
+        },
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 41.0,
+          "duration": 4.0
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 43.0,
+          "duration": 2.0
+        },
+        {
+          "note": 47,
+          "velocity": 30,
+          "startTime": 44.0,
+          "duration": 1.0
+        }
+      ]
+    },
+    {
+      "name": "Choir Harmonic Bed",
+      "program": 91,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz), high-mid(1-5kHz)",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 62,
+          "velocity": 38,
+          "startTime": 0.5,
+          "duration": 5.5
+        },
+        {
+          "note": 57,
+          "velocity": 36,
+          "startTime": 0.8,
+          "duration": 5.0
+        },
+        {
+          "note": 66,
+          "velocity": 35,
+          "startTime": 1.2,
+          "duration": 5.0
+        },
+        {
+          "note": 55,
+          "velocity": 40,
+          "startTime": 5.5,
+          "duration": 5.5
+        },
+        {
+          "note": 62,
+          "velocity": 42,
+          "startTime": 6.0,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 44,
+          "startTime": 11.5,
+          "duration": 5.5
+        },
+        {
+          "note": 59,
+          "velocity": 46,
+          "startTime": 11.8,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 43,
+          "startTime": 12.3,
+          "duration": 5.0
+        },
+        {
+          "note": 55,
+          "velocity": 48,
+          "startTime": 16.5,
+          "duration": 5.5
+        },
+        {
+          "note": 64,
+          "velocity": 50,
+          "startTime": 17.0,
+          "duration": 5.0
+        },
+        {
+          "note": 66,
+          "velocity": 55,
+          "startTime": 22.5,
+          "duration": 5.5
+        },
+        {
+          "note": 61,
+          "velocity": 52,
+          "startTime": 22.8,
+          "duration": 5.5
+        },
+        {
+          "note": 57,
+          "velocity": 50,
+          "startTime": 23.2,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 58,
+          "startTime": 27.5,
+          "duration": 5.5
+        },
+        {
+          "note": 69,
+          "velocity": 55,
+          "startTime": 28.0,
+          "duration": 5.0
+        },
+        {
+          "note": 66,
+          "velocity": 55,
+          "startTime": 33.5,
+          "duration": 5.5
+        },
+        {
+          "note": 59,
+          "velocity": 52,
+          "startTime": 33.8,
+          "duration": 5.5
+        },
+        {
+          "note": 63,
+          "velocity": 50,
+          "startTime": 34.2,
+          "duration": 5.0
+        },
+        {
+          "note": 55,
+          "velocity": 42,
+          "startTime": 39.0,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 38,
+          "startTime": 39.5,
+          "duration": 5.0
+        },
+        {
+          "note": 59,
+          "velocity": 35,
+          "startTime": 42.0,
+          "duration": 3.0
+        }
+      ]
+    },
+    {
+      "name": "Shimmer Melody Pad",
+      "program": 88,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz), presence(5kHz+)",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 74,
+          "velocity": 38,
+          "startTime": 1.5,
+          "duration": 4.5
+        },
+        {
+          "note": 69,
+          "velocity": 36,
+          "startTime": 4.0,
+          "duration": 4.0
+        },
+        {
+          "note": 71,
+          "velocity": 40,
+          "startTime": 7.5,
+          "duration": 3.5
+        },
+        {
+          "note": 74,
+          "velocity": 42,
+          "startTime": 10.0,
+          "duration": 3.0
+        },
+        {
+          "note": 76,
+          "velocity": 48,
+          "startTime": 12.5,
+          "duration": 4.5
+        },
+        {
+          "note": 71,
+          "velocity": 45,
+          "startTime": 15.0,
+          "duration": 4.0
+        },
+        {
+          "note": 74,
+          "velocity": 50,
+          "startTime": 18.0,
+          "duration": 4.0
+        },
+        {
+          "note": 78,
+          "velocity": 52,
+          "startTime": 20.5,
+          "duration": 3.5
+        },
+        {
+          "note": 74,
+          "velocity": 55,
+          "startTime": 23.0,
+          "duration": 4.5
+        },
+        {
+          "note": 78,
+          "velocity": 58,
+          "startTime": 26.0,
+          "duration": 4.0
+        },
+        {
+          "note": 81,
+          "velocity": 60,
+          "startTime": 28.5,
+          "duration": 4.5
+        },
+        {
+          "note": 78,
+          "velocity": 62,
+          "startTime": 31.5,
+          "duration": 3.5
+        },
+        {
+          "note": 76,
+          "velocity": 58,
+          "startTime": 34.0,
+          "duration": 4.5
+        },
+        {
+          "note": 71,
+          "velocity": 52,
+          "startTime": 37.0,
+          "duration": 4.0
+        },
+        {
+          "note": 74,
+          "velocity": 48,
+          "startTime": 39.5,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 40,
+          "startTime": 41.5,
+          "duration": 3.5
+        }
+      ]
+    },
+    {
+      "name": "Crystal Texture Sweep",
+      "program": 95,
+      "role": "texture",
+      "frequencyRole": "presence(5kHz+)",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 81,
+          "velocity": 30,
+          "startTime": 2.0,
+          "duration": 6.0
+        },
+        {
+          "note": 86,
+          "velocity": 28,
+          "startTime": 5.0,
+          "duration": 5.5
+        },
+        {
+          "note": 78,
+          "velocity": 32,
+          "startTime": 9.0,
+          "duration": 5.0
+        },
+        {
+          "note": 83,
+          "velocity": 35,
+          "startTime": 12.0,
+          "duration": 6.0
+        },
+        {
+          "note": 88,
+          "velocity": 38,
+          "startTime": 15.5,
+          "duration": 5.5
+        },
+        {
+          "note": 81,
+          "velocity": 40,
+          "startTime": 19.0,
+          "duration": 5.0
+        },
+        {
+          "note": 86,
+          "velocity": 45,
+          "startTime": 22.0,
+          "duration": 6.0
+        },
+        {
+          "note": 83,
+          "velocity": 48,
+          "startTime": 25.0,
+          "duration": 5.5
+        },
+        {
+          "note": 88,
+          "velocity": 50,
+          "startTime": 28.0,
+          "duration": 5.5
+        },
+        {
+          "note": 86,
+          "velocity": 52,
+          "startTime": 31.0,
+          "duration": 5.0
+        },
+        {
+          "note": 83,
+          "velocity": 48,
+          "startTime": 34.0,
+          "duration": 5.5
+        },
+        {
+          "note": 78,
+          "velocity": 42,
+          "startTime": 37.0,
+          "duration": 5.0
+        },
+        {
+          "note": 81,
+          "velocity": 38,
+          "startTime": 39.5,
+          "duration": 5.5
+        },
+        {
+          "note": 76,
+          "velocity": 32,
+          "startTime": 41.5,
+          "duration": 3.5
+        },
+        {
+          "note": 83,
+          "velocity": 28,
+          "startTime": 43.0,
+          "duration": 2.0
+        }
+      ]
+    }
+  ],
+  "key": "D",
+  "bpm": 61,
+  "scale": "Lydian"
+}

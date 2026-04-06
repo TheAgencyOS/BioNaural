@@ -1,0 +1,400 @@
+{
+  "genre": "reggae",
+  "mode": "sleep",
+  "mixStrategy": "This sleep reggae arrangement uses 3 tracks carefully separated by frequency to create a warm, enveloping bed of sound. The chord progression is I (G) \u2192 IV (C) \u2192 I (G) \u2192 V (D) \u2192 IV (C), repeating in long 10-second phrases. BASS (Electric Bass, 100-300Hz): Anchors everything with extremely slow, sustained root notes (G2, C2, D2) in the low register (MIDI 31-43). Notes are long (4-8s) with gentle velocity (30-45), providing a deep, warm foundation. Uses root-5th movement with whole notes and dotted halves. CHORDS (Organ, 300Hz-2kHz): Plays the classic reggae offbeat skank but slowed to a dreamlike pace. Chord voicings sit in MIDI 60-72 range. In sleep mode, these are extremely soft (vel 25-40), sustained pad-like washes on the upbeats with long sustains (4-8s), creating harmonic warmth without rhythmic urgency. Triads voiced as G-B-D, C-E-G, D-F#-A. MELODY (Nylon Guitar, 1-5kHz): Sparse, vocal-like phrases in MIDI 60-72 range. Plays only chord tones on strong beats with gentle passing tones. Very few notes (one every 2-4 seconds), long sustains (4-8s), creating a lullaby quality. Velocity 30-45. Energy arc: Segments 1-2 (0-15s) start very quiet with bass and sparse organ, melody enters gently. Segments 3-4 (15-30s) reach modest peak with all three tracks softly interacting. Segments 5-6 (30-45s) gradually fade, melody thins, bass sustains longer, organ drops out. All tracks change chords together at the same moments. NO drums per sleep mode. The result is a warm, dark, slow-motion reggae lullaby.",
+  "tracks": [
+    {
+      "name": "Nylon Guitar Melody",
+      "program": 24,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz)",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 67,
+          "velocity": 28,
+          "startTime": 2.5,
+          "duration": 6.0
+        },
+        {
+          "note": 71,
+          "velocity": 30,
+          "startTime": 5.0,
+          "duration": 5.0
+        },
+        {
+          "note": 69,
+          "velocity": 32,
+          "startTime": 10.0,
+          "duration": 4.0
+        },
+        {
+          "note": 67,
+          "velocity": 30,
+          "startTime": 12.5,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 35,
+          "startTime": 15.0,
+          "duration": 6.0
+        },
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 18.75,
+          "duration": 4.5
+        },
+        {
+          "note": 71,
+          "velocity": 40,
+          "startTime": 21.25,
+          "duration": 5.0
+        },
+        {
+          "note": 72,
+          "velocity": 42,
+          "startTime": 23.75,
+          "duration": 4.0
+        },
+        {
+          "note": 69,
+          "velocity": 40,
+          "startTime": 26.25,
+          "duration": 5.5
+        },
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 28.75,
+          "duration": 6.0
+        },
+        {
+          "note": 71,
+          "velocity": 35,
+          "startTime": 31.25,
+          "duration": 5.0
+        },
+        {
+          "note": 69,
+          "velocity": 33,
+          "startTime": 33.75,
+          "duration": 5.5
+        },
+        {
+          "note": 67,
+          "velocity": 30,
+          "startTime": 36.25,
+          "duration": 6.0
+        },
+        {
+          "note": 64,
+          "velocity": 28,
+          "startTime": 38.75,
+          "duration": 4.5
+        },
+        {
+          "note": 62,
+          "velocity": 26,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 25,
+          "startTime": 42.5,
+          "duration": 2.5
+        }
+      ]
+    },
+    {
+      "name": "Electric Bass",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "bass(100-300Hz)",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 43,
+          "velocity": 30,
+          "startTime": 0,
+          "duration": 6.25
+        },
+        {
+          "note": 43,
+          "velocity": 32,
+          "startTime": 5.0,
+          "duration": 5.0
+        },
+        {
+          "note": 36,
+          "velocity": 34,
+          "startTime": 7.5,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 33,
+          "startTime": 10.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 36,
+          "startTime": 12.5,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 38,
+          "startTime": 15.0,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 17.5,
+          "duration": 3.75
+        },
+        {
+          "note": 36,
+          "velocity": 42,
+          "startTime": 20.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 44,
+          "startTime": 22.5,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 42,
+          "startTime": 25.0,
+          "duration": 5.0
+        },
+        {
+          "note": 36,
+          "velocity": 40,
+          "startTime": 27.5,
+          "duration": 6.25
+        },
+        {
+          "note": 43,
+          "velocity": 38,
+          "startTime": 30.0,
+          "duration": 5.0
+        },
+        {
+          "note": 36,
+          "velocity": 35,
+          "startTime": 32.5,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 33,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 30,
+          "startTime": 37.5,
+          "duration": 5.0
+        },
+        {
+          "note": 36,
+          "velocity": 28,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 25,
+          "startTime": 42.5,
+          "duration": 2.5
+        }
+      ]
+    },
+    {
+      "name": "Organ Pad Skank",
+      "program": 16,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz)",
+      "suggestedVolume": 0.3,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 62,
+          "velocity": 25,
+          "startTime": 1.875,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 25,
+          "startTime": 1.875,
+          "duration": 5.0
+        },
+        {
+          "note": 71,
+          "velocity": 25,
+          "startTime": 1.875,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 28,
+          "startTime": 6.875,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 28,
+          "startTime": 6.875,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 28,
+          "startTime": 6.875,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 30,
+          "startTime": 11.875,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 30,
+          "startTime": 11.875,
+          "duration": 5.0
+        },
+        {
+          "note": 71,
+          "velocity": 30,
+          "startTime": 11.875,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 16.875,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 33,
+          "startTime": 16.875,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 33,
+          "startTime": 16.875,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 35,
+          "startTime": 21.875,
+          "duration": 5.0
+        },
+        {
+          "note": 66,
+          "velocity": 35,
+          "startTime": 21.875,
+          "duration": 5.0
+        },
+        {
+          "note": 69,
+          "velocity": 35,
+          "startTime": 21.875,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 35,
+          "startTime": 26.875,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 35,
+          "startTime": 26.875,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 35,
+          "startTime": 26.875,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 32,
+          "startTime": 31.875,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 32,
+          "startTime": 31.875,
+          "duration": 5.0
+        },
+        {
+          "note": 71,
+          "velocity": 32,
+          "startTime": 31.875,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 28,
+          "startTime": 36.875,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 28,
+          "startTime": 36.875,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 28,
+          "startTime": 36.875,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 25,
+          "startTime": 41.875,
+          "duration": 3.125
+        },
+        {
+          "note": 67,
+          "velocity": 25,
+          "startTime": 41.875,
+          "duration": 3.125
+        },
+        {
+          "note": 71,
+          "velocity": 25,
+          "startTime": 41.875,
+          "duration": 3.125
+        }
+      ]
+    }
+  ],
+  "key": "G",
+  "bpm": 48,
+  "scale": "mixolydian"
+}

@@ -1,0 +1,526 @@
+{
+  "genre": "jazz",
+  "mode": "relaxation",
+  "mixStrategy": "This arrangement places three instruments in a classic jazz trio configuration optimized for relaxation. The BASS (Acoustic Bass, GM 32) anchors the sub-bass and bass registers (MIDI 28-48, 20-300Hz) with a gentle walking bass line that outlines chord roots, 5ths, and chromatic approach tones \u2014 quarter notes with slight rhythmic breathing, not relentless walking. The CHORDS (Warm Pad, GM 89) fills the low-mid and mid range (MIDI 48-67, 300Hz-2kHz) with sustained 7th and 9th voicings that bloom slowly, providing harmonic warmth and a floating bed of sound. The MELODY (Acoustic Piano, GM 0) occupies the high-mid and presence range (MIDI 60-81, 1kHz-8kHz) with lyrical, spacious phrases that arpeggiate chord tones on strong beats and use Dorian/Mixolydian scale tones and chromatic passing tones on weak beats. Rhythmic interlock: bass provides steady pulse foundation, pad sustains create harmonic continuity between bass pulses, and piano melody floats above with rubato-like phrasing \u2014 playing 2-4 note phrases then resting, breathing between ideas. Energy arc: segments 1 (0-7.5s) at 0.3 \u2014 sparse entry, bass and pad only at first, piano enters gently; segment 2 (7.5-15s) at 0.5 \u2014 all three voices present, moderate activity; segment 3 (15-22.5s) at 0.6 \u2014 melody becomes slightly more active with passing tones; segment 4 (22.5-30s) at 0.7 \u2014 peak warmth, fuller voicings, melody reaches highest point; segment 5 (30-37.5s) at 0.6 \u2014 gentle descent, melody simplifies; segment 6 (37.5-45s) at 0.4 \u2014 winding down, longer sustains, fading velocity. Chord progression: Dm7 (ii7) for ~4 beats \u2192 G7 (V7) for ~4 beats \u2192 Cmaj7 (Imaj7) for ~4 beats \u2192 Cmaj7 for ~4 beats, then Em7 (iii7) \u2192 Am7 (vi7) \u2192 Dm7 (ii7) \u2192 G7 (V7), repeating with variation. All tracks change chords on the same beat boundaries. No drums \u2014 pure floating quality for relaxation.",
+  "tracks": [
+    {
+      "name": "Jazz Piano Melody",
+      "program": 0,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz), presence(5kHz+)",
+      "suggestedVolume": 0.7,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 72,
+          "velocity": 42,
+          "startTime": 1.0,
+          "duration": 2.5
+        },
+        {
+          "note": 74,
+          "velocity": 45,
+          "startTime": 4.0,
+          "duration": 1.8
+        },
+        {
+          "note": 76,
+          "velocity": 48,
+          "startTime": 6.0,
+          "duration": 2.0
+        },
+        {
+          "note": 71,
+          "velocity": 50,
+          "startTime": 8.5,
+          "duration": 2.2
+        },
+        {
+          "note": 72,
+          "velocity": 52,
+          "startTime": 11.0,
+          "duration": 1.5
+        },
+        {
+          "note": 74,
+          "velocity": 55,
+          "startTime": 13.0,
+          "duration": 2.8
+        },
+        {
+          "note": 76,
+          "velocity": 55,
+          "startTime": 16.0,
+          "duration": 1.6
+        },
+        {
+          "note": 77,
+          "velocity": 58,
+          "startTime": 18.0,
+          "duration": 2.5
+        },
+        {
+          "note": 79,
+          "velocity": 58,
+          "startTime": 20.5,
+          "duration": 2.0
+        },
+        {
+          "note": 76,
+          "velocity": 60,
+          "startTime": 23.0,
+          "duration": 2.2
+        },
+        {
+          "note": 77,
+          "velocity": 62,
+          "startTime": 25.5,
+          "duration": 1.8
+        },
+        {
+          "note": 79,
+          "velocity": 63,
+          "startTime": 27.5,
+          "duration": 2.5
+        },
+        {
+          "note": 81,
+          "velocity": 60,
+          "startTime": 30.0,
+          "duration": 3.0
+        },
+        {
+          "note": 79,
+          "velocity": 55,
+          "startTime": 33.5,
+          "duration": 2.0
+        },
+        {
+          "note": 76,
+          "velocity": 52,
+          "startTime": 36.0,
+          "duration": 2.5
+        },
+        {
+          "note": 74,
+          "velocity": 48,
+          "startTime": 39.0,
+          "duration": 3.0
+        },
+        {
+          "note": 72,
+          "velocity": 42,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 60,
+          "velocity": 50,
+          "startTime": 2.5,
+          "duration": 1.2
+        },
+        {
+          "note": 64,
+          "velocity": 48,
+          "startTime": 9.5,
+          "duration": 1.0
+        },
+        {
+          "note": 67,
+          "velocity": 52,
+          "startTime": 14.5,
+          "duration": 1.2
+        },
+        {
+          "note": 65,
+          "velocity": 55,
+          "startTime": 19.0,
+          "duration": 1.0
+        },
+        {
+          "note": 69,
+          "velocity": 58,
+          "startTime": 24.0,
+          "duration": 1.2
+        },
+        {
+          "note": 67,
+          "velocity": 55,
+          "startTime": 31.5,
+          "duration": 1.5
+        },
+        {
+          "note": 64,
+          "velocity": 48,
+          "startTime": 37.5,
+          "duration": 1.8
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 43.0,
+          "duration": 2.0
+        }
+      ]
+    },
+    {
+      "name": "Acoustic Walking Bass",
+      "program": 32,
+      "role": "bass",
+      "frequencyRole": "sub-bass(20-100Hz), bass(100-300Hz)",
+      "suggestedVolume": 0.6,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 38,
+          "velocity": 55,
+          "startTime": 0,
+          "duration": 2.8
+        },
+        {
+          "note": 36,
+          "velocity": 55,
+          "startTime": 3.0,
+          "duration": 2.5
+        },
+        {
+          "note": 33,
+          "velocity": 58,
+          "startTime": 5.5,
+          "duration": 2.0
+        },
+        {
+          "note": 31,
+          "velocity": 58,
+          "startTime": 7.8,
+          "duration": 2.5
+        },
+        {
+          "note": 36,
+          "velocity": 60,
+          "startTime": 10.5,
+          "duration": 2.2
+        },
+        {
+          "note": 38,
+          "velocity": 60,
+          "startTime": 13.0,
+          "duration": 2.0
+        },
+        {
+          "note": 36,
+          "velocity": 62,
+          "startTime": 15.5,
+          "duration": 2.5
+        },
+        {
+          "note": 35,
+          "velocity": 62,
+          "startTime": 18.0,
+          "duration": 2.0
+        },
+        {
+          "note": 33,
+          "velocity": 65,
+          "startTime": 20.0,
+          "duration": 2.5
+        },
+        {
+          "note": 36,
+          "velocity": 65,
+          "startTime": 22.5,
+          "duration": 2.0
+        },
+        {
+          "note": 40,
+          "velocity": 65,
+          "startTime": 24.8,
+          "duration": 2.2
+        },
+        {
+          "note": 38,
+          "velocity": 68,
+          "startTime": 27.0,
+          "duration": 2.5
+        },
+        {
+          "note": 36,
+          "velocity": 65,
+          "startTime": 29.5,
+          "duration": 2.0
+        },
+        {
+          "note": 33,
+          "velocity": 65,
+          "startTime": 31.8,
+          "duration": 2.5
+        },
+        {
+          "note": 31,
+          "velocity": 62,
+          "startTime": 34.5,
+          "duration": 2.0
+        },
+        {
+          "note": 38,
+          "velocity": 60,
+          "startTime": 36.8,
+          "duration": 2.5
+        },
+        {
+          "note": 36,
+          "velocity": 58,
+          "startTime": 39.5,
+          "duration": 2.5
+        },
+        {
+          "note": 35,
+          "velocity": 55,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 43,
+          "velocity": 58,
+          "startTime": 1.5,
+          "duration": 1.2
+        },
+        {
+          "note": 40,
+          "velocity": 60,
+          "startTime": 8.5,
+          "duration": 1.5
+        },
+        {
+          "note": 43,
+          "velocity": 62,
+          "startTime": 16.5,
+          "duration": 1.2
+        },
+        {
+          "note": 45,
+          "velocity": 65,
+          "startTime": 25.5,
+          "duration": 1.0
+        },
+        {
+          "note": 40,
+          "velocity": 60,
+          "startTime": 33.0,
+          "duration": 1.2
+        },
+        {
+          "note": 38,
+          "velocity": 55,
+          "startTime": 40.5,
+          "duration": 1.5
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Chords",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz), high-mid(1-5kHz)",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 50,
+          "velocity": 35,
+          "startTime": 0,
+          "duration": 5.5
+        },
+        {
+          "note": 53,
+          "velocity": 35,
+          "startTime": 0,
+          "duration": 5.5
+        },
+        {
+          "note": 57,
+          "velocity": 35,
+          "startTime": 0,
+          "duration": 5.5
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 0,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 5.8,
+          "duration": 5.0
+        },
+        {
+          "note": 59,
+          "velocity": 38,
+          "startTime": 5.8,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 38,
+          "startTime": 5.8,
+          "duration": 5.0
+        },
+        {
+          "note": 65,
+          "velocity": 36,
+          "startTime": 5.8,
+          "duration": 5.0
+        },
+        {
+          "note": 48,
+          "velocity": 40,
+          "startTime": 11.0,
+          "duration": 5.5
+        },
+        {
+          "note": 52,
+          "velocity": 40,
+          "startTime": 11.0,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 40,
+          "startTime": 11.0,
+          "duration": 5.5
+        },
+        {
+          "note": 59,
+          "velocity": 38,
+          "startTime": 11.0,
+          "duration": 5.5
+        },
+        {
+          "note": 52,
+          "velocity": 42,
+          "startTime": 16.8,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 42,
+          "startTime": 16.8,
+          "duration": 5.5
+        },
+        {
+          "note": 59,
+          "velocity": 42,
+          "startTime": 16.8,
+          "duration": 5.5
+        },
+        {
+          "note": 62,
+          "velocity": 40,
+          "startTime": 16.8,
+          "duration": 5.5
+        },
+        {
+          "note": 57,
+          "velocity": 44,
+          "startTime": 22.5,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 44,
+          "startTime": 22.5,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 44,
+          "startTime": 22.5,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 42,
+          "startTime": 22.5,
+          "duration": 5.0
+        },
+        {
+          "note": 50,
+          "velocity": 45,
+          "startTime": 27.8,
+          "duration": 5.5
+        },
+        {
+          "note": 53,
+          "velocity": 45,
+          "startTime": 27.8,
+          "duration": 5.5
+        },
+        {
+          "note": 57,
+          "velocity": 45,
+          "startTime": 27.8,
+          "duration": 5.5
+        },
+        {
+          "note": 60,
+          "velocity": 43,
+          "startTime": 27.8,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 42,
+          "startTime": 33.5,
+          "duration": 5.0
+        },
+        {
+          "note": 59,
+          "velocity": 42,
+          "startTime": 33.5,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 42,
+          "startTime": 33.5,
+          "duration": 5.0
+        },
+        {
+          "note": 65,
+          "velocity": 40,
+          "startTime": 33.5,
+          "duration": 5.0
+        },
+        {
+          "note": 48,
+          "velocity": 38,
+          "startTime": 39.0,
+          "duration": 6.0
+        },
+        {
+          "note": 52,
+          "velocity": 38,
+          "startTime": 39.0,
+          "duration": 6.0
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 39.0,
+          "duration": 6.0
+        },
+        {
+          "note": 59,
+          "velocity": 36,
+          "startTime": 39.0,
+          "duration": 6.0
+        }
+      ]
+    }
+  ],
+  "key": "C",
+  "bpm": 61,
+  "scale": "Dorian, Mixolydian, Lydian, Bebop Dominant with chromatic passing tones"
+}

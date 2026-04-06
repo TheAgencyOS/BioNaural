@@ -1,0 +1,376 @@
+{
+  "genre": "lofi",
+  "mode": "sleep",
+  "mixStrategy": "This lo-fi hip hop sleep arrangement is built around the progression ii7 \u2192 V7 \u2192 Imaj7 \u2192 vi7 cycling through Eb major/dorian harmony (Fm7 \u2192 Bb7 \u2192 Ebmaj7 \u2192 Cm7). Three tracks fill distinct frequency bands like a warm blanket of sound:\n\nFREQUENCY SEPARATION:\n- BASS (Electric Bass, 20-300Hz, MIDI 31-48): Anchors the harmony with deep root notes and gentle 5th walks. Sits in the sub-bass to bass range, providing gravitational warmth. Sparse \u2014 only root movements with long sustains (4-8s), occasionally walking to the next chord root via chromatic approach.\n- CHORDS (Warm Pad, 300Hz-2kHz, MIDI 51-67): Sustained open-voiced 7th chords that bloom slowly. Each chord is a 4-note voicing (root-3rd-5th-7th) spread across the mid range. These pads are the harmonic body \u2014 they change together with bass on chord boundaries and sustain for 6-10 seconds, creating a pillowy warmth.\n- MELODY (Rhodes EP, 1-8kHz, MIDI 63-79): Sparse, gentle Rhodes phrases that float above the pad. Plays chord tones on strong beats (root, 3rd, 5th, 7th of current chord) with occasional dorian scale passing tones. Notes are widely spaced (2-6s apart) with long sustains, mimicking a sleepy jazz musician gently touching keys.\n\nRHYTHMIC INTERLOCK: No drums in sleep mode. Bass provides slow rhythmic anchoring (whole notes and longer). Pad sustains continuously beneath. Rhodes melody enters with gentle phrases that breathe \u2014 1-2 notes, then silence, then another phrase. Everything feels like it's floating.\n\nENERGY ARC (6 segments of ~7.5s each):\n- 0-7.5s (0.3): Bass and pad enter softly. One or two melody notes. Establishing warmth.\n- 7.5-15s (0.4): Melody begins gentle phrases. Slightly more presence.\n- 15-22.5s (0.5): Peak gentleness \u2014 all three tracks most active (still very sparse). Fuller chord voicings.\n- 22.5-30s (0.5): Sustained peak. Melody plays its most expressive (but still minimal) phrases.\n- 30-37.5s (0.4): Beginning to recede. Fewer melody notes. Velocities drop.\n- 37.5-45s (0.3): Fade to near-silence. Final sustained chord and single melody note lingering.\n\nHARMONIC PLAN (Eb key):\n- Bars 1-2 (0-10s): Fm7 (F-Ab-C-Eb) \u2014 ii7\n- Bars 3-4 (10-20s): Bb7 (Bb-D-F-Ab) \u2014 V7\n- Bars 5-6 (20-30s): Ebmaj7 (Eb-G-Bb-D) \u2014 Imaj7\n- Bars 7-8 (30-37.5s): Cm7 (C-Eb-G-Bb) \u2014 vi7\n- Bar 9 (37.5-41s): Fm7 \u2014 ii7\n- Bar 10 (41-45s): Bb7 \u2192 resolution hint \u2014 V7\n\nAll tracks change chords SIMULTANEOUSLY at these boundaries, creating unified harmonic motion.",
+  "tracks": [
+    {
+      "name": "Rhodes Melody",
+      "program": 4,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-8kHz)",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 65,
+          "velocity": 30,
+          "startTime": 1.5,
+          "duration": 5.0
+        },
+        {
+          "note": 68,
+          "velocity": 35,
+          "startTime": 7.0,
+          "duration": 4.5
+        },
+        {
+          "note": 72,
+          "velocity": 40,
+          "startTime": 10.5,
+          "duration": 5.5
+        },
+        {
+          "note": 70,
+          "velocity": 42,
+          "startTime": 14.0,
+          "duration": 4.0
+        },
+        {
+          "note": 68,
+          "velocity": 45,
+          "startTime": 16.5,
+          "duration": 3.5
+        },
+        {
+          "note": 65,
+          "velocity": 48,
+          "startTime": 20.0,
+          "duration": 6.0
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 22.5,
+          "duration": 5.0
+        },
+        {
+          "note": 70,
+          "velocity": 48,
+          "startTime": 25.0,
+          "duration": 4.5
+        },
+        {
+          "note": 74,
+          "velocity": 45,
+          "startTime": 27.5,
+          "duration": 5.5
+        },
+        {
+          "note": 72,
+          "velocity": 42,
+          "startTime": 30.0,
+          "duration": 5.0
+        },
+        {
+          "note": 75,
+          "velocity": 40,
+          "startTime": 33.0,
+          "duration": 4.0
+        },
+        {
+          "note": 70,
+          "velocity": 38,
+          "startTime": 35.5,
+          "duration": 5.5
+        },
+        {
+          "note": 67,
+          "velocity": 35,
+          "startTime": 38.0,
+          "duration": 4.5
+        },
+        {
+          "note": 65,
+          "velocity": 32,
+          "startTime": 40.5,
+          "duration": 3.5
+        },
+        {
+          "note": 63,
+          "velocity": 28,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 68,
+          "velocity": 25,
+          "startTime": 43.5,
+          "duration": 1.5
+        }
+      ]
+    },
+    {
+      "name": "Finger Bass",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "sub-bass(20-100Hz) and bass(100-300Hz)",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 41,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 41,
+          "velocity": 38,
+          "startTime": 5.0,
+          "duration": 5.0
+        },
+        {
+          "note": 46,
+          "velocity": 45,
+          "startTime": 10.0,
+          "duration": 5.0
+        },
+        {
+          "note": 45,
+          "velocity": 42,
+          "startTime": 14.5,
+          "duration": 1.5
+        },
+        {
+          "note": 46,
+          "velocity": 48,
+          "startTime": 15.5,
+          "duration": 4.5
+        },
+        {
+          "note": 39,
+          "velocity": 50,
+          "startTime": 20.0,
+          "duration": 5.0
+        },
+        {
+          "note": 39,
+          "velocity": 48,
+          "startTime": 25.0,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 45,
+          "startTime": 29.5,
+          "duration": 1.0
+        },
+        {
+          "note": 36,
+          "velocity": 48,
+          "startTime": 30.0,
+          "duration": 5.0
+        },
+        {
+          "note": 36,
+          "velocity": 45,
+          "startTime": 35.0,
+          "duration": 2.5
+        },
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 37.5,
+          "duration": 3.5
+        },
+        {
+          "note": 40,
+          "velocity": 38,
+          "startTime": 40.5,
+          "duration": 0.8
+        },
+        {
+          "note": 41,
+          "velocity": 35,
+          "startTime": 41.0,
+          "duration": 2.0
+        },
+        {
+          "note": 46,
+          "velocity": 32,
+          "startTime": 42.5,
+          "duration": 2.5
+        },
+        {
+          "note": 45,
+          "velocity": 28,
+          "startTime": 44.0,
+          "duration": 1.0
+        },
+        {
+          "note": 39,
+          "velocity": 25,
+          "startTime": 44.5,
+          "duration": 0.5
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Chords",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "low-mid(300Hz-1kHz) and high-mid(1-2kHz)",
+      "suggestedVolume": 0.38,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 53,
+          "velocity": 30,
+          "startTime": 0.5,
+          "duration": 9.0
+        },
+        {
+          "note": 56,
+          "velocity": 28,
+          "startTime": 0.5,
+          "duration": 9.0
+        },
+        {
+          "note": 60,
+          "velocity": 28,
+          "startTime": 0.5,
+          "duration": 9.0
+        },
+        {
+          "note": 63,
+          "velocity": 26,
+          "startTime": 0.5,
+          "duration": 9.0
+        },
+        {
+          "note": 58,
+          "velocity": 35,
+          "startTime": 10.0,
+          "duration": 10.0
+        },
+        {
+          "note": 62,
+          "velocity": 33,
+          "startTime": 10.0,
+          "duration": 10.0
+        },
+        {
+          "note": 65,
+          "velocity": 33,
+          "startTime": 10.0,
+          "duration": 10.0
+        },
+        {
+          "note": 68,
+          "velocity": 30,
+          "startTime": 10.0,
+          "duration": 10.0
+        },
+        {
+          "note": 55,
+          "velocity": 40,
+          "startTime": 20.0,
+          "duration": 10.0
+        },
+        {
+          "note": 58,
+          "velocity": 38,
+          "startTime": 20.0,
+          "duration": 10.0
+        },
+        {
+          "note": 62,
+          "velocity": 38,
+          "startTime": 20.0,
+          "duration": 10.0
+        },
+        {
+          "note": 67,
+          "velocity": 35,
+          "startTime": 20.0,
+          "duration": 10.0
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 30.0,
+          "duration": 7.5
+        },
+        {
+          "note": 60,
+          "velocity": 35,
+          "startTime": 30.0,
+          "duration": 7.5
+        },
+        {
+          "note": 63,
+          "velocity": 35,
+          "startTime": 30.0,
+          "duration": 7.5
+        },
+        {
+          "note": 67,
+          "velocity": 32,
+          "startTime": 30.0,
+          "duration": 7.5
+        },
+        {
+          "note": 53,
+          "velocity": 32,
+          "startTime": 37.5,
+          "duration": 3.5
+        },
+        {
+          "note": 56,
+          "velocity": 30,
+          "startTime": 37.5,
+          "duration": 3.5
+        },
+        {
+          "note": 60,
+          "velocity": 30,
+          "startTime": 37.5,
+          "duration": 3.5
+        },
+        {
+          "note": 63,
+          "velocity": 28,
+          "startTime": 37.5,
+          "duration": 3.5
+        },
+        {
+          "note": 58,
+          "velocity": 28,
+          "startTime": 41.0,
+          "duration": 4.0
+        },
+        {
+          "note": 62,
+          "velocity": 26,
+          "startTime": 41.0,
+          "duration": 4.0
+        },
+        {
+          "note": 65,
+          "velocity": 26,
+          "startTime": 41.0,
+          "duration": 4.0
+        },
+        {
+          "note": 68,
+          "velocity": 25,
+          "startTime": 41.0,
+          "duration": 4.0
+        }
+      ]
+    }
+  ],
+  "key": "Eb",
+  "bpm": 48,
+  "scale": "Dorian with minor 7th and major pentatonic colors"
+}

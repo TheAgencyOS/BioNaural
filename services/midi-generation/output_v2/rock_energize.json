@@ -1,0 +1,2714 @@
+{
+  "genre": "rock",
+  "mode": "energize",
+  "mixStrategy": "FREQUENCY SEPARATION: Bass (Electric Bass, GM 33) owns 20-300Hz with notes E1-E3 (MIDI 28-52), providing the rhythmic and harmonic foundation with driving eighth-note patterns that lock tightly with the kick drum. Chords (Warm Pad, GM 89) fill 300Hz-2kHz with sustained power chords (root+5th) in the E2-B4 range (MIDI 40-71), creating a thick harmonic bed underneath. Melody (Overdriven Guitar, GM 29) cuts through at 1-8kHz with pentatonic riffs in E4-E5 (MIDI 64-76), playing the lead voice with punchy rhythmic stabs and melodic phrases. Drums (GM 0 channel 10) provide full-spectrum rhythmic drive with kick on 1&3, snare on 2&4, hi-hat eighths, and crash accents at section boundaries.\n\nHARMONIC PLAN: The progression is Em \u2192 D \u2192 C \u2192 D (i \u2192 bVII \u2192 bVI \u2192 bVII) for the verse segments, and Em \u2192 C \u2192 D \u2192 D (i \u2192 bVI \u2192 bVII \u2192 bVII) for the chorus/peak segments. All tracks change chords on the SAME beats. Each chord lasts 2 bars (4 beats = ~2.087s at 115 BPM).\n\nRHYTHMIC INTERLOCK: Bass plays driving eighth notes that align with kick drum hits on beats 1 and 3. Snare accents beats 2 and 4 for backbeat drive. Hi-hat plays steady eighths for momentum. Melody riffs land on chord tones on strong beats and use pentatonic passing tones on weak beats. The pad sustains underneath to glue everything together.\n\nENERGY ARC (6 segments of ~7.5s each): Seg1 (0-7.5s) 0.4 energy \u2014 sparse intro, bass and drums only, lower velocities. Seg2 (7.5-15s) 0.6 \u2014 chords enter, melody hints. Seg3 (15-22.5s) 0.8 \u2014 full band, melody riffs intensify. Seg4 (22.5-30s) 0.9 \u2014 peak verse energy, dense riffing. Seg5 (30-37.5s) 1.0 \u2014 climax, highest velocities, crash cymbals, most dense. Seg6 (37.5-45s) 0.7 \u2014 controlled descent, sparser melody, sustained chords fade.",
+  "tracks": [
+    {
+      "name": "Overdriven Lead Guitar",
+      "program": 29,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz), presence(5kHz+)",
+      "suggestedVolume": 0.78,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 64,
+          "velocity": 70,
+          "startTime": 3.13,
+          "duration": 0.52
+        },
+        {
+          "note": 67,
+          "velocity": 72,
+          "startTime": 4.17,
+          "duration": 0.52
+        },
+        {
+          "note": 64,
+          "velocity": 75,
+          "startTime": 7.83,
+          "duration": 0.4
+        },
+        {
+          "note": 67,
+          "velocity": 78,
+          "startTime": 8.35,
+          "duration": 0.35
+        },
+        {
+          "note": 69,
+          "velocity": 80,
+          "startTime": 8.87,
+          "duration": 0.52
+        },
+        {
+          "note": 71,
+          "velocity": 82,
+          "startTime": 9.91,
+          "duration": 0.52
+        },
+        {
+          "note": 72,
+          "velocity": 80,
+          "startTime": 10.43,
+          "duration": 0.78
+        },
+        {
+          "note": 69,
+          "velocity": 78,
+          "startTime": 11.48,
+          "duration": 0.52
+        },
+        {
+          "note": 67,
+          "velocity": 80,
+          "startTime": 12.0,
+          "duration": 0.52
+        },
+        {
+          "note": 64,
+          "velocity": 82,
+          "startTime": 12.52,
+          "duration": 1.04
+        },
+        {
+          "note": 67,
+          "velocity": 85,
+          "startTime": 14.09,
+          "duration": 0.26
+        },
+        {
+          "note": 69,
+          "velocity": 85,
+          "startTime": 14.35,
+          "duration": 0.26
+        },
+        {
+          "note": 71,
+          "velocity": 88,
+          "startTime": 15.13,
+          "duration": 0.52
+        },
+        {
+          "note": 72,
+          "velocity": 90,
+          "startTime": 15.65,
+          "duration": 0.52
+        },
+        {
+          "note": 76,
+          "velocity": 92,
+          "startTime": 16.17,
+          "duration": 0.78
+        },
+        {
+          "note": 74,
+          "velocity": 88,
+          "startTime": 17.22,
+          "duration": 0.52
+        },
+        {
+          "note": 72,
+          "velocity": 85,
+          "startTime": 17.74,
+          "duration": 0.52
+        },
+        {
+          "note": 71,
+          "velocity": 88,
+          "startTime": 18.26,
+          "duration": 0.26
+        },
+        {
+          "note": 69,
+          "velocity": 85,
+          "startTime": 18.52,
+          "duration": 0.52
+        },
+        {
+          "note": 67,
+          "velocity": 90,
+          "startTime": 19.3,
+          "duration": 0.52
+        },
+        {
+          "note": 69,
+          "velocity": 88,
+          "startTime": 19.83,
+          "duration": 1.04
+        },
+        {
+          "note": 72,
+          "velocity": 92,
+          "startTime": 21.13,
+          "duration": 0.52
+        },
+        {
+          "note": 74,
+          "velocity": 90,
+          "startTime": 21.65,
+          "duration": 0.52
+        },
+        {
+          "note": 76,
+          "velocity": 95,
+          "startTime": 22.7,
+          "duration": 0.78
+        },
+        {
+          "note": 74,
+          "velocity": 92,
+          "startTime": 23.48,
+          "duration": 0.26
+        },
+        {
+          "note": 72,
+          "velocity": 90,
+          "startTime": 23.74,
+          "duration": 0.52
+        },
+        {
+          "note": 71,
+          "velocity": 92,
+          "startTime": 24.26,
+          "duration": 0.52
+        },
+        {
+          "note": 69,
+          "velocity": 88,
+          "startTime": 24.78,
+          "duration": 0.52
+        },
+        {
+          "note": 67,
+          "velocity": 90,
+          "startTime": 25.3,
+          "duration": 0.26
+        },
+        {
+          "note": 69,
+          "velocity": 92,
+          "startTime": 25.57,
+          "duration": 0.78
+        },
+        {
+          "note": 72,
+          "velocity": 95,
+          "startTime": 26.61,
+          "duration": 0.52
+        },
+        {
+          "note": 76,
+          "velocity": 98,
+          "startTime": 27.13,
+          "duration": 0.78
+        },
+        {
+          "note": 74,
+          "velocity": 95,
+          "startTime": 28.17,
+          "duration": 0.52
+        },
+        {
+          "note": 72,
+          "velocity": 92,
+          "startTime": 28.7,
+          "duration": 0.52
+        },
+        {
+          "note": 69,
+          "velocity": 95,
+          "startTime": 29.22,
+          "duration": 1.04
+        },
+        {
+          "note": 76,
+          "velocity": 100,
+          "startTime": 30.26,
+          "duration": 0.78
+        },
+        {
+          "note": 74,
+          "velocity": 98,
+          "startTime": 31.3,
+          "duration": 0.26
+        },
+        {
+          "note": 72,
+          "velocity": 100,
+          "startTime": 31.57,
+          "duration": 0.52
+        },
+        {
+          "note": 76,
+          "velocity": 105,
+          "startTime": 32.09,
+          "duration": 0.78
+        },
+        {
+          "note": 79,
+          "velocity": 108,
+          "startTime": 33.13,
+          "duration": 0.52
+        },
+        {
+          "note": 76,
+          "velocity": 105,
+          "startTime": 33.65,
+          "duration": 0.52
+        },
+        {
+          "note": 74,
+          "velocity": 100,
+          "startTime": 34.17,
+          "duration": 0.52
+        },
+        {
+          "note": 72,
+          "velocity": 102,
+          "startTime": 34.7,
+          "duration": 0.52
+        },
+        {
+          "note": 74,
+          "velocity": 105,
+          "startTime": 35.22,
+          "duration": 0.78
+        },
+        {
+          "note": 76,
+          "velocity": 110,
+          "startTime": 36.0,
+          "duration": 1.04
+        },
+        {
+          "note": 72,
+          "velocity": 100,
+          "startTime": 37.3,
+          "duration": 0.52
+        },
+        {
+          "note": 74,
+          "velocity": 95,
+          "startTime": 37.83,
+          "duration": 0.52
+        },
+        {
+          "note": 72,
+          "velocity": 88,
+          "startTime": 38.35,
+          "duration": 1.04
+        },
+        {
+          "note": 69,
+          "velocity": 85,
+          "startTime": 39.65,
+          "duration": 0.78
+        },
+        {
+          "note": 67,
+          "velocity": 82,
+          "startTime": 40.7,
+          "duration": 0.52
+        },
+        {
+          "note": 69,
+          "velocity": 80,
+          "startTime": 41.22,
+          "duration": 1.04
+        },
+        {
+          "note": 67,
+          "velocity": 78,
+          "startTime": 42.52,
+          "duration": 0.52
+        },
+        {
+          "note": 64,
+          "velocity": 75,
+          "startTime": 43.04,
+          "duration": 1.56
+        }
+      ]
+    },
+    {
+      "name": "Driving Electric Bass",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "sub-bass(20-100Hz), bass(100-300Hz)",
+      "suggestedVolume": 0.75,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 28,
+          "velocity": 80,
+          "startTime": 0,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 75,
+          "startTime": 0.52,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 82,
+          "startTime": 1.04,
+          "duration": 0.52
+        },
+        {
+          "note": 35,
+          "velocity": 78,
+          "startTime": 1.57,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 85,
+          "startTime": 2.09,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 80,
+          "startTime": 2.61,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 82,
+          "startTime": 3.13,
+          "duration": 0.52
+        },
+        {
+          "note": 35,
+          "velocity": 78,
+          "startTime": 3.65,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 85,
+          "startTime": 4.17,
+          "duration": 0.52
+        },
+        {
+          "note": 38,
+          "velocity": 80,
+          "startTime": 4.7,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 82,
+          "startTime": 5.22,
+          "duration": 0.52
+        },
+        {
+          "note": 40,
+          "velocity": 78,
+          "startTime": 5.74,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 85,
+          "startTime": 6.26,
+          "duration": 0.52
+        },
+        {
+          "note": 38,
+          "velocity": 80,
+          "startTime": 6.78,
+          "duration": 0.26
+        },
+        {
+          "note": 36,
+          "velocity": 82,
+          "startTime": 7.3,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 85,
+          "startTime": 7.57,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 88,
+          "startTime": 8.35,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 82,
+          "startTime": 8.87,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 85,
+          "startTime": 9.39,
+          "duration": 0.52
+        },
+        {
+          "note": 35,
+          "velocity": 80,
+          "startTime": 9.91,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 88,
+          "startTime": 10.43,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 82,
+          "startTime": 10.96,
+          "duration": 0.26
+        },
+        {
+          "note": 35,
+          "velocity": 85,
+          "startTime": 11.48,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 82,
+          "startTime": 11.74,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 88,
+          "startTime": 12.52,
+          "duration": 0.52
+        },
+        {
+          "note": 38,
+          "velocity": 82,
+          "startTime": 13.04,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 85,
+          "startTime": 13.57,
+          "duration": 0.52
+        },
+        {
+          "note": 38,
+          "velocity": 80,
+          "startTime": 14.09,
+          "duration": 0.26
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 14.61,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 88,
+          "startTime": 14.87,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 90,
+          "startTime": 15.13,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 85,
+          "startTime": 15.65,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 88,
+          "startTime": 16.17,
+          "duration": 0.52
+        },
+        {
+          "note": 35,
+          "velocity": 85,
+          "startTime": 16.7,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 90,
+          "startTime": 17.22,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 85,
+          "startTime": 17.74,
+          "duration": 0.26
+        },
+        {
+          "note": 35,
+          "velocity": 88,
+          "startTime": 18.26,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 85,
+          "startTime": 18.52,
+          "duration": 0.26
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 19.3,
+          "duration": 0.52
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 19.83,
+          "duration": 0.26
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 20.35,
+          "duration": 0.52
+        },
+        {
+          "note": 38,
+          "velocity": 85,
+          "startTime": 20.87,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 21.13,
+          "duration": 0.52
+        },
+        {
+          "note": 38,
+          "velocity": 85,
+          "startTime": 21.65,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 88,
+          "startTime": 22.17,
+          "duration": 0.52
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 22.7,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 92,
+          "startTime": 22.96,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 88,
+          "startTime": 23.48,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 90,
+          "startTime": 24.0,
+          "duration": 0.52
+        },
+        {
+          "note": 35,
+          "velocity": 88,
+          "startTime": 24.52,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 92,
+          "startTime": 25.04,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 88,
+          "startTime": 25.57,
+          "duration": 0.26
+        },
+        {
+          "note": 35,
+          "velocity": 90,
+          "startTime": 26.09,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 88,
+          "startTime": 26.35,
+          "duration": 0.26
+        },
+        {
+          "note": 36,
+          "velocity": 92,
+          "startTime": 26.61,
+          "duration": 0.52
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 27.13,
+          "duration": 0.26
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 27.65,
+          "duration": 0.52
+        },
+        {
+          "note": 38,
+          "velocity": 88,
+          "startTime": 28.17,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 28.7,
+          "duration": 0.52
+        },
+        {
+          "note": 38,
+          "velocity": 88,
+          "startTime": 29.22,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 29.74,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 95,
+          "startTime": 30.26,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 90,
+          "startTime": 30.78,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 92,
+          "startTime": 31.3,
+          "duration": 0.52
+        },
+        {
+          "note": 35,
+          "velocity": 90,
+          "startTime": 31.83,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 95,
+          "startTime": 32.35,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 90,
+          "startTime": 32.87,
+          "duration": 0.26
+        },
+        {
+          "note": 35,
+          "velocity": 92,
+          "startTime": 33.39,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 90,
+          "startTime": 33.65,
+          "duration": 0.26
+        },
+        {
+          "note": 36,
+          "velocity": 95,
+          "startTime": 34.17,
+          "duration": 0.52
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 34.7,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 95,
+          "startTime": 35.22,
+          "duration": 0.52
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 35.74,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 98,
+          "startTime": 36.26,
+          "duration": 0.52
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 36.78,
+          "duration": 0.26
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 37.3,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 37.57,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 88,
+          "startTime": 37.83,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 82,
+          "startTime": 38.35,
+          "duration": 0.26
+        },
+        {
+          "note": 28,
+          "velocity": 85,
+          "startTime": 38.87,
+          "duration": 0.52
+        },
+        {
+          "note": 35,
+          "velocity": 82,
+          "startTime": 39.39,
+          "duration": 0.26
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 39.91,
+          "duration": 0.52
+        },
+        {
+          "note": 36,
+          "velocity": 80,
+          "startTime": 40.43,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 85,
+          "startTime": 40.96,
+          "duration": 0.52
+        },
+        {
+          "note": 38,
+          "velocity": 80,
+          "startTime": 41.48,
+          "duration": 0.26
+        },
+        {
+          "note": 38,
+          "velocity": 82,
+          "startTime": 42.0,
+          "duration": 0.52
+        },
+        {
+          "note": 36,
+          "velocity": 80,
+          "startTime": 42.52,
+          "duration": 0.26
+        },
+        {
+          "note": 35,
+          "velocity": 82,
+          "startTime": 43.04,
+          "duration": 0.52
+        },
+        {
+          "note": 28,
+          "velocity": 85,
+          "startTime": 43.57,
+          "duration": 1.3
+        }
+      ]
+    },
+    {
+      "name": "Power Chord Pad",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz), high-mid(1-5kHz)",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 52,
+          "velocity": 55,
+          "startTime": 7.83,
+          "duration": 2.09
+        },
+        {
+          "note": 59,
+          "velocity": 55,
+          "startTime": 7.83,
+          "duration": 2.09
+        },
+        {
+          "note": 50,
+          "velocity": 58,
+          "startTime": 10.43,
+          "duration": 2.09
+        },
+        {
+          "note": 57,
+          "velocity": 58,
+          "startTime": 10.43,
+          "duration": 2.09
+        },
+        {
+          "note": 48,
+          "velocity": 58,
+          "startTime": 12.52,
+          "duration": 2.09
+        },
+        {
+          "note": 55,
+          "velocity": 58,
+          "startTime": 12.52,
+          "duration": 2.09
+        },
+        {
+          "note": 50,
+          "velocity": 58,
+          "startTime": 14.61,
+          "duration": 1.56
+        },
+        {
+          "note": 57,
+          "velocity": 58,
+          "startTime": 14.61,
+          "duration": 1.56
+        },
+        {
+          "note": 52,
+          "velocity": 62,
+          "startTime": 16.17,
+          "duration": 2.09
+        },
+        {
+          "note": 59,
+          "velocity": 62,
+          "startTime": 16.17,
+          "duration": 2.09
+        },
+        {
+          "note": 50,
+          "velocity": 60,
+          "startTime": 18.26,
+          "duration": 2.09
+        },
+        {
+          "note": 57,
+          "velocity": 60,
+          "startTime": 18.26,
+          "duration": 2.09
+        },
+        {
+          "note": 48,
+          "velocity": 62,
+          "startTime": 20.35,
+          "duration": 1.83
+        },
+        {
+          "note": 55,
+          "velocity": 62,
+          "startTime": 20.35,
+          "duration": 1.83
+        },
+        {
+          "note": 50,
+          "velocity": 62,
+          "startTime": 22.17,
+          "duration": 1.83
+        },
+        {
+          "note": 57,
+          "velocity": 62,
+          "startTime": 22.17,
+          "duration": 1.83
+        },
+        {
+          "note": 52,
+          "velocity": 65,
+          "startTime": 24.0,
+          "duration": 2.09
+        },
+        {
+          "note": 59,
+          "velocity": 65,
+          "startTime": 24.0,
+          "duration": 2.09
+        },
+        {
+          "note": 48,
+          "velocity": 65,
+          "startTime": 26.09,
+          "duration": 2.09
+        },
+        {
+          "note": 55,
+          "velocity": 65,
+          "startTime": 26.09,
+          "duration": 2.09
+        },
+        {
+          "note": 50,
+          "velocity": 65,
+          "startTime": 28.17,
+          "duration": 2.09
+        },
+        {
+          "note": 57,
+          "velocity": 65,
+          "startTime": 28.17,
+          "duration": 2.09
+        },
+        {
+          "note": 52,
+          "velocity": 68,
+          "startTime": 30.26,
+          "duration": 2.09
+        },
+        {
+          "note": 59,
+          "velocity": 68,
+          "startTime": 30.26,
+          "duration": 2.09
+        },
+        {
+          "note": 64,
+          "velocity": 65,
+          "startTime": 30.26,
+          "duration": 2.09
+        },
+        {
+          "note": 48,
+          "velocity": 68,
+          "startTime": 32.35,
+          "duration": 1.83
+        },
+        {
+          "note": 55,
+          "velocity": 68,
+          "startTime": 32.35,
+          "duration": 1.83
+        },
+        {
+          "note": 60,
+          "velocity": 65,
+          "startTime": 32.35,
+          "duration": 1.83
+        },
+        {
+          "note": 50,
+          "velocity": 70,
+          "startTime": 34.17,
+          "duration": 2.09
+        },
+        {
+          "note": 57,
+          "velocity": 70,
+          "startTime": 34.17,
+          "duration": 2.09
+        },
+        {
+          "note": 62,
+          "velocity": 68,
+          "startTime": 34.17,
+          "duration": 2.09
+        },
+        {
+          "note": 52,
+          "velocity": 70,
+          "startTime": 36.26,
+          "duration": 2.09
+        },
+        {
+          "note": 59,
+          "velocity": 70,
+          "startTime": 36.26,
+          "duration": 2.09
+        },
+        {
+          "note": 64,
+          "velocity": 68,
+          "startTime": 36.26,
+          "duration": 2.09
+        },
+        {
+          "note": 52,
+          "velocity": 62,
+          "startTime": 38.35,
+          "duration": 2.09
+        },
+        {
+          "note": 59,
+          "velocity": 62,
+          "startTime": 38.35,
+          "duration": 2.09
+        },
+        {
+          "note": 48,
+          "velocity": 60,
+          "startTime": 40.43,
+          "duration": 2.09
+        },
+        {
+          "note": 55,
+          "velocity": 60,
+          "startTime": 40.43,
+          "duration": 2.09
+        },
+        {
+          "note": 50,
+          "velocity": 58,
+          "startTime": 42.52,
+          "duration": 2.09
+        },
+        {
+          "note": 57,
+          "velocity": 58,
+          "startTime": 42.52,
+          "duration": 2.09
+        },
+        {
+          "note": 52,
+          "velocity": 55,
+          "startTime": 43.57,
+          "duration": 1.43
+        },
+        {
+          "note": 59,
+          "velocity": 55,
+          "startTime": 43.57,
+          "duration": 1.43
+        }
+      ]
+    },
+    {
+      "name": "Rock Drums",
+      "program": 0,
+      "role": "drums",
+      "frequencyRole": "sub-bass(20-100Hz), high-mid(1-5kHz), presence(5kHz+)",
+      "suggestedVolume": 0.8,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 0,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 0.26,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 0.52,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 0.52,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 0.78,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 1.04,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 1.04,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 1.3,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 1.57,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 1.57,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 1.83,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 2.09,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 2.09,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 2.35,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 2.61,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 2.61,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 2.87,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 3.13,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 3.13,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 3.39,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 3.65,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 3.65,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 3.91,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 4.17,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 4.17,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 4.43,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 4.7,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 4.7,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 4.96,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 5.22,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 5.22,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 5.48,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 5.74,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 5.74,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 6.0,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 6.26,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 6.26,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 6.52,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 6.78,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 6.78,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 7.04,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 7.3,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 7.3,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 7.57,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 7.83,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 7.83,
+          "duration": 0.2
+        },
+        {
+          "note": 49,
+          "velocity": 95,
+          "startTime": 7.83,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 8.09,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 8.35,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 8.35,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 8.61,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 8.87,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 8.87,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 9.13,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 9.39,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 9.39,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 9.65,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 9.91,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 9.91,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 10.17,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 10.43,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 10.43,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 10.7,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 10.96,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 10.96,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 11.22,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 11.48,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 11.48,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 11.74,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 12.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 12.0,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 12.26,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 12.52,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 12.52,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 12.78,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 13.04,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 13.04,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 13.3,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 13.57,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 13.57,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 13.83,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 14.09,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 14.09,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 14.35,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 14.61,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 14.61,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 14.87,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 95,
+          "startTime": 15.13,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 15.13,
+          "duration": 0.2
+        },
+        {
+          "note": 49,
+          "velocity": 98,
+          "startTime": 15.13,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 15.39,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 15.65,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 15.65,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 15.91,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 95,
+          "startTime": 16.17,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 16.17,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 16.43,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 16.7,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 16.7,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 16.96,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 95,
+          "startTime": 17.22,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 17.22,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 17.48,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 17.74,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 17.74,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 18.0,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 95,
+          "startTime": 18.26,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 18.26,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 18.52,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 18.78,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 18.78,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 19.04,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 95,
+          "startTime": 19.3,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 19.3,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 19.57,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 19.83,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 19.83,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 20.09,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 95,
+          "startTime": 20.35,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 20.35,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 20.61,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 20.87,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 20.87,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 21.13,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 95,
+          "startTime": 21.39,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 21.39,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 21.65,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 92,
+          "startTime": 21.91,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 21.91,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 22.17,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 98,
+          "startTime": 22.43,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 22.43,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 22.7,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 92,
+          "startTime": 22.96,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 22.96,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 23.22,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 98,
+          "startTime": 23.48,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 23.48,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 23.74,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 92,
+          "startTime": 24.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 24.0,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 24.26,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 98,
+          "startTime": 24.52,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 24.52,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 24.78,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 92,
+          "startTime": 25.04,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 25.04,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 25.3,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 98,
+          "startTime": 25.57,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 25.57,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 25.83,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 92,
+          "startTime": 26.09,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 26.09,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 26.35,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 98,
+          "startTime": 26.61,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 26.61,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 26.87,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 92,
+          "startTime": 27.13,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 27.13,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 27.39,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 98,
+          "startTime": 27.65,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 27.65,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 27.91,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 92,
+          "startTime": 28.17,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 28.17,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 28.43,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 98,
+          "startTime": 28.7,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 28.7,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 28.96,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 92,
+          "startTime": 29.22,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 29.22,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 29.48,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 98,
+          "startTime": 29.74,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 29.74,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 30.0,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 95,
+          "startTime": 30.26,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 80,
+          "startTime": 30.26,
+          "duration": 0.2
+        },
+        {
+          "note": 49,
+          "velocity": 105,
+          "startTime": 30.26,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 30.52,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 100,
+          "startTime": 30.78,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 80,
+          "startTime": 30.78,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 31.04,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 95,
+          "startTime": 31.3,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 80,
+          "startTime": 31.3,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 31.57,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 100,
+          "startTime": 31.83,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 80,
+          "startTime": 31.83,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 32.09,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 95,
+          "startTime": 32.35,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 80,
+          "startTime": 32.35,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 32.61,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 100,
+          "startTime": 32.87,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 80,
+          "startTime": 32.87,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 33.13,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 95,
+          "startTime": 33.39,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 80,
+          "startTime": 33.39,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 33.65,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 100,
+          "startTime": 33.91,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 80,
+          "startTime": 33.91,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 34.17,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 98,
+          "startTime": 34.43,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 82,
+          "startTime": 34.43,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 34.7,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 105,
+          "startTime": 34.96,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 82,
+          "startTime": 34.96,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 35.22,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 98,
+          "startTime": 35.48,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 82,
+          "startTime": 35.48,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 35.74,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 105,
+          "startTime": 36.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 82,
+          "startTime": 36.0,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 36.26,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 98,
+          "startTime": 36.52,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 82,
+          "startTime": 36.52,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 78,
+          "startTime": 36.78,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 105,
+          "startTime": 37.04,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 82,
+          "startTime": 37.04,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 37.3,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 37.57,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 37.57,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 37.83,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 38.09,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 38.09,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 38.35,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 38.61,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 38.61,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 38.87,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 39.13,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 39.13,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 39.39,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 90,
+          "startTime": 39.65,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 39.65,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 39.91,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 92,
+          "startTime": 40.17,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 75,
+          "startTime": 40.17,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 40.43,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 40.7,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 40.7,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 40.96,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 41.22,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 41.22,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 41.48,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 41.74,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 41.74,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 42.0,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 42.26,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 42.26,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 42.52,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 88,
+          "startTime": 42.78,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 42.78,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 43.04,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 90,
+          "startTime": 43.3,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 72,
+          "startTime": 43.3,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 68,
+          "startTime": 43.57,
+          "duration": 0.2
+        },
+        {
+          "note": 36,
+          "velocity": 85,
+          "startTime": 43.83,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 70,
+          "startTime": 43.83,
+          "duration": 0.2
+        },
+        {
+          "note": 42,
+          "velocity": 65,
+          "startTime": 44.09,
+          "duration": 0.2
+        },
+        {
+          "note": 38,
+          "velocity": 88,
+          "startTime": 44.35,
+          "duration": 0.3
+        },
+        {
+          "note": 49,
+          "velocity": 90,
+          "startTime": 44.35,
+          "duration": 0.5
+        }
+      ]
+    }
+  ],
+  "key": "Em",
+  "bpm": 115,
+  "scale": "E natural minor / E minor pentatonic / E blues scale"
+}

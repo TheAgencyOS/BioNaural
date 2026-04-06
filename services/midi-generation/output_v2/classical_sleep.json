@@ -1,0 +1,470 @@
+{
+  "genre": "classical",
+  "mode": "sleep",
+  "mixStrategy": "This sleep-mode Classical arrangement is built around a gentle I\u2192IV\u2192V\u2192I then I\u2192vi\u2192IV\u2192V progression in C major, with each track occupying a distinct frequency band to create a warm, enveloping sonic blanket.\n\nFREQUENCY SEPARATION:\n- BASS (Cello, 20-300Hz, MIDI 36-48): Provides the harmonic foundation with sustained root notes and occasional 5ths. Very long notes (4-8s) anchoring each chord change. Sits in the sub-bass/bass region.\n- CHORDS (String Ensemble, 300Hz-2kHz, MIDI 48-67): Gentle sustained triads and 7th chords in close voicing. Provides the harmonic body with smooth voice leading \u2014 common tones are held across chord changes. Warm, pillowy pad.\n- MELODY (Acoustic Piano, 1-8kHz, MIDI 60-76): A lyrical, stepwise lullaby theme with long note values. Plays chord tones on strong beats, with gentle scalar passing tones. Very sparse \u2014 breathing space between phrases.\n- TEXTURE (Flute, 3kHz+, MIDI 72-84): Ethereal counter-melody fragments, extremely sparse. Provides shimmer and air. Responds to the piano melody in call-and-response fashion.\n\nENERGY ARC (6 segments of ~7.5s each):\n0-7.5s: 0.3 \u2014 Only bass and soft chords enter. Piano plays first note at end.\n7.5-15s: 0.4 \u2014 Piano melody enters gently, strings swell slightly.\n15-22.5s: 0.5 \u2014 Peak warmth. Flute enters. All four voices present.\n22.5-30s: 0.5 \u2014 Sustained fullness, second phrase of progression.\n30-37.5s: 0.4 \u2014 Gradual retreat. Flute thins out, velocities drop.\n37.5-45s: 0.3 \u2014 Final plagal/authentic cadence. Everything fades to near-silence.\n\nRHYTHMIC INTERLOCK: At 48 BPM, a quarter note = 1.25s. All tracks change chords together. The bass sustains through chord changes, the strings shift voicings smoothly, the piano places notes on beats 1 and 3, and the flute floats above with ornamental fragments offset from the piano. No drums \u2014 pure tonal warmth for sleep.\n\nCHORD TIMING (each chord ~5.625s = ~4.5 beats at 48BPM, 8 chords across 45s):\nC (0-5.6) \u2192 F (5.6-11.25) \u2192 G (11.25-16.9) \u2192 C (16.9-22.5) \u2192 C (22.5-28.1) \u2192 Am (28.1-33.75) \u2192 F (33.75-39.4) \u2192 G (39.4-45)",
+  "tracks": [
+    {
+      "name": "Piano Lullaby",
+      "program": 0,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz)",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 72,
+          "velocity": 35,
+          "startTime": 2.5,
+          "duration": 5.0
+        },
+        {
+          "note": 71,
+          "velocity": 30,
+          "startTime": 5.6,
+          "duration": 2.5
+        },
+        {
+          "note": 69,
+          "velocity": 33,
+          "startTime": 8.1,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 11.25,
+          "duration": 4.0
+        },
+        {
+          "note": 69,
+          "velocity": 36,
+          "startTime": 15.25,
+          "duration": 1.5
+        },
+        {
+          "note": 72,
+          "velocity": 42,
+          "startTime": 16.9,
+          "duration": 5.0
+        },
+        {
+          "note": 71,
+          "velocity": 40,
+          "startTime": 22.0,
+          "duration": 2.5
+        },
+        {
+          "note": 72,
+          "velocity": 45,
+          "startTime": 22.5,
+          "duration": 4.0
+        },
+        {
+          "note": 76,
+          "velocity": 43,
+          "startTime": 26.5,
+          "duration": 3.5
+        },
+        {
+          "note": 74,
+          "velocity": 40,
+          "startTime": 28.1,
+          "duration": 3.0
+        },
+        {
+          "note": 72,
+          "velocity": 42,
+          "startTime": 31.1,
+          "duration": 2.5
+        },
+        {
+          "note": 69,
+          "velocity": 38,
+          "startTime": 33.75,
+          "duration": 4.0
+        },
+        {
+          "note": 67,
+          "velocity": 35,
+          "startTime": 37.75,
+          "duration": 2.0
+        },
+        {
+          "note": 65,
+          "velocity": 32,
+          "startTime": 39.4,
+          "duration": 3.0
+        },
+        {
+          "note": 64,
+          "velocity": 30,
+          "startTime": 42.4,
+          "duration": 2.5
+        },
+        {
+          "note": 60,
+          "velocity": 25,
+          "startTime": 44.0,
+          "duration": 1.0
+        }
+      ]
+    },
+    {
+      "name": "Cello Foundation",
+      "program": 42,
+      "role": "bass",
+      "frequencyRole": "bass(100-300Hz)",
+      "suggestedVolume": 0.5,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 36,
+          "velocity": 30,
+          "startTime": 0,
+          "duration": 5.5
+        },
+        {
+          "note": 41,
+          "velocity": 33,
+          "startTime": 5.6,
+          "duration": 5.5
+        },
+        {
+          "note": 43,
+          "velocity": 38,
+          "startTime": 11.25,
+          "duration": 5.5
+        },
+        {
+          "note": 40,
+          "velocity": 35,
+          "startTime": 14.0,
+          "duration": 2.8
+        },
+        {
+          "note": 36,
+          "velocity": 40,
+          "startTime": 16.9,
+          "duration": 5.5
+        },
+        {
+          "note": 43,
+          "velocity": 38,
+          "startTime": 19.5,
+          "duration": 2.8
+        },
+        {
+          "note": 36,
+          "velocity": 42,
+          "startTime": 22.5,
+          "duration": 5.5
+        },
+        {
+          "note": 43,
+          "velocity": 40,
+          "startTime": 25.0,
+          "duration": 2.8
+        },
+        {
+          "note": 45,
+          "velocity": 38,
+          "startTime": 28.1,
+          "duration": 5.5
+        },
+        {
+          "note": 40,
+          "velocity": 35,
+          "startTime": 31.0,
+          "duration": 2.5
+        },
+        {
+          "note": 41,
+          "velocity": 33,
+          "startTime": 33.75,
+          "duration": 5.5
+        },
+        {
+          "note": 36,
+          "velocity": 30,
+          "startTime": 36.5,
+          "duration": 2.8
+        },
+        {
+          "note": 43,
+          "velocity": 35,
+          "startTime": 39.4,
+          "duration": 4.0
+        },
+        {
+          "note": 40,
+          "velocity": 30,
+          "startTime": 41.5,
+          "duration": 2.0
+        },
+        {
+          "note": 36,
+          "velocity": 28,
+          "startTime": 43.5,
+          "duration": 1.5
+        }
+      ]
+    },
+    {
+      "name": "String Ensemble Pads",
+      "program": 49,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz)",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 48,
+          "velocity": 28,
+          "startTime": 0,
+          "duration": 5.5
+        },
+        {
+          "note": 52,
+          "velocity": 28,
+          "startTime": 0,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 28,
+          "startTime": 0,
+          "duration": 5.5
+        },
+        {
+          "note": 53,
+          "velocity": 32,
+          "startTime": 5.6,
+          "duration": 5.5
+        },
+        {
+          "note": 57,
+          "velocity": 32,
+          "startTime": 5.6,
+          "duration": 5.5
+        },
+        {
+          "note": 60,
+          "velocity": 32,
+          "startTime": 5.6,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 11.25,
+          "duration": 5.5
+        },
+        {
+          "note": 59,
+          "velocity": 38,
+          "startTime": 11.25,
+          "duration": 5.5
+        },
+        {
+          "note": 62,
+          "velocity": 36,
+          "startTime": 11.25,
+          "duration": 5.5
+        },
+        {
+          "note": 48,
+          "velocity": 40,
+          "startTime": 16.9,
+          "duration": 5.5
+        },
+        {
+          "note": 52,
+          "velocity": 40,
+          "startTime": 16.9,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 16.9,
+          "duration": 5.5
+        },
+        {
+          "note": 48,
+          "velocity": 42,
+          "startTime": 22.5,
+          "duration": 5.5
+        },
+        {
+          "note": 52,
+          "velocity": 42,
+          "startTime": 22.5,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 40,
+          "startTime": 22.5,
+          "duration": 5.5
+        },
+        {
+          "note": 57,
+          "velocity": 40,
+          "startTime": 28.1,
+          "duration": 5.5
+        },
+        {
+          "note": 60,
+          "velocity": 38,
+          "startTime": 28.1,
+          "duration": 5.5
+        },
+        {
+          "note": 64,
+          "velocity": 38,
+          "startTime": 28.1,
+          "duration": 5.5
+        },
+        {
+          "note": 53,
+          "velocity": 35,
+          "startTime": 33.75,
+          "duration": 5.5
+        },
+        {
+          "note": 57,
+          "velocity": 35,
+          "startTime": 33.75,
+          "duration": 5.5
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 33.75,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 32,
+          "startTime": 39.4,
+          "duration": 5.5
+        },
+        {
+          "note": 59,
+          "velocity": 32,
+          "startTime": 39.4,
+          "duration": 5.5
+        },
+        {
+          "note": 62,
+          "velocity": 30,
+          "startTime": 39.4,
+          "duration": 5.5
+        }
+      ]
+    },
+    {
+      "name": "Flute Shimmer",
+      "program": 73,
+      "role": "texture",
+      "frequencyRole": "presence(5kHz+)",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 79,
+          "velocity": 25,
+          "startTime": 14.0,
+          "duration": 2.8
+        },
+        {
+          "note": 77,
+          "velocity": 28,
+          "startTime": 16.9,
+          "duration": 4.0
+        },
+        {
+          "note": 79,
+          "velocity": 30,
+          "startTime": 21.0,
+          "duration": 3.5
+        },
+        {
+          "note": 84,
+          "velocity": 32,
+          "startTime": 22.5,
+          "duration": 3.0
+        },
+        {
+          "note": 83,
+          "velocity": 33,
+          "startTime": 25.5,
+          "duration": 2.5
+        },
+        {
+          "note": 84,
+          "velocity": 35,
+          "startTime": 28.1,
+          "duration": 4.0
+        },
+        {
+          "note": 81,
+          "velocity": 33,
+          "startTime": 29.5,
+          "duration": 2.5
+        },
+        {
+          "note": 79,
+          "velocity": 35,
+          "startTime": 32.1,
+          "duration": 3.0
+        },
+        {
+          "note": 77,
+          "velocity": 32,
+          "startTime": 33.75,
+          "duration": 3.5
+        },
+        {
+          "note": 76,
+          "velocity": 30,
+          "startTime": 35.5,
+          "duration": 2.5
+        },
+        {
+          "note": 74,
+          "velocity": 28,
+          "startTime": 37.25,
+          "duration": 2.0
+        },
+        {
+          "note": 79,
+          "velocity": 30,
+          "startTime": 39.4,
+          "duration": 3.0
+        },
+        {
+          "note": 77,
+          "velocity": 28,
+          "startTime": 40.5,
+          "duration": 2.0
+        },
+        {
+          "note": 76,
+          "velocity": 25,
+          "startTime": 42.4,
+          "duration": 2.5
+        },
+        {
+          "note": 72,
+          "velocity": 25,
+          "startTime": 43.5,
+          "duration": 1.5
+        }
+      ]
+    }
+  ],
+  "key": "C",
+  "bpm": 48,
+  "scale": "Major"
+}

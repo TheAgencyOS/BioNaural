@@ -1,0 +1,376 @@
+{
+  "genre": "latin",
+  "mode": "sleep",
+  "mixStrategy": "SLEEP LATIN LULLABY \u2014 Andalusian Cadence in Am (i\u2192bVII\u2192bVI\u2192V)\n\nFREQUENCY SEPARATION:\n- BASS (Electric Bass, 100-300Hz, MIDI 33-48): Ultra-slow tumbao-inspired roots. Plays chord roots A, G, F, E with gentle syncopated anticipations. Long sustains (4-8s) with very low velocity (25-45). Provides the warm harmonic foundation without any rhythmic aggression.\n- CHORDS (Piano, 300Hz-2kHz, MIDI 48-67): Dreamy montuno fragments \u2014 not full rapid-fire montuno but slow, arpeggiated chord voicings that hint at the Latin harmonic language. Soft broken chords with long sustains. Each chord change uses open voicings (root-5th-3rd-7th spread) to create warmth. Velocity 25-45.\n- MELODY (Flute, 1-8kHz, MIDI 64-79): Gentle, breathing melodic fragments in A harmonic minor. Sparse phrases with long notes that trace the chord tones on strong beats (A over Am, G over G, F over F, E/G# over E). Occasional ornamental passing tones (B, D, G#) for Latin color. Velocity 25-50. Lots of space and silence between phrases.\n\nNO DRUMS \u2014 Sleep mode eliminates all percussion.\n\nHARMONIC PLAN (each chord = ~5.6s = ~4.5 beats at 48 BPM):\nCycle 1 (0-22.5s): Am \u2192 G \u2192 F \u2192 E7 (energy 0.3\u21920.4\u21920.5\u21920.5)\nCycle 2 (22.5-45s): Am \u2192 G \u2192 F \u2192 E7 (energy 0.4\u21920.4\u21920.3\u21920.3)\n\nENERGY ARC: Starts hushed (vel ~25-30), gently swells to mid-section (vel ~40-50), then fades back to near-silence (vel ~25-30). The piece breathes like a sleeping body \u2014 slow inhale, slow exhale.\n\nRHYTHMIC INTERLOCK: Even in sleep mode, subtle syncopated anticipations remain \u2014 bass notes arrive just slightly before chord changes (by ~0.3s), giving a ghostly echo of clave feel. Melody phrases float above with gentle rubato-like spacing. Chords provide slow broken arpeggios that fill the harmonic middle without competing.\n\nCOHESION: All three tracks move through the same Am\u2192G\u2192F\u2192E progression simultaneously. Bass provides roots, piano provides harmonic color, flute sings the top voice. Together they create a warm, enveloping Latin lullaby.",
+  "tracks": [
+    {
+      "name": "Flute - Sleep Melody",
+      "program": 73,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz), presence(5kHz+)",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 69,
+          "velocity": 28,
+          "startTime": 0.5,
+          "duration": 5.0
+        },
+        {
+          "note": 72,
+          "velocity": 30,
+          "startTime": 3.5,
+          "duration": 4.0
+        },
+        {
+          "note": 71,
+          "velocity": 35,
+          "startTime": 6.2,
+          "duration": 4.5
+        },
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 8.5,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 40,
+          "startTime": 11.8,
+          "duration": 5.0
+        },
+        {
+          "note": 65,
+          "velocity": 45,
+          "startTime": 14.0,
+          "duration": 4.0
+        },
+        {
+          "note": 68,
+          "velocity": 48,
+          "startTime": 17.0,
+          "duration": 5.5
+        },
+        {
+          "note": 64,
+          "velocity": 50,
+          "startTime": 19.5,
+          "duration": 4.0
+        },
+        {
+          "note": 69,
+          "velocity": 45,
+          "startTime": 23.0,
+          "duration": 5.5
+        },
+        {
+          "note": 72,
+          "velocity": 42,
+          "startTime": 26.0,
+          "duration": 4.5
+        },
+        {
+          "note": 71,
+          "velocity": 40,
+          "startTime": 28.8,
+          "duration": 4.0
+        },
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 31.0,
+          "duration": 4.5
+        },
+        {
+          "note": 65,
+          "velocity": 35,
+          "startTime": 34.0,
+          "duration": 5.0
+        },
+        {
+          "note": 68,
+          "velocity": 30,
+          "startTime": 37.5,
+          "duration": 4.5
+        },
+        {
+          "note": 64,
+          "velocity": 28,
+          "startTime": 40.0,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 25,
+          "startTime": 42.5,
+          "duration": 2.5
+        }
+      ]
+    },
+    {
+      "name": "Electric Bass - Tumbao",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "sub-bass(20-100Hz), bass(100-300Hz)",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 33,
+          "velocity": 28,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 40,
+          "velocity": 30,
+          "startTime": 2.8,
+          "duration": 3.0
+        },
+        {
+          "note": 43,
+          "velocity": 32,
+          "startTime": 5.3,
+          "duration": 5.5
+        },
+        {
+          "note": 47,
+          "velocity": 35,
+          "startTime": 7.5,
+          "duration": 3.0
+        },
+        {
+          "note": 41,
+          "velocity": 38,
+          "startTime": 10.9,
+          "duration": 5.5
+        },
+        {
+          "note": 45,
+          "velocity": 40,
+          "startTime": 13.5,
+          "duration": 3.0
+        },
+        {
+          "note": 40,
+          "velocity": 45,
+          "startTime": 16.7,
+          "duration": 6.0
+        },
+        {
+          "note": 44,
+          "velocity": 45,
+          "startTime": 19.0,
+          "duration": 3.5
+        },
+        {
+          "note": 33,
+          "velocity": 40,
+          "startTime": 22.2,
+          "duration": 5.5
+        },
+        {
+          "note": 40,
+          "velocity": 38,
+          "startTime": 25.0,
+          "duration": 3.0
+        },
+        {
+          "note": 43,
+          "velocity": 38,
+          "startTime": 27.8,
+          "duration": 5.0
+        },
+        {
+          "note": 47,
+          "velocity": 35,
+          "startTime": 30.0,
+          "duration": 3.5
+        },
+        {
+          "note": 41,
+          "velocity": 32,
+          "startTime": 33.5,
+          "duration": 5.5
+        },
+        {
+          "note": 45,
+          "velocity": 30,
+          "startTime": 36.0,
+          "duration": 3.0
+        },
+        {
+          "note": 40,
+          "velocity": 28,
+          "startTime": 39.2,
+          "duration": 4.0
+        },
+        {
+          "note": 44,
+          "velocity": 25,
+          "startTime": 41.5,
+          "duration": 3.5
+        }
+      ]
+    },
+    {
+      "name": "Piano - Montuno Chords",
+      "program": 0,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz), high-mid(1-5kHz)",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 57,
+          "velocity": 25,
+          "startTime": 0,
+          "duration": 5.5
+        },
+        {
+          "note": 60,
+          "velocity": 25,
+          "startTime": 0.3,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 28,
+          "startTime": 0.6,
+          "duration": 4.5
+        },
+        {
+          "note": 55,
+          "velocity": 30,
+          "startTime": 5.6,
+          "duration": 5.0
+        },
+        {
+          "note": 59,
+          "velocity": 30,
+          "startTime": 5.9,
+          "duration": 4.5
+        },
+        {
+          "note": 62,
+          "velocity": 32,
+          "startTime": 6.2,
+          "duration": 4.0
+        },
+        {
+          "note": 53,
+          "velocity": 38,
+          "startTime": 11.2,
+          "duration": 5.5
+        },
+        {
+          "note": 57,
+          "velocity": 38,
+          "startTime": 11.5,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 11.8,
+          "duration": 4.5
+        },
+        {
+          "note": 52,
+          "velocity": 45,
+          "startTime": 16.8,
+          "duration": 5.5
+        },
+        {
+          "note": 56,
+          "velocity": 45,
+          "startTime": 17.1,
+          "duration": 5.0
+        },
+        {
+          "note": 59,
+          "velocity": 48,
+          "startTime": 17.4,
+          "duration": 4.5
+        },
+        {
+          "note": 57,
+          "velocity": 40,
+          "startTime": 22.5,
+          "duration": 5.5
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 22.8,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 42,
+          "startTime": 23.1,
+          "duration": 4.5
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 28.0,
+          "duration": 5.0
+        },
+        {
+          "note": 59,
+          "velocity": 38,
+          "startTime": 28.3,
+          "duration": 4.5
+        },
+        {
+          "note": 62,
+          "velocity": 38,
+          "startTime": 28.6,
+          "duration": 4.0
+        },
+        {
+          "note": 53,
+          "velocity": 32,
+          "startTime": 33.5,
+          "duration": 5.5
+        },
+        {
+          "note": 57,
+          "velocity": 32,
+          "startTime": 33.8,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 32,
+          "startTime": 34.1,
+          "duration": 4.5
+        },
+        {
+          "note": 52,
+          "velocity": 28,
+          "startTime": 39.5,
+          "duration": 5.5
+        },
+        {
+          "note": 56,
+          "velocity": 28,
+          "startTime": 39.8,
+          "duration": 5.0
+        },
+        {
+          "note": 59,
+          "velocity": 25,
+          "startTime": 40.1,
+          "duration": 4.9
+        }
+      ]
+    }
+  ],
+  "key": "Am",
+  "bpm": 48,
+  "scale": "harmonic minor"
+}

@@ -1,0 +1,388 @@
+{
+  "genre": "jazz",
+  "mode": "sleep",
+  "mixStrategy": "This sleep jazz arrangement is built around a gentle ii7\u2192V7\u2192Imaj7 turnaround in F, extended with iii7\u2192vi7\u2192ii7\u2192V7, all voiced in dark, warm registers with extreme sustain and space. THREE tracks occupy distinct frequency bands to create a full but gossamer-thin sonic bed:\n\nBASS (Acoustic Bass, 20-300Hz): Provides the harmonic foundation with very slow, sustained root notes and occasional 5ths. Notes sit in MIDI 33-48 (F1-C3). Ultra-gentle walking feel \u2014 more like whole notes and half notes drifting between chord roots. Velocity 25-45. This is the warm, dark undertow.\n\nCHORDS (Warm Pad, 300Hz-2kHz): Lush 7th and 9th voicings sustained for 4-8 seconds each, sitting in MIDI 53-67 (F3-G4). These pads bloom slowly beneath the melody, changing with the chord progression. Velocity 25-40. The harmonic body \u2014 like a warm blanket of sound.\n\nMELODY (Acoustic Piano, 1kHz-8kHz): Sparse, gentle piano notes in MIDI 65-81 (F4-A5). Arpeggiated chord tones with the occasional chromatic neighbor tone, placed with generous silence between phrases. Velocity 30-50. This is the lead voice \u2014 a lullaby murmured over the harmony.\n\nENERGY ARC (6 segments, ~7.5s each): 0.3\u21920.4\u21920.5\u21920.5\u21920.4\u21920.3. The piece breathes in gently, peaks at a very modest midpoint, then dissolves. All three tracks follow this arc together \u2014 bass gets slightly more active in the middle, chords swell a touch, melody adds one or two extra notes, then everything recedes.\n\nNO DRUMS \u2014 silence is the rhythm here. The bass provides gentle pulse. Chord changes happen simultaneously across all tracks. Melody chord tones always align with the current harmony. The overall effect is a dark, enveloping jazz cloud perfect for deep sleep.",
+  "tracks": [
+    {
+      "name": "Jazz Piano Lullaby",
+      "program": 0,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz) and presence(5kHz+)",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 72,
+          "velocity": 35,
+          "startTime": 0.5,
+          "duration": 3.5
+        },
+        {
+          "note": 70,
+          "velocity": 30,
+          "startTime": 4.5,
+          "duration": 2.5
+        },
+        {
+          "note": 69,
+          "velocity": 38,
+          "startTime": 7.5,
+          "duration": 4.0
+        },
+        {
+          "note": 72,
+          "velocity": 40,
+          "startTime": 12.0,
+          "duration": 3.0
+        },
+        {
+          "note": 74,
+          "velocity": 42,
+          "startTime": 15.5,
+          "duration": 2.5
+        },
+        {
+          "note": 76,
+          "velocity": 45,
+          "startTime": 18.5,
+          "duration": 4.0
+        },
+        {
+          "note": 74,
+          "velocity": 48,
+          "startTime": 23.0,
+          "duration": 3.0
+        },
+        {
+          "note": 72,
+          "velocity": 50,
+          "startTime": 26.5,
+          "duration": 2.5
+        },
+        {
+          "note": 70,
+          "velocity": 48,
+          "startTime": 29.5,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 45,
+          "startTime": 33.5,
+          "duration": 4.0
+        },
+        {
+          "note": 67,
+          "velocity": 40,
+          "startTime": 37.5,
+          "duration": 3.0
+        },
+        {
+          "note": 65,
+          "velocity": 38,
+          "startTime": 40.5,
+          "duration": 2.0
+        },
+        {
+          "note": 67,
+          "velocity": 35,
+          "startTime": 42.5,
+          "duration": 2.5
+        },
+        {
+          "note": 77,
+          "velocity": 32,
+          "startTime": 10.0,
+          "duration": 1.5
+        },
+        {
+          "note": 81,
+          "velocity": 30,
+          "startTime": 21.0,
+          "duration": 1.5
+        },
+        {
+          "note": 75,
+          "velocity": 42,
+          "startTime": 31.0,
+          "duration": 1.0
+        },
+        {
+          "note": 73,
+          "velocity": 36,
+          "startTime": 35.5,
+          "duration": 1.5
+        },
+        {
+          "note": 68,
+          "velocity": 28,
+          "startTime": 2.5,
+          "duration": 1.5
+        }
+      ]
+    },
+    {
+      "name": "Acoustic Bass Foundation",
+      "program": 32,
+      "role": "bass",
+      "frequencyRole": "sub-bass(20-100Hz) and bass(100-300Hz)",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 41,
+          "velocity": 30,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 36,
+          "velocity": 28,
+          "startTime": 5.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 32,
+          "startTime": 5.0,
+          "duration": 2.5
+        },
+        {
+          "note": 41,
+          "velocity": 35,
+          "startTime": 10.0,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 33,
+          "startTime": 12.5,
+          "duration": 2.5
+        },
+        {
+          "note": 40,
+          "velocity": 38,
+          "startTime": 15.0,
+          "duration": 5.0
+        },
+        {
+          "note": 45,
+          "velocity": 40,
+          "startTime": 17.5,
+          "duration": 2.5
+        },
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 20.0,
+          "duration": 5.0
+        },
+        {
+          "note": 36,
+          "velocity": 45,
+          "startTime": 22.5,
+          "duration": 2.5
+        },
+        {
+          "note": 33,
+          "velocity": 43,
+          "startTime": 25.0,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 27.5,
+          "duration": 2.5
+        },
+        {
+          "note": 41,
+          "velocity": 38,
+          "startTime": 30.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 36,
+          "startTime": 32.5,
+          "duration": 2.5
+        },
+        {
+          "note": 36,
+          "velocity": 35,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 40,
+          "velocity": 32,
+          "startTime": 37.5,
+          "duration": 2.5
+        },
+        {
+          "note": 41,
+          "velocity": 30,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 28,
+          "startTime": 42.5,
+          "duration": 2.5
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Harmonies",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz) and high-mid(1-5kHz)",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 60,
+          "velocity": 28,
+          "startTime": 0,
+          "duration": 7.5
+        },
+        {
+          "note": 63,
+          "velocity": 28,
+          "startTime": 0,
+          "duration": 7.5
+        },
+        {
+          "note": 67,
+          "velocity": 26,
+          "startTime": 0,
+          "duration": 7.5
+        },
+        {
+          "note": 55,
+          "velocity": 30,
+          "startTime": 7.5,
+          "duration": 7.5
+        },
+        {
+          "note": 59,
+          "velocity": 30,
+          "startTime": 7.5,
+          "duration": 7.5
+        },
+        {
+          "note": 62,
+          "velocity": 28,
+          "startTime": 7.5,
+          "duration": 7.5
+        },
+        {
+          "note": 65,
+          "velocity": 28,
+          "startTime": 7.5,
+          "duration": 7.5
+        },
+        {
+          "note": 57,
+          "velocity": 32,
+          "startTime": 15.0,
+          "duration": 7.5
+        },
+        {
+          "note": 60,
+          "velocity": 34,
+          "startTime": 15.0,
+          "duration": 7.5
+        },
+        {
+          "note": 64,
+          "velocity": 32,
+          "startTime": 15.0,
+          "duration": 7.5
+        },
+        {
+          "note": 67,
+          "velocity": 30,
+          "startTime": 15.0,
+          "duration": 7.5
+        },
+        {
+          "note": 53,
+          "velocity": 35,
+          "startTime": 22.5,
+          "duration": 7.5
+        },
+        {
+          "note": 57,
+          "velocity": 35,
+          "startTime": 22.5,
+          "duration": 7.5
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 22.5,
+          "duration": 7.5
+        },
+        {
+          "note": 64,
+          "velocity": 30,
+          "startTime": 22.5,
+          "duration": 7.5
+        },
+        {
+          "note": 55,
+          "velocity": 30,
+          "startTime": 30.0,
+          "duration": 7.5
+        },
+        {
+          "note": 58,
+          "velocity": 30,
+          "startTime": 30.0,
+          "duration": 7.5
+        },
+        {
+          "note": 62,
+          "velocity": 28,
+          "startTime": 30.0,
+          "duration": 7.5
+        },
+        {
+          "note": 65,
+          "velocity": 26,
+          "startTime": 30.0,
+          "duration": 7.5
+        },
+        {
+          "note": 53,
+          "velocity": 26,
+          "startTime": 37.5,
+          "duration": 7.5
+        },
+        {
+          "note": 57,
+          "velocity": 26,
+          "startTime": 37.5,
+          "duration": 7.5
+        },
+        {
+          "note": 60,
+          "velocity": 25,
+          "startTime": 37.5,
+          "duration": 7.5
+        },
+        {
+          "note": 65,
+          "velocity": 25,
+          "startTime": 37.5,
+          "duration": 7.5
+        }
+      ]
+    }
+  ],
+  "key": "F",
+  "bpm": 48,
+  "scale": "Dorian, Mixolydian, Lydian, Bebop Dominant with chromatic passing tones"
+}

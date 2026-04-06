@@ -1,0 +1,358 @@
+{
+  "genre": "blues",
+  "mode": "sleep",
+  "mixStrategy": "SLEEP BLUES MIX STRATEGY \u2014 Key of E, 48 BPM, 45 seconds\n\nFREQUENCY SEPARATION:\n\u2022 Bass (Electric Bass, 20-300Hz, MIDI 28-44): Ultra-slow, warm whole notes and half notes on chord roots. Sits in the sub-bass/bass region providing a dark, enveloping foundation. Minimal movement \u2014 mostly roots with occasional 5ths as gentle passing tones. Velocity 25-45 for sleep mode.\n\u2022 Chords (Piano, 300Hz-2kHz, MIDI 48-67): Sparse, sustained dominant 7th voicings. Soft comping \u2014 one chord every 2-4 bars, letting each voicing ring out and decay naturally. Ghost-like presence filling the harmonic midrange. Velocity 25-40.\n\u2022 Melody (Steel Guitar, 1kHz-8kHz, MIDI 60-76): Extremely sparse, slow blues licks with long sustains (4-12s). Mimics a sleepy steel guitar crying softly in the night. Blue notes (Bb, G) used for that aching, drowsy quality. Velocity 25-50. Lots of space between phrases.\n\nRHYTHMIC INTERLOCK:\nNo drums in sleep mode. All three tracks breathe together in a slow, free-floating pulse. Bass provides the harmonic anchor with very long tones. Piano chords appear gently between bass movements. Melody floats above with long, singing phrases that resolve on chord tones. The feel is like a lullaby played by a blues trio at 3 AM, barely awake.\n\nENERGY ARC (6 segments, ~7.5s each):\n0.0-7.5s (0.3): Whisper entrance \u2014 bass root only, single piano chord, melody enters with one gentle note\n7.5-15.0s (0.4): Slightly more movement \u2014 bass walks gently, piano adds another voicing, melody offers a short lick\n15.0-22.5s (0.5): Peak warmth \u2014 all three voices present, melody has its most expressive (but still gentle) phrase\n22.5-30.0s (0.5): Sustained warmth \u2014 V7-IV7 turnaround, gentle tension and release\n30.0-37.5s (0.4): Settling down \u2014 fewer notes, longer sustains, melody fading\n37.5-45.0s (0.3): Dissolution \u2014 bass holds final root, piano whispers last chord, melody trails off\n\nCHORD PROGRESSION (12-bar blues in E at 48 BPM, quarter = 1.25s, bar = 5.0s, 12 bars \u2248 60s \u2014 compressed to ~9 bars for 45s):\nAdapted 12-bar for 45s (9 bars \u00d7 5s):\nBar 1-2 (0-10s): E7\nBar 3-4 (10-20s): A7 (2 bars) then E7 (brief)\nBar 5-6 (20-30s): E7 \u2192 B7\nBar 7 (30-35s): A7\nBar 8-9 (35-45s): E7 (resolution)\n\nAll tracks change chords TOGETHER on the same beats. Bass always plays the root. Piano voicings shift to match. Melody resolves to chord tones on downbeats.",
+  "tracks": [
+    {
+      "name": "Steel Guitar Melody",
+      "program": 25,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz)",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 64,
+          "velocity": 30,
+          "startTime": 1.0,
+          "duration": 6.0
+        },
+        {
+          "note": 67,
+          "velocity": 28,
+          "startTime": 7.5,
+          "duration": 5.0
+        },
+        {
+          "note": 71,
+          "velocity": 35,
+          "startTime": 10.0,
+          "duration": 4.0
+        },
+        {
+          "note": 69,
+          "velocity": 38,
+          "startTime": 14.0,
+          "duration": 5.5
+        },
+        {
+          "note": 67,
+          "velocity": 33,
+          "startTime": 16.5,
+          "duration": 4.0
+        },
+        {
+          "note": 64,
+          "velocity": 40,
+          "startTime": 20.5,
+          "duration": 5.0
+        },
+        {
+          "note": 66,
+          "velocity": 45,
+          "startTime": 22.5,
+          "duration": 3.5
+        },
+        {
+          "note": 67,
+          "velocity": 48,
+          "startTime": 26.0,
+          "duration": 5.0
+        },
+        {
+          "note": 71,
+          "velocity": 45,
+          "startTime": 28.0,
+          "duration": 4.5
+        },
+        {
+          "note": 76,
+          "velocity": 42,
+          "startTime": 30.5,
+          "duration": 4.0
+        },
+        {
+          "note": 74,
+          "velocity": 40,
+          "startTime": 33.0,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 38,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 69,
+          "velocity": 35,
+          "startTime": 37.5,
+          "duration": 4.0
+        },
+        {
+          "note": 67,
+          "velocity": 30,
+          "startTime": 39.5,
+          "duration": 4.0
+        },
+        {
+          "note": 64,
+          "velocity": 28,
+          "startTime": 41.5,
+          "duration": 3.5
+        }
+      ]
+    },
+    {
+      "name": "Electric Bass",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "sub-bass(20-100Hz) + bass(100-300Hz)",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 28,
+          "velocity": 35,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 35,
+          "velocity": 30,
+          "startTime": 5.0,
+          "duration": 5.0
+        },
+        {
+          "note": 28,
+          "velocity": 33,
+          "startTime": 10.0,
+          "duration": 5.5
+        },
+        {
+          "note": 33,
+          "velocity": 38,
+          "startTime": 12.5,
+          "duration": 4.0
+        },
+        {
+          "note": 33,
+          "velocity": 35,
+          "startTime": 15.0,
+          "duration": 5.0
+        },
+        {
+          "note": 28,
+          "velocity": 40,
+          "startTime": 20.0,
+          "duration": 5.5
+        },
+        {
+          "note": 35,
+          "velocity": 38,
+          "startTime": 22.5,
+          "duration": 4.0
+        },
+        {
+          "note": 28,
+          "velocity": 42,
+          "startTime": 25.0,
+          "duration": 5.0
+        },
+        {
+          "note": 30,
+          "velocity": 40,
+          "startTime": 27.5,
+          "duration": 3.5
+        },
+        {
+          "note": 35,
+          "velocity": 45,
+          "startTime": 30.0,
+          "duration": 5.0
+        },
+        {
+          "note": 33,
+          "velocity": 40,
+          "startTime": 33.0,
+          "duration": 4.5
+        },
+        {
+          "note": 33,
+          "velocity": 38,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 28,
+          "velocity": 35,
+          "startTime": 37.5,
+          "duration": 5.5
+        },
+        {
+          "note": 35,
+          "velocity": 30,
+          "startTime": 40.0,
+          "duration": 3.0
+        },
+        {
+          "note": 28,
+          "velocity": 28,
+          "startTime": 42.0,
+          "duration": 3.0
+        }
+      ]
+    },
+    {
+      "name": "Piano Chords",
+      "program": 0,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz) + high-mid(1-5kHz)",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 52,
+          "velocity": 28,
+          "startTime": 0.5,
+          "duration": 8.0
+        },
+        {
+          "note": 56,
+          "velocity": 26,
+          "startTime": 0.5,
+          "duration": 8.0
+        },
+        {
+          "note": 59,
+          "velocity": 25,
+          "startTime": 0.5,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 25,
+          "startTime": 0.5,
+          "duration": 8.0
+        },
+        {
+          "note": 57,
+          "velocity": 30,
+          "startTime": 10.0,
+          "duration": 7.0
+        },
+        {
+          "note": 61,
+          "velocity": 28,
+          "startTime": 10.0,
+          "duration": 7.0
+        },
+        {
+          "note": 64,
+          "velocity": 27,
+          "startTime": 10.0,
+          "duration": 7.0
+        },
+        {
+          "note": 67,
+          "velocity": 26,
+          "startTime": 10.0,
+          "duration": 7.0
+        },
+        {
+          "note": 52,
+          "velocity": 35,
+          "startTime": 20.0,
+          "duration": 7.5
+        },
+        {
+          "note": 56,
+          "velocity": 33,
+          "startTime": 20.0,
+          "duration": 7.5
+        },
+        {
+          "note": 59,
+          "velocity": 32,
+          "startTime": 20.0,
+          "duration": 7.5
+        },
+        {
+          "note": 62,
+          "velocity": 30,
+          "startTime": 20.0,
+          "duration": 7.5
+        },
+        {
+          "note": 54,
+          "velocity": 38,
+          "startTime": 30.0,
+          "duration": 5.0
+        },
+        {
+          "note": 59,
+          "velocity": 36,
+          "startTime": 30.0,
+          "duration": 5.0
+        },
+        {
+          "note": 63,
+          "velocity": 35,
+          "startTime": 30.0,
+          "duration": 5.0
+        },
+        {
+          "note": 66,
+          "velocity": 33,
+          "startTime": 30.0,
+          "duration": 5.0
+        },
+        {
+          "note": 57,
+          "velocity": 33,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 61,
+          "velocity": 31,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 30,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 52,
+          "velocity": 28,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 56,
+          "velocity": 26,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 59,
+          "velocity": 25,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 25,
+          "startTime": 40.0,
+          "duration": 5.0
+        }
+      ]
+    }
+  ],
+  "key": "E",
+  "bpm": 48,
+  "scale": "Blues pentatonic (E-G-A-Bb-B-D)"
+}

@@ -1,0 +1,740 @@
+{
+  "genre": "classical",
+  "mode": "focus",
+  "mixStrategy": "This Classical focus score in D Major at 75 BPM is built around a clear harmonic foundation with four complementary tracks occupying distinct frequency bands. The CELLO BASS (20-300Hz) anchors the harmony with sustained roots and fifths in the C2-C4 range, providing a warm, steady foundation using legato whole and half notes. The STRING ENSEMBLE CHORDS (300Hz-2kHz) fill the harmonic body in the C3-C5 range with close-voiced triads and seventh chords, sustaining through each harmony change with gentle swells. The PIANO MELODY (1-8kHz) carries a lyrical, singable theme in the C4-C6 range with balanced 2-bar antecedent-consequent phrases, emphasizing chord tones on strong beats with stepwise passing tones on weak beats. The FLUTE TEXTURE (3kHz+) adds shimmer and air in the C5-C7 range with sparse counter-melodic fragments that ornament the melody without competing. All four tracks lock to the same chord progression: Segment 1-2 (0-16s): I(D) \u2192 IV(G) \u2192 V(A) \u2192 I(D); Segment 3-6 (16-45s): I(D) \u2192 vi(Bm) \u2192 IV(G) \u2192 V(A), repeated with variation. Energy arc: bars 1-2 at 0.4 (gentle entry), bars 3-4 at 0.6, bars 5-8 at 0.7 (sustained plateau), bars 9-10 at 0.7, final bars easing to 0.5. Velocity stays in 45-75 range for focus-mode habituation. Rhythmic interlock: bass plays on beats 1 and 3, chords sustain across bars, melody weaves eighth-note and quarter-note motion between bass pulses, flute enters on off-beats with gentle ornaments. All chord changes are synchronized across every track.",
+  "tracks": [
+    {
+      "name": "Piano Melody",
+      "program": 0,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz)",
+      "suggestedVolume": 0.75,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 74,
+          "velocity": 50,
+          "startTime": 0,
+          "duration": 1.6
+        },
+        {
+          "note": 73,
+          "velocity": 48,
+          "startTime": 1.6,
+          "duration": 0.8
+        },
+        {
+          "note": 74,
+          "velocity": 52,
+          "startTime": 2.4,
+          "duration": 0.8
+        },
+        {
+          "note": 78,
+          "velocity": 55,
+          "startTime": 3.2,
+          "duration": 1.6
+        },
+        {
+          "note": 76,
+          "velocity": 53,
+          "startTime": 4.8,
+          "duration": 0.8
+        },
+        {
+          "note": 74,
+          "velocity": 55,
+          "startTime": 5.6,
+          "duration": 1.6
+        },
+        {
+          "note": 73,
+          "velocity": 58,
+          "startTime": 7.2,
+          "duration": 0.8
+        },
+        {
+          "note": 71,
+          "velocity": 56,
+          "startTime": 8.0,
+          "duration": 0.8
+        },
+        {
+          "note": 69,
+          "velocity": 60,
+          "startTime": 8.8,
+          "duration": 1.6
+        },
+        {
+          "note": 71,
+          "velocity": 58,
+          "startTime": 10.4,
+          "duration": 0.8
+        },
+        {
+          "note": 73,
+          "velocity": 62,
+          "startTime": 11.2,
+          "duration": 1.6
+        },
+        {
+          "note": 74,
+          "velocity": 60,
+          "startTime": 12.8,
+          "duration": 1.6
+        },
+        {
+          "note": 73,
+          "velocity": 55,
+          "startTime": 14.4,
+          "duration": 0.8
+        },
+        {
+          "note": 74,
+          "velocity": 58,
+          "startTime": 15.2,
+          "duration": 1.6
+        },
+        {
+          "note": 78,
+          "velocity": 62,
+          "startTime": 16.8,
+          "duration": 1.6
+        },
+        {
+          "note": 76,
+          "velocity": 60,
+          "startTime": 18.4,
+          "duration": 0.8
+        },
+        {
+          "note": 78,
+          "velocity": 65,
+          "startTime": 19.2,
+          "duration": 1.6
+        },
+        {
+          "note": 79,
+          "velocity": 63,
+          "startTime": 20.8,
+          "duration": 0.8
+        },
+        {
+          "note": 78,
+          "velocity": 65,
+          "startTime": 21.6,
+          "duration": 0.8
+        },
+        {
+          "note": 76,
+          "velocity": 63,
+          "startTime": 22.4,
+          "duration": 1.6
+        },
+        {
+          "note": 74,
+          "velocity": 65,
+          "startTime": 24.0,
+          "duration": 1.6
+        },
+        {
+          "note": 73,
+          "velocity": 62,
+          "startTime": 25.6,
+          "duration": 0.8
+        },
+        {
+          "note": 71,
+          "velocity": 65,
+          "startTime": 26.4,
+          "duration": 1.6
+        },
+        {
+          "note": 69,
+          "velocity": 63,
+          "startTime": 28.0,
+          "duration": 0.8
+        },
+        {
+          "note": 71,
+          "velocity": 65,
+          "startTime": 28.8,
+          "duration": 1.6
+        },
+        {
+          "note": 73,
+          "velocity": 67,
+          "startTime": 30.4,
+          "duration": 1.6
+        },
+        {
+          "note": 74,
+          "velocity": 65,
+          "startTime": 32.0,
+          "duration": 1.6
+        },
+        {
+          "note": 78,
+          "velocity": 68,
+          "startTime": 33.6,
+          "duration": 1.6
+        },
+        {
+          "note": 76,
+          "velocity": 65,
+          "startTime": 35.2,
+          "duration": 0.8
+        },
+        {
+          "note": 78,
+          "velocity": 67,
+          "startTime": 36.0,
+          "duration": 1.6
+        },
+        {
+          "note": 79,
+          "velocity": 63,
+          "startTime": 37.6,
+          "duration": 0.8
+        },
+        {
+          "note": 78,
+          "velocity": 60,
+          "startTime": 38.4,
+          "duration": 1.6
+        },
+        {
+          "note": 76,
+          "velocity": 58,
+          "startTime": 40.0,
+          "duration": 1.6
+        },
+        {
+          "note": 74,
+          "velocity": 55,
+          "startTime": 41.6,
+          "duration": 1.6
+        },
+        {
+          "note": 73,
+          "velocity": 52,
+          "startTime": 43.2,
+          "duration": 0.8
+        },
+        {
+          "note": 74,
+          "velocity": 50,
+          "startTime": 44.0,
+          "duration": 1.0
+        }
+      ]
+    },
+    {
+      "name": "Cello Bass",
+      "program": 42,
+      "role": "bass",
+      "frequencyRole": "bass(100-300Hz)",
+      "suggestedVolume": 0.6,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 38,
+          "velocity": 48,
+          "startTime": 0,
+          "duration": 3.2
+        },
+        {
+          "note": 43,
+          "velocity": 50,
+          "startTime": 3.2,
+          "duration": 3.2
+        },
+        {
+          "note": 45,
+          "velocity": 52,
+          "startTime": 6.4,
+          "duration": 1.6
+        },
+        {
+          "note": 42,
+          "velocity": 50,
+          "startTime": 8.0,
+          "duration": 1.6
+        },
+        {
+          "note": 38,
+          "velocity": 52,
+          "startTime": 9.6,
+          "duration": 3.2
+        },
+        {
+          "note": 38,
+          "velocity": 55,
+          "startTime": 12.8,
+          "duration": 3.2
+        },
+        {
+          "note": 38,
+          "velocity": 58,
+          "startTime": 16.0,
+          "duration": 3.2
+        },
+        {
+          "note": 35,
+          "velocity": 56,
+          "startTime": 19.2,
+          "duration": 3.2
+        },
+        {
+          "note": 43,
+          "velocity": 58,
+          "startTime": 22.4,
+          "duration": 3.2
+        },
+        {
+          "note": 45,
+          "velocity": 60,
+          "startTime": 25.6,
+          "duration": 3.2
+        },
+        {
+          "note": 38,
+          "velocity": 60,
+          "startTime": 28.8,
+          "duration": 3.2
+        },
+        {
+          "note": 35,
+          "velocity": 58,
+          "startTime": 32.0,
+          "duration": 3.2
+        },
+        {
+          "note": 43,
+          "velocity": 60,
+          "startTime": 35.2,
+          "duration": 3.2
+        },
+        {
+          "note": 45,
+          "velocity": 55,
+          "startTime": 38.4,
+          "duration": 3.2
+        },
+        {
+          "note": 38,
+          "velocity": 50,
+          "startTime": 41.6,
+          "duration": 1.6
+        },
+        {
+          "note": 42,
+          "velocity": 48,
+          "startTime": 43.2,
+          "duration": 0.8
+        },
+        {
+          "note": 38,
+          "velocity": 48,
+          "startTime": 44.0,
+          "duration": 1.0
+        }
+      ]
+    },
+    {
+      "name": "String Ensemble Chords",
+      "program": 49,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz)",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 62,
+          "velocity": 45,
+          "startTime": 0,
+          "duration": 3.2
+        },
+        {
+          "note": 66,
+          "velocity": 45,
+          "startTime": 0,
+          "duration": 3.2
+        },
+        {
+          "note": 69,
+          "velocity": 45,
+          "startTime": 0,
+          "duration": 3.2
+        },
+        {
+          "note": 62,
+          "velocity": 48,
+          "startTime": 3.2,
+          "duration": 3.2
+        },
+        {
+          "note": 67,
+          "velocity": 48,
+          "startTime": 3.2,
+          "duration": 3.2
+        },
+        {
+          "note": 71,
+          "velocity": 48,
+          "startTime": 3.2,
+          "duration": 3.2
+        },
+        {
+          "note": 64,
+          "velocity": 50,
+          "startTime": 6.4,
+          "duration": 3.2
+        },
+        {
+          "note": 69,
+          "velocity": 50,
+          "startTime": 6.4,
+          "duration": 3.2
+        },
+        {
+          "note": 61,
+          "velocity": 50,
+          "startTime": 6.4,
+          "duration": 3.2
+        },
+        {
+          "note": 62,
+          "velocity": 48,
+          "startTime": 9.6,
+          "duration": 3.2
+        },
+        {
+          "note": 66,
+          "velocity": 48,
+          "startTime": 9.6,
+          "duration": 3.2
+        },
+        {
+          "note": 69,
+          "velocity": 48,
+          "startTime": 9.6,
+          "duration": 3.2
+        },
+        {
+          "note": 62,
+          "velocity": 50,
+          "startTime": 12.8,
+          "duration": 3.2
+        },
+        {
+          "note": 66,
+          "velocity": 50,
+          "startTime": 12.8,
+          "duration": 3.2
+        },
+        {
+          "note": 69,
+          "velocity": 50,
+          "startTime": 12.8,
+          "duration": 3.2
+        },
+        {
+          "note": 62,
+          "velocity": 55,
+          "startTime": 16.0,
+          "duration": 3.2
+        },
+        {
+          "note": 66,
+          "velocity": 55,
+          "startTime": 16.0,
+          "duration": 3.2
+        },
+        {
+          "note": 69,
+          "velocity": 55,
+          "startTime": 16.0,
+          "duration": 3.2
+        },
+        {
+          "note": 59,
+          "velocity": 55,
+          "startTime": 19.2,
+          "duration": 3.2
+        },
+        {
+          "note": 63,
+          "velocity": 55,
+          "startTime": 19.2,
+          "duration": 3.2
+        },
+        {
+          "note": 66,
+          "velocity": 55,
+          "startTime": 19.2,
+          "duration": 3.2
+        },
+        {
+          "note": 62,
+          "velocity": 58,
+          "startTime": 22.4,
+          "duration": 3.2
+        },
+        {
+          "note": 67,
+          "velocity": 58,
+          "startTime": 22.4,
+          "duration": 3.2
+        },
+        {
+          "note": 71,
+          "velocity": 58,
+          "startTime": 22.4,
+          "duration": 3.2
+        },
+        {
+          "note": 64,
+          "velocity": 58,
+          "startTime": 25.6,
+          "duration": 3.2
+        },
+        {
+          "note": 69,
+          "velocity": 58,
+          "startTime": 25.6,
+          "duration": 3.2
+        },
+        {
+          "note": 61,
+          "velocity": 58,
+          "startTime": 25.6,
+          "duration": 3.2
+        },
+        {
+          "note": 62,
+          "velocity": 58,
+          "startTime": 28.8,
+          "duration": 3.2
+        },
+        {
+          "note": 66,
+          "velocity": 58,
+          "startTime": 28.8,
+          "duration": 3.2
+        },
+        {
+          "note": 69,
+          "velocity": 58,
+          "startTime": 28.8,
+          "duration": 3.2
+        },
+        {
+          "note": 59,
+          "velocity": 55,
+          "startTime": 32.0,
+          "duration": 3.2
+        },
+        {
+          "note": 63,
+          "velocity": 55,
+          "startTime": 32.0,
+          "duration": 3.2
+        },
+        {
+          "note": 66,
+          "velocity": 55,
+          "startTime": 32.0,
+          "duration": 3.2
+        },
+        {
+          "note": 62,
+          "velocity": 55,
+          "startTime": 35.2,
+          "duration": 3.2
+        },
+        {
+          "note": 67,
+          "velocity": 55,
+          "startTime": 35.2,
+          "duration": 3.2
+        },
+        {
+          "note": 71,
+          "velocity": 55,
+          "startTime": 35.2,
+          "duration": 3.2
+        },
+        {
+          "note": 64,
+          "velocity": 52,
+          "startTime": 38.4,
+          "duration": 3.2
+        },
+        {
+          "note": 69,
+          "velocity": 52,
+          "startTime": 38.4,
+          "duration": 3.2
+        },
+        {
+          "note": 61,
+          "velocity": 52,
+          "startTime": 38.4,
+          "duration": 3.2
+        },
+        {
+          "note": 62,
+          "velocity": 48,
+          "startTime": 41.6,
+          "duration": 3.4
+        },
+        {
+          "note": 66,
+          "velocity": 48,
+          "startTime": 41.6,
+          "duration": 3.4
+        },
+        {
+          "note": 69,
+          "velocity": 48,
+          "startTime": 41.6,
+          "duration": 3.4
+        }
+      ]
+    },
+    {
+      "name": "Flute Texture",
+      "program": 73,
+      "role": "texture",
+      "frequencyRole": "presence(5kHz+)",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 86,
+          "velocity": 40,
+          "startTime": 1.6,
+          "duration": 1.2
+        },
+        {
+          "note": 85,
+          "velocity": 42,
+          "startTime": 4.0,
+          "duration": 1.2
+        },
+        {
+          "note": 83,
+          "velocity": 42,
+          "startTime": 7.2,
+          "duration": 1.2
+        },
+        {
+          "note": 81,
+          "velocity": 44,
+          "startTime": 10.4,
+          "duration": 1.2
+        },
+        {
+          "note": 83,
+          "velocity": 44,
+          "startTime": 12.0,
+          "duration": 0.8
+        },
+        {
+          "note": 86,
+          "velocity": 46,
+          "startTime": 14.4,
+          "duration": 1.2
+        },
+        {
+          "note": 86,
+          "velocity": 48,
+          "startTime": 17.6,
+          "duration": 1.6
+        },
+        {
+          "note": 85,
+          "velocity": 48,
+          "startTime": 19.6,
+          "duration": 0.8
+        },
+        {
+          "note": 83,
+          "velocity": 50,
+          "startTime": 20.8,
+          "duration": 1.2
+        },
+        {
+          "note": 81,
+          "velocity": 48,
+          "startTime": 23.2,
+          "duration": 1.6
+        },
+        {
+          "note": 83,
+          "velocity": 50,
+          "startTime": 25.6,
+          "duration": 0.8
+        },
+        {
+          "note": 85,
+          "velocity": 50,
+          "startTime": 27.2,
+          "duration": 1.2
+        },
+        {
+          "note": 86,
+          "velocity": 52,
+          "startTime": 29.6,
+          "duration": 1.6
+        },
+        {
+          "note": 88,
+          "velocity": 50,
+          "startTime": 32.0,
+          "duration": 1.2
+        },
+        {
+          "note": 86,
+          "velocity": 50,
+          "startTime": 34.4,
+          "duration": 1.2
+        },
+        {
+          "note": 85,
+          "velocity": 48,
+          "startTime": 36.0,
+          "duration": 1.6
+        },
+        {
+          "note": 83,
+          "velocity": 46,
+          "startTime": 38.4,
+          "duration": 1.6
+        },
+        {
+          "note": 81,
+          "velocity": 44,
+          "startTime": 40.8,
+          "duration": 1.2
+        },
+        {
+          "note": 83,
+          "velocity": 42,
+          "startTime": 42.4,
+          "duration": 1.2
+        },
+        {
+          "note": 86,
+          "velocity": 40,
+          "startTime": 44.0,
+          "duration": 1.0
+        }
+      ]
+    }
+  ],
+  "key": "D",
+  "bpm": 75,
+  "scale": "Major"
+}

@@ -1,0 +1,460 @@
+{
+  "genre": "hiphop",
+  "mode": "sleep",
+  "mixStrategy": "This sleep-mode hip hop arrangement in Cm uses a i \u2192 iv \u2192 bVI \u2192 bVII progression (Cm \u2192 Fm \u2192 Ab \u2192 Bb) cycling every ~15 seconds (3 cycles over 45s). FREQUENCY SEPARATION: The Synth Bass (GM 38) anchors the sub-bass region (MIDI 36-48, 65-130Hz) with long 5-8s sustained root notes that provide a warm, dark 808-style foundation. The Warm Pad (GM 89) fills the mid frequencies (MIDI 48-67, 130Hz-600Hz) with slow-moving minor chord voicings that shift gently with each chord change, creating harmonic body. The Vibraphone melody (GM 11) floats in the upper register (MIDI 67-79, 600Hz-2kHz) with sparse, bell-like phrases that use chord tones on strong beats and pentatonic passing tones between. ENERGY ARC: The piece is divided into 6 segments (~7.5s each). Segments 1&6 (0-7.5s, 37.5-45s) are the quietest \u2014 fewest notes, lowest velocities (25-40). Segments 2&5 (7.5-15s, 30-37.5s) add slightly more motion. Segments 3&4 (15-30s) represent the gentle peak with marginally more melodic movement and slightly higher velocities, but never exceeding the sleep ceiling. COHESION: All three tracks change chords simultaneously at 0s (Cm), 3.75s (Fm), 7.5s (Ab), 11.25s (Bb), and repeat. Bass always plays the root. Pad voicings always include root-b3-5th (or root-4th-b7 for Fm). Melody targets chord tones (C, Eb, G for Cm; F, Ab, C for Fm; Ab, C, Eb for Ab; Bb, D, F for Bb) on downbeats. NO drums \u2014 pure ambient warmth. The overall effect is a dark, enveloping cloud of sound that breathes slowly, perfect for sleep.",
+  "tracks": [
+    {
+      "name": "Vibraphone Melody",
+      "program": 11,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz)",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 72,
+          "velocity": 30,
+          "startTime": 1.5,
+          "duration": 4.0
+        },
+        {
+          "note": 75,
+          "velocity": 28,
+          "startTime": 5.5,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 35,
+          "startTime": 9.5,
+          "duration": 4.0
+        },
+        {
+          "note": 70,
+          "velocity": 33,
+          "startTime": 13.5,
+          "duration": 3.0
+        },
+        {
+          "note": 72,
+          "velocity": 40,
+          "startTime": 17.0,
+          "duration": 3.5
+        },
+        {
+          "note": 75,
+          "velocity": 42,
+          "startTime": 20.5,
+          "duration": 4.0
+        },
+        {
+          "note": 79,
+          "velocity": 38,
+          "startTime": 24.5,
+          "duration": 3.5
+        },
+        {
+          "note": 77,
+          "velocity": 40,
+          "startTime": 28.0,
+          "duration": 3.0
+        },
+        {
+          "note": 75,
+          "velocity": 42,
+          "startTime": 31.0,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 38,
+          "startTime": 34.5,
+          "duration": 4.0
+        },
+        {
+          "note": 70,
+          "velocity": 35,
+          "startTime": 38.5,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 30,
+          "startTime": 41.5,
+          "duration": 3.5
+        },
+        {
+          "note": 74,
+          "velocity": 32,
+          "startTime": 3.75,
+          "duration": 2.5
+        },
+        {
+          "note": 77,
+          "velocity": 40,
+          "startTime": 22.5,
+          "duration": 2.0
+        },
+        {
+          "note": 68,
+          "velocity": 35,
+          "startTime": 11.25,
+          "duration": 3.0
+        },
+        {
+          "note": 79,
+          "velocity": 36,
+          "startTime": 15.5,
+          "duration": 2.5
+        },
+        {
+          "note": 70,
+          "velocity": 30,
+          "startTime": 43.0,
+          "duration": 2.0
+        }
+      ]
+    },
+    {
+      "name": "808 Sub Bass",
+      "program": 38,
+      "role": "bass",
+      "frequencyRole": "sub-bass(20-100Hz)",
+      "suggestedVolume": 0.65,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 36,
+          "velocity": 35,
+          "startTime": 0,
+          "duration": 3.75
+        },
+        {
+          "note": 41,
+          "velocity": 35,
+          "startTime": 3.75,
+          "duration": 3.75
+        },
+        {
+          "note": 44,
+          "velocity": 38,
+          "startTime": 7.5,
+          "duration": 3.75
+        },
+        {
+          "note": 46,
+          "velocity": 38,
+          "startTime": 11.25,
+          "duration": 3.75
+        },
+        {
+          "note": 36,
+          "velocity": 42,
+          "startTime": 15.0,
+          "duration": 3.75
+        },
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 18.75,
+          "duration": 3.75
+        },
+        {
+          "note": 44,
+          "velocity": 45,
+          "startTime": 22.5,
+          "duration": 3.75
+        },
+        {
+          "note": 46,
+          "velocity": 45,
+          "startTime": 26.25,
+          "duration": 3.75
+        },
+        {
+          "note": 36,
+          "velocity": 42,
+          "startTime": 30.0,
+          "duration": 3.75
+        },
+        {
+          "note": 41,
+          "velocity": 40,
+          "startTime": 33.75,
+          "duration": 3.75
+        },
+        {
+          "note": 44,
+          "velocity": 35,
+          "startTime": 37.5,
+          "duration": 3.75
+        },
+        {
+          "note": 46,
+          "velocity": 33,
+          "startTime": 41.25,
+          "duration": 3.75
+        },
+        {
+          "note": 43,
+          "velocity": 30,
+          "startTime": 3.0,
+          "duration": 0.75
+        },
+        {
+          "note": 48,
+          "velocity": 35,
+          "startTime": 14.0,
+          "duration": 1.0
+        },
+        {
+          "note": 43,
+          "velocity": 38,
+          "startTime": 18.0,
+          "duration": 0.75
+        },
+        {
+          "note": 48,
+          "velocity": 40,
+          "startTime": 29.25,
+          "duration": 0.75
+        },
+        {
+          "note": 43,
+          "velocity": 32,
+          "startTime": 33.0,
+          "duration": 0.75
+        }
+      ]
+    },
+    {
+      "name": "Dark Minor Pad",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz)",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 48,
+          "velocity": 28,
+          "startTime": 0,
+          "duration": 3.75
+        },
+        {
+          "note": 51,
+          "velocity": 26,
+          "startTime": 0,
+          "duration": 3.75
+        },
+        {
+          "note": 55,
+          "velocity": 26,
+          "startTime": 0,
+          "duration": 3.75
+        },
+        {
+          "note": 53,
+          "velocity": 28,
+          "startTime": 3.75,
+          "duration": 3.75
+        },
+        {
+          "note": 56,
+          "velocity": 26,
+          "startTime": 3.75,
+          "duration": 3.75
+        },
+        {
+          "note": 60,
+          "velocity": 26,
+          "startTime": 3.75,
+          "duration": 3.75
+        },
+        {
+          "note": 56,
+          "velocity": 30,
+          "startTime": 7.5,
+          "duration": 3.75
+        },
+        {
+          "note": 60,
+          "velocity": 28,
+          "startTime": 7.5,
+          "duration": 3.75
+        },
+        {
+          "note": 63,
+          "velocity": 28,
+          "startTime": 7.5,
+          "duration": 3.75
+        },
+        {
+          "note": 58,
+          "velocity": 30,
+          "startTime": 11.25,
+          "duration": 3.75
+        },
+        {
+          "note": 62,
+          "velocity": 28,
+          "startTime": 11.25,
+          "duration": 3.75
+        },
+        {
+          "note": 65,
+          "velocity": 28,
+          "startTime": 11.25,
+          "duration": 3.75
+        },
+        {
+          "note": 48,
+          "velocity": 35,
+          "startTime": 15.0,
+          "duration": 3.75
+        },
+        {
+          "note": 51,
+          "velocity": 33,
+          "startTime": 15.0,
+          "duration": 3.75
+        },
+        {
+          "note": 55,
+          "velocity": 33,
+          "startTime": 15.0,
+          "duration": 3.75
+        },
+        {
+          "note": 53,
+          "velocity": 35,
+          "startTime": 18.75,
+          "duration": 3.75
+        },
+        {
+          "note": 56,
+          "velocity": 33,
+          "startTime": 18.75,
+          "duration": 3.75
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 18.75,
+          "duration": 3.75
+        },
+        {
+          "note": 56,
+          "velocity": 38,
+          "startTime": 22.5,
+          "duration": 3.75
+        },
+        {
+          "note": 60,
+          "velocity": 36,
+          "startTime": 22.5,
+          "duration": 3.75
+        },
+        {
+          "note": 63,
+          "velocity": 36,
+          "startTime": 22.5,
+          "duration": 3.75
+        },
+        {
+          "note": 58,
+          "velocity": 38,
+          "startTime": 26.25,
+          "duration": 3.75
+        },
+        {
+          "note": 62,
+          "velocity": 36,
+          "startTime": 26.25,
+          "duration": 3.75
+        },
+        {
+          "note": 65,
+          "velocity": 36,
+          "startTime": 26.25,
+          "duration": 3.75
+        },
+        {
+          "note": 48,
+          "velocity": 35,
+          "startTime": 30.0,
+          "duration": 3.75
+        },
+        {
+          "note": 51,
+          "velocity": 33,
+          "startTime": 30.0,
+          "duration": 3.75
+        },
+        {
+          "note": 55,
+          "velocity": 33,
+          "startTime": 30.0,
+          "duration": 3.75
+        },
+        {
+          "note": 53,
+          "velocity": 33,
+          "startTime": 33.75,
+          "duration": 3.75
+        },
+        {
+          "note": 56,
+          "velocity": 30,
+          "startTime": 33.75,
+          "duration": 3.75
+        },
+        {
+          "note": 60,
+          "velocity": 30,
+          "startTime": 33.75,
+          "duration": 3.75
+        },
+        {
+          "note": 56,
+          "velocity": 28,
+          "startTime": 37.5,
+          "duration": 3.75
+        },
+        {
+          "note": 60,
+          "velocity": 26,
+          "startTime": 37.5,
+          "duration": 3.75
+        },
+        {
+          "note": 63,
+          "velocity": 26,
+          "startTime": 37.5,
+          "duration": 3.75
+        },
+        {
+          "note": 58,
+          "velocity": 28,
+          "startTime": 41.25,
+          "duration": 3.75
+        },
+        {
+          "note": 62,
+          "velocity": 26,
+          "startTime": 41.25,
+          "duration": 3.75
+        },
+        {
+          "note": 65,
+          "velocity": 26,
+          "startTime": 41.25,
+          "duration": 3.75
+        }
+      ]
+    }
+  ],
+  "key": "Cm",
+  "bpm": 48,
+  "scale": "natural minor"
+}

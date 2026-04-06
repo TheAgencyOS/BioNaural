@@ -1,0 +1,334 @@
+{
+  "genre": "rock",
+  "mode": "sleep",
+  "mixStrategy": "This sleep-mode rock arrangement strips the genre to its darkest, most enveloping essence \u2014 no drums, extremely sparse, long-sustaining tones that blur into a warm, dark blanket of sound.\n\nFREQUENCY SEPARATION:\n- BASS (Electric Bass, 20-300Hz, MIDI 28-43): Ultra-slow root notes with enormous sustains (8-16s). Provides the gravitational foundation in sub-bass and bass territory. Plays chord roots E1, D2, A1, forming the I\u2192bVII\u2192IV progression in glacial cycles. Velocity 25-40 for a felt-more-than-heard rumble.\n- CHORDS (Warm Pad, 300Hz-2kHz, MIDI 48-67): Sustained power chord voicings (root+5th) that bloom slowly and overlap, creating a continuous harmonic bed. These fill the mid-range warmth zone. Velocity 30-45 for gentle, enveloping warmth. Each chord sustains 8-12s with slow crossfades.\n- MELODY (Overdriven Guitar, 1kHz-8kHz, MIDI 60-76): Extremely sparse pentatonic fragments \u2014 single notes with long sustains (4-8s), like distant guitar harmonics echoing through a vast space. Only 1-2 notes per chord change. Velocity 25-45 for a ghostly, ethereal presence.\n\nHARMONIC COHESION:\nAll three tracks follow the same slow chord progression: Em (I) \u2192 D (bVII) \u2192 Am (IV), cycling approximately every 15 seconds (12 beats at 48 BPM). The progression repeats 3 times across 45 seconds:\n- Cycle 1 (0-15s): Em \u2192 D \u2192 Am \u2014 Energy 0.3, barely audible emergence\n- Cycle 2 (15-30s): Em \u2192 D \u2192 Am \u2014 Energy 0.4-0.5, gentle peak of warmth\n- Cycle 3 (30-45s): Em \u2192 D \u2192 Am \u2014 Energy 0.4\u21920.3, gradual dissolve into silence\n\nRHYTHMIC APPROACH:\nThere is essentially NO rhythm \u2014 just overlapping sustains. Notes enter at slightly staggered times to create a breathing, organic feel. Bass enters first on each chord, pad blooms next, melody floats in last. This staggering creates gentle movement without any pulse. The overall effect is like hearing a rock band from very far away, through walls, as you fall asleep \u2014 just warm harmonic ghosts.",
+  "tracks": [
+    {
+      "name": "Bass - Deep Foundation",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "sub-bass(20-100Hz), bass(100-300Hz)",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 28,
+          "velocity": 30,
+          "startTime": 0,
+          "duration": 6.0
+        },
+        {
+          "note": 28,
+          "velocity": 28,
+          "startTime": 5.5,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 32,
+          "startTime": 5.0,
+          "duration": 5.5
+        },
+        {
+          "note": 33,
+          "velocity": 30,
+          "startTime": 10.0,
+          "duration": 5.5
+        },
+        {
+          "note": 28,
+          "velocity": 35,
+          "startTime": 15.0,
+          "duration": 6.0
+        },
+        {
+          "note": 35,
+          "velocity": 33,
+          "startTime": 15.5,
+          "duration": 4.0
+        },
+        {
+          "note": 38,
+          "velocity": 38,
+          "startTime": 20.0,
+          "duration": 5.5
+        },
+        {
+          "note": 40,
+          "velocity": 35,
+          "startTime": 20.5,
+          "duration": 3.0
+        },
+        {
+          "note": 33,
+          "velocity": 36,
+          "startTime": 25.0,
+          "duration": 5.5
+        },
+        {
+          "note": 35,
+          "velocity": 33,
+          "startTime": 25.5,
+          "duration": 3.5
+        },
+        {
+          "note": 28,
+          "velocity": 33,
+          "startTime": 30.0,
+          "duration": 6.5
+        },
+        {
+          "note": 35,
+          "velocity": 30,
+          "startTime": 30.5,
+          "duration": 3.5
+        },
+        {
+          "note": 38,
+          "velocity": 30,
+          "startTime": 35.0,
+          "duration": 5.5
+        },
+        {
+          "note": 33,
+          "velocity": 28,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 28,
+          "velocity": 25,
+          "startTime": 42.0,
+          "duration": 3.0
+        }
+      ]
+    },
+    {
+      "name": "Pad - Warm Power Chords",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "low-mid(300-1kHz), high-mid(1-5kHz)",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 52,
+          "velocity": 30,
+          "startTime": 0.5,
+          "duration": 8.0
+        },
+        {
+          "note": 59,
+          "velocity": 28,
+          "startTime": 0.5,
+          "duration": 8.0
+        },
+        {
+          "note": 50,
+          "velocity": 32,
+          "startTime": 5.5,
+          "duration": 7.0
+        },
+        {
+          "note": 57,
+          "velocity": 30,
+          "startTime": 5.5,
+          "duration": 7.0
+        },
+        {
+          "note": 48,
+          "velocity": 30,
+          "startTime": 10.5,
+          "duration": 6.0
+        },
+        {
+          "note": 55,
+          "velocity": 28,
+          "startTime": 10.5,
+          "duration": 6.0
+        },
+        {
+          "note": 52,
+          "velocity": 38,
+          "startTime": 15.5,
+          "duration": 8.0
+        },
+        {
+          "note": 59,
+          "velocity": 35,
+          "startTime": 15.5,
+          "duration": 8.0
+        },
+        {
+          "note": 50,
+          "velocity": 40,
+          "startTime": 20.5,
+          "duration": 7.5
+        },
+        {
+          "note": 57,
+          "velocity": 38,
+          "startTime": 20.5,
+          "duration": 7.5
+        },
+        {
+          "note": 48,
+          "velocity": 38,
+          "startTime": 25.5,
+          "duration": 7.0
+        },
+        {
+          "note": 55,
+          "velocity": 35,
+          "startTime": 25.5,
+          "duration": 7.0
+        },
+        {
+          "note": 52,
+          "velocity": 35,
+          "startTime": 30.5,
+          "duration": 8.0
+        },
+        {
+          "note": 59,
+          "velocity": 33,
+          "startTime": 30.5,
+          "duration": 8.0
+        },
+        {
+          "note": 50,
+          "velocity": 32,
+          "startTime": 35.5,
+          "duration": 7.0
+        },
+        {
+          "note": 57,
+          "velocity": 30,
+          "startTime": 35.5,
+          "duration": 7.0
+        },
+        {
+          "note": 48,
+          "velocity": 28,
+          "startTime": 40.5,
+          "duration": 4.5
+        },
+        {
+          "note": 55,
+          "velocity": 26,
+          "startTime": 40.5,
+          "duration": 4.5
+        }
+      ]
+    },
+    {
+      "name": "Guitar - Ghost Melody",
+      "program": 29,
+      "role": "melody",
+      "frequencyRole": "high-mid(1-5kHz), presence(5kHz+)",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45.0,
+      "notes": [
+        {
+          "note": 64,
+          "velocity": 28,
+          "startTime": 1.5,
+          "duration": 6.0
+        },
+        {
+          "note": 67,
+          "velocity": 30,
+          "startTime": 4.0,
+          "duration": 5.0
+        },
+        {
+          "note": 71,
+          "velocity": 25,
+          "startTime": 7.0,
+          "duration": 5.5
+        },
+        {
+          "note": 69,
+          "velocity": 28,
+          "startTime": 11.0,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 30,
+          "startTime": 13.5,
+          "duration": 4.0
+        },
+        {
+          "note": 76,
+          "velocity": 35,
+          "startTime": 16.5,
+          "duration": 6.0
+        },
+        {
+          "note": 72,
+          "velocity": 38,
+          "startTime": 19.0,
+          "duration": 5.5
+        },
+        {
+          "note": 74,
+          "velocity": 36,
+          "startTime": 21.5,
+          "duration": 5.0
+        },
+        {
+          "note": 69,
+          "velocity": 40,
+          "startTime": 24.0,
+          "duration": 4.5
+        },
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 26.5,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 42,
+          "startTime": 28.5,
+          "duration": 4.0
+        },
+        {
+          "note": 76,
+          "velocity": 35,
+          "startTime": 31.0,
+          "duration": 6.0
+        },
+        {
+          "note": 71,
+          "velocity": 32,
+          "startTime": 34.0,
+          "duration": 5.0
+        },
+        {
+          "note": 69,
+          "velocity": 30,
+          "startTime": 37.0,
+          "duration": 5.5
+        },
+        {
+          "note": 67,
+          "velocity": 28,
+          "startTime": 40.0,
+          "duration": 4.0
+        },
+        {
+          "note": 64,
+          "velocity": 25,
+          "startTime": 42.5,
+          "duration": 2.5
+        }
+      ]
+    }
+  ],
+  "key": "Em",
+  "bpm": 48,
+  "scale": "natural minor"
+}
