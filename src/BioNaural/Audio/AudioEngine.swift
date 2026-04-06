@@ -498,8 +498,13 @@ public final class AudioEngine: AudioEngineProtocol {
             renderer.changePreset(presetIndex)
         }
 
-        // Start generative melody with calm initial state
-        generativeMIDI?.start(mode: mode, biometricState: .calm)
+        // Wire bass generator to MIDI engine so chord changes propagate
+        if let bassGen = bassLine {
+            generativeMIDI?.bassLineGenerator = bassGen
+        }
+
+        // Start generative melody with calm initial state and shared tonality
+        generativeMIDI?.start(mode: mode, biometricState: .calm, tonality: sessionTonality)
     }
 
     // MARK: - Preset Application

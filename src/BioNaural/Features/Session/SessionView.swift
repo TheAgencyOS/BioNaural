@@ -925,8 +925,10 @@ extension SessionView {
                     color: Theme.Colors.accent
                 )
 
-                // Bass and Drums sliders — only shown for modes that support them
-                if Theme.ModeInstrumentation.allowsRhythmStem(for: viewModel.sessionMode) {
+                // Bass and Drums sliders — only for Focus and Energize.
+                // Sleep and Relaxation use pads and nature only (no rhythm section).
+                let modeAllowsRhythm = viewModel.sessionMode == .focus || viewModel.sessionMode == .energize
+                if modeAllowsRhythm {
                     mixSlider(
                         label: "Bass",
                         value: Binding(

@@ -30,6 +30,12 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
     private let renderer: SF2MelodicRenderer
     private let parameters: AudioParameters
 
+    /// Shared tonality — all notes, chords, and bass must be in this key/scale/tempo.
+    private var tonality: SessionTonality?
+
+    /// Reference to bass generator so chord changes can update the bass root.
+    public weak var bassLineGenerator: BassLineGenerator?
+
     // MARK: - State (accessed ONLY on generationQueue)
 
     private var mode: FocusMode = .focus
@@ -76,13 +82,15 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
 
     // MARK: - Public API
 
-    /// Start generating notes for the given mode.
-    public func start(mode: FocusMode, biometricState: BiometricState) {
+    /// Start generating notes for the given mode and tonality.
+    /// All generated notes, chords, and bass will be in the tonality's key/scale/tempo.
+    public func start(mode: FocusMode, biometricState: BiometricState, tonality: SessionTonality? = nil) {
         generationQueue.async { [weak self] in
             guard let self, !self.isRunning else { return }
 
             self.mode = mode
             self.biometricState = biometricState
+            self.tonality = tonality
             self.isRunning = true
             self.lastNote = nil
             self.notesSinceRest = 0
@@ -207,14 +215,21 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
     // MARK: - Pitch Selection
 
     private func validMIDINotes() -> [UInt8] {
+        let octaveRange = midiOctaveRange()
+
+        // Use SessionTonality if available (ensures all layers share the same key)
+        if let tonality {
+            return tonality.validNotes(octaveRange: octaveRange)
+        }
+
+        // Fallback to ScaleMapper
         let scale = ScaleMapper.scale(for: mode, biometricState: biometricState)
         let root = ScaleMapper.rootNote(for: mode)
         let key = Key(root: root, scale: scale)
-        let octaveRange = midiOctaveRange()
 
         return key.noteSet.array.flatMap { note -> [UInt8] in
             octaveRange.compactMap { octave -> UInt8? in
-                let midi = Int(note.noteNumber) + (octave - 4) * 12
+                let midi = Int(note.intValue) + (octave * 12)
                 guard midi >= 0, midi <= 127 else { return nil }
                 return UInt8(midi)
             }
@@ -350,7 +365,16 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
     // MARK: - Timing
 
     private func nextNoteInterval() -> TimeInterval {
-        let base = Theme.SF2.noteInterval
+        // Use tonality tempo if available — notes align to musical beats.
+        // One beat = 60/BPM seconds. Note interval is a fraction of a beat
+        // multiplied by the mode density.
+        let base: TimeInterval
+        if let tonality {
+            // Base interval = one beat, scaled by density
+            base = tonality.beatDuration
+        } else {
+            base = Theme.SF2.noteInterval
+        }
         let jitter = TimeInterval.random(
             in: -Theme.SF2.noteIntervalJitter...Theme.SF2.noteIntervalJitter
         )
@@ -485,8 +509,8 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         // Get current chord (scale degree offsets from root)
         let chordOffsets = chordProgression[currentChordIndex % chordProgression.count]
 
-        // Get the root note for current mode
-        let root = ScaleMapper.rootNote(for: mode)
+        // Use SessionTonality root if available, otherwise fall back to ScaleMapper
+        let root = tonality?.root ?? ScaleMapper.rootNote(for: mode)
         let baseOctave: Int
         switch mode {
         case .sleep:       baseOctave = 2  // Low register for sleep
@@ -495,8 +519,8 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         case .energize:    baseOctave = 3  // Mid, with octave doublings
         }
 
-        // Convert scale degree offsets to MIDI notes
-        let baseMIDI = root.intValue + (baseOctave - 4) * 12
+        // Convert scale degree offsets to MIDI notes using the session root
+        let baseMIDI = root.intValue + (baseOctave * 12)
         var chordNotes: [UInt8] = []
 
         for offset in chordOffsets {
@@ -524,6 +548,11 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         }
         activeChordNotes = chordNotes
 
+        // Notify bass generator of the new chord root so bass follows the harmony
+        if let firstChordNote = chordNotes.first {
+            bassLineGenerator?.updateChordRoot(firstChordNote)
+        }
+
         // Advance to next chord
         currentChordIndex += 1
         chordChangeCount += 1
@@ -541,21 +570,24 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         timer.resume()
     }
 
-    /// Harmonic rhythm: how often chords change. From FunctionalMusicTheory.md.
+    /// Harmonic rhythm: how often chords change.
+    /// Expressed in bars (4 beats) using the session tempo for cohesion.
     private func chordChangeInterval() -> TimeInterval {
+        let barDuration = tonality?.barDuration ?? 4.0 // fallback 4s per bar
+
         switch mode {
         case .sleep:
-            // Very slow: 16-32 seconds per chord (near-static harmony)
-            return TimeInterval.random(in: 16.0...32.0)
+            // 4-8 bars per chord (near-static harmony)
+            return barDuration * Double.random(in: 4.0...8.0)
         case .relaxation:
-            // Moderate: 8-16 seconds per chord
-            return TimeInterval.random(in: 8.0...16.0)
+            // 2-4 bars per chord
+            return barDuration * Double.random(in: 2.0...4.0)
         case .focus:
-            // Steady: 4-8 seconds per chord
-            return TimeInterval.random(in: 4.0...8.0)
+            // 1-2 bars per chord (steady, predictable)
+            return barDuration * Double.random(in: 1.0...2.0)
         case .energize:
-            // Fast: 2-4 seconds per chord (driving harmonic motion)
-            return TimeInterval.random(in: 2.0...4.0)
+            // 1 bar per chord (driving harmonic motion)
+            return barDuration * Double.random(in: 0.5...1.0)
         }
     }
 
