@@ -50,6 +50,12 @@ public final class AudioEngine: AudioEngineProtocol {
     // SF2MelodicRenderer renders them through the SoundFont.
     public private(set) var sf2Renderer: SF2MelodicRenderer?
     public private(set) var generativeMIDI: GenerativeMIDIEngine?
+    public private(set) var bassLine: BassLineGenerator?
+    public private(set) var drums: DrumPatternGenerator?
+
+    /// Master tonality for the current session. All layers reference this
+    /// to ensure harmonic coherence (same key, scale, tempo).
+    public private(set) var sessionTonality: SessionTonality?
 
     // MARK: - Private State
 
@@ -165,7 +171,16 @@ public final class AudioEngine: AudioEngineProtocol {
         }
 
         currentMode = mode
-        applyPreset(for: mode)
+
+        // Create the master tonality — ALL layers use this for key/scale/tempo.
+        let tonality = SessionTonality(mode: mode)
+        self.sessionTonality = tonality
+
+        // Apply binaural preset using the tonality-aligned carrier frequency.
+        // This ensures the carrier is a harmonic of the musical key root.
+        parameters.baseFrequency = tonality.alignedCarrierFrequency
+        parameters.beatFrequency = mode.defaultBeatFrequency
+        parameters.carrierFrequency = tonality.alignedCarrierFrequency
 
         // Volume hierarchy: binaural/isochronic tones are barely perceptible
         // (just enough to feel the entrainment effect). Ambient and melodic
@@ -183,12 +198,17 @@ public final class AudioEngine: AudioEngineProtocol {
         // Start ambient layer with mode-appropriate default soundscape.
         startAmbienceLayer(for: mode)
 
-        // Start melodic layer (file-based loops as ambient musical bed).
+        // Start melodic layer — file selection filtered by key compatibility.
         startMelodicLayer(for: mode)
 
-        // Start generative MIDI layer (real-time algorithmic composition
-        // via SoundFont + ScaleMapper + Tonic scale mapping).
+        // Start generative MIDI layer (melody + chords in session key).
         startGenerativeLayer(for: mode)
+
+        // Start bass line (Focus/Energize only, in session key and tempo).
+        startBassLine(tonality: tonality)
+
+        // Start drum pattern (Focus/Energize only, locked to session tempo).
+        startDrumPattern(tonality: tonality)
 
         // Start volume sync so user slider changes reach player nodes.
         startVolumeSyncTimer()
@@ -238,9 +258,23 @@ public final class AudioEngine: AudioEngineProtocol {
         Logger.audio.error("[AUDIO-DEBUG] MelodicLayer: \(candidates.count) candidates for \(mode.rawValue)")
         Logger.audio.info("MelodicLayer: \(candidates.count) candidates for \(mode.rawValue)")
 
-        if let firstSound = candidates.first {
+        // Filter candidates by key compatibility with the session tonality
+        let keyCompatible: [SoundID]
+        if let tonality = sessionTonality {
+            let sessionKeyStr = "\(tonality.root)"
+            keyCompatible = candidates.filter { soundID in
+                guard let meta = soundLibrary.metadata(for: soundID) else { return true }
+                return ScaleMapper.areKeysCompatible(meta.key, sessionKeyStr)
+            }
+        } else {
+            keyCompatible = candidates
+        }
+
+        let selected = keyCompatible.isEmpty ? candidates : keyCompatible
+
+        if let firstSound = selected.first {
             let url = soundLibrary.audioFileURL(for: firstSound)
-            Logger.audio.info("MelodicLayer: Playing '\(firstSound)' — URL: \(url?.lastPathComponent ?? "NIL")")
+            Logger.audio.info("MelodicLayer: Playing '\(firstSound)' — URL: \(url?.lastPathComponent ?? "NIL") (key-filtered: \(keyCompatible.count)/\(candidates.count) compatible)")
             melodicLayer?.play(soundID: firstSound)
         } else {
             // Fallback: try to play a MusicGen track directly by filename
@@ -256,15 +290,30 @@ public final class AudioEngine: AudioEngineProtocol {
         }
     }
 
+    /// Start bass line generator (Focus/Energize only).
+    private func startBassLine(tonality: SessionTonality) {
+        guard Theme.ModeInstrumentation.allowsRhythmStem(for: tonality.mode) else { return }
+        bassLine?.start(tonality: tonality)
+    }
+
+    /// Start drum pattern generator (Focus/Energize only).
+    private func startDrumPattern(tonality: SessionTonality) {
+        guard Theme.ModeInstrumentation.allowsRhythmStem(for: tonality.mode) else { return }
+        drums?.start(tonality: tonality)
+    }
+
     public func stop() {
         // Set amplitude to zero — the render callback's per-sample smoothing
         // (5ms time constant) creates an audible fade-out ramp. isPlaying
         // stays true during the ramp so the callback keeps running.
         parameters.amplitude = 0.0
         currentMode = nil
+        sessionTonality = nil
 
         // Stop volume sync and audio layers gracefully.
         stopVolumeSyncTimer()
+        drums?.stop()
+        bassLine?.stop()
         generativeMIDI?.stop()
         stemAudioLayer?.stop()
         melodicLayer?.stop()
@@ -392,9 +441,13 @@ public final class AudioEngine: AudioEngineProtocol {
         do {
             try renderer.setup(sf2URL: sf2URL, presetIndex: Theme.SF2.PresetIndex.focusPad)
             let midi = GenerativeMIDIEngine(renderer: renderer, parameters: parameters)
+            let bass = BassLineGenerator(renderer: renderer)
+            let drum = DrumPatternGenerator(renderer: renderer)
             self.sf2Renderer = renderer
             self.generativeMIDI = midi
-            Logger.audio.info("SF2 generative layer initialized with \(Theme.SF2.resourceName)")
+            self.bassLine = bass
+            self.drums = drum
+            Logger.audio.info("SF2 generative layer initialized with \(Theme.SF2.resourceName) (melody + bass + drums)")
         } catch {
             Logger.audio.error("SF2 setup failed: \(error.localizedDescription)")
         }
