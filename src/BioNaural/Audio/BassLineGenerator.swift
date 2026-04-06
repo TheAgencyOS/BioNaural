@@ -201,13 +201,16 @@ public final class BassLineGenerator: @unchecked Sendable {
     private func bassDuration(tonality: SessionTonality) -> TimeInterval {
         switch tonality.mode {
         case .focus:
-            // Sustained notes (nearly legato)
+            // Sustained notes — nearly legato, warm foundation
             return tonality.beatDuration * 1.8
         case .energize:
-            // Shorter, punchy notes
-            return tonality.beatDuration * 0.4
+            // Full, resonant bass notes — NOT short clicks.
+            // Duration covers most of the note interval so notes connect.
+            // At 120 BPM with 8th-note pattern: beatDuration = 0.5s,
+            // interval = 0.25s, so duration = 0.9 × 0.5 = 0.45s (resonant)
+            return tonality.beatDuration * 0.9
         default:
-            return tonality.beatDuration
+            return tonality.beatDuration * 1.5
         }
     }
 }

@@ -1840,20 +1840,22 @@ extension Theme {
         /// Volume fade-out duration when SF2 layer stops (seconds).
         static let fadeOutDuration: TimeInterval = 5.0
 
-        /// Per-mode note density multipliers.
+        /// Per-mode note density multipliers. Higher = more notes per beat.
+        /// Energize needs much higher density for rhythmic, driving feel.
         enum Density {
-            static let focus: Double = 1.0
-            static let relaxation: Double = 0.7
-            static let sleep: Double = 0.4
-            static let energize: Double = 1.4
+            static let focus: Double = 1.0      // Steady, moderate
+            static let relaxation: Double = 0.7 // Sparse, gentle
+            static let sleep: Double = 0.3      // Very sparse
+            static let energize: Double = 2.2   // Dense, driving rhythm
         }
 
         /// Per-mode note duration multipliers (applied to durationMin/Max).
+        /// Sleep = long sustaining pads, Energize = short punchy melodic notes.
         enum DurationMultiplier {
-            static let focus: Double = 1.0
-            static let relaxation: Double = 1.3
-            static let sleep: Double = 2.0
-            static let energize: Double = 0.7
+            static let focus: Double = 1.0      // 1.5-6.0s (moderate sustain)
+            static let relaxation: Double = 1.5 // 2.25-9.0s (flowing)
+            static let sleep: Double = 2.5      // 3.75-15.0s (long pads)
+            static let energize: Double = 0.3   // 0.45-1.8s (short, rhythmic, punchy)
         }
 
         /// SoundFont preset indices per mode (index into the loaded SF2 file).
@@ -1866,13 +1868,14 @@ extension Theme {
             static let relaxationStrings: Int = 89 // GM: Warm Pad
             // Sleep: Choir Pad — dark, enveloping, formless
             static let sleepPad: Int = 91     // GM: Pad 4 (Choir)
-            // Energize: Bright synth lead — driving, rhythmic
-            static let energizeBells: Int = 80 // GM: Square Lead
+            // Energize: Sawtooth Lead — warm, full, musical (NOT Square Lead which is harsh)
+            static let energizeBells: Int = 81 // GM: Sawtooth Lead (warm, usable for melodies)
             // Additional presets for layering
             static let strings: Int = 49      // GM: String Ensemble 1
             static let acousticPiano: Int = 0 // GM: Acoustic Grand Piano
             static let pad: Int = 88          // GM: New Age Pad
-            static let bass: Int = 38         // GM: Synth Bass 1
+            // Bass: Electric Bass (finger) — round, musical bass tone
+            static let bass: Int = 33         // GM: Electric Bass (finger)
         }
 
         /// Per-mode MIDI octave ranges.
@@ -1889,11 +1892,13 @@ extension Theme {
         }
 
         /// Per-mode phrase lengths (notes before rest probability kicks in).
+        /// Energize plays long continuous phrases for driving momentum.
+        /// Sleep plays very short fragments with long silences.
         enum PhraseLength {
-            static let focus: Int = 4
-            static let relaxation: Int = 3
-            static let sleep: Int = 2
-            static let energize: Int = 5
+            static let focus: Int = 4       // 4-note phrases, steady
+            static let relaxation: Int = 3  // 3-note phrases, gentle
+            static let sleep: Int = 2       // 2-note fragments, sparse
+            static let energize: Int = 8    // 8-note phrases, driving runs
         }
 
         /// Voice leading parameters.

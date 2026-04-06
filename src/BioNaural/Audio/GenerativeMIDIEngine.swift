@@ -330,7 +330,17 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
     // MARK: - Velocity
 
     private func generateVelocity() -> UInt8 {
-        let base = Int(UInt8.random(in: Theme.SF2.velocityMin...Theme.SF2.velocityMax))
+        // Mode-specific velocity ranges:
+        // Sleep: very soft (30-55), Relaxation: soft (40-65), Focus: moderate (50-80), Energize: strong (70-100)
+        let range: ClosedRange<UInt8>
+        switch mode {
+        case .sleep:       range = 30...55
+        case .relaxation:  range = 40...65
+        case .focus:       range = 50...80
+        case .energize:    range = 70...100
+        }
+
+        let base = Int(UInt8.random(in: range))
 
         let offset: Int
         switch biometricState {
@@ -340,7 +350,7 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         case .peak:     offset = Theme.SF2.VelocityOffset.peak
         }
 
-        let clamped = max(Int(Theme.SF2.velocityMin), min(Int(Theme.SF2.velocityMax), base + offset))
+        let clamped = max(Int(range.lowerBound), min(127, base + offset))
         return UInt8(clamped)
     }
 
@@ -416,7 +426,16 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
 
         guard notesSinceRest >= phraseLength else { return false }
 
-        return Double.random(in: 0...1) < Theme.SF2.restProbability
+        // Mode-specific rest probability:
+        // Energize rarely rests (momentum), Sleep rests often (silence is music)
+        let restProb: Double
+        switch mode {
+        case .energize:    restProb = 0.15  // Rarely pause — keep driving
+        case .focus:       restProb = 0.25  // Occasional breath
+        case .relaxation:  restProb = 0.35  // Gentle pauses
+        case .sleep:       restProb = 0.50  // Lots of silence
+        }
+        return Double.random(in: 0...1) < restProb
     }
 
     // MARK: - Preset Mapping
