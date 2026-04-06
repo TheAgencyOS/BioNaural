@@ -116,7 +116,7 @@ public final class MelodicLayer {
 
         let active = activePlayer
         let format = file.processingFormat
-        engine.connect(active, to: submixer, format: format)
+        safeConnect(active, to: submixer, format: format, engine: engine)
 
         submixer.volume = Float(parameters.melodicVolume)
         active.volume = 1.0
@@ -151,7 +151,7 @@ public final class MelodicLayer {
 
         // Wire the incoming player.
         let format = file.processingFormat
-        engine.connect(incoming, to: submixer, format: format)
+        safeConnect(incoming, to: submixer, format: format, engine: engine)
 
         incoming.volume = 0.0
         scheduleLoop(player: incoming, file: file)
@@ -202,8 +202,12 @@ public final class MelodicLayer {
 
     /// Stop all melodic playback with a fade-out.
     public func stop() {
-        guard isPlaying else { return }
         cancelCrossfade()
+
+        // Reset state IMMEDIATELY so a subsequent play() doesn't try to crossfade.
+        // This prevents the crash when stop→start happens quickly.
+        isPlaying = false
+        currentSoundID = nil
 
         let fadeOutDuration = Theme.Audio.melodicCrossfadeDuration
         let stepInterval = Theme.Audio.crossfadeStepInterval
@@ -227,10 +231,8 @@ public final class MelodicLayer {
             if currentStep >= totalSteps {
                 timer.cancel()
                 self?.crossfadeTimer = nil
-                    self?.playerA.stop()
-                    self?.playerB.stop()
-                    self?.isPlaying = false
-                    self?.currentSoundID = nil
+                self?.playerA.stop()
+                self?.playerB.stop()
             }
         }
         crossfadeTimer = timer
@@ -306,7 +308,7 @@ public final class MelodicLayer {
             let file = try AVAudioFile(forReading: url)
             let active = activePlayer
             let format = file.processingFormat
-            engine.connect(active, to: submixer, format: format)
+            safeConnect(active, to: submixer, format: format, engine: engine)
 
             submixer.volume = Float(parameters.melodicVolume)
             active.volume = 1.0
@@ -320,6 +322,31 @@ public final class MelodicLayer {
         } catch {
             Logger.audio.error("MelodicLayer: Failed to play URL \(url.lastPathComponent): \(error.localizedDescription)")
         }
+    }
+
+    // MARK: - Safe Connection
+
+    /// Safely connect a player node to a mixer, re-attaching if necessary.
+    /// Prevents the crash: "required condition is false: _nodes containsObject"
+    /// that occurs when nodes become detached after engine stop/restart.
+    private func safeConnect(
+        _ node: AVAudioPlayerNode,
+        to mixer: AVAudioMixerNode,
+        format: AVAudioFormat,
+        engine: AVAudioEngine
+    ) {
+        // Disconnect existing connections to prevent format conflicts
+        engine.disconnectNodeOutput(node)
+
+        // Re-attach if the node was detached (can happen after engine.stop())
+        if !engine.attachedNodes.contains(node) {
+            engine.attach(node)
+        }
+        if !engine.attachedNodes.contains(mixer) {
+            engine.attach(mixer)
+        }
+
+        engine.connect(node, to: mixer, format: format)
     }
 
     // MARK: - Teardown
