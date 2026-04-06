@@ -195,21 +195,22 @@ public final class MIDISequencePlayer {
         logger.info("Playing: \(sequence.genre)/\(sequence.mode) — \(sequence.tracks.count) tracks, \(sequence.bpm) BPM, key=\(sequence.key)")
     }
 
-    /// Stop playback and clean up samplers.
+    /// Stop playback. Does NOT detach samplers (causes render thread crash).
+    /// Samplers are silenced and reused on next play().
     public func stop() {
         isPlaying = false
         schedulerTimer?.cancel()
         schedulerTimer = nil
 
-        // Stop all notes and detach samplers
+        // Silence all notes but keep samplers attached to avoid
+        // EXC_BAD_ACCESS on the audio render thread.
         for (_, sampler) in samplers {
             for note: UInt8 in 0...127 {
                 sampler.stopNote(note, onChannel: 0)
             }
-            engine.disconnectNodeOutput(sampler)
-            engine.detach(sampler)
+            sampler.volume = 0
         }
-        samplers.removeAll()
+        masterSubmixer.volume = 0
         currentSequence = nil
     }
 
