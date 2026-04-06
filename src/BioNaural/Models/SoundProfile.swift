@@ -64,6 +64,14 @@ public final class SoundProfile {
     /// this profile. Used for weighting confidence.
     public var soundDNASampleCount: Int
 
+    // MARK: - Genre Preferences (Sound DNA)
+
+    /// User's preferred music genres (e.g. ["jazz", "lofi", "ambient"]).
+    /// Selected during onboarding, stored as part of Sound DNA.
+    /// Informs genre selection for all music generation.
+    /// Maximum 3 genres. Empty means no preference (use mode defaults).
+    public var genrePreferences: [String]
+
     // MARK: - Self-Awareness Calibration
     /// How accurately the user's pre-session check-in predicts their
     /// actual biometric state. `0.0` = poor self-awareness (biometrics
@@ -94,6 +102,7 @@ public final class SoundProfile {
         warmthPreference: Double? = nil,
         keyPreference: String? = nil,
         soundDNASampleCount: Int = 0,
+        genrePreferences: [String] = [],
         selfAwarenessScore: Double = 0.5
     ) {
         self.id = id
@@ -107,6 +116,7 @@ public final class SoundProfile {
         self.warmthPreference = warmthPreference
         self.keyPreference = keyPreference
         self.soundDNASampleCount = soundDNASampleCount
+        self.genrePreferences = genrePreferences
         self.selfAwarenessScore = selfAwarenessScore
     }
     // MARK: - Learning

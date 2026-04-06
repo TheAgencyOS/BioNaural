@@ -23,6 +23,7 @@
 import BioNauralShared
 import Foundation
 import os.log
+import UIKit
 import WebKit
 
 // MARK: - WebAudioEngine
@@ -67,8 +68,15 @@ public final class WebAudioEngine: NSObject, WKScriptMessageHandler {
         contentController.add(self, name: "engineReady")
         contentController.add(self, name: "engineStatus")
 
-        let wv = WKWebView(frame: .zero, configuration: config)
+        let wv = WKWebView(frame: CGRect(x: 0, y: 0, width: 1, height: 1), configuration: config)
         wv.isHidden = true // Not visible — audio only
+
+        // WKWebView MUST be in a window hierarchy to execute JS and play audio.
+        // Add it to the key window's root view.
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+           let window = windowScene.windows.first {
+            window.addSubview(wv)
+        }
 
         // Load the bundled HTML+JS engine (files are in Resources root)
         guard let bundleURL = Bundle.main.url(forResource: "webengine-index", withExtension: "html") else {
@@ -78,12 +86,12 @@ public final class WebAudioEngine: NSObject, WKScriptMessageHandler {
         }
 
         // Allow read access to the entire bundle directory so the JS can
-        // load the SoundFont (BioNaural-Melodic.sf2) and engine bundle
+        // load the SoundFont and engine bundle JS
         let bundleDir = Bundle.main.bundleURL
         wv.loadFileURL(bundleURL, allowingReadAccessTo: bundleDir)
 
         self.webView = wv
-        logger.info("WebAudioEngine setup complete")
+        logger.info("WebAudioEngine setup — HTML loaded from \(bundleURL.lastPathComponent)")
     }
 
     // MARK: - WKScriptMessageHandler
