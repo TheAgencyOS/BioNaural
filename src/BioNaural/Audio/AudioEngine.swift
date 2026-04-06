@@ -58,6 +58,13 @@ public final class AudioEngine: AudioEngineProtocol {
     /// musical content. Replaces native MIDI for all melodic generation.
     public private(set) var webEngine: WebAudioEngine?
 
+    /// Pre-generated MIDI sequence player. Plays Claude-composed sequences
+    /// through the SoundFont — highest quality, zero per-session API cost.
+    public private(set) var sequencePlayer: MIDISequencePlayer?
+
+    /// Catalog of all pre-generated MIDI sequences (loaded from bundle).
+    private var midiCatalog: MIDISequenceCatalog?
+
     /// User's selected genre preference (from onboarding or per-session).
     public var genrePreference: String?
 
@@ -148,7 +155,18 @@ public final class AudioEngine: AudioEngineProtocol {
         // -- SF2 generative melodic layer (SoundFont + MIDI) ----------------
         setupSF2Layer()
 
+        // -- Pre-generated MIDI sequence player (Claude-composed, highest quality)
+        let seqPlayer = MIDISequencePlayer(engine: engine, parameters: parameters)
+        engine.connect(seqPlayer.outputNode, to: engine.mainMixerNode, format: nil)
+        seqPlayer.setup()
+        self.sequencePlayer = seqPlayer
+        self.midiCatalog = MIDISequencePlayer.loadCatalog()
+        if midiCatalog != nil {
+            Logger.audio.info("MIDI catalog loaded — \(self.midiCatalog!.sequences.count) sequences")
+        }
+
         // -- WebView audio engine (SpessaSynth + genre-aware patterns) ------
+        // Used as fallback when pre-generated sequences aren't available.
         let web = WebAudioEngine(parameters: parameters)
         self.webEngine = web
         DispatchQueue.main.async {
@@ -225,14 +243,9 @@ public final class AudioEngine: AudioEngineProtocol {
         // Start drum pattern (Focus/Energize only, locked to session tempo).
         startDrumPattern(tonality: tonality)
 
-        // Start WebView audio engine (SpessaSynth — genre-aware music).
-        // This produces beat-locked, cohesive musical content.
-        webEngine?.start(
-            mode: mode,
-            genre: genrePreference,
-            key: "\(tonality.root)",
-            bpm: tonality.tempo
-        )
+        // Start music generation — prefer pre-generated Claude sequences,
+        // fall back to WebView SpessaSynth, then native MIDI as last resort.
+        startMusicGeneration(mode: mode, tonality: tonality)
 
         // Start volume sync so user slider changes reach player nodes.
         startVolumeSyncTimer()
@@ -314,6 +327,40 @@ public final class AudioEngine: AudioEngineProtocol {
         }
     }
 
+    // MARK: - Music Generation Cascade
+
+    /// Start music generation using the best available engine:
+    /// 1. Pre-generated Claude MIDI sequences (highest quality)
+    /// 2. WebView SpessaSynth engine (genre-aware algorithmic)
+    /// 3. Native GenerativeMIDIEngine (basic fallback)
+    private func startMusicGeneration(mode: FocusMode, tonality: SessionTonality) {
+        let genre = genrePreference ?? WebAudioEngine.availableGenres.first(where: {
+            switch mode {
+            case .sleep: return $0.id == "ambient"
+            case .relaxation: return $0.id == "lofi"
+            case .focus: return $0.id == "lofi"
+            case .energize: return $0.id == "electronic"
+            }
+        })?.id ?? "ambient"
+
+        // Try pre-generated sequences first (best quality)
+        if let catalog = midiCatalog,
+           let sequence = MIDISequencePlayer.findSequence(genre: genre, mode: mode, catalog: catalog) {
+            sequencePlayer?.play(sequence: sequence)
+            Logger.audio.info("Music: Playing pre-generated sequence (\(genre)/\(mode.rawValue))")
+            return
+        }
+
+        // Fall back to WebView SpessaSynth
+        webEngine?.start(
+            mode: mode,
+            genre: genre,
+            key: "\(tonality.root)",
+            bpm: tonality.tempo
+        )
+        Logger.audio.info("Music: Using WebView SpessaSynth (\(genre)/\(mode.rawValue))")
+    }
+
     /// Start bass line generator (Focus/Energize only).
     private func startBassLine(tonality: SessionTonality) {
         guard Theme.ModeInstrumentation.allowsRhythmStem(for: tonality.mode) else { return }
@@ -336,6 +383,7 @@ public final class AudioEngine: AudioEngineProtocol {
 
         // Stop volume sync and audio layers gracefully.
         stopVolumeSyncTimer()
+        sequencePlayer?.stop()
         webEngine?.stop()
         drums?.stop()
         bassLine?.stop()
@@ -440,6 +488,8 @@ public final class AudioEngine: AudioEngineProtocol {
             if let mv = self?.multiVoice, let params = self?.parameters {
                 mv.syncVolumes(parameters: params)
             }
+            // Sync pre-generated sequence player volumes
+            self?.sequencePlayer?.syncVolumes()
             // Sync WebView engine volumes from sliders
             self?.webEngine?.syncVolumes()
         }
