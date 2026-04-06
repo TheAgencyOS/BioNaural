@@ -1,0 +1,25 @@
+# BioNaural Post-Processing Service
+# Handles: Demucs stem separation, loudness normalization, auto-tagging, encoding
+
+# Audio processing
+demucs==4.0.1
+librosa==0.10.2
+soundfile==0.12.1
+pyloudnorm==0.1.1
+pydub==0.25.1
+numpy==1.26.4
+scipy==1.13.1
+
+# Music analysis (key detection, onset detection)
+essentia==2.1b6.dev1034
+
+# Web framework
+fastapi==0.115.6
+uvicorn==0.34.0
+python-multipart==0.0.18
+
+# Supabase client
+supabase==2.11.0
+
+# HTTP client
+httpx==0.28.1

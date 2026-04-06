@@ -1,0 +1,17 @@
+# BioNaural ML Training Pipeline
+# All classical ML — no LLMs, no deep learning (except tiny VAE)
+
+numpy==1.26.4
+scipy==1.13.1
+scikit-learn==1.5.2
+pandas==2.2.3
+
+# For VAE composition space (tiny, trains on CPU in minutes)
+torch==2.5.1
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# Supabase client
+supabase==2.11.0
+
+# Scheduling
+apscheduler==3.10.4

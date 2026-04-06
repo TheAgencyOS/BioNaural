@@ -5,6 +5,7 @@
 // Every color, spacing, font, duration, frequency, and threshold in the app
 // references this file. No hardcoded values anywhere else.
 
+import BioNauralShared
 import SwiftUI
 import UIKit
 
@@ -1856,18 +1857,33 @@ extension Theme {
         }
 
         /// SoundFont preset indices per mode (index into the loaded SF2 file).
-        /// These map to the curated presets in the bundled SoundFont.
+        /// GM (General MIDI) program numbers for GeneralUser GS SoundFont.
+        /// These select the instrument timbre for each mode.
         enum PresetIndex {
-            static let focusPad: Int = 0
-            static let relaxationStrings: Int = 1
-            static let sleepPad: Int = 2
-            static let energizeBells: Int = 3
+            // Focus: Electric Piano — clean, steady, non-distracting
+            static let focusPad: Int = 4      // GM: Electric Piano 1 (Rhodes)
+            // Relaxation: Warm Pad — spacious, floating, Lydian character
+            static let relaxationStrings: Int = 89 // GM: Warm Pad
+            // Sleep: Choir Pad — dark, enveloping, formless
+            static let sleepPad: Int = 91     // GM: Pad 4 (Choir)
+            // Energize: Bright synth lead — driving, rhythmic
+            static let energizeBells: Int = 80 // GM: Square Lead
+            // Additional presets for layering
+            static let strings: Int = 49      // GM: String Ensemble 1
+            static let acousticPiano: Int = 0 // GM: Acoustic Grand Piano
+            static let pad: Int = 88          // GM: New Age Pad
+            static let bass: Int = 38         // GM: Synth Bass 1
         }
 
         /// Per-mode MIDI octave ranges.
+        /// Based on FunctionalMusicTheory.md research:
+        /// - Focus: narrow mid-range for habituation (C3-G4)
+        /// - Relaxation: warm mid range (C3-C5)
+        /// - Sleep: low register (C2-C3), high notes activate alertness
+        /// - Energize: wide range for drama (C3-C6)
         enum OctaveRange {
-            static let focus: ClosedRange<Int> = 3...5
-            static let relaxation: ClosedRange<Int> = 2...4
+            static let focus: ClosedRange<Int> = 3...4
+            static let relaxation: ClosedRange<Int> = 3...4
             static let sleep: ClosedRange<Int> = 2...3
             static let energize: ClosedRange<Int> = 3...6
         }
@@ -2211,6 +2227,235 @@ extension Theme {
 
         /// Sharpness for button press haptic (0...1).
         static let buttonSharpness: Float = 0.5
+    }
+}
+
+// MARK: - Color Initializers
+
+// MARK: - Supabase Configuration
+
+extension Theme {
+
+    enum Supabase {
+        static let url = "https://nkqgenwbqtnqeqvmokdq.supabase.co"
+        static let anonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5rcWdlbndicXRucWVxdm1va2RxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU0ODQ2NDksImV4cCI6MjA5MTA2MDY0OX0.cvpywlnuPPs4gU_YDFzkdo-8d0PzCSecaUwUiS-DGlU"
+    }
+}
+
+// MARK: - Transition Coordinator Tokens
+
+extension Theme {
+
+    enum Transition {
+
+        // MARK: Slew Rates (max parameter change per second)
+
+        /// Maximum beat frequency change rate (Hz/sec). Default mode.
+        static let beatFrequencySlewRate: Double = 0.3
+        /// Halved slew rate for sleep mode during deep sleep.
+        static let beatFrequencySlewRateSleep: Double = 0.15
+        /// Maximum stem volume change rate per second (default).
+        static let stemVolumeSlewRate: Float = 0.05
+        /// Halved rate for sleep mode.
+        static let stemVolumeSlewRateSleep: Float = 0.02
+        /// Maximum carrier frequency change rate (Hz/sec).
+        static let carrierFrequencySlewRate: Double = 5.0
+
+        // MARK: Dwell Times
+
+        /// Minimum seconds in a biometric state before triggering audio changes.
+        static let minimumDwellSeconds: TimeInterval = 5.0
+        /// Extended dwell for sleep mode — avoid false triggers.
+        static let minimumDwellSecondsSleep: TimeInterval = 30.0
+        /// Minimum gap between stem pack crossfade and MIDI register change.
+        static let crossParameterGapSeconds: TimeInterval = 10.0
+
+        // MARK: Smoothing
+
+        /// Smoothstep duration for MIDI density transitions.
+        static let midiDensitySmoothSeconds: TimeInterval = 3.0
+        /// Exponential smoothing alpha for stem volumes (10Hz update rate).
+        static let stemVolumeSmoothingAlpha: Float = 0.05
+        /// Carrier frequency transition duration via tanh curve.
+        static let carrierTransitionSeconds: TimeInterval = 4.0
+
+        // MARK: Sleep Protections
+
+        /// HR threshold above resting that defines "deep sleep" state.
+        static let deepSleepHRThresholdAboveResting: Double = 5.0
+        /// Duration of sustained low HR to confirm deep sleep.
+        static let deepSleepConfirmationSeconds: TimeInterval = 300.0 // 5 min
+        /// HR spike magnitude that triggers restlessness response.
+        static let restlessnessHRSpike: Double = 15.0
+        /// Cooldown after restless period before resuming normal adaptation.
+        static let restlessCooldownSeconds: TimeInterval = 120.0 // 2 min
+
+        // MARK: Crossfade Timing
+
+        /// Stem pack crossfade duration (equal-power).
+        static let stemPackCrossfadeSeconds: TimeInterval = 8.0
+        /// Melodic content crossfade duration.
+        static let melodicCrossfadeSeconds: TimeInterval = 12.0
+        /// Minimum time a new state must persist before triggering content crossfade.
+        static let contentCrossfadeDwellSeconds: TimeInterval = 30.0
+
+        // MARK: Micro-Variation (Long Sessions)
+
+        /// Period range for stem volume drift LFOs (seconds).
+        static let volumeDriftPeriodMin: TimeInterval = 120.0
+        static let volumeDriftPeriodMax: TimeInterval = 300.0
+        /// Amplitude of stem volume drift (additive).
+        static let volumeDriftAmplitude: Float = 0.05
+        /// Interval between variation set crossfades during long sessions.
+        static let variationCrossfadeIntervalSeconds: TimeInterval = 1200.0 // 20 min
+
+        // MARK: Generation
+
+        /// Default stem duration for ACE-STEP generation.
+        static let defaultStemDurationSeconds: Int = 60
+        /// Max wait time for generation job polling.
+        static let maxGenerationWaitSeconds: Int = 300
+        /// Polling interval for generation job status.
+        static let generationPollIntervalSeconds: TimeInterval = 5.0
+    }
+}
+
+// MARK: - Mode-Specific Instrumentation Rules
+
+extension Theme {
+
+    /// Governs which instruments, sounds, and textures are permitted
+    /// per mode. The generation pipeline (ACE-STEP prompts), SoundSelector,
+    /// and GenerativeMIDIEngine all consult these rules.
+    enum ModeInstrumentation {
+
+        // MARK: Sleep — Ambient pads and nature ONLY
+
+        /// Sleep mode: warm pads, deep drones, nature textures.
+        /// NO percussion, NO rhythmic elements, NO melodic instruments.
+        static let sleepAllowedInstruments: Set<Instrument> = [.pad, .texture]
+        static let sleepProhibitedInstruments: Set<Instrument> = [.percussion, .guitar, .bass, .piano]
+        /// Sleep uses NO rhythm stem.
+        static let sleepAllowRhythmStem: Bool = false
+        /// Sleep: very dark, warm, formless textures only.
+        static let sleepMaxBrightness: Double = 0.3
+        static let sleepMaxDensity: Double = 0.2
+        /// Sleep generation prompt suffix.
+        static let sleepPromptSuffix = "no drums, no percussion, no rhythm, no melody, no vocals, formless, dark, warm"
+
+        // MARK: Relaxation — Ambient pads, gentle strings, nature sounds
+
+        /// Relaxation: warm pads, gentle strings, nature textures.
+        /// NO percussion, NO driving rhythm, NO sharp transients.
+        static let relaxationAllowedInstruments: Set<Instrument> = [.pad, .texture, .strings]
+        static let relaxationProhibitedInstruments: Set<Instrument> = [.percussion, .guitar]
+        static let relaxationAllowRhythmStem: Bool = false
+        static let relaxationMaxBrightness: Double = 0.5
+        static let relaxationMaxDensity: Double = 0.4
+        static let relaxationPromptSuffix = "no drums, no percussion, no rhythm, no vocals, gentle, flowing, spacious"
+
+        // MARK: Focus — Minimal, steady, can include subtle rhythm
+
+        /// Focus: pads, subtle piano, light texture. Optional minimal rhythm.
+        /// Percussion allowed but should be subtle (soft clicks, minimal hi-hat).
+        static let focusAllowedInstruments: Set<Instrument> = [.pad, .texture, .piano, .percussion]
+        static let focusProhibitedInstruments: Set<Instrument> = [] // None prohibited
+        static let focusAllowRhythmStem: Bool = true
+        static let focusMaxBrightness: Double = 0.7
+        static let focusMaxDensity: Double = 0.6
+        static let focusPromptSuffix = "steady, minimal, subtle, no vocals, clean, focused"
+
+        // MARK: Energize — Full instrumentation, rhythmic, driving
+
+        /// Energize: full palette including percussion, bass, guitar, piano.
+        /// Tabla, drumset, bass guitar, electric guitar all welcome.
+        static let energizeAllowedInstruments: Set<Instrument> = [
+            .pad, .texture, .piano, .strings, .guitar, .bass, .percussion,
+        ]
+        static let energizeProhibitedInstruments: Set<Instrument> = [] // None prohibited
+        static let energizeAllowRhythmStem: Bool = true
+        static let energizeMaxBrightness: Double = 1.0
+        static let energizeMaxDensity: Double = 1.0
+        static let energizePromptSuffix = "rhythmic, driving, uplifting, energetic, no vocals"
+
+        // MARK: Lookup Helpers
+
+        /// Returns the set of allowed instruments for the given mode.
+        static func allowedInstruments(for mode: FocusMode) -> Set<Instrument> {
+            switch mode {
+            case .sleep:       return sleepAllowedInstruments
+            case .relaxation:  return relaxationAllowedInstruments
+            case .focus:       return focusAllowedInstruments
+            case .energize:    return energizeAllowedInstruments
+            }
+        }
+
+        /// Returns instruments explicitly prohibited for the given mode.
+        static func prohibitedInstruments(for mode: FocusMode) -> Set<Instrument> {
+            switch mode {
+            case .sleep:       return sleepProhibitedInstruments
+            case .relaxation:  return relaxationProhibitedInstruments
+            case .focus:       return focusProhibitedInstruments
+            case .energize:    return energizeProhibitedInstruments
+            }
+        }
+
+        /// Whether the rhythm stem should be included in stem packs for this mode.
+        static func allowsRhythmStem(for mode: FocusMode) -> Bool {
+            switch mode {
+            case .sleep:       return sleepAllowRhythmStem
+            case .relaxation:  return relaxationAllowRhythmStem
+            case .focus:       return focusAllowRhythmStem
+            case .energize:    return energizeAllowRhythmStem
+            }
+        }
+
+        /// Maximum brightness for generated content in this mode.
+        static func maxBrightness(for mode: FocusMode) -> Double {
+            switch mode {
+            case .sleep:       return sleepMaxBrightness
+            case .relaxation:  return relaxationMaxBrightness
+            case .focus:       return focusMaxBrightness
+            case .energize:    return energizeMaxBrightness
+            }
+        }
+
+        /// Maximum density for generated content in this mode.
+        static func maxDensity(for mode: FocusMode) -> Double {
+            switch mode {
+            case .sleep:       return sleepMaxDensity
+            case .relaxation:  return relaxationMaxDensity
+            case .focus:       return focusMaxDensity
+            case .energize:    return energizeMaxDensity
+            }
+        }
+
+        /// Prompt suffix appended to ACE-STEP generation prompts for this mode.
+        static func promptSuffix(for mode: FocusMode) -> String {
+            switch mode {
+            case .sleep:       return sleepPromptSuffix
+            case .relaxation:  return relaxationPromptSuffix
+            case .focus:       return focusPromptSuffix
+            case .energize:    return energizePromptSuffix
+            }
+        }
+
+        /// Nature sound categories allowed per mode.
+        /// Sleep/Relaxation: flowing water, rain, wind, ocean.
+        /// Focus: minimal (rain, white noise only).
+        /// Energize: none (music is the texture).
+        static func allowedNatureSounds(for mode: FocusMode) -> [String] {
+            switch mode {
+            case .sleep:
+                return ["rain", "deep_rain", "ocean", "distant_thunder", "night_forest"]
+            case .relaxation:
+                return ["flowing_stream", "gentle_wind", "rain", "birdsong", "ocean"]
+            case .focus:
+                return ["soft_rain", "white_noise", "pink_noise"]
+            case .energize:
+                return [] // No nature sounds — music provides all texture
+            }
+        }
     }
 }
 

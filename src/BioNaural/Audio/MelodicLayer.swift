@@ -283,12 +283,42 @@ public final class MelodicLayer {
 
     /// Resolves a `SoundID` to an `AVAudioFile` via the sound library.
     private func loadFile(for soundID: SoundID) -> AVAudioFile? {
-        guard let url = soundLibrary.audioFileURL(for: soundID) else { return nil }
+        guard let url = soundLibrary.audioFileURL(for: soundID) else {
+            Logger.audio.warning("MelodicLayer: No URL for soundID '\(soundID)' in sound library")
+            return nil
+        }
         do {
             return try AVAudioFile(forReading: url)
         } catch {
             Logger.audio.warning("Failed to load melodic file for '\(soundID)': \(error.localizedDescription)")
             return nil
+        }
+    }
+
+    // MARK: - Direct URL Playback
+
+    /// Play an audio file directly by URL (bypasses SoundLibrary lookup).
+    /// Used as a fallback for MusicGen-generated tracks.
+    public func playURL(_ url: URL) {
+        guard let engine else { return }
+
+        do {
+            let file = try AVAudioFile(forReading: url)
+            let active = activePlayer
+            let format = file.processingFormat
+            engine.connect(active, to: submixer, format: format)
+
+            submixer.volume = Float(parameters.melodicVolume)
+            active.volume = 1.0
+
+            scheduleLoop(player: active, file: file)
+            active.play()
+
+            currentSoundID = url.deletingPathExtension().lastPathComponent
+            isPlaying = true
+            Logger.audio.info("MelodicLayer: Playing URL directly: \(url.lastPathComponent)")
+        } catch {
+            Logger.audio.error("MelodicLayer: Failed to play URL \(url.lastPathComponent): \(error.localizedDescription)")
         }
     }
 

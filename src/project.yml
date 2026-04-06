@@ -29,10 +29,13 @@ packages:
   GlowGetter:
     url: https://github.com/Aeastr/GlowGetter.git
     from: "2.0.0"
-  # SF2Lib: Uncomment when switching from AVAudioUnitSampler to SF2Lib's AUv3
+  Supabase:
+    url: https://github.com/supabase/supabase-swift.git
+    from: "2.0.0"
+  # SF2Lib v8.9.0 — Enable when replacing AVAudioUnitSampler with SF2Lib AUv3
   # SF2Lib:
   #   url: https://github.com/bradhowes/SF2Lib.git
-  #   from: "11.0.0"
+  #   from: "8.9.0"
   BioNauralShared:
     path: BioNauralShared
 
@@ -43,14 +46,24 @@ targets:
     sources:
       - path: BioNaural
         excludes:
-          - "Resources/Ambience/**"
+          - "Resources/Sounds/**"
     resources:
       - path: BioNaural/Resources
+        excludes:
+          - "Sounds/**"
+      - path: BioNaural/Resources
+        includes:
+          - "*.caf"
+          - "*.m4a"
+        buildPhase: resources
+        type: file
     dependencies:
       - package: Atomics
       - package: Tonic
       - package: Vortex
       - package: GlowGetter
+      - package: Supabase
+        product: Supabase
       # - package: SF2Lib
       #   product: SF2Lib
       - package: BioNauralShared

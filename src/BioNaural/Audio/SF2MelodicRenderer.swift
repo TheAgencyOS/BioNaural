@@ -105,8 +105,9 @@ public final class SF2MelodicRenderer {
         self.currentPresetIndex = presetIndex
         self.isReady = true
 
-        // Start with zero volume — fade in when playback begins.
-        submixer.volume = 0.0
+        // Start at moderate volume — the GenerativeMIDIEngine calls fadeIn()
+        // which ramps to full, but we want notes audible immediately.
+        submixer.volume = 0.6
 
         Self.logger.info("SF2 renderer ready — preset \(presetIndex)")
     }

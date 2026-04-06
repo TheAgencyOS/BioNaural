@@ -45,9 +45,11 @@ public final class AudioEngine: AudioEngineProtocol {
     /// When `nil`, the selector falls back to neutral defaults.
     public var soundSelectionProfile: SoundSelectionProfile?
 
-    // SF2 generative layer — stubbed until SF2MelodicRenderer ships.
-    // public private(set) var sf2Renderer: SF2MelodicRenderer?
-    // public private(set) var generativeMIDI: GenerativeMIDIEngine?
+    // SF2 generative layer — real-time MIDI synthesis via SoundFont.
+    // GenerativeMIDIEngine produces notes using ScaleMapper + Tonic;
+    // SF2MelodicRenderer renders them through the SoundFont.
+    public private(set) var sf2Renderer: SF2MelodicRenderer?
+    public private(set) var generativeMIDI: GenerativeMIDIEngine?
 
     // MARK: - Private State
 
@@ -129,8 +131,8 @@ public final class AudioEngine: AudioEngineProtocol {
         engine.connect(stem.outputNode, to: engine.mainMixerNode, format: nil)
         self.stemAudioLayer = stem
 
-        // -- SF2 melodic layer (v1.5 — stubbed) ----------------------------
-        // setupSF2Layer()
+        // -- SF2 generative melodic layer (SoundFont + MIDI) ----------------
+        setupSF2Layer()
 
         // -- Output configuration -----------------------------------------
         // Spatial Audio MUST be disabled to preserve stereo binaural beat
@@ -164,21 +166,54 @@ public final class AudioEngine: AudioEngineProtocol {
 
         currentMode = mode
         applyPreset(for: mode)
+
+        // Volume hierarchy: binaural/isochronic tones are barely perceptible
+        // (just enough to feel the entrainment effect). Ambient and melodic
+        // layers carry the actual listening experience.
         parameters.amplitude = Theme.Audio.Amplitude.binauralMax
-        parameters.binauralVolume = Theme.Audio.Amplitude.defaultBinauralVolume
-        parameters.ambientVolume = Theme.Audio.Amplitude.ambientAtCalm
-        parameters.melodicVolume = Theme.Audio.Amplitude.binauralMax
+        parameters.binauralVolume = 0.12    // Just perceptible — felt, not heard
+        parameters.ambientVolume = 0.90     // Primary audio bed (loudest)
+        parameters.melodicVolume = 0.70     // Prominent — the musical experience
         parameters.isPlaying = true
 
         if !engine.isRunning {
             try engine.start()
         }
 
-        // Start melodic layer (file-based; SF2 generative is v1.5).
+        // Start ambient layer with mode-appropriate default soundscape.
+        startAmbienceLayer(for: mode)
+
+        // Start melodic layer (file-based loops as ambient musical bed).
         startMelodicLayer(for: mode)
+
+        // Start generative MIDI layer (real-time algorithmic composition
+        // via SoundFont + ScaleMapper + Tonic scale mapping).
+        startGenerativeLayer(for: mode)
 
         // Start volume sync so user slider changes reach player nodes.
         startVolumeSyncTimer()
+    }
+
+    // MARK: - Ambience Layer Kickoff
+
+    /// Selects and starts a mode-appropriate ambient bed.
+    /// Sleep/Relaxation: nature sounds (rain, ocean, wind).
+    /// Focus: pink noise or rain. Energize: no ambient (music is the texture).
+    private func startAmbienceLayer(for mode: FocusMode) {
+        let bedName: String
+        switch mode {
+        case .sleep:
+            bedName = "rain-texture-60s"
+        case .relaxation:
+            bedName = "ocean-waves-60s"
+        case .focus:
+            bedName = "pink-noise-60s"
+        case .energize:
+            // Energize uses music as texture — ambient is quieter
+            bedName = "brown-noise-60s"
+            parameters.ambientVolume = 0.3
+        }
+        ambienceLayer?.play(bedName: bedName)
     }
 
     // MARK: - Melodic Layer Kickoff
@@ -200,8 +235,24 @@ public final class AudioEngine: AudioEngineProtocol {
             preferences: profile
         )
 
+        Logger.audio.error("[AUDIO-DEBUG] MelodicLayer: \(candidates.count) candidates for \(mode.rawValue)")
+        Logger.audio.info("MelodicLayer: \(candidates.count) candidates for \(mode.rawValue)")
+
         if let firstSound = candidates.first {
+            let url = soundLibrary.audioFileURL(for: firstSound)
+            Logger.audio.info("MelodicLayer: Playing '\(firstSound)' — URL: \(url?.lastPathComponent ?? "NIL")")
             melodicLayer?.play(soundID: firstSound)
+        } else {
+            // Fallback: try to play a MusicGen track directly by filename
+            Logger.audio.error("[AUDIO-DEBUG] MelodicLayer: No candidates! Trying MusicGen fallback for \(mode.rawValue)")
+            Logger.audio.warning("MelodicLayer: No candidates from SoundSelector. Trying MusicGen fallback.")
+            let fallbackName = "musicgen-\(mode.rawValue)-30s"
+            if let url = Bundle.main.url(forResource: fallbackName, withExtension: "wav") {
+                Logger.audio.info("MelodicLayer: Playing fallback '\(fallbackName).wav'")
+                melodicLayer?.playURL(url)
+            } else {
+                Logger.audio.error("MelodicLayer: No audio available for mode \(mode.rawValue)")
+            }
         }
     }
 
@@ -214,6 +265,7 @@ public final class AudioEngine: AudioEngineProtocol {
 
         // Stop volume sync and audio layers gracefully.
         stopVolumeSyncTimer()
+        generativeMIDI?.stop()
         stemAudioLayer?.stop()
         melodicLayer?.stop()
         ambienceLayer?.stop()
@@ -318,14 +370,55 @@ public final class AudioEngine: AudioEngineProtocol {
         volumeSyncTimer = nil
     }
 
-    // MARK: - SF2 Layer Setup (Stubbed)
-    // SF2MelodicRenderer and GenerativeMIDIEngine are v1.5 features.
-    // The setup and start methods below are commented out until those
-    // types are implemented. The file-based melodic layer handles all
-    // melodic content in v1.
-    //
-    // private func setupSF2Layer() { ... }
-    // private func startGenerativeLayer(for mode: FocusMode) { ... }
+    // MARK: - SF2 Generative Layer Setup
+
+    /// Sets up the SoundFont renderer and generative MIDI engine.
+    /// Uses SF2MelodicRenderer (AVAudioUnitSampler) to render notes
+    /// produced by GenerativeMIDIEngine using Tonic-powered ScaleMapper.
+    private func setupSF2Layer() {
+        guard let sf2URL = Bundle.main.url(
+            forResource: Theme.SF2.resourceName,
+            withExtension: Theme.SF2.resourceExtension
+        ) else {
+            Logger.audio.error("[AUDIO-DEBUG] SoundFont NOT FOUND: \(Theme.SF2.resourceName).\(Theme.SF2.resourceExtension)")
+            Logger.audio.error("[AUDIO-DEBUG] SF2 files in bundle: \(Bundle.main.paths(forResourcesOfType: "sf2", inDirectory: nil))")
+            Logger.audio.error("SoundFont NOT FOUND: \(Theme.SF2.resourceName).\(Theme.SF2.resourceExtension) — generative MIDI disabled")
+            return
+        }
+        Logger.audio.error("[AUDIO-DEBUG] SoundFont found: \(sf2URL.lastPathComponent)")
+        Logger.audio.info("SoundFont found at: \(sf2URL.lastPathComponent) (\(sf2URL.path))")
+
+        let renderer = SF2MelodicRenderer(engine: engine, parameters: parameters)
+        do {
+            try renderer.setup(sf2URL: sf2URL, presetIndex: Theme.SF2.PresetIndex.focusPad)
+            let midi = GenerativeMIDIEngine(renderer: renderer, parameters: parameters)
+            self.sf2Renderer = renderer
+            self.generativeMIDI = midi
+            Logger.audio.info("SF2 generative layer initialized with \(Theme.SF2.resourceName)")
+        } catch {
+            Logger.audio.error("SF2 setup failed: \(error.localizedDescription)")
+        }
+    }
+
+    /// Starts the generative MIDI engine for the given mode.
+    /// Selects the appropriate SoundFont preset and begins algorithmic
+    /// note generation using ScaleMapper-driven pitch selection.
+    private func startGenerativeLayer(for mode: FocusMode) {
+        guard let midi = generativeMIDI, let renderer = sf2Renderer else { return }
+
+        // Select mode-appropriate SoundFont preset
+        let presetIndex: Int
+        switch mode {
+        case .focus:       presetIndex = Theme.SF2.PresetIndex.focusPad
+        case .relaxation:  presetIndex = Theme.SF2.PresetIndex.relaxationStrings
+        case .sleep:       presetIndex = Theme.SF2.PresetIndex.sleepPad
+        case .energize:    presetIndex = Theme.SF2.PresetIndex.energizeBells
+        }
+        renderer.changePreset(presetIndex)
+
+        // Start generative composition with calm initial state
+        midi.start(mode: mode, biometricState: .calm)
+    }
 
     // MARK: - Preset Application
 

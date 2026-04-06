@@ -34,5 +34,28 @@ Pods/
 !default.perspectivev3
 xcuserdata/
 
+# Environment variables (secrets)
+.env
+**/.env
+!**/.env.example
+
+# Raw uncompressed audio (use compressed .caf in Resources/)
+sounds/ambient/*.wav
+sounds/melodic/*.wav
+sounds/binaural-test/
+sounds/*.mp3
+sounds/*.wav
+
+# Xcode generated project (regenerate via xcodegen)
+src/BioNaural.xcodeproj/
+
+# Supabase local
+supabase/.temp/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
 # Claude Code
 .claude/

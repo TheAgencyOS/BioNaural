@@ -127,6 +127,15 @@ public actor BiometricProcessor {
     private let selector: ParameterSelectorProtocol
     private let audioParameters: AudioParameters
 
+    /// Coordinates multi-parameter transitions with priority ordering
+    /// and sleep-specific protections (volume-only restlessness response,
+    /// half-rate changes during deep sleep, 2-min cooldown).
+    private var transitionCoordinator: TransitionCoordinator
+
+    /// Injects subtle variation into long sessions (stem volume drift,
+    /// MIDI parameter evolution, passing tones) to prevent habituation.
+    private var microVariation: MicroVariationEngine
+
     // MARK: - Session Configuration
 
     private var activeMode: FocusMode = .focus
@@ -226,6 +235,8 @@ public actor BiometricProcessor {
         self.analyzer = HeartRateAnalyzer()
         self.classifier = StateClassifier()
         self.currentOutput = .neutral
+        self.transitionCoordinator = TransitionCoordinator(mode: .focus, restingHR: restingHR)
+        self.microVariation = MicroVariationEngine(mode: .focus)
 
         var capturedContinuation: AsyncStream<BiometricSnapshot>.Continuation?
         self.snapshotStream = AsyncStream { capturedContinuation = $0 }
@@ -256,6 +267,10 @@ public actor BiometricProcessor {
         sessionStartTime = Date()
         lastSmoothedHR = nil
         lastSampleTimestamp = nil
+
+        // Reset transition coordinator and micro-variation for the new session.
+        transitionCoordinator = TransitionCoordinator(mode: mode, restingHR: restingHR)
+        microVariation = MicroVariationEngine(mode: mode)
 
         if let duration = sessionDuration {
             self.sessionDuration = duration
@@ -466,6 +481,25 @@ public actor BiometricProcessor {
             target: qualityWeightedTargets,
             dt: dt
         )
+
+        // --- 10b. TransitionCoordinator: priority-ordered multi-parameter
+        //          coordination + sleep-specific protections ---
+        let transitionPlan = transitionCoordinator.processBiometricUpdate(
+            newState: state,
+            currentHR: hrSmoothed,
+            currentHRV: sample?.hrv,
+            sessionProgress: sessionProgress,
+            now: now
+        )
+
+        // Apply micro-variation for long sessions (stem volume drift,
+        // MIDI parameter evolution). The drift offsets are additive and
+        // don't interfere with the slew-limited targets.
+        let drift = microVariation.volumeDriftOffsets(deltaTime: dt)
+        audioParameters.stemPadsVolume += Double(drift.pads)
+        audioParameters.stemTextureVolume += Double(drift.texture)
+        audioParameters.stemBassVolume += Double(drift.bass)
+        audioParameters.stemRhythmVolume += Double(drift.rhythm)
 
         // --- 11. Update state and write to audio ---
         currentOutput = slewLimited

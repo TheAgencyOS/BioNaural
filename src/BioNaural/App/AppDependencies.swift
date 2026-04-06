@@ -73,6 +73,18 @@ final class AppDependencies {
     let weatherService: any WeatherServiceProtocol
     let cloudKitSyncService: any CloudKitSyncServiceProtocol
 
+    // MARK: - Supabase Services
+
+    /// Central Supabase client. Handles auth, exposes authenticated client.
+    let supabaseManager: SupabaseManager
+
+    /// Content delivery: stem pack catalog, downloads, generation jobs.
+    /// Falls back to MockAIContentService when not authenticated.
+    let contentService: any AIContentServiceProtocol
+
+    /// Bidirectional sync: profiles, ML parameters, session outcomes.
+    let syncService: SupabaseSyncService
+
     // MARK: - Watch Status
 
     /// Whether the Apple Watch is currently connected and reachable.
@@ -106,7 +118,8 @@ final class AppDependencies {
             ContextTrack.self,
             SavedTrack.self,
             CalendarPatternStore.self,
-            UserBehavioralPatternsModel.self
+            UserBehavioralPatternsModel.self,
+            ContentPack.self
         ])
         let configuration = ModelConfiguration(
             schema: schema,
@@ -144,6 +157,17 @@ final class AppDependencies {
         self.journalService = JournalSuggestionServiceFactory.create()
         self.weatherService = LiveWeatherService()
         self.cloudKitSyncService = CloudKitSyncService()
+
+        // Supabase services — real backend when authenticated, mock fallback.
+        let sbManager = SupabaseManager()
+        self.supabaseManager = sbManager
+        self.contentService = SupabaseContentService(supabase: sbManager)
+        self.syncService = SupabaseSyncService(supabase: sbManager)
+
+        // Attempt to restore existing auth session on launch.
+        Task {
+            await sbManager.restoreSession()
+        }
     }
 
     // MARK: - Test Init
@@ -179,7 +203,8 @@ final class AppDependencies {
             ContextTrack.self,
             SavedTrack.self,
             CalendarPatternStore.self,
-            UserBehavioralPatternsModel.self
+            UserBehavioralPatternsModel.self,
+            ContentPack.self
         ])
         let configuration = ModelConfiguration(
             schema: schema,
@@ -201,5 +226,11 @@ final class AppDependencies {
         self.journalService = MockJournalSuggestionService()
         self.weatherService = MockWeatherService()
         self.cloudKitSyncService = MockCloudKitSyncService()
+
+        // Test init uses mock content service (no real Supabase connection).
+        let sbManager = SupabaseManager()
+        self.supabaseManager = sbManager
+        self.contentService = MockAIContentService()
+        self.syncService = SupabaseSyncService(supabase: sbManager)
     }
 }
