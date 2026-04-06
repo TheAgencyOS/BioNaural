@@ -49,6 +49,7 @@ public final class AudioEngine: AudioEngineProtocol {
     // GenerativeMIDIEngine produces notes using ScaleMapper + Tonic;
     // SF2MelodicRenderer renders them through the SoundFont.
     public private(set) var sf2Renderer: SF2MelodicRenderer?
+    public private(set) var multiVoice: MultiVoiceRenderer?
     public private(set) var generativeMIDI: GenerativeMIDIEngine?
     public private(set) var bassLine: BassLineGenerator?
     public private(set) var drums: DrumPatternGenerator?
@@ -411,6 +412,10 @@ public final class AudioEngine: AudioEngineProtocol {
         ) { [weak self] _ in
             self?.ambienceLayer?.syncVolume()
             self?.melodicLayer?.syncVolume()
+            // Sync multi-voice renderer (bass + drums volumes from sliders)
+            if let mv = self?.multiVoice, let params = self?.parameters {
+                mv.syncVolumes(parameters: params)
+            }
         }
     }
 
@@ -429,48 +434,72 @@ public final class AudioEngine: AudioEngineProtocol {
             forResource: Theme.SF2.resourceName,
             withExtension: Theme.SF2.resourceExtension
         ) else {
-            Logger.audio.error("[AUDIO-DEBUG] SoundFont NOT FOUND: \(Theme.SF2.resourceName).\(Theme.SF2.resourceExtension)")
-            Logger.audio.error("[AUDIO-DEBUG] SF2 files in bundle: \(Bundle.main.paths(forResourcesOfType: "sf2", inDirectory: nil))")
             Logger.audio.error("SoundFont NOT FOUND: \(Theme.SF2.resourceName).\(Theme.SF2.resourceExtension) — generative MIDI disabled")
             return
         }
-        Logger.audio.error("[AUDIO-DEBUG] SoundFont found: \(sf2URL.lastPathComponent)")
-        Logger.audio.info("SoundFont found at: \(sf2URL.lastPathComponent) (\(sf2URL.path))")
 
+        // Create legacy single-voice renderer (for backward compat)
         let renderer = SF2MelodicRenderer(engine: engine, parameters: parameters)
         do {
             try renderer.setup(sf2URL: sf2URL, presetIndex: Theme.SF2.PresetIndex.focusPad)
-            let midi = GenerativeMIDIEngine(renderer: renderer, parameters: parameters)
-            let bass = BassLineGenerator(renderer: renderer)
-            let drum = DrumPatternGenerator(renderer: renderer)
             self.sf2Renderer = renderer
-            self.generativeMIDI = midi
-            self.bassLine = bass
-            self.drums = drum
-            Logger.audio.info("SF2 generative layer initialized with \(Theme.SF2.resourceName) (melody + bass + drums)")
         } catch {
-            Logger.audio.error("SF2 setup failed: \(error.localizedDescription)")
+            Logger.audio.error("SF2 single-voice setup failed: \(error.localizedDescription)")
         }
+
+        // Create multi-voice renderer (melody + bass + drums, each with own sampler)
+        let mv = MultiVoiceRenderer(engine: engine)
+        engine.connect(mv.outputNode, to: engine.mainMixerNode, format: nil)
+        self.multiVoice = mv
+
+        // GenerativeMIDIEngine uses the melody voice from multi-voice renderer
+        // (still needs SF2MelodicRenderer interface — we wrap the melody voice)
+        let midi = GenerativeMIDIEngine(renderer: renderer, parameters: parameters)
+        self.generativeMIDI = midi
+
+        Logger.audio.info("Multi-voice renderer created: melody + bass + drums")
     }
 
     /// Starts the generative MIDI engine for the given mode.
     /// Selects the appropriate SoundFont preset and begins algorithmic
     /// note generation using ScaleMapper-driven pitch selection.
     private func startGenerativeLayer(for mode: FocusMode) {
-        guard let midi = generativeMIDI, let renderer = sf2Renderer else { return }
+        guard let sf2URL = Bundle.main.url(
+            forResource: Theme.SF2.resourceName,
+            withExtension: Theme.SF2.resourceExtension
+        ) else { return }
 
-        // Select mode-appropriate SoundFont preset
-        let presetIndex: Int
-        switch mode {
-        case .focus:       presetIndex = Theme.SF2.PresetIndex.focusPad
-        case .relaxation:  presetIndex = Theme.SF2.PresetIndex.relaxationStrings
-        case .sleep:       presetIndex = Theme.SF2.PresetIndex.sleepPad
-        case .energize:    presetIndex = Theme.SF2.PresetIndex.energizeBells
+        // Set up the multi-voice renderer with mode-specific presets
+        if let mv = multiVoice {
+            do {
+                try mv.setup(sf2URL: sf2URL, mode: mode)
+
+                // Create bass and drum generators with their own voice handles
+                let bassGen = BassLineGenerator(renderer: mv.bass)
+                let drumGen = DrumPatternGenerator(renderer: mv.drums)
+                self.bassLine = bassGen
+                self.drums = drumGen
+
+                Logger.audio.info("Multi-voice renderer configured for \(mode.rawValue)")
+            } catch {
+                Logger.audio.error("Multi-voice setup failed: \(error.localizedDescription)")
+            }
         }
-        renderer.changePreset(presetIndex)
 
-        // Start generative composition with calm initial state
-        midi.start(mode: mode, biometricState: .calm)
+        // Change the melody renderer's preset for the mode
+        if let renderer = sf2Renderer {
+            let presetIndex: Int
+            switch mode {
+            case .focus:       presetIndex = Theme.SF2.PresetIndex.focusPad
+            case .relaxation:  presetIndex = Theme.SF2.PresetIndex.relaxationStrings
+            case .sleep:       presetIndex = Theme.SF2.PresetIndex.sleepPad
+            case .energize:    presetIndex = Theme.SF2.PresetIndex.energizeBells
+            }
+            renderer.changePreset(presetIndex)
+        }
+
+        // Start generative melody with calm initial state
+        generativeMIDI?.start(mode: mode, biometricState: .calm)
     }
 
     // MARK: - Preset Application

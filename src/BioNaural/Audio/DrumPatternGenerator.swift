@@ -47,7 +47,7 @@ public enum GMDrum {
 
 public final class DrumPatternGenerator: @unchecked Sendable {
 
-    private let renderer: SF2MelodicRenderer
+    private let renderer: NotePlayer
     private var tonality: SessionTonality?
     private var biometricState: BiometricState = .calm
     private var isRunning = false
@@ -61,7 +61,7 @@ public final class DrumPatternGenerator: @unchecked Sendable {
 
     // MARK: - Init
 
-    public init(renderer: SF2MelodicRenderer) {
+    public init(renderer: NotePlayer) {
         self.renderer = renderer
     }
 
@@ -127,10 +127,10 @@ public final class DrumPatternGenerator: @unchecked Sendable {
 
         for hit in hits {
             let delay = max(0, humanize)
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
+            generationQueue.asyncAfter(deadline: .now() + delay) { [weak self] in
                 self?.renderer.noteOn(hit.note, velocity: hit.velocity)
                 // Drums are very short — schedule note-off after 50ms
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+                self?.generationQueue.asyncAfter(deadline: .now() + 0.05) { [weak self] in
                     self?.renderer.noteOff(hit.note)
                 }
             }

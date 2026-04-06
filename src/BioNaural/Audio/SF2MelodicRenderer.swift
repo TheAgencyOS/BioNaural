@@ -27,7 +27,7 @@ import OSLog
 ///
 /// Call `setup()` once to load the SF2 file and attach to the engine.
 /// Then use `noteOn`/`noteOff` to drive playback from the generative engine.
-public final class SF2MelodicRenderer {
+public final class SF2MelodicRenderer: NotePlayer {
 
     // MARK: - Node Graph
 

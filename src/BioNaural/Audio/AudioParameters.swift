@@ -25,6 +25,10 @@ public final class AudioParameters: @unchecked Sendable {
     private let _binauralVolume  = ManagedAtomic<UInt64>(1.0.bitPattern)
     private let _isPlaying       = ManagedAtomic<Bool>(false)
 
+    // MIDI voice volumes — user-controllable per-instrument sliders.
+    private let _bassVolume  = ManagedAtomic<UInt64>(0.55.bitPattern)
+    private let _drumsVolume = ManagedAtomic<UInt64>(0.45.bitPattern)
+
     // Stem volume targets — set by BiometricStemMixer, read by StemAudioLayer.
     private let _stemPadsVolume    = ManagedAtomic<UInt64>(1.0.bitPattern)
     private let _stemTextureVolume = ManagedAtomic<UInt64>(1.0.bitPattern)
@@ -80,6 +84,20 @@ public final class AudioParameters: @unchecked Sendable {
     public var isPlaying: Bool {
         get { _isPlaying.load(ordering: .relaxed) }
         set { _isPlaying.store(newValue, ordering: .relaxed) }
+    }
+
+    // MARK: - MIDI Voice Volumes (user-controllable sliders)
+
+    /// Volume of the MIDI bass line [0…1].
+    public var bassVolume: Double {
+        get { Double(bitPattern: _bassVolume.load(ordering: .relaxed)) }
+        set { _bassVolume.store(newValue.bitPattern, ordering: .relaxed) }
+    }
+
+    /// Volume of the MIDI drum pattern [0…1].
+    public var drumsVolume: Double {
+        get { Double(bitPattern: _drumsVolume.load(ordering: .relaxed)) }
+        set { _drumsVolume.store(newValue.bitPattern, ordering: .relaxed) }
     }
 
     // MARK: - Stem Volume Properties

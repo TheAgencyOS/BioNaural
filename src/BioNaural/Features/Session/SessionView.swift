@@ -925,6 +925,27 @@ extension SessionView {
                     color: Theme.Colors.accent
                 )
 
+                // Bass and Drums sliders — only shown for modes that support them
+                if Theme.ModeInstrumentation.allowsRhythmStem(for: viewModel.sessionMode) {
+                    mixSlider(
+                        label: "Bass",
+                        value: Binding(
+                            get: { viewModel.audioEngine.parameters.bassVolume },
+                            set: { viewModel.audioEngine.parameters.bassVolume = $0 }
+                        ),
+                        color: Theme.Colors.signalElevated
+                    )
+
+                    mixSlider(
+                        label: "Drums",
+                        value: Binding(
+                            get: { viewModel.audioEngine.parameters.drumsVolume },
+                            set: { viewModel.audioEngine.parameters.drumsVolume = $0 }
+                        ),
+                        color: Theme.Colors.signalPeak
+                    )
+                }
+
                 Spacer()
             }
             .padding(.horizontal, Theme.Spacing.pageMargin)

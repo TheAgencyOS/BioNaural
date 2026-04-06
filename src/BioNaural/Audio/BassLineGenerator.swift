@@ -19,7 +19,7 @@ import Foundation
 
 public final class BassLineGenerator: @unchecked Sendable {
 
-    private let renderer: SF2MelodicRenderer
+    private let renderer: NotePlayer
     private var tonality: SessionTonality?
     private var isRunning = false
     private var bassTimer: DispatchSourceTimer?
@@ -34,7 +34,7 @@ public final class BassLineGenerator: @unchecked Sendable {
 
     // MARK: - Init
 
-    public init(renderer: SF2MelodicRenderer) {
+    public init(renderer: NotePlayer) {
         self.renderer = renderer
     }
 
@@ -65,9 +65,7 @@ public final class BassLineGenerator: @unchecked Sendable {
             self.bassTimer?.cancel()
             self.bassTimer = nil
             if let note = self.activeNote {
-                DispatchQueue.main.async { [weak self] in
-                    self?.renderer.noteOff(note)
-                }
+                self.renderer.noteOff(note)
                 self.activeNote = nil
             }
         }
@@ -113,19 +111,15 @@ public final class BassLineGenerator: @unchecked Sendable {
         let velocity = bassVelocity(tonality: tonality)
         let duration = bassDuration(tonality: tonality)
 
-        DispatchQueue.main.async { [weak self] in
-            self?.renderer.noteOn(note, velocity: velocity)
-        }
+        renderer.noteOn(note, velocity: velocity)
         activeNote = note
         patternStep += 1
 
-        // Schedule note-off
-        DispatchQueue.main.asyncAfter(deadline: .now() + duration) { [weak self] in
-            guard let self else { return }
-            if self.activeNote == note {
-                self.renderer.noteOff(note)
-                self.activeNote = nil
-            }
+        // Schedule note-off on generation queue
+        generationQueue.asyncAfter(deadline: .now() + duration) { [weak self] in
+            guard let self, self.activeNote == note else { return }
+            self.renderer.noteOff(note)
+            self.activeNote = nil
         }
 
         scheduleNextBassNote()
