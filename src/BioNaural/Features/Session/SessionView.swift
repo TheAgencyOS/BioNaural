@@ -959,13 +959,18 @@ extension SessionView {
                             ForEach(WebAudioEngine.availableGenres, id: \.id) { genre in
                                 let isSelected = viewModel.audioEngine.webEngine?.currentGenre == genre.id
                                 Button {
+                                    // Change genre mid-session
                                     viewModel.audioEngine.genrePreference = genre.id
-                                    viewModel.audioEngine.webEngine?.start(
-                                        mode: viewModel.sessionMode,
-                                        genre: genre.id,
-                                        key: viewModel.audioEngine.sessionTonality.map { "\($0.root)" },
-                                        bpm: viewModel.audioEngine.sessionTonality?.tempo
-                                    )
+                                    if let engine = viewModel.audioEngine.webEngine {
+                                        let key = viewModel.audioEngine.sessionTonality.map { "\($0.root)" } ?? "C"
+                                        let bpm = viewModel.audioEngine.sessionTonality?.tempo ?? 80
+                                        engine.start(
+                                            mode: viewModel.sessionMode,
+                                            genre: genre.id,
+                                            key: key,
+                                            bpm: bpm
+                                        )
+                                    }
                                 } label: {
                                     Text(genre.label)
                                         .font(Theme.Typography.caption)

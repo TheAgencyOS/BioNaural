@@ -151,6 +151,7 @@ public final class WebAudioEngine: NSObject, WKScriptMessageHandler {
         let startCommand = { [weak self] in
             guard let self, let json = try? JSONSerialization.data(withJSONObject: config),
                   let jsonStr = String(data: json, encoding: .utf8) else { return }
+            self.logger.info("WebEngine start command: \(jsonStr)")
             self.evaluateJS("window.BioNauralEngine.start(\(jsonStr))")
         }
 
@@ -220,9 +221,17 @@ public final class WebAudioEngine: NSObject, WKScriptMessageHandler {
 
     private func evaluateJS(_ script: String) {
         DispatchQueue.main.async { [weak self] in
-            self?.webView?.evaluateJavaScript(script) { _, error in
+            guard let wv = self?.webView else {
+                self?.logger.error("WebView is nil — cannot evaluate JS")
+                return
+            }
+            self?.logger.info("Evaluating JS: \(script.prefix(100))...")
+            wv.evaluateJavaScript(script) { result, error in
                 if let error {
                     self?.logger.error("JS eval error: \(error.localizedDescription)")
+                }
+                if let result {
+                    self?.logger.info("JS eval result: \(String(describing: result))")
                 }
             }
         }
