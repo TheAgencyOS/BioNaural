@@ -335,8 +335,11 @@ public final class MelodicLayer {
         format: AVAudioFormat,
         engine: AVAudioEngine
     ) {
-        // Disconnect existing connections to prevent format conflicts
-        engine.disconnectNodeOutput(node)
+        // Only disconnect if the node is actually attached — calling
+        // disconnectNodeOutput on an unattached node throws an exception.
+        if engine.attachedNodes.contains(node) {
+            engine.disconnectNodeOutput(node)
+        }
 
         // Re-attach if the node was detached (can happen after engine.stop())
         if !engine.attachedNodes.contains(node) {
