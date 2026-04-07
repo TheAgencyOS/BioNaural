@@ -267,9 +267,9 @@ extension Theme {
             static let brightness: Double = 0.5
             static let density: Double = 0.3
             static let reverbWetDry: Float = 15.0
-            static let binauralVolume: Double = 0.5
-            static let ambientVolume: Double = 0.7
-            static let melodicVolume: Double = 0.55
+            static let binauralVolume: Double = 0.01
+            static let ambientVolume: Double = 0.20
+            static let melodicVolume: Double = 0.79
             static let durationMinutes: Int = 25
             static let filterTolerance: Double = 0.15
             static let reverbMax: Float = 75.0
