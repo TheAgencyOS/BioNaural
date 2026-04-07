@@ -39,6 +39,10 @@ struct LibraryView: View {
 
     @State private var sectionsVisible = false
 
+    /// Track selected for playback — triggers pre-session check-in.
+    @State private var selectedTrack: FeaturedTrackItem?
+    @State private var showTrackCheckIn = false
+
     // MARK: - Environment
 
     @Environment(\.modelContext) private var modelContext
@@ -102,22 +106,36 @@ struct LibraryView: View {
     private var libraryContent: some View {
         ScrollView(.vertical, showsIndicators: false) {
             VStack(spacing: Theme.Spacing.xxxl) {
-                // Hero + remaining compositions
+                // Featured Tracks — pre-generated playable compositions
+                VStack(alignment: .leading, spacing: Theme.Spacing.md) {
+                    Text("FEATURED TRACKS")
+                        .font(Theme.Typography.caption)
+                        .tracking(1.5)
+                        .foregroundStyle(Theme.Colors.textTertiary)
+
+                    FeaturedTracksView { track in
+                        selectedTrack = track
+                        showTrackCheckIn = true
+                    }
+                }
+                .staggeredFadeIn(index: 0, isVisible: sectionsVisible)
+
+                // User compositions
                 if !compositions.isEmpty {
                     compositionsSection
-                        .staggeredFadeIn(index: 0, isVisible: sectionsVisible)
+                        .staggeredFadeIn(index: 1, isVisible: sectionsVisible)
                 }
 
                 // Sessions — compact list rows
                 if !savedTracks.isEmpty {
                     bodyMusicSection
-                        .staggeredFadeIn(index: 1, isVisible: sectionsVisible)
+                        .staggeredFadeIn(index: 2, isVisible: sectionsVisible)
                 }
 
                 // Correlations — 2-column grid
                 if !sonicMemories.isEmpty {
                     sonicMemoriesSection
-                        .staggeredFadeIn(index: 2, isVisible: sectionsVisible)
+                        .staggeredFadeIn(index: 3, isVisible: sectionsVisible)
                 }
             }
             .padding(.horizontal, Theme.Spacing.pageMargin)
