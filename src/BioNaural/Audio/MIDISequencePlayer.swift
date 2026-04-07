@@ -252,7 +252,7 @@ public final class MIDISequencePlayer {
         events.sort { $0.time < $1.time }
 
         let totalDuration = sequence.tracks.map(\.totalDuration).max() ?? 30.0
-        let crossfadeZone: Double = 3.0 // seconds of crossfade at loop boundary
+        let crossfadeZone: Double = 5.0 // seconds of crossfade at loop boundary
         var eventIndex = 0
         var absoluteTime: Double = 0 // monotonically increasing, never resets
 
@@ -268,10 +268,16 @@ public final class MIDISequencePlayer {
             // Detect loop boundary crossing
             let prevPos = (absoluteTime - 0.05).truncatingRemainder(dividingBy: totalDuration)
             if posInLoop < prevPos {
-                // We crossed the loop point — reset event index to beginning
+                // We crossed the loop point — reset event index
                 // but DON'T stop any notes (let them ring out naturally)
                 eventIndex = 0
                 self.loopCount += 1
+
+                // Subtle variation: shift the start offset slightly each loop
+                // so the sequence doesn't sound identical every time.
+                // This is imperceptible but prevents pattern recognition.
+                let jitter = Double.random(in: -0.03...0.03)
+                absoluteTime += jitter
             }
 
             // Crossfade multiplier: full volume except near the end/start
