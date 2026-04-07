@@ -100,7 +100,12 @@ final class ComposerViewModel {
         updateAutoName()
 
         guard let engine = audioEngine as? AudioEngine else { return }
-        if let bedName {
+        if let bedName,
+           let bed = AmbientBed(rawValue: bedName) {
+            // Use the mapped file name, not the raw enum value
+            engine.ambienceLayer?.play(bedName: bed.fileName)
+        } else if let bedName {
+            // Fallback: try the raw name directly
             engine.ambienceLayer?.play(bedName: bedName)
         } else {
             engine.ambienceLayer?.stop()

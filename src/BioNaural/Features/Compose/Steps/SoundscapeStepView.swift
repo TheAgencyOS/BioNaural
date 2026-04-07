@@ -12,19 +12,41 @@ import BioNauralShared
 // MARK: - Ambient Catalog
 
 enum AmbientBed: String, CaseIterable, Identifiable {
-    case rain, ocean, forest, river, wind, night
+    case rain, ocean, forest, wind, night, space
 
     var id: String { rawValue }
-    var displayName: String { rawValue.capitalized }
+    var displayName: String {
+        switch self {
+        case .rain:   return "Rain"
+        case .ocean:  return "Ocean"
+        case .forest: return "Forest"
+        case .wind:   return "Wind"
+        case .night:  return "Night"
+        case .space:  return "Deep Space"
+        }
+    }
 
     var iconName: String {
         switch self {
         case .rain:   return "cloud.rain.fill"
         case .ocean:  return "water.waves"
         case .forest: return "tree.fill"
-        case .river:  return "drop.fill"
         case .wind:   return "wind"
         case .night:  return "moon.stars.fill"
+        case .space:  return "sparkles"
+        }
+    }
+
+    /// Maps the UI enum to the actual bundled audio file name.
+    /// AmbienceLayer searches by this name with .caf/.m4a/.wav extensions.
+    var fileName: String {
+        switch self {
+        case .rain:   return "rain-texture-60s"
+        case .ocean:  return "ocean-waves-60s"
+        case .forest: return "brown-noise-60s"    // Placeholder until forest recording added
+        case .wind:   return "wind-texture-60s"
+        case .night:  return "pink-noise-60s"     // Placeholder until night ambience added
+        case .space:  return "deep-space-60s"
         }
     }
 }
