@@ -67,6 +67,12 @@ public final class MIDISequencePlayer {
     private var samplers: [String: AVAudioUnitSampler] = [:]
     private let masterSubmixer = AVAudioMixerNode()
 
+    /// Track active notes per sampler to prevent polyphony overload.
+    /// AVAudioUnitSampler crashes (EXC_BAD_ACCESS in SamplerNote::Render)
+    /// when too many notes accumulate without note-offs.
+    private var activeNotes: [String: Set<UInt8>] = [:]
+    private let maxPolyphony = 12 // Max simultaneous notes per sampler
+
     /// The currently loaded sequence.
     private var currentSequence: MIDISequence?
 
@@ -211,7 +217,36 @@ public final class MIDISequencePlayer {
             sampler.volume = 0
         }
         masterSubmixer.volume = 0
+        activeNotes.removeAll()
         currentSequence = nil
+    }
+
+    // MARK: - Safe Note Management
+
+    /// Play a note with polyphony limiting to prevent SamplerNote::Render crash.
+    private func safeNoteOn(role: String, sampler: AVAudioUnitSampler, note: UInt8, velocity: UInt8) {
+        // Ensure we don't exceed polyphony limit
+        var notes = activeNotes[role] ?? []
+        if notes.count >= maxPolyphony {
+            // Stop the oldest note to make room
+            if let oldest = notes.first {
+                sampler.stopNote(oldest, onChannel: 0)
+                notes.remove(oldest)
+            }
+        }
+        // Stop this specific note if already playing (prevents doubling)
+        if notes.contains(note) {
+            sampler.stopNote(note, onChannel: 0)
+        }
+        sampler.startNote(note, withVelocity: velocity, onChannel: 0)
+        notes.insert(note)
+        activeNotes[role] = notes
+    }
+
+    /// Stop a note and update tracking.
+    private func safeNoteOff(role: String, sampler: AVAudioUnitSampler, note: UInt8) {
+        sampler.stopNote(note, onChannel: 0)
+        activeNotes[role]?.remove(note)
     }
 
     /// Update per-role volumes from AudioParameters sliders.
@@ -307,11 +342,10 @@ public final class MIDISequencePlayer {
                     }
 
                     if event.isOn {
-                        // Apply crossfade to velocity
                         let fadedVelocity = UInt8(max(1, min(127, Float(event.velocity) * fadeMultiplier)))
-                        sampler.startNote(event.note, withVelocity: fadedVelocity, onChannel: 0)
+                        self.safeNoteOn(role: event.role, sampler: sampler, note: event.note, velocity: fadedVelocity)
                     } else {
-                        sampler.stopNote(event.note, onChannel: 0)
+                        self.safeNoteOff(role: event.role, sampler: sampler, note: event.note)
                     }
                 }
 
@@ -328,9 +362,9 @@ public final class MIDISequencePlayer {
                     if let sampler = self.samplers[event.role] {
                         if event.isOn {
                             let fadedVelocity = UInt8(max(1, min(127, Float(event.velocity) * fadeMultiplier)))
-                            sampler.startNote(event.note, withVelocity: fadedVelocity, onChannel: 0)
+                            self.safeNoteOn(role: event.role, sampler: sampler, note: event.note, velocity: fadedVelocity)
                         } else {
-                            sampler.stopNote(event.note, onChannel: 0)
+                            self.safeNoteOff(role: event.role, sampler: sampler, note: event.note)
                         }
                     }
                     wrapIdx += 1
