@@ -47,13 +47,10 @@ targets:
       - path: BioNaural
         excludes:
           - "Resources/Sounds/**"
-          - "Resources/WebEngine/**"
-          - "Audio/WebEngine/bundle/**"
     resources:
       - path: BioNaural/Resources
         excludes:
           - "Sounds/**"
-          - "WebEngine/**"
       - path: BioNaural/Resources
         includes:
           - "*.caf"

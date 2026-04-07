@@ -967,19 +967,17 @@ extension SessionView {
 
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: Theme.Spacing.xs) {
-                            ForEach(WebAudioEngine.availableGenres, id: \.id) { genre in
-                                let isSelected = viewModel.audioEngine.webEngine?.currentGenre == genre.id
+                            ForEach(Theme.ModeInstrumentation.genreOptions, id: \.id) { genre in
+                                let isSelected = viewModel.audioEngine.genrePreference == genre.id
                                 Button {
                                     // Change genre mid-session — switch the sequence player
                                     viewModel.audioEngine.genrePreference = genre.id
                                     if let audioEngine = viewModel.audioEngine as? AudioEngine,
                                        let tonality = audioEngine.sessionTonality {
-                                        // Stop current music, start new genre
                                         audioEngine.sequencePlayer?.stop()
                                         audioEngine.generativeMIDI?.stop()
                                         audioEngine.bassLine?.stop()
                                         audioEngine.drums?.stop()
-                                        audioEngine.webEngine?.stop()
                                         audioEngine.startMusicGeneration(
                                             mode: viewModel.sessionMode,
                                             tonality: tonality

@@ -2461,6 +2461,20 @@ extension Theme {
                 return [] // No nature sounds — music provides all texture
             }
         }
+
+        /// Available genre options for the genre picker UI.
+        static let genreOptions: [(id: String, label: String)] = [
+            ("ambient", "Ambient"),
+            ("lofi", "Lo-Fi"),
+            ("rock", "Rock"),
+            ("hiphop", "Hip Hop"),
+            ("jazz", "Jazz"),
+            ("blues", "Blues"),
+            ("reggae", "Reggae"),
+            ("classical", "Classical"),
+            ("latin", "Latin"),
+            ("electronic", "Electronic"),
+        ]
     }
 }
 

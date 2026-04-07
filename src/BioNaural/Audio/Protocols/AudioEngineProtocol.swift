@@ -26,11 +26,8 @@ public protocol AudioEngineProtocol: AnyObject {
     var soundSelectionProfile: SoundSelectionProfile? { get set }
 
     /// User's preferred genre (from SoundProfile.genrePreferences).
-    /// Passed to WebAudioEngine to select genre-appropriate patterns.
+    /// Used by MIDISequencePlayer to select genre-appropriate sequences.
     var genrePreference: String? { get set }
-
-    /// WebView-based SpessaSynth audio engine for genre-aware music.
-    var webEngine: WebAudioEngine? { get }
 
     /// Master tonality for the current session (key, scale, tempo).
     var sessionTonality: SessionTonality? { get }

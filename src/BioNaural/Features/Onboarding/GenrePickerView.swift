@@ -43,8 +43,8 @@ struct GenrePickerView: View {
             }
 
             LazyVGrid(columns: columns, spacing: Theme.Spacing.sm) {
-                ForEach(WebAudioEngine.availableGenres, id: \.id) { genre in
-                    genreTile(id: genre.id, label: genre.label, category: genre.category)
+                ForEach(Theme.ModeInstrumentation.genreOptions, id: \.id) { genre in
+                    genreTile(id: genre.id, label: genre.label, category: "")
                 }
             }
         }
