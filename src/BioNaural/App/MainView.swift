@@ -232,7 +232,7 @@ private func sharedDestinationView(
 
 /// Fetches a CustomComposition by ID from SwiftData and launches the session.
 /// Used by the navigation destination for `.composedSession(id:)`.
-private struct ComposedSessionLauncher: View {
+struct ComposedSessionLauncher: View {
 
     let compositionID: UUID
     let audioEngine: any AudioEngineProtocol

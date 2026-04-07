@@ -107,6 +107,11 @@ struct LibraryView: View {
                         pomodoroEnabled: false,
                         audioEngine: dependencies.audioEngine
                     ))
+                case .composedSession(let id):
+                    ComposedSessionLauncher(
+                        compositionID: id,
+                        audioEngine: dependencies.audioEngine
+                    )
                 default:
                     EmptyView()
                 }
@@ -175,13 +180,16 @@ struct LibraryView: View {
         VStack(alignment: .leading, spacing: Theme.Spacing.md) {
             sectionHeader(title: "COMPOSITIONS", destination: .compositions)
 
-            // Hero card — full-width, tall
+            // Hero card — full-width, tall, TAPPABLE
             if let hero = heroComposition {
-                LibraryHeroCompositionCard(composition: hero)
-                    .staggeredFadeIn(index: 0, isVisible: sectionsVisible)
+                NavigationLink(value: AppDestination.composedSession(id: hero.id)) {
+                    LibraryHeroCompositionCard(composition: hero)
+                }
+                .buttonStyle(.plain)
+                .staggeredFadeIn(index: 0, isVisible: sectionsVisible)
             }
 
-            // Remaining compositions — compact horizontal scroll
+            // Remaining compositions — compact horizontal scroll, TAPPABLE
             if !remainingCompositions.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     LazyHStack(spacing: Theme.Spacing.sm) {
@@ -189,9 +197,12 @@ struct LibraryView: View {
                             Array(remainingCompositions.enumerated()),
                             id: \.element.id
                         ) { index, composition in
-                            LibraryCompactCompositionCard(composition: composition)
-                                .frame(width: Constants.Library.compactCardWidth)
-                                .staggeredFadeIn(index: index + 1, isVisible: sectionsVisible)
+                            NavigationLink(value: AppDestination.composedSession(id: composition.id)) {
+                                LibraryCompactCompositionCard(composition: composition)
+                                    .frame(width: Constants.Library.compactCardWidth)
+                            }
+                            .buttonStyle(.plain)
+                            .staggeredFadeIn(index: index + 1, isVisible: sectionsVisible)
                         }
                     }
                     .padding(.horizontal, Theme.Spacing.xxs)
