@@ -1,0 +1,310 @@
+{
+  "genre": "blues",
+  "mode": "sleep",
+  "mixStrategy": "Ultra-sparse, warm layering with wide frequency separation. Bass provides a deep, barely-felt foundation in the sub-bass/bass register (MIDI 28-45). Piano chords sit in the low-mid register (MIDI 48-64) as slow-moving, barely audible pads with dominant 7th voicings. Steel guitar melody floats in the mid register (MIDI 60-72) with long, descending blues-scale phrases. All tracks blend into a single warm blanket of sound with no rhythmic pulse \u2014 notes overlap and fade like breath. Chord changes occur every ~16-20 seconds (near-static harmony), and maximum 3-4 notes sound simultaneously. Energy arc descends gently from 0.4 to 0.2 over 45 seconds.",
+  "tracks": [
+    {
+      "name": "Steel Guitar - Descending Blues Lullaby",
+      "program": 25,
+      "role": "melody",
+      "frequencyRole": "Mid register lead voice (MIDI 60-72). Gentle, descending blues-scale phrases with long sustains. Sits above piano chords, below nothing \u2014 the highest voice but still warm and low.",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 71,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 5.0,
+          "duration": 7.0
+        },
+        {
+          "note": 64,
+          "velocity": 36,
+          "startTime": 9.0,
+          "duration": 9.0
+        },
+        {
+          "note": 63,
+          "velocity": 35,
+          "startTime": 14.0,
+          "duration": 6.0
+        },
+        {
+          "note": 64,
+          "velocity": 34,
+          "startTime": 17.5,
+          "duration": 10.0
+        },
+        {
+          "note": 67,
+          "velocity": 33,
+          "startTime": 22.0,
+          "duration": 7.0
+        },
+        {
+          "note": 66,
+          "velocity": 32,
+          "startTime": 25.5,
+          "duration": 8.0
+        },
+        {
+          "note": 64,
+          "velocity": 31,
+          "startTime": 29.0,
+          "duration": 7.0
+        },
+        {
+          "note": 63,
+          "velocity": 30,
+          "startTime": 32.0,
+          "duration": 8.0
+        },
+        {
+          "note": 60,
+          "velocity": 29,
+          "startTime": 35.0,
+          "duration": 6.5
+        },
+        {
+          "note": 64,
+          "velocity": 28,
+          "startTime": 37.5,
+          "duration": 7.5
+        },
+        {
+          "note": 63,
+          "velocity": 27,
+          "startTime": 39.5,
+          "duration": 5.5
+        },
+        {
+          "note": 60,
+          "velocity": 26,
+          "startTime": 41.0,
+          "duration": 4.0
+        },
+        {
+          "note": 62,
+          "velocity": 25,
+          "startTime": 42.5,
+          "duration": 4.0
+        },
+        {
+          "note": 59,
+          "velocity": 25,
+          "startTime": 43.5,
+          "duration": 4.0
+        }
+      ]
+    },
+    {
+      "name": "Electric Bass - Deep Root Foundation",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "Sub-bass/bass register (MIDI 28-44). Plays chord roots with extremely long sustains. Provides warm, felt-more-than-heard tonal gravity. Changes only with chord changes every 16-20 seconds.",
+      "suggestedVolume": 0.3,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 40,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 16.0
+        },
+        {
+          "note": 35,
+          "velocity": 38,
+          "startTime": 4.0,
+          "duration": 12.0
+        },
+        {
+          "note": 40,
+          "velocity": 36,
+          "startTime": 8.5,
+          "duration": 10.0
+        },
+        {
+          "note": 35,
+          "velocity": 35,
+          "startTime": 14.0,
+          "duration": 8.0
+        },
+        {
+          "note": 45,
+          "velocity": 34,
+          "startTime": 16.5,
+          "duration": 16.0
+        },
+        {
+          "note": 40,
+          "velocity": 33,
+          "startTime": 20.0,
+          "duration": 12.0
+        },
+        {
+          "note": 45,
+          "velocity": 32,
+          "startTime": 24.0,
+          "duration": 10.0
+        },
+        {
+          "note": 40,
+          "velocity": 31,
+          "startTime": 28.0,
+          "duration": 8.0
+        },
+        {
+          "note": 35,
+          "velocity": 30,
+          "startTime": 32.0,
+          "duration": 13.0
+        },
+        {
+          "note": 40,
+          "velocity": 29,
+          "startTime": 34.5,
+          "duration": 10.5
+        },
+        {
+          "note": 35,
+          "velocity": 28,
+          "startTime": 37.0,
+          "duration": 8.0
+        },
+        {
+          "note": 40,
+          "velocity": 27,
+          "startTime": 38.5,
+          "duration": 6.5
+        },
+        {
+          "note": 47,
+          "velocity": 27,
+          "startTime": 39.5,
+          "duration": 5.5
+        },
+        {
+          "note": 40,
+          "velocity": 26,
+          "startTime": 41.0,
+          "duration": 4.0
+        },
+        {
+          "note": 35,
+          "velocity": 25,
+          "startTime": 43.0,
+          "duration": 4.0
+        }
+      ]
+    },
+    {
+      "name": "Piano - Warm Dominant 7th Pads",
+      "program": 0,
+      "role": "chords",
+      "frequencyRole": "Low-mid harmonic body (MIDI 48-64). Slow, widely-spaced dominant 7th voicings (blues I7-IV7-V7) with ultra-long sustains. 2-3 notes per voicing max to avoid density. Sits between bass and melody.",
+      "suggestedVolume": 0.3,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 52,
+          "velocity": 38,
+          "startTime": 0.5,
+          "duration": 14.0
+        },
+        {
+          "note": 56,
+          "velocity": 36,
+          "startTime": 1.0,
+          "duration": 14.5
+        },
+        {
+          "note": 50,
+          "velocity": 35,
+          "startTime": 3.0,
+          "duration": 12.0
+        },
+        {
+          "note": 58,
+          "velocity": 34,
+          "startTime": 7.0,
+          "duration": 9.0
+        },
+        {
+          "note": 52,
+          "velocity": 33,
+          "startTime": 10.0,
+          "duration": 7.0
+        },
+        {
+          "note": 57,
+          "velocity": 32,
+          "startTime": 16.5,
+          "duration": 15.0
+        },
+        {
+          "note": 61,
+          "velocity": 31,
+          "startTime": 17.0,
+          "duration": 14.0
+        },
+        {
+          "note": 55,
+          "velocity": 30,
+          "startTime": 19.0,
+          "duration": 12.0
+        },
+        {
+          "note": 63,
+          "velocity": 29,
+          "startTime": 22.0,
+          "duration": 10.0
+        },
+        {
+          "note": 57,
+          "velocity": 28,
+          "startTime": 26.0,
+          "duration": 8.0
+        },
+        {
+          "note": 52,
+          "velocity": 28,
+          "startTime": 32.5,
+          "duration": 12.5
+        },
+        {
+          "note": 56,
+          "velocity": 27,
+          "startTime": 33.0,
+          "duration": 12.0
+        },
+        {
+          "note": 50,
+          "velocity": 26,
+          "startTime": 35.0,
+          "duration": 10.0
+        },
+        {
+          "note": 58,
+          "velocity": 25,
+          "startTime": 39.0,
+          "duration": 6.0
+        },
+        {
+          "note": 52,
+          "velocity": 25,
+          "startTime": 42.0,
+          "duration": 4.0
+        }
+      ]
+    }
+  ],
+  "key": "E",
+  "bpm": 48,
+  "scale": "blues"
+}

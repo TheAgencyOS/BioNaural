@@ -1,0 +1,328 @@
+{
+  "genre": "hiphop",
+  "mode": "relaxation",
+  "mixStrategy": "Three-layer frequency separation: Synth Bass anchors the low end (MIDI 36-48, C2-C3) with slow root notes, Warm Pad fills the harmonic middle (MIDI 53-67, F3-G4) with sustained open voicings changing every 8-16 seconds, and Vibraphone floats gentle arch-shaped melodies in the upper register (MIDI 62-77, D4-F5). All layers follow the same Dm dorian progression: Dm (0-16s) \u2192 Bb (16-24s) \u2192 C (24-32s) \u2192 Bb (32-40s) \u2192 Dm (40-45s). Note density kept sparse (2-4 new notes per 4 seconds) with long durations (2-8s) ensuring no more than 4-5 simultaneous voices. Energy arc rises gently from 0.3 to 0.6 at the midpoint then settles back to 0.3. Hip-hop flavor expressed through minor pentatonic/dorian color tones and i\u2192bVI\u2192bVII harmonic movement, never through rhythmic intensity.",
+  "tracks": [
+    {
+      "name": "Vibraphone Melody",
+      "program": 11,
+      "role": "melody",
+      "frequencyRole": "Lead voice in MIDI 62-77 (D4-F5). Gentle arch-shaped phrases using Dm dorian/minor pentatonic tones. Floats above the pad and bass with soft, shimmering articulations.",
+      "suggestedVolume": 0.65,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 65,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 4.0
+        },
+        {
+          "note": 69,
+          "velocity": 40,
+          "startTime": 3.5,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 42,
+          "startTime": 7.0,
+          "duration": 4.0
+        },
+        {
+          "note": 69,
+          "velocity": 40,
+          "startTime": 11.0,
+          "duration": 3.0
+        },
+        {
+          "note": 65,
+          "velocity": 38,
+          "startTime": 14.0,
+          "duration": 3.5
+        },
+        {
+          "note": 70,
+          "velocity": 45,
+          "startTime": 17.0,
+          "duration": 4.0
+        },
+        {
+          "note": 74,
+          "velocity": 48,
+          "startTime": 21.0,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 50,
+          "startTime": 24.5,
+          "duration": 4.0
+        },
+        {
+          "note": 76,
+          "velocity": 52,
+          "startTime": 28.0,
+          "duration": 3.5
+        },
+        {
+          "note": 74,
+          "velocity": 50,
+          "startTime": 31.5,
+          "duration": 4.0
+        },
+        {
+          "note": 72,
+          "velocity": 48,
+          "startTime": 33.0,
+          "duration": 3.5
+        },
+        {
+          "note": 70,
+          "velocity": 45,
+          "startTime": 35.5,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 42,
+          "startTime": 38.0,
+          "duration": 3.5
+        },
+        {
+          "note": 65,
+          "velocity": 40,
+          "startTime": 40.5,
+          "duration": 3.0
+        },
+        {
+          "note": 62,
+          "velocity": 36,
+          "startTime": 42.5,
+          "duration": 2.5
+        }
+      ]
+    },
+    {
+      "name": "Synth Bass",
+      "program": 38,
+      "role": "bass",
+      "frequencyRole": "Foundation in MIDI 36-48 (C2-C3). Plays chord roots with long, sustained tones. Slow and grounding, providing warmth underneath the pad and melody.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 38,
+          "velocity": 42,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 46,
+          "velocity": 44,
+          "startTime": 16.0,
+          "duration": 8.0
+        },
+        {
+          "note": 48,
+          "velocity": 48,
+          "startTime": 24.0,
+          "duration": 4.0
+        },
+        {
+          "note": 48,
+          "velocity": 46,
+          "startTime": 28.0,
+          "duration": 4.0
+        },
+        {
+          "note": 46,
+          "velocity": 45,
+          "startTime": 32.0,
+          "duration": 4.0
+        },
+        {
+          "note": 46,
+          "velocity": 43,
+          "startTime": 36.0,
+          "duration": 4.0
+        },
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 38,
+          "startTime": 2.0,
+          "duration": 6.0
+        },
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 10.0,
+          "duration": 6.0
+        },
+        {
+          "note": 46,
+          "velocity": 42,
+          "startTime": 18.0,
+          "duration": 6.0
+        },
+        {
+          "note": 48,
+          "velocity": 46,
+          "startTime": 26.0,
+          "duration": 6.0
+        },
+        {
+          "note": 46,
+          "velocity": 44,
+          "startTime": 34.0,
+          "duration": 6.0
+        },
+        {
+          "note": 38,
+          "velocity": 38,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 38,
+          "velocity": 36,
+          "startTime": 4.0,
+          "duration": 4.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Chords",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in MIDI 53-67 (F3-G4). Sustained open voicings with 2-3 notes per chord. Changes every 8-16 seconds following the Dm\u2192Bb\u2192C\u2192Bb\u2192Dm progression. Fills the mid-range with gentle warmth.",
+      "suggestedVolume": 0.5,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 53,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 57,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 36,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 53,
+          "velocity": 40,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 57,
+          "velocity": 40,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 38,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 58,
+          "velocity": 44,
+          "startTime": 16.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 44,
+          "startTime": 16.0,
+          "duration": 8.0
+        },
+        {
+          "note": 65,
+          "velocity": 42,
+          "startTime": 16.0,
+          "duration": 8.0
+        },
+        {
+          "note": 55,
+          "velocity": 48,
+          "startTime": 24.0,
+          "duration": 8.0
+        },
+        {
+          "note": 60,
+          "velocity": 48,
+          "startTime": 24.0,
+          "duration": 8.0
+        },
+        {
+          "note": 64,
+          "velocity": 46,
+          "startTime": 24.0,
+          "duration": 8.0
+        },
+        {
+          "note": 58,
+          "velocity": 44,
+          "startTime": 32.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 44,
+          "startTime": 32.0,
+          "duration": 8.0
+        },
+        {
+          "note": 65,
+          "velocity": 42,
+          "startTime": 32.0,
+          "duration": 8.0
+        },
+        {
+          "note": 53,
+          "velocity": 38,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 57,
+          "velocity": 38,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 36,
+          "startTime": 40.0,
+          "duration": 5.0
+        }
+      ]
+    }
+  ],
+  "key": "Dm",
+  "bpm": 62,
+  "scale": "dorian"
+}

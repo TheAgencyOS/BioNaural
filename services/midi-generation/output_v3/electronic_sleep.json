@@ -1,0 +1,322 @@
+{
+  "genre": "electronic",
+  "mode": "sleep",
+  "mixStrategy": "Ultra-sparse, low-register layering with maximum frequency separation. Bass provides a warm sub-foundation (C1-C3), pad chords fill the harmonic body (C3-C5 but staying below C5), and sawtooth melody floats gently in the C4 range. No rhythmic pulse \u2014 all notes overlap with staggered, free-floating entries. Note density kept to 1-2 new notes every 4-8 seconds. Chord changes occur every ~16 seconds (Am \u2192 Dm \u2192 F \u2192 G \u2192 Am) creating near-static harmony. Energy starts at 0.4 and gently descends to 0.2 by the end \u2014 velocities gradually decrease and note durations lengthen. All tracks breathe together, creating a warm blanket of sound that induces deep sleep.",
+  "tracks": [
+    {
+      "name": "Sawtooth Lead - Descending Sleep Melody",
+      "program": 81,
+      "role": "melody",
+      "frequencyRole": "Lead voice in C4 range (MIDI 60-72). Gentle descending phrases with long sustained tones. Stays below C5 (MIDI 72) to maintain warmth and darkness.",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 69,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 5.0,
+          "duration": 7.0
+        },
+        {
+          "note": 64,
+          "velocity": 37,
+          "startTime": 10.0,
+          "duration": 6.5
+        },
+        {
+          "note": 62,
+          "velocity": 36,
+          "startTime": 14.5,
+          "duration": 7.0
+        },
+        {
+          "note": 65,
+          "velocity": 35,
+          "startTime": 18.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 34,
+          "startTime": 22.5,
+          "duration": 7.5
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 26.0,
+          "duration": 6.0
+        },
+        {
+          "note": 65,
+          "velocity": 33,
+          "startTime": 29.0,
+          "duration": 7.0
+        },
+        {
+          "note": 64,
+          "velocity": 32,
+          "startTime": 32.5,
+          "duration": 6.5
+        },
+        {
+          "note": 62,
+          "velocity": 31,
+          "startTime": 35.0,
+          "duration": 7.0
+        },
+        {
+          "note": 67,
+          "velocity": 30,
+          "startTime": 37.0,
+          "duration": 8.0
+        },
+        {
+          "note": 64,
+          "velocity": 29,
+          "startTime": 39.5,
+          "duration": 5.5
+        },
+        {
+          "note": 62,
+          "velocity": 28,
+          "startTime": 41.0,
+          "duration": 4.0
+        },
+        {
+          "note": 60,
+          "velocity": 27,
+          "startTime": 42.5,
+          "duration": 5.0
+        },
+        {
+          "note": 57,
+          "velocity": 25,
+          "startTime": 44.0,
+          "duration": 6.0
+        }
+      ]
+    },
+    {
+      "name": "Synth Bass - Deep Foundation",
+      "program": 38,
+      "role": "bass",
+      "frequencyRole": "Sub-foundation in C1-C3 range (MIDI 33-48). Plays chord roots with extremely long sustained tones. Provides warmth and grounding weight beneath the mix.",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 45,
+          "velocity": 42,
+          "startTime": 0,
+          "duration": 16.0
+        },
+        {
+          "note": 40,
+          "velocity": 40,
+          "startTime": 4.0,
+          "duration": 12.0
+        },
+        {
+          "note": 33,
+          "velocity": 39,
+          "startTime": 8.0,
+          "duration": 10.0
+        },
+        {
+          "note": 45,
+          "velocity": 38,
+          "startTime": 12.0,
+          "duration": 8.0
+        },
+        {
+          "note": 38,
+          "velocity": 37,
+          "startTime": 16.0,
+          "duration": 16.0
+        },
+        {
+          "note": 33,
+          "velocity": 36,
+          "startTime": 20.0,
+          "duration": 12.0
+        },
+        {
+          "note": 41,
+          "velocity": 35,
+          "startTime": 24.0,
+          "duration": 10.0
+        },
+        {
+          "note": 36,
+          "velocity": 34,
+          "startTime": 28.0,
+          "duration": 8.0
+        },
+        {
+          "note": 43,
+          "velocity": 33,
+          "startTime": 32.0,
+          "duration": 16.0
+        },
+        {
+          "note": 38,
+          "velocity": 32,
+          "startTime": 34.0,
+          "duration": 11.0
+        },
+        {
+          "note": 45,
+          "velocity": 31,
+          "startTime": 36.0,
+          "duration": 9.0
+        },
+        {
+          "note": 40,
+          "velocity": 30,
+          "startTime": 38.0,
+          "duration": 7.0
+        },
+        {
+          "note": 33,
+          "velocity": 29,
+          "startTime": 40.0,
+          "duration": 8.0
+        },
+        {
+          "note": 45,
+          "velocity": 27,
+          "startTime": 42.0,
+          "duration": 6.0
+        },
+        {
+          "note": 38,
+          "velocity": 25,
+          "startTime": 44.0,
+          "duration": 6.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad - Floating Harmonic Bed",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in C3-C4 range (MIDI 48-65). Sustained chord voicings with 2-3 notes max, changing every ~16 seconds. Creates a warm, enveloping blanket of harmony.",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 57,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 16.0
+        },
+        {
+          "note": 60,
+          "velocity": 39,
+          "startTime": 0,
+          "duration": 16.0
+        },
+        {
+          "note": 52,
+          "velocity": 38,
+          "startTime": 1.0,
+          "duration": 15.0
+        },
+        {
+          "note": 53,
+          "velocity": 37,
+          "startTime": 6.0,
+          "duration": 10.0
+        },
+        {
+          "note": 57,
+          "velocity": 36,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 55,
+          "velocity": 35,
+          "startTime": 16.0,
+          "duration": 16.0
+        },
+        {
+          "note": 50,
+          "velocity": 34,
+          "startTime": 16.0,
+          "duration": 16.0
+        },
+        {
+          "note": 53,
+          "velocity": 34,
+          "startTime": 17.0,
+          "duration": 15.0
+        },
+        {
+          "note": 48,
+          "velocity": 33,
+          "startTime": 20.0,
+          "duration": 12.0
+        },
+        {
+          "note": 57,
+          "velocity": 32,
+          "startTime": 24.0,
+          "duration": 8.0
+        },
+        {
+          "note": 55,
+          "velocity": 31,
+          "startTime": 32.0,
+          "duration": 13.0
+        },
+        {
+          "note": 60,
+          "velocity": 30,
+          "startTime": 32.0,
+          "duration": 13.0
+        },
+        {
+          "note": 52,
+          "velocity": 29,
+          "startTime": 33.0,
+          "duration": 12.0
+        },
+        {
+          "note": 57,
+          "velocity": 28,
+          "startTime": 38.0,
+          "duration": 7.0
+        },
+        {
+          "note": 48,
+          "velocity": 26,
+          "startTime": 40.0,
+          "duration": 8.0
+        },
+        {
+          "note": 53,
+          "velocity": 25,
+          "startTime": 42.0,
+          "duration": 6.0
+        },
+        {
+          "note": 50,
+          "velocity": 25,
+          "startTime": 44.0,
+          "duration": 6.0
+        }
+      ]
+    }
+  ],
+  "key": "Am",
+  "bpm": 48,
+  "scale": "dorian"
+}

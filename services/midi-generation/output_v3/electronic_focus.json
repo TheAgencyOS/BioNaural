@@ -1,0 +1,602 @@
+{
+  "genre": "electronic",
+  "mode": "focus",
+  "mixStrategy": "Frequency-separated layering: Bass synth anchors the low end (C2-C3) with steady root notes on each chord change, warm pad fills the mid-range (C3-C5) with sustained chords changing every 4-8 seconds, sawtooth lead sits above (C4-C6) with a gentle pentatonic melody at moderate velocity, and subtle drums (soft hi-hat + rim click) provide a barely-perceptible pulse. All tracks follow the same Am\u2192Dm\u2192F\u2192G\u2192Am progression together. Energy remains flat at 0.6-0.7 throughout \u2014 steady, predictable, habituatable background music for deep concentration.",
+  "tracks": [
+    {
+      "name": "Sawtooth Lead",
+      "program": 81,
+      "role": "melody",
+      "frequencyRole": "Lead voice in MIDI 60-76 range (C4-E5). Pentatonic A minor melody using chord tones on downbeats. Gentle, repetitive 4-bar motif that loops with minimal variation to support habituation.",
+      "suggestedVolume": 0.65,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 69,
+          "velocity": 55,
+          "startTime": 0,
+          "duration": 2.0
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 2.0,
+          "duration": 1.5
+        },
+        {
+          "note": 64,
+          "velocity": 52,
+          "startTime": 3.5,
+          "duration": 2.5
+        },
+        {
+          "note": 60,
+          "velocity": 48,
+          "startTime": 6.4,
+          "duration": 2.0
+        },
+        {
+          "note": 62,
+          "velocity": 50,
+          "startTime": 8.4,
+          "duration": 1.5
+        },
+        {
+          "note": 65,
+          "velocity": 55,
+          "startTime": 10.4,
+          "duration": 2.4
+        },
+        {
+          "note": 69,
+          "velocity": 52,
+          "startTime": 12.8,
+          "duration": 2.0
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 14.8,
+          "duration": 1.5
+        },
+        {
+          "note": 65,
+          "velocity": 48,
+          "startTime": 16.3,
+          "duration": 2.5
+        },
+        {
+          "note": 64,
+          "velocity": 50,
+          "startTime": 19.2,
+          "duration": 2.0
+        },
+        {
+          "note": 62,
+          "velocity": 52,
+          "startTime": 21.2,
+          "duration": 1.5
+        },
+        {
+          "note": 60,
+          "velocity": 48,
+          "startTime": 22.7,
+          "duration": 2.5
+        },
+        {
+          "note": 69,
+          "velocity": 55,
+          "startTime": 25.6,
+          "duration": 2.0
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 27.6,
+          "duration": 1.5
+        },
+        {
+          "note": 64,
+          "velocity": 52,
+          "startTime": 29.1,
+          "duration": 2.5
+        },
+        {
+          "note": 60,
+          "velocity": 48,
+          "startTime": 32.0,
+          "duration": 2.0
+        },
+        {
+          "note": 62,
+          "velocity": 50,
+          "startTime": 34.0,
+          "duration": 1.5
+        },
+        {
+          "note": 65,
+          "velocity": 55,
+          "startTime": 35.5,
+          "duration": 2.4
+        },
+        {
+          "note": 69,
+          "velocity": 52,
+          "startTime": 38.4,
+          "duration": 2.0
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 40.4,
+          "duration": 1.5
+        },
+        {
+          "note": 65,
+          "velocity": 48,
+          "startTime": 41.9,
+          "duration": 2.5
+        }
+      ]
+    },
+    {
+      "name": "Synth Bass",
+      "program": 38,
+      "role": "bass",
+      "frequencyRole": "Foundation in MIDI 33-45 range (A1-A2). Plays chord roots with steady whole/half notes on each chord change. Anchors the harmonic progression and provides a warm, low-end pulse.",
+      "suggestedVolume": 0.6,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 45,
+          "velocity": 60,
+          "startTime": 0,
+          "duration": 3.2
+        },
+        {
+          "note": 45,
+          "velocity": 58,
+          "startTime": 3.2,
+          "duration": 3.2
+        },
+        {
+          "note": 38,
+          "velocity": 60,
+          "startTime": 6.4,
+          "duration": 3.2
+        },
+        {
+          "note": 38,
+          "velocity": 58,
+          "startTime": 9.6,
+          "duration": 3.2
+        },
+        {
+          "note": 41,
+          "velocity": 60,
+          "startTime": 12.8,
+          "duration": 3.2
+        },
+        {
+          "note": 43,
+          "velocity": 58,
+          "startTime": 16.0,
+          "duration": 3.2
+        },
+        {
+          "note": 45,
+          "velocity": 60,
+          "startTime": 19.2,
+          "duration": 3.2
+        },
+        {
+          "note": 45,
+          "velocity": 58,
+          "startTime": 22.4,
+          "duration": 3.2
+        },
+        {
+          "note": 45,
+          "velocity": 60,
+          "startTime": 25.6,
+          "duration": 3.2
+        },
+        {
+          "note": 45,
+          "velocity": 58,
+          "startTime": 28.8,
+          "duration": 3.2
+        },
+        {
+          "note": 38,
+          "velocity": 60,
+          "startTime": 32.0,
+          "duration": 3.2
+        },
+        {
+          "note": 38,
+          "velocity": 58,
+          "startTime": 35.2,
+          "duration": 3.2
+        },
+        {
+          "note": 41,
+          "velocity": 60,
+          "startTime": 38.4,
+          "duration": 3.2
+        },
+        {
+          "note": 43,
+          "velocity": 58,
+          "startTime": 41.6,
+          "duration": 3.2
+        },
+        {
+          "note": 45,
+          "velocity": 55,
+          "startTime": 44.0,
+          "duration": 1.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in MIDI 48-67 range (C3-G4). Sustained triads/7ths changing every 6.4 seconds following the Am\u2192Dm\u2192F\u2192G\u2192Am progression. Provides a warm, enveloping harmonic bed.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 57,
+          "velocity": 48,
+          "startTime": 0,
+          "duration": 6.4
+        },
+        {
+          "note": 60,
+          "velocity": 46,
+          "startTime": 0,
+          "duration": 6.4
+        },
+        {
+          "note": 64,
+          "velocity": 44,
+          "startTime": 0,
+          "duration": 6.4
+        },
+        {
+          "note": 50,
+          "velocity": 48,
+          "startTime": 6.4,
+          "duration": 6.4
+        },
+        {
+          "note": 53,
+          "velocity": 46,
+          "startTime": 6.4,
+          "duration": 6.4
+        },
+        {
+          "note": 57,
+          "velocity": 44,
+          "startTime": 6.4,
+          "duration": 6.4
+        },
+        {
+          "note": 53,
+          "velocity": 48,
+          "startTime": 12.8,
+          "duration": 3.2
+        },
+        {
+          "note": 57,
+          "velocity": 46,
+          "startTime": 12.8,
+          "duration": 3.2
+        },
+        {
+          "note": 60,
+          "velocity": 44,
+          "startTime": 12.8,
+          "duration": 3.2
+        },
+        {
+          "note": 55,
+          "velocity": 48,
+          "startTime": 16.0,
+          "duration": 3.2
+        },
+        {
+          "note": 59,
+          "velocity": 46,
+          "startTime": 16.0,
+          "duration": 3.2
+        },
+        {
+          "note": 62,
+          "velocity": 44,
+          "startTime": 16.0,
+          "duration": 3.2
+        },
+        {
+          "note": 57,
+          "velocity": 48,
+          "startTime": 19.2,
+          "duration": 6.4
+        },
+        {
+          "note": 60,
+          "velocity": 46,
+          "startTime": 19.2,
+          "duration": 6.4
+        },
+        {
+          "note": 64,
+          "velocity": 44,
+          "startTime": 19.2,
+          "duration": 6.4
+        },
+        {
+          "note": 57,
+          "velocity": 48,
+          "startTime": 25.6,
+          "duration": 6.4
+        },
+        {
+          "note": 60,
+          "velocity": 46,
+          "startTime": 25.6,
+          "duration": 6.4
+        },
+        {
+          "note": 64,
+          "velocity": 44,
+          "startTime": 25.6,
+          "duration": 6.4
+        },
+        {
+          "note": 50,
+          "velocity": 48,
+          "startTime": 32.0,
+          "duration": 6.4
+        },
+        {
+          "note": 53,
+          "velocity": 46,
+          "startTime": 32.0,
+          "duration": 6.4
+        },
+        {
+          "note": 57,
+          "velocity": 44,
+          "startTime": 32.0,
+          "duration": 6.4
+        },
+        {
+          "note": 53,
+          "velocity": 48,
+          "startTime": 38.4,
+          "duration": 3.2
+        },
+        {
+          "note": 57,
+          "velocity": 46,
+          "startTime": 38.4,
+          "duration": 3.2
+        },
+        {
+          "note": 60,
+          "velocity": 44,
+          "startTime": 38.4,
+          "duration": 3.2
+        },
+        {
+          "note": 55,
+          "velocity": 48,
+          "startTime": 41.6,
+          "duration": 3.4
+        },
+        {
+          "note": 59,
+          "velocity": 46,
+          "startTime": 41.6,
+          "duration": 3.4
+        },
+        {
+          "note": 62,
+          "velocity": 44,
+          "startTime": 41.6,
+          "duration": 3.4
+        }
+      ]
+    },
+    {
+      "name": "Subtle Drums",
+      "program": 0,
+      "role": "drums",
+      "frequencyRole": "Percussive texture using soft hi-hat (42) and rim click (37) only. Barely perceptible pulse at velocity 30-42. Provides subtle rhythmic grounding without drawing attention.",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 0,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 1.6,
+          "duration": 0.5
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 3.2,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 4.8,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 6.4,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 8.0,
+          "duration": 0.5
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 9.6,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 11.2,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 12.8,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 14.4,
+          "duration": 0.5
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 16.0,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 17.6,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 19.2,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 20.8,
+          "duration": 0.5
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 22.4,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 24.0,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 25.6,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 27.2,
+          "duration": 0.5
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 28.8,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 30.4,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 32.0,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 33.6,
+          "duration": 0.5
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 35.2,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 36.8,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 38.4,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 40.0,
+          "duration": 0.5
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 41.6,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 43.2,
+          "duration": 0.5
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 44.4,
+          "duration": 0.5
+        }
+      ]
+    }
+  ],
+  "key": "Am",
+  "bpm": 75,
+  "scale": "dorian"
+}

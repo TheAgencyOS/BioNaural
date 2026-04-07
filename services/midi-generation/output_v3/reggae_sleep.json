@@ -1,0 +1,310 @@
+{
+  "genre": "reggae",
+  "mode": "sleep",
+  "mixStrategy": "Ultra-sparse, low-register layering for deep sleep. Bass provides a warm, barely-perceptible foundation in the C1-C3 range with long sustained root notes. Organ chords sit in the C3-C5 range as a soft, near-static harmonic blanket with gentle voicings. Nylon guitar melody floats in C4-C5 with predominantly descending motion, creating a settling, sinking sensation. All three tracks share the same slow I\u2192IV\u2192I\u2192V progression changing every ~16 seconds. No rhythmic pulse \u2014 notes drift in freely with staggered entries to avoid density spikes. Maximum 3-4 notes sounding simultaneously. Energy starts at 0.4 and gently descends to 0.2 by the end. Reggae influence is limited to mixolydian color tones and instrument choices only.",
+  "tracks": [
+    {
+      "name": "Nylon Guitar - Descending Sleep Melody",
+      "program": 24,
+      "role": "melody",
+      "frequencyRole": "Lead voice in C4-C5 range (MIDI 60-72). Predominantly descending lines that settle downward, evoking a sinking-into-sleep sensation. Sparse, floating phrases with no rhythmic pulse.",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 71,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 6.0
+        },
+        {
+          "note": 69,
+          "velocity": 38,
+          "startTime": 5.0,
+          "duration": 7.0
+        },
+        {
+          "note": 67,
+          "velocity": 36,
+          "startTime": 9.5,
+          "duration": 6.5
+        },
+        {
+          "note": 64,
+          "velocity": 35,
+          "startTime": 14.0,
+          "duration": 8.0
+        },
+        {
+          "note": 67,
+          "velocity": 34,
+          "startTime": 16.5,
+          "duration": 5.5
+        },
+        {
+          "note": 65,
+          "velocity": 33,
+          "startTime": 21.0,
+          "duration": 7.0
+        },
+        {
+          "note": 64,
+          "velocity": 32,
+          "startTime": 24.5,
+          "duration": 6.0
+        },
+        {
+          "note": 62,
+          "velocity": 31,
+          "startTime": 28.0,
+          "duration": 7.5
+        },
+        {
+          "note": 60,
+          "velocity": 30,
+          "startTime": 32.0,
+          "duration": 8.0
+        },
+        {
+          "note": 64,
+          "velocity": 29,
+          "startTime": 33.5,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 28,
+          "startTime": 36.0,
+          "duration": 6.5
+        },
+        {
+          "note": 60,
+          "velocity": 27,
+          "startTime": 38.5,
+          "duration": 6.5
+        },
+        {
+          "note": 67,
+          "velocity": 28,
+          "startTime": 39.5,
+          "duration": 5.5
+        },
+        {
+          "note": 64,
+          "velocity": 26,
+          "startTime": 41.5,
+          "duration": 4.0
+        },
+        {
+          "note": 62,
+          "velocity": 25,
+          "startTime": 43.0,
+          "duration": 5.0
+        }
+      ]
+    },
+    {
+      "name": "Electric Bass - Warm Root Foundation",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "Deep foundation in C1-C3 range (MIDI 31-48). Plays chord roots as long, warm sustained tones. Provides gravitational anchor for the harmonic progression. Very slow movement.",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 43,
+          "velocity": 40,
+          "startTime": 0.5,
+          "duration": 10.0
+        },
+        {
+          "note": 38,
+          "velocity": 38,
+          "startTime": 3.0,
+          "duration": 8.0
+        },
+        {
+          "note": 43,
+          "velocity": 37,
+          "startTime": 8.0,
+          "duration": 9.0
+        },
+        {
+          "note": 36,
+          "velocity": 36,
+          "startTime": 11.0,
+          "duration": 7.0
+        },
+        {
+          "note": 48,
+          "velocity": 35,
+          "startTime": 16.0,
+          "duration": 10.0
+        },
+        {
+          "note": 43,
+          "velocity": 34,
+          "startTime": 19.5,
+          "duration": 8.0
+        },
+        {
+          "note": 48,
+          "velocity": 33,
+          "startTime": 24.0,
+          "duration": 9.0
+        },
+        {
+          "note": 41,
+          "velocity": 32,
+          "startTime": 27.0,
+          "duration": 7.5
+        },
+        {
+          "note": 43,
+          "velocity": 31,
+          "startTime": 32.0,
+          "duration": 10.0
+        },
+        {
+          "note": 38,
+          "velocity": 30,
+          "startTime": 33.5,
+          "duration": 8.0
+        },
+        {
+          "note": 43,
+          "velocity": 29,
+          "startTime": 36.0,
+          "duration": 9.0
+        },
+        {
+          "note": 36,
+          "velocity": 28,
+          "startTime": 38.0,
+          "duration": 7.0
+        },
+        {
+          "note": 45,
+          "velocity": 27,
+          "startTime": 39.5,
+          "duration": 5.5
+        },
+        {
+          "note": 43,
+          "velocity": 26,
+          "startTime": 41.5,
+          "duration": 4.5
+        },
+        {
+          "note": 38,
+          "velocity": 25,
+          "startTime": 43.0,
+          "duration": 5.0
+        }
+      ]
+    },
+    {
+      "name": "Organ - Soft Harmonic Blanket",
+      "program": 16,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in C3-C5 range (MIDI 48-72). Very slow, near-static chord pads using reggae-influenced I-IV-V voicings in G mixolydian. Chords change approximately every 16 seconds. Soft, enveloping warmth.",
+      "suggestedVolume": 0.3,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 1.0,
+          "duration": 14.0
+        },
+        {
+          "note": 59,
+          "velocity": 36,
+          "startTime": 1.5,
+          "duration": 14.0
+        },
+        {
+          "note": 62,
+          "velocity": 35,
+          "startTime": 2.0,
+          "duration": 13.0
+        },
+        {
+          "note": 50,
+          "velocity": 34,
+          "startTime": 4.0,
+          "duration": 12.0
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 16.0,
+          "duration": 14.0
+        },
+        {
+          "note": 64,
+          "velocity": 32,
+          "startTime": 16.5,
+          "duration": 14.0
+        },
+        {
+          "note": 55,
+          "velocity": 31,
+          "startTime": 17.0,
+          "duration": 13.0
+        },
+        {
+          "note": 67,
+          "velocity": 30,
+          "startTime": 18.0,
+          "duration": 12.0
+        },
+        {
+          "note": 57,
+          "velocity": 29,
+          "startTime": 24.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 28,
+          "startTime": 32.0,
+          "duration": 13.0
+        },
+        {
+          "note": 55,
+          "velocity": 27,
+          "startTime": 32.5,
+          "duration": 12.5
+        },
+        {
+          "note": 59,
+          "velocity": 27,
+          "startTime": 33.0,
+          "duration": 12.0
+        },
+        {
+          "note": 50,
+          "velocity": 26,
+          "startTime": 34.0,
+          "duration": 11.0
+        },
+        {
+          "note": 48,
+          "velocity": 25,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 55,
+          "velocity": 25,
+          "startTime": 41.0,
+          "duration": 4.5
+        }
+      ]
+    }
+  ],
+  "key": "G",
+  "bpm": 48,
+  "scale": "mixolydian"
+}

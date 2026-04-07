@@ -1,0 +1,334 @@
+{
+  "genre": "jazz",
+  "mode": "relaxation",
+  "mixStrategy": "Three-layer spectral separation: Bass (MIDI 36-48) provides warm, slow-moving root foundations; Chords/Pad (MIDI 48-67) fills the harmonic body with extended jazz voicings using long sustained notes; Melody/Piano (MIDI 60-79) floats gently above with arch-shaped phrases. All layers follow the same chord progression (Dm9\u2192G13\u2192Cmaj9\u2192Am9\u2192Dm9\u2192G13\u2192Cmaj9\u2192Fmaj9\u2192Dm9\u2192G13\u2192Cmaj9) changing every ~8-10 seconds. Rhythmic staggering ensures no more than 4-5 notes sound simultaneously. Energy arc: 0.3\u21920.5\u21920.6\u21920.5\u21920.4\u21920.3. All velocities 35-60, durations 2-8s, gentle and floating.",
+  "tracks": [
+    {
+      "name": "Jazz Piano Melody",
+      "program": 0,
+      "role": "melody",
+      "frequencyRole": "Lead voice: MIDI 60-79 (C4-G5). Gentle arch-shaped phrases with jazz intervals (9ths, 6ths). Sits above pad and bass, never competes spectrally.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 62,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 3.5
+        },
+        {
+          "note": 65,
+          "velocity": 42,
+          "startTime": 3.5,
+          "duration": 3.0
+        },
+        {
+          "note": 69,
+          "velocity": 45,
+          "startTime": 6.5,
+          "duration": 4.0
+        },
+        {
+          "note": 67,
+          "velocity": 43,
+          "startTime": 8.5,
+          "duration": 3.0
+        },
+        {
+          "note": 64,
+          "velocity": 48,
+          "startTime": 11.5,
+          "duration": 3.5
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 15.0,
+          "duration": 3.0
+        },
+        {
+          "note": 72,
+          "velocity": 55,
+          "startTime": 18.0,
+          "duration": 4.0
+        },
+        {
+          "note": 71,
+          "velocity": 53,
+          "startTime": 21.0,
+          "duration": 3.0
+        },
+        {
+          "note": 69,
+          "velocity": 55,
+          "startTime": 24.0,
+          "duration": 3.5
+        },
+        {
+          "note": 74,
+          "velocity": 58,
+          "startTime": 27.0,
+          "duration": 4.0
+        },
+        {
+          "note": 72,
+          "velocity": 55,
+          "startTime": 30.0,
+          "duration": 3.0
+        },
+        {
+          "note": 69,
+          "velocity": 50,
+          "startTime": 33.0,
+          "duration": 3.5
+        },
+        {
+          "note": 67,
+          "velocity": 47,
+          "startTime": 36.0,
+          "duration": 3.0
+        },
+        {
+          "note": 65,
+          "velocity": 43,
+          "startTime": 39.0,
+          "duration": 3.0
+        },
+        {
+          "note": 64,
+          "velocity": 40,
+          "startTime": 41.5,
+          "duration": 3.5
+        },
+        {
+          "note": 62,
+          "velocity": 37,
+          "startTime": 43.0,
+          "duration": 2.0
+        }
+      ]
+    },
+    {
+      "name": "Acoustic Jazz Bass",
+      "program": 32,
+      "role": "bass",
+      "frequencyRole": "Foundation: MIDI 36-48 (C2-C3). Slow whole-note and half-note roots anchoring each chord change. Warm, round, no attack emphasis.",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 38,
+          "startTime": 5.0,
+          "duration": 4.0
+        },
+        {
+          "note": 43,
+          "velocity": 42,
+          "startTime": 9.0,
+          "duration": 4.5
+        },
+        {
+          "note": 43,
+          "velocity": 40,
+          "startTime": 13.5,
+          "duration": 4.5
+        },
+        {
+          "note": 36,
+          "velocity": 45,
+          "startTime": 18.0,
+          "duration": 5.0
+        },
+        {
+          "note": 36,
+          "velocity": 43,
+          "startTime": 23.0,
+          "duration": 4.0
+        },
+        {
+          "note": 45,
+          "velocity": 48,
+          "startTime": 27.0,
+          "duration": 5.0
+        },
+        {
+          "note": 45,
+          "velocity": 46,
+          "startTime": 32.0,
+          "duration": 4.0
+        },
+        {
+          "note": 38,
+          "velocity": 43,
+          "startTime": 36.0,
+          "duration": 4.5
+        },
+        {
+          "note": 43,
+          "velocity": 40,
+          "startTime": 40.0,
+          "duration": 2.5
+        },
+        {
+          "note": 36,
+          "velocity": 38,
+          "startTime": 42.5,
+          "duration": 2.5
+        },
+        {
+          "note": 38,
+          "velocity": 42,
+          "startTime": 2.5,
+          "duration": 2.5
+        },
+        {
+          "note": 41,
+          "velocity": 40,
+          "startTime": 7.0,
+          "duration": 2.0
+        },
+        {
+          "note": 40,
+          "velocity": 44,
+          "startTime": 15.5,
+          "duration": 2.5
+        },
+        {
+          "note": 43,
+          "velocity": 42,
+          "startTime": 25.0,
+          "duration": 2.0
+        },
+        {
+          "note": 41,
+          "velocity": 40,
+          "startTime": 34.5,
+          "duration": 2.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Jazz Pad Chords",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "Harmonic body: MIDI 48-67 (C3-G4). Extended jazz voicings (maj9, m9, 13th) with long sustains. Fills the mid-range warmly beneath melody, above bass.",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 50,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 53,
+          "velocity": 36,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 57,
+          "velocity": 37,
+          "startTime": 0.5,
+          "duration": 7.5
+        },
+        {
+          "note": 55,
+          "velocity": 40,
+          "startTime": 9.0,
+          "duration": 8.0
+        },
+        {
+          "note": 59,
+          "velocity": 38,
+          "startTime": 9.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 39,
+          "startTime": 9.5,
+          "duration": 7.5
+        },
+        {
+          "note": 48,
+          "velocity": 43,
+          "startTime": 18.0,
+          "duration": 8.0
+        },
+        {
+          "note": 52,
+          "velocity": 42,
+          "startTime": 18.0,
+          "duration": 8.0
+        },
+        {
+          "note": 55,
+          "velocity": 44,
+          "startTime": 18.5,
+          "duration": 7.5
+        },
+        {
+          "note": 57,
+          "velocity": 45,
+          "startTime": 27.0,
+          "duration": 8.0
+        },
+        {
+          "note": 60,
+          "velocity": 43,
+          "startTime": 27.0,
+          "duration": 8.0
+        },
+        {
+          "note": 64,
+          "velocity": 44,
+          "startTime": 27.5,
+          "duration": 7.5
+        },
+        {
+          "note": 50,
+          "velocity": 40,
+          "startTime": 36.0,
+          "duration": 8.0
+        },
+        {
+          "note": 53,
+          "velocity": 38,
+          "startTime": 36.0,
+          "duration": 8.0
+        },
+        {
+          "note": 57,
+          "velocity": 39,
+          "startTime": 36.5,
+          "duration": 7.5
+        },
+        {
+          "note": 55,
+          "velocity": 37,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 59,
+          "velocity": 36,
+          "startTime": 40.5,
+          "duration": 4.5
+        }
+      ]
+    }
+  ],
+  "key": "C",
+  "bpm": 62,
+  "scale": "dorian"
+}

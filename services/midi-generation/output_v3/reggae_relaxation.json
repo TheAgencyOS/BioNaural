@@ -1,0 +1,412 @@
+{
+  "genre": "reggae",
+  "mode": "relaxation",
+  "mixStrategy": "Three-layer frequency separation: Bass (MIDI 36-48) provides warm, slow-moving root foundation; Organ chords (MIDI 48-67) sit in the mid-range with gentle offbeat swells at low velocity creating a soft reggae-flavored harmonic bed; Nylon guitar melody (MIDI 60-79) floats above with arching phrases. All layers use long, overlapping durations (2-8s) to create a floating, connected texture. Dynamics follow energy arc 0.3\u21920.5\u21920.6\u21920.5\u21920.4\u21920.3 across 45 seconds. Chord changes every ~8-10 seconds following I(C)\u2192IV(F)\u2192V(G)\u2192IV(F)\u2192I(C) progression. No percussive attacks; everything breathes gently.",
+  "tracks": [
+    {
+      "name": "Nylon Guitar Melody",
+      "program": 24,
+      "role": "melody",
+      "frequencyRole": "Lead voice in MIDI 60-79 (C4-G5). Gentle arch-shaped phrases that rise and fall. Plays chord tones on strong beats, passing tones between. Floats above the harmonic bed.",
+      "suggestedVolume": 0.65,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 60,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 3.5
+        },
+        {
+          "note": 64,
+          "velocity": 40,
+          "startTime": 3.0,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 42,
+          "startTime": 5.5,
+          "duration": 3.5
+        },
+        {
+          "note": 65,
+          "velocity": 40,
+          "startTime": 8.5,
+          "duration": 3.0
+        },
+        {
+          "note": 69,
+          "velocity": 45,
+          "startTime": 11.0,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 48,
+          "startTime": 14.0,
+          "duration": 4.0
+        },
+        {
+          "note": 69,
+          "velocity": 46,
+          "startTime": 17.5,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 20.0,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 55,
+          "startTime": 23.0,
+          "duration": 3.5
+        },
+        {
+          "note": 74,
+          "velocity": 58,
+          "startTime": 26.0,
+          "duration": 3.0
+        },
+        {
+          "note": 71,
+          "velocity": 55,
+          "startTime": 28.5,
+          "duration": 3.5
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 31.5,
+          "duration": 3.0
+        },
+        {
+          "note": 65,
+          "velocity": 47,
+          "startTime": 34.0,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 44,
+          "startTime": 37.0,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 42,
+          "startTime": 39.5,
+          "duration": 3.0
+        },
+        {
+          "note": 64,
+          "velocity": 40,
+          "startTime": 41.5,
+          "duration": 3.5
+        }
+      ]
+    },
+    {
+      "name": "Electric Bass Foundation",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "Foundation layer in MIDI 36-48 (C2-C3). Plays chord roots with long sustained tones. Slow, breathing rhythm anchoring the harmony. Warm and deep.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 36,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 4.5
+        },
+        {
+          "note": 36,
+          "velocity": 40,
+          "startTime": 4.5,
+          "duration": 4.0
+        },
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 8.5,
+          "duration": 4.5
+        },
+        {
+          "note": 41,
+          "velocity": 44,
+          "startTime": 13.0,
+          "duration": 4.0
+        },
+        {
+          "note": 43,
+          "velocity": 48,
+          "startTime": 17.0,
+          "duration": 4.5
+        },
+        {
+          "note": 43,
+          "velocity": 50,
+          "startTime": 21.5,
+          "duration": 4.0
+        },
+        {
+          "note": 41,
+          "velocity": 48,
+          "startTime": 25.5,
+          "duration": 4.5
+        },
+        {
+          "note": 41,
+          "velocity": 46,
+          "startTime": 30.0,
+          "duration": 3.5
+        },
+        {
+          "note": 36,
+          "velocity": 44,
+          "startTime": 33.5,
+          "duration": 4.0
+        },
+        {
+          "note": 36,
+          "velocity": 42,
+          "startTime": 37.5,
+          "duration": 4.0
+        },
+        {
+          "note": 48,
+          "velocity": 40,
+          "startTime": 0.5,
+          "duration": 3.5
+        },
+        {
+          "note": 48,
+          "velocity": 42,
+          "startTime": 5.0,
+          "duration": 3.5
+        },
+        {
+          "note": 41,
+          "velocity": 44,
+          "startTime": 9.5,
+          "duration": 3.5
+        },
+        {
+          "note": 43,
+          "velocity": 46,
+          "startTime": 18.0,
+          "duration": 3.5
+        },
+        {
+          "note": 36,
+          "velocity": 40,
+          "startTime": 41.5,
+          "duration": 3.5
+        },
+        {
+          "note": 48,
+          "velocity": 38,
+          "startTime": 38.0,
+          "duration": 3.5
+        }
+      ]
+    },
+    {
+      "name": "Organ Chords (Reggae Offbeat Pads)",
+      "program": 16,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in MIDI 48-67 (C3-G4). Gentle offbeat chord swells inspired by reggae skank but stretched into soft pad-like voicings. 2-3 notes per voicing to avoid density. Changes with progression.",
+      "suggestedVolume": 0.5,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 52,
+          "velocity": 38,
+          "startTime": 0.5,
+          "duration": 3.5
+        },
+        {
+          "note": 55,
+          "velocity": 36,
+          "startTime": 0.5,
+          "duration": 3.5
+        },
+        {
+          "note": 60,
+          "velocity": 37,
+          "startTime": 0.5,
+          "duration": 3.5
+        },
+        {
+          "note": 52,
+          "velocity": 40,
+          "startTime": 4.5,
+          "duration": 3.5
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 4.5,
+          "duration": 3.5
+        },
+        {
+          "note": 60,
+          "velocity": 39,
+          "startTime": 4.5,
+          "duration": 3.5
+        },
+        {
+          "note": 53,
+          "velocity": 42,
+          "startTime": 9.0,
+          "duration": 4.0
+        },
+        {
+          "note": 57,
+          "velocity": 40,
+          "startTime": 9.0,
+          "duration": 4.0
+        },
+        {
+          "note": 60,
+          "velocity": 41,
+          "startTime": 9.0,
+          "duration": 4.0
+        },
+        {
+          "note": 53,
+          "velocity": 45,
+          "startTime": 13.5,
+          "duration": 4.0
+        },
+        {
+          "note": 57,
+          "velocity": 43,
+          "startTime": 13.5,
+          "duration": 4.0
+        },
+        {
+          "note": 60,
+          "velocity": 44,
+          "startTime": 13.5,
+          "duration": 4.0
+        },
+        {
+          "note": 55,
+          "velocity": 50,
+          "startTime": 17.5,
+          "duration": 4.5
+        },
+        {
+          "note": 59,
+          "velocity": 48,
+          "startTime": 17.5,
+          "duration": 4.5
+        },
+        {
+          "note": 62,
+          "velocity": 49,
+          "startTime": 17.5,
+          "duration": 4.5
+        },
+        {
+          "note": 55,
+          "velocity": 55,
+          "startTime": 22.5,
+          "duration": 4.0
+        },
+        {
+          "note": 59,
+          "velocity": 53,
+          "startTime": 22.5,
+          "duration": 4.0
+        },
+        {
+          "note": 62,
+          "velocity": 54,
+          "startTime": 22.5,
+          "duration": 4.0
+        },
+        {
+          "note": 53,
+          "velocity": 50,
+          "startTime": 27.0,
+          "duration": 4.0
+        },
+        {
+          "note": 57,
+          "velocity": 48,
+          "startTime": 27.0,
+          "duration": 4.0
+        },
+        {
+          "note": 60,
+          "velocity": 49,
+          "startTime": 27.0,
+          "duration": 4.0
+        },
+        {
+          "note": 53,
+          "velocity": 46,
+          "startTime": 31.5,
+          "duration": 3.5
+        },
+        {
+          "note": 57,
+          "velocity": 44,
+          "startTime": 31.5,
+          "duration": 3.5
+        },
+        {
+          "note": 60,
+          "velocity": 45,
+          "startTime": 31.5,
+          "duration": 3.5
+        },
+        {
+          "note": 52,
+          "velocity": 42,
+          "startTime": 35.5,
+          "duration": 4.0
+        },
+        {
+          "note": 55,
+          "velocity": 40,
+          "startTime": 35.5,
+          "duration": 4.0
+        },
+        {
+          "note": 60,
+          "velocity": 41,
+          "startTime": 35.5,
+          "duration": 4.0
+        },
+        {
+          "note": 52,
+          "velocity": 38,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 55,
+          "velocity": 36,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 37,
+          "startTime": 40.0,
+          "duration": 5.0
+        }
+      ]
+    }
+  ],
+  "key": "C",
+  "bpm": 62,
+  "scale": "mixolydian"
+}

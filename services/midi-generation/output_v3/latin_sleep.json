@@ -1,0 +1,322 @@
+{
+  "genre": "latin",
+  "mode": "sleep",
+  "mixStrategy": "Ultra-sparse, low-register layering. Bass provides a warm sub-foundation (C1-C3) with long, slowly fading root notes. Piano chords sit in the C3-C5 range as soft, widely-spaced voicings (no more than 3 notes per chord) that bloom and decay over 16-32 seconds. Flute melody floats in C4-C5 with descending phrases using harmonic minor intervals, never exceeding 2 simultaneous notes with the chords. All tracks use staggered entrances so notes overlap gently without creating rhythmic pulse. Spectral separation ensures no masking: bass below 200Hz, piano 200-800Hz, flute 800Hz+. Energy arc descends from 0.4 to 0.2 across 45 seconds \u2014 velocity and density both decrease toward the end.",
+  "tracks": [
+    {
+      "name": "Latin Flute \u2014 Descending Sleep Melody",
+      "program": 73,
+      "role": "melody",
+      "frequencyRole": "Lead voice in C4-C5 range (MIDI 60-72). Descending motion throughout, using A harmonic minor intervals (A, G#, F, E). Stays well below C5 to preserve warmth. Sparse, floating phrases with no rhythmic pulse.",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 69,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 68,
+          "velocity": 38,
+          "startTime": 6.0,
+          "duration": 7.0
+        },
+        {
+          "note": 65,
+          "velocity": 36,
+          "startTime": 12.0,
+          "duration": 9.0
+        },
+        {
+          "note": 64,
+          "velocity": 35,
+          "startTime": 17.5,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 33,
+          "startTime": 23.0,
+          "duration": 7.5
+        },
+        {
+          "note": 60,
+          "velocity": 32,
+          "startTime": 28.0,
+          "duration": 10.0
+        },
+        {
+          "note": 65,
+          "velocity": 30,
+          "startTime": 4.0,
+          "duration": 6.0
+        },
+        {
+          "note": 67,
+          "velocity": 37,
+          "startTime": 9.5,
+          "duration": 5.5
+        },
+        {
+          "note": 64,
+          "velocity": 34,
+          "startTime": 15.0,
+          "duration": 6.0
+        },
+        {
+          "note": 69,
+          "velocity": 31,
+          "startTime": 21.0,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 29,
+          "startTime": 33.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 28,
+          "startTime": 36.5,
+          "duration": 7.0
+        },
+        {
+          "note": 60,
+          "velocity": 27,
+          "startTime": 39.5,
+          "duration": 5.5
+        },
+        {
+          "note": 64,
+          "velocity": 30,
+          "startTime": 26.0,
+          "duration": 6.0
+        },
+        {
+          "note": 60,
+          "velocity": 25,
+          "startTime": 42.0,
+          "duration": 3.0
+        }
+      ]
+    },
+    {
+      "name": "Electric Bass \u2014 Andalusian Roots",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "Deep foundation in C2-C3 range (MIDI 36-48). Plays chord roots of Andalusian cadence: Am(A)\u2192G(G)\u2192F(F)\u2192E(E). Extremely long sustained notes, one per chord change every ~11 seconds. Warm, dark, enveloping low end.",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 45,
+          "velocity": 42,
+          "startTime": 0,
+          "duration": 12.0
+        },
+        {
+          "note": 43,
+          "velocity": 40,
+          "startTime": 11.0,
+          "duration": 12.0
+        },
+        {
+          "note": 41,
+          "velocity": 37,
+          "startTime": 22.0,
+          "duration": 12.0
+        },
+        {
+          "note": 40,
+          "velocity": 34,
+          "startTime": 33.0,
+          "duration": 12.0
+        },
+        {
+          "note": 45,
+          "velocity": 38,
+          "startTime": 2.5,
+          "duration": 8.0
+        },
+        {
+          "note": 43,
+          "velocity": 36,
+          "startTime": 13.5,
+          "duration": 8.0
+        },
+        {
+          "note": 41,
+          "velocity": 33,
+          "startTime": 24.5,
+          "duration": 8.0
+        },
+        {
+          "note": 40,
+          "velocity": 30,
+          "startTime": 35.5,
+          "duration": 9.5
+        },
+        {
+          "note": 45,
+          "velocity": 40,
+          "startTime": 5.5,
+          "duration": 5.5
+        },
+        {
+          "note": 43,
+          "velocity": 37,
+          "startTime": 16.5,
+          "duration": 5.5
+        },
+        {
+          "note": 41,
+          "velocity": 34,
+          "startTime": 27.5,
+          "duration": 5.5
+        },
+        {
+          "note": 40,
+          "velocity": 28,
+          "startTime": 38.5,
+          "duration": 6.5
+        },
+        {
+          "note": 36,
+          "velocity": 35,
+          "startTime": 8.0,
+          "duration": 4.0
+        },
+        {
+          "note": 36,
+          "velocity": 30,
+          "startTime": 19.5,
+          "duration": 4.0
+        },
+        {
+          "note": 36,
+          "velocity": 27,
+          "startTime": 30.0,
+          "duration": 4.0
+        },
+        {
+          "note": 40,
+          "velocity": 25,
+          "startTime": 43.0,
+          "duration": 2.0
+        }
+      ]
+    },
+    {
+      "name": "Piano \u2014 Warm Harmonic Minor Pads",
+      "program": 0,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in C3-C5 range (MIDI 48-72). Widely-spaced Andalusian voicings: Am (A-C-E) \u2192 G (G-B-D) \u2192 F (F-A-C) \u2192 E (E-G#-B). Max 2-3 notes per voicing, staggered entry. Extremely soft, pad-like sustained chords changing every ~11 seconds.",
+      "suggestedVolume": 0.3,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 57,
+          "velocity": 40,
+          "startTime": 0.5,
+          "duration": 11.0
+        },
+        {
+          "note": 60,
+          "velocity": 38,
+          "startTime": 1.0,
+          "duration": 10.5
+        },
+        {
+          "note": 64,
+          "velocity": 36,
+          "startTime": 1.5,
+          "duration": 10.0
+        },
+        {
+          "note": 55,
+          "velocity": 37,
+          "startTime": 11.5,
+          "duration": 11.0
+        },
+        {
+          "note": 59,
+          "velocity": 35,
+          "startTime": 12.0,
+          "duration": 10.5
+        },
+        {
+          "note": 62,
+          "velocity": 33,
+          "startTime": 12.5,
+          "duration": 10.0
+        },
+        {
+          "note": 53,
+          "velocity": 34,
+          "startTime": 22.5,
+          "duration": 11.0
+        },
+        {
+          "note": 57,
+          "velocity": 32,
+          "startTime": 23.0,
+          "duration": 10.5
+        },
+        {
+          "note": 60,
+          "velocity": 30,
+          "startTime": 23.5,
+          "duration": 10.0
+        },
+        {
+          "note": 52,
+          "velocity": 30,
+          "startTime": 33.5,
+          "duration": 11.5
+        },
+        {
+          "note": 56,
+          "velocity": 28,
+          "startTime": 34.0,
+          "duration": 11.0
+        },
+        {
+          "note": 59,
+          "velocity": 27,
+          "startTime": 34.5,
+          "duration": 10.5
+        },
+        {
+          "note": 64,
+          "velocity": 35,
+          "startTime": 5.0,
+          "duration": 6.0
+        },
+        {
+          "note": 62,
+          "velocity": 32,
+          "startTime": 16.0,
+          "duration": 6.0
+        },
+        {
+          "note": 60,
+          "velocity": 29,
+          "startTime": 27.0,
+          "duration": 6.0
+        },
+        {
+          "note": 59,
+          "velocity": 26,
+          "startTime": 38.0,
+          "duration": 7.0
+        }
+      ]
+    }
+  ],
+  "key": "Am",
+  "bpm": 48,
+  "scale": "harmonic minor"
+}

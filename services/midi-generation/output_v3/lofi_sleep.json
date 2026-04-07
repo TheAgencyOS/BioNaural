@@ -1,0 +1,328 @@
+{
+  "genre": "lofi",
+  "mode": "sleep",
+  "mixStrategy": "Ultra-sparse, floating textures with no rhythmic pulse. Bass provides a warm low-frequency foundation (C1-C3), changing roots only every 16-32 seconds. Warm Pad chords sit in the mid register (C3-C5) with gentle jazz 7th voicings, swelling in and out like slow breathing. Electric Piano melody floats above (C4-C5) with predominantly descending motion, placing sparse chord tones that settle downward. All three layers are spectrally separated to avoid masking. Energy begins at 0.4 and gently descends to 0.2 by the end. Maximum 3-4 notes sounding simultaneously at any moment. Note onsets are staggered across tracks to avoid rhythmic coincidence, creating a weightless, drifting quality.",
+  "tracks": [
+    {
+      "name": "Lofi Electric Piano - Descending Melody",
+      "program": 4,
+      "role": "melody",
+      "frequencyRole": "Lead voice in C4-C5 range (MIDI 60-72). Sparse, descending phrases using chord tones. Sits above pad and bass with no spectral overlap. Predominantly stepwise descending motion to induce settling.",
+      "suggestedVolume": 0.3,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 70,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 6.0
+        },
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 5.5,
+          "duration": 7.0
+        },
+        {
+          "note": 65,
+          "velocity": 36,
+          "startTime": 11.0,
+          "duration": 6.5
+        },
+        {
+          "note": 63,
+          "velocity": 37,
+          "startTime": 16.5,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 35,
+          "startTime": 22.0,
+          "duration": 7.0
+        },
+        {
+          "note": 65,
+          "velocity": 33,
+          "startTime": 27.5,
+          "duration": 6.0
+        },
+        {
+          "note": 63,
+          "velocity": 32,
+          "startTime": 32.0,
+          "duration": 7.5
+        },
+        {
+          "note": 62,
+          "velocity": 30,
+          "startTime": 36.0,
+          "duration": 9.0
+        },
+        {
+          "note": 60,
+          "velocity": 28,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 39,
+          "startTime": 3.0,
+          "duration": 5.0
+        },
+        {
+          "note": 66,
+          "velocity": 35,
+          "startTime": 8.5,
+          "duration": 5.5
+        },
+        {
+          "note": 63,
+          "velocity": 34,
+          "startTime": 14.0,
+          "duration": 6.0
+        },
+        {
+          "note": 70,
+          "velocity": 36,
+          "startTime": 19.0,
+          "duration": 5.5
+        },
+        {
+          "note": 65,
+          "velocity": 31,
+          "startTime": 29.5,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 27,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 61,
+          "velocity": 29,
+          "startTime": 38.5,
+          "duration": 6.5
+        }
+      ]
+    },
+    {
+      "name": "Lofi Electric Bass - Root Foundation",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "Warm low-frequency foundation in C2-C3 range (MIDI 36-48). Plays chord roots with extremely long sustained tones. Changes only every 16-32 seconds to maintain near-static harmony. No spectral overlap with pad or melody.",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 41,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 16.0
+        },
+        {
+          "note": 43,
+          "velocity": 38,
+          "startTime": 2.0,
+          "duration": 14.0
+        },
+        {
+          "note": 39,
+          "velocity": 37,
+          "startTime": 16.0,
+          "duration": 16.0
+        },
+        {
+          "note": 41,
+          "velocity": 35,
+          "startTime": 18.0,
+          "duration": 14.0
+        },
+        {
+          "note": 39,
+          "velocity": 33,
+          "startTime": 32.0,
+          "duration": 13.0
+        },
+        {
+          "note": 38,
+          "velocity": 30,
+          "startTime": 34.0,
+          "duration": 11.0
+        },
+        {
+          "note": 36,
+          "velocity": 28,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 39,
+          "startTime": 5.0,
+          "duration": 10.0
+        },
+        {
+          "note": 41,
+          "velocity": 36,
+          "startTime": 10.0,
+          "duration": 6.0
+        },
+        {
+          "note": 39,
+          "velocity": 34,
+          "startTime": 20.5,
+          "duration": 10.0
+        },
+        {
+          "note": 41,
+          "velocity": 32,
+          "startTime": 25.0,
+          "duration": 7.0
+        },
+        {
+          "note": 38,
+          "velocity": 31,
+          "startTime": 29.0,
+          "duration": 6.0
+        },
+        {
+          "note": 39,
+          "velocity": 29,
+          "startTime": 36.0,
+          "duration": 8.0
+        },
+        {
+          "note": 36,
+          "velocity": 27,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 41,
+          "velocity": 38,
+          "startTime": 7.5,
+          "duration": 8.0
+        },
+        {
+          "note": 38,
+          "velocity": 30,
+          "startTime": 38.0,
+          "duration": 7.0
+        }
+      ]
+    },
+    {
+      "name": "Lofi Warm Pad - Jazz 7th Voicings",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in C3-C5 range (MIDI 48-67). Slow-breathing jazz 7th chord voicings (Fm7, Bb7, Ebmaj7 in dorian context). Chords change every 16-32 seconds. Sits between bass and melody spectrally. Maximum 2-3 chord tones sounding at once.",
+      "suggestedVolume": 0.25,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 53,
+          "velocity": 38,
+          "startTime": 1.0,
+          "duration": 15.0
+        },
+        {
+          "note": 56,
+          "velocity": 36,
+          "startTime": 1.5,
+          "duration": 14.5
+        },
+        {
+          "note": 60,
+          "velocity": 35,
+          "startTime": 2.0,
+          "duration": 14.0
+        },
+        {
+          "note": 51,
+          "velocity": 34,
+          "startTime": 6.0,
+          "duration": 10.0
+        },
+        {
+          "note": 58,
+          "velocity": 33,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 55,
+          "velocity": 35,
+          "startTime": 16.5,
+          "duration": 15.0
+        },
+        {
+          "note": 58,
+          "velocity": 33,
+          "startTime": 17.0,
+          "duration": 14.5
+        },
+        {
+          "note": 62,
+          "velocity": 32,
+          "startTime": 17.5,
+          "duration": 14.0
+        },
+        {
+          "note": 53,
+          "velocity": 31,
+          "startTime": 22.0,
+          "duration": 10.0
+        },
+        {
+          "note": 60,
+          "velocity": 30,
+          "startTime": 24.0,
+          "duration": 8.0
+        },
+        {
+          "note": 51,
+          "velocity": 30,
+          "startTime": 32.5,
+          "duration": 12.5
+        },
+        {
+          "note": 55,
+          "velocity": 28,
+          "startTime": 33.0,
+          "duration": 12.0
+        },
+        {
+          "note": 58,
+          "velocity": 27,
+          "startTime": 33.5,
+          "duration": 11.5
+        },
+        {
+          "note": 53,
+          "velocity": 26,
+          "startTime": 38.0,
+          "duration": 7.0
+        },
+        {
+          "note": 51,
+          "velocity": 25,
+          "startTime": 41.0,
+          "duration": 4.0
+        },
+        {
+          "note": 55,
+          "velocity": 26,
+          "startTime": 42.0,
+          "duration": 3.0
+        }
+      ]
+    }
+  ],
+  "key": "Eb",
+  "bpm": 48,
+  "scale": "dorian"
+}

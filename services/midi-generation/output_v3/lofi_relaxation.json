@@ -1,0 +1,340 @@
+{
+  "genre": "lofi",
+  "mode": "relaxation",
+  "mixStrategy": "Three-layer spectral separation: Bass (MIDI 36-48) provides warm foundation with slow root movements; Chords/Pad (MIDI 48-67) fills the harmonic middle with soft jazz 7th voicings, voiced openly to avoid muddiness; Melody/EP (MIDI 60-77) floats above with gentle arch-shaped phrases. All layers breathe together with staggered entries to keep max polyphony at 4-5 notes. Energy arc: 0.3\u21920.5\u21920.6\u21920.5\u21920.4\u21920.3. Chord changes every ~8-10 seconds. Lofi warmth in timbre only \u2014 dynamics and density strictly serve relaxation.",
+  "tracks": [
+    {
+      "name": "Lofi Electric Piano Melody",
+      "program": 4,
+      "role": "melody",
+      "frequencyRole": "Lead voice: MIDI 60-77 (C4-F5). Gentle arch-shaped phrases with stepwise motion, landing on chord tones on strong beats. Sparse and breathing.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 65,
+          "velocity": 40,
+          "startTime": 1.0,
+          "duration": 3.5
+        },
+        {
+          "note": 68,
+          "velocity": 42,
+          "startTime": 5.0,
+          "duration": 3.0
+        },
+        {
+          "note": 70,
+          "velocity": 44,
+          "startTime": 8.5,
+          "duration": 2.5
+        },
+        {
+          "note": 68,
+          "velocity": 42,
+          "startTime": 11.5,
+          "duration": 3.0
+        },
+        {
+          "note": 65,
+          "velocity": 45,
+          "startTime": 15.0,
+          "duration": 3.5
+        },
+        {
+          "note": 67,
+          "velocity": 48,
+          "startTime": 19.0,
+          "duration": 3.0
+        },
+        {
+          "note": 70,
+          "velocity": 50,
+          "startTime": 22.5,
+          "duration": 2.5
+        },
+        {
+          "note": 72,
+          "velocity": 52,
+          "startTime": 25.5,
+          "duration": 3.0
+        },
+        {
+          "note": 70,
+          "velocity": 50,
+          "startTime": 29.0,
+          "duration": 3.5
+        },
+        {
+          "note": 68,
+          "velocity": 48,
+          "startTime": 33.0,
+          "duration": 3.0
+        },
+        {
+          "note": 65,
+          "velocity": 45,
+          "startTime": 36.5,
+          "duration": 3.5
+        },
+        {
+          "note": 63,
+          "velocity": 42,
+          "startTime": 40.0,
+          "duration": 2.5
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 42.5,
+          "duration": 2.5
+        },
+        {
+          "note": 65,
+          "velocity": 38,
+          "startTime": 43.0,
+          "duration": 2.0
+        },
+        {
+          "note": 63,
+          "velocity": 36,
+          "startTime": 44.0,
+          "duration": 1.0
+        },
+        {
+          "note": 60,
+          "velocity": 35,
+          "startTime": 44.5,
+          "duration": 0.5
+        }
+      ]
+    },
+    {
+      "name": "Lofi Electric Bass",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "Foundation: MIDI 36-48 (C2-C3). Plays chord roots with long sustained tones, occasional gentle octave movement. Warm and grounding.",
+      "suggestedVolume": 0.5,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 0,
+          "duration": 4.5
+        },
+        {
+          "note": 43,
+          "velocity": 40,
+          "startTime": 4.5,
+          "duration": 4.0
+        },
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 8.5,
+          "duration": 4.0
+        },
+        {
+          "note": 36,
+          "velocity": 40,
+          "startTime": 10.0,
+          "duration": 6.0
+        },
+        {
+          "note": 41,
+          "velocity": 44,
+          "startTime": 16.0,
+          "duration": 4.5
+        },
+        {
+          "note": 43,
+          "velocity": 46,
+          "startTime": 20.5,
+          "duration": 4.0
+        },
+        {
+          "note": 48,
+          "velocity": 48,
+          "startTime": 24.5,
+          "duration": 4.5
+        },
+        {
+          "note": 46,
+          "velocity": 46,
+          "startTime": 29.0,
+          "duration": 4.0
+        },
+        {
+          "note": 43,
+          "velocity": 44,
+          "startTime": 33.0,
+          "duration": 4.0
+        },
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 37.0,
+          "duration": 4.0
+        },
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 41.0,
+          "duration": 4.0
+        },
+        {
+          "note": 36,
+          "velocity": 38,
+          "startTime": 43.0,
+          "duration": 2.0
+        },
+        {
+          "note": 41,
+          "velocity": 40,
+          "startTime": 2.0,
+          "duration": 3.0
+        },
+        {
+          "note": 43,
+          "velocity": 42,
+          "startTime": 13.0,
+          "duration": 3.0
+        },
+        {
+          "note": 41,
+          "velocity": 38,
+          "startTime": 38.0,
+          "duration": 3.0
+        },
+        {
+          "note": 36,
+          "velocity": 36,
+          "startTime": 44.0,
+          "duration": 1.0
+        }
+      ]
+    },
+    {
+      "name": "Lofi Warm Pad Chords",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "Harmonic body: MIDI 48-67 (C3-G4). Open jazz 7th voicings (Gm7, C7, Fmaj7, Dm7) with slow attacks. 2-3 notes per voicing to stay under polyphony limit.",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 58,
+          "velocity": 36,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 37,
+          "startTime": 0.5,
+          "duration": 7.5
+        },
+        {
+          "note": 55,
+          "velocity": 40,
+          "startTime": 8.5,
+          "duration": 7.5
+        },
+        {
+          "note": 60,
+          "velocity": 38,
+          "startTime": 8.5,
+          "duration": 7.5
+        },
+        {
+          "note": 64,
+          "velocity": 39,
+          "startTime": 9.0,
+          "duration": 7.0
+        },
+        {
+          "note": 53,
+          "velocity": 44,
+          "startTime": 16.5,
+          "duration": 7.5
+        },
+        {
+          "note": 57,
+          "velocity": 42,
+          "startTime": 16.5,
+          "duration": 7.5
+        },
+        {
+          "note": 60,
+          "velocity": 43,
+          "startTime": 17.0,
+          "duration": 7.0
+        },
+        {
+          "note": 55,
+          "velocity": 48,
+          "startTime": 24.5,
+          "duration": 8.0
+        },
+        {
+          "note": 58,
+          "velocity": 46,
+          "startTime": 24.5,
+          "duration": 8.0
+        },
+        {
+          "note": 63,
+          "velocity": 47,
+          "startTime": 25.0,
+          "duration": 7.5
+        },
+        {
+          "note": 53,
+          "velocity": 44,
+          "startTime": 33.0,
+          "duration": 7.0
+        },
+        {
+          "note": 57,
+          "velocity": 42,
+          "startTime": 33.0,
+          "duration": 7.0
+        },
+        {
+          "note": 60,
+          "velocity": 43,
+          "startTime": 33.5,
+          "duration": 6.5
+        },
+        {
+          "note": 50,
+          "velocity": 40,
+          "startTime": 40.5,
+          "duration": 4.5
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 40.5,
+          "duration": 4.5
+        },
+        {
+          "note": 58,
+          "velocity": 39,
+          "startTime": 41.0,
+          "duration": 4.0
+        }
+      ]
+    }
+  ],
+  "key": "F",
+  "bpm": 62,
+  "scale": "dorian"
+}

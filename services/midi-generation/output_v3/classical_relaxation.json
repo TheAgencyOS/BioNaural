@@ -1,0 +1,334 @@
+{
+  "genre": "classical",
+  "mode": "relaxation",
+  "mixStrategy": "Three-layer frequency separation: Cello bass (C2-C3) provides warm foundation with sustained root notes, String Ensemble chords (C3-C5) fill the harmonic body with soft, slowly evolving pads using proper voice leading, and Acoustic Piano melody (C4-C6) floats gently on top with arch-shaped phrases. All layers breathe together with chord changes every 8-16 seconds. Bass and chords sustain underneath while piano melody uses space and silence. Energy arc follows 0.3\u21920.5\u21920.6\u21920.5\u21920.4\u21920.3 over the 45-second duration. No rhythmic driving\u2014everything sways gently like floating on calm water.",
+  "tracks": [
+    {
+      "name": "Acoustic Piano - Gentle Melody",
+      "program": 0,
+      "role": "melody",
+      "frequencyRole": "Lead voice in MIDI 60-84 (C4-C6). Gentle arch-shaped phrases that rise and fall. Sparse, breathing, with lots of space. Hits chord tones on strong beats.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 3.5
+        },
+        {
+          "note": 71,
+          "velocity": 40,
+          "startTime": 3.5,
+          "duration": 3.0
+        },
+        {
+          "note": 74,
+          "velocity": 42,
+          "startTime": 6.5,
+          "duration": 2.5
+        },
+        {
+          "note": 72,
+          "velocity": 40,
+          "startTime": 9.0,
+          "duration": 3.0
+        },
+        {
+          "note": 69,
+          "velocity": 44,
+          "startTime": 12.0,
+          "duration": 3.5
+        },
+        {
+          "note": 71,
+          "velocity": 47,
+          "startTime": 15.5,
+          "duration": 3.0
+        },
+        {
+          "note": 74,
+          "velocity": 50,
+          "startTime": 18.5,
+          "duration": 2.5
+        },
+        {
+          "note": 76,
+          "velocity": 52,
+          "startTime": 21.0,
+          "duration": 3.0
+        },
+        {
+          "note": 74,
+          "velocity": 50,
+          "startTime": 24.0,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 48,
+          "startTime": 27.5,
+          "duration": 3.0
+        },
+        {
+          "note": 74,
+          "velocity": 46,
+          "startTime": 30.5,
+          "duration": 3.0
+        },
+        {
+          "note": 71,
+          "velocity": 44,
+          "startTime": 33.5,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 42,
+          "startTime": 37.0,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 40,
+          "startTime": 40.0,
+          "duration": 2.5
+        },
+        {
+          "note": 66,
+          "velocity": 38,
+          "startTime": 42.5,
+          "duration": 2.5
+        }
+      ]
+    },
+    {
+      "name": "Cello - Warm Bass Foundation",
+      "program": 42,
+      "role": "bass",
+      "frequencyRole": "Foundation in MIDI 31-48 (G1-C3). Sustained root notes of each chord. Slow, warm, grounding. Changes with chord progression every 8-16 seconds.",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 43,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 38,
+          "startTime": 5.0,
+          "duration": 4.0
+        },
+        {
+          "note": 36,
+          "velocity": 42,
+          "startTime": 9.0,
+          "duration": 4.5
+        },
+        {
+          "note": 36,
+          "velocity": 40,
+          "startTime": 13.5,
+          "duration": 4.5
+        },
+        {
+          "note": 38,
+          "velocity": 44,
+          "startTime": 18.0,
+          "duration": 4.0
+        },
+        {
+          "note": 38,
+          "velocity": 46,
+          "startTime": 22.0,
+          "duration": 4.0
+        },
+        {
+          "note": 43,
+          "velocity": 48,
+          "startTime": 26.0,
+          "duration": 4.5
+        },
+        {
+          "note": 43,
+          "velocity": 46,
+          "startTime": 30.5,
+          "duration": 4.5
+        },
+        {
+          "note": 36,
+          "velocity": 44,
+          "startTime": 35.0,
+          "duration": 4.0
+        },
+        {
+          "note": 36,
+          "velocity": 42,
+          "startTime": 39.0,
+          "duration": 3.0
+        },
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 43,
+          "velocity": 38,
+          "startTime": 45.0,
+          "duration": 0.05
+        },
+        {
+          "note": 43,
+          "velocity": 42,
+          "startTime": 2.5,
+          "duration": 2.5
+        },
+        {
+          "note": 36,
+          "velocity": 41,
+          "startTime": 11.0,
+          "duration": 2.5
+        },
+        {
+          "note": 38,
+          "velocity": 45,
+          "startTime": 20.0,
+          "duration": 2.0
+        },
+        {
+          "note": 43,
+          "velocity": 44,
+          "startTime": 28.0,
+          "duration": 2.5
+        }
+      ]
+    },
+    {
+      "name": "String Ensemble - Harmonic Pads",
+      "program": 49,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in MIDI 48-72 (C3-C5). Soft sustained chords with proper classical voice leading. I-IV-V-I progression in G major. 3-4 notes per chord, gently evolving.",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 59,
+          "velocity": 36,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 37,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 9.0,
+          "duration": 8.0
+        },
+        {
+          "note": 64,
+          "velocity": 38,
+          "startTime": 9.0,
+          "duration": 8.0
+        },
+        {
+          "note": 67,
+          "velocity": 39,
+          "startTime": 9.0,
+          "duration": 8.0
+        },
+        {
+          "note": 59,
+          "velocity": 46,
+          "startTime": 18.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 44,
+          "startTime": 18.0,
+          "duration": 8.0
+        },
+        {
+          "note": 66,
+          "velocity": 45,
+          "startTime": 18.0,
+          "duration": 8.0
+        },
+        {
+          "note": 55,
+          "velocity": 48,
+          "startTime": 26.0,
+          "duration": 8.0
+        },
+        {
+          "note": 59,
+          "velocity": 46,
+          "startTime": 26.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 47,
+          "startTime": 26.0,
+          "duration": 8.0
+        },
+        {
+          "note": 60,
+          "velocity": 42,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 64,
+          "velocity": 40,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 41,
+          "startTime": 35.0,
+          "duration": 5.0
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 59,
+          "velocity": 36,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 37,
+          "startTime": 40.0,
+          "duration": 5.0
+        }
+      ]
+    }
+  ],
+  "key": "G",
+  "bpm": 62,
+  "scale": "Major"
+}

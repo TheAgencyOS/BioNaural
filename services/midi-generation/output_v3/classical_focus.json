@@ -1,0 +1,638 @@
+{
+  "genre": "classical",
+  "mode": "focus",
+  "mixStrategy": "Frequency-separated layering: Cello bass anchors the low end (MIDI 38-50), String Ensemble chords fill the mid range (MIDI 54-66), Piano melody floats above (MIDI 62-74), and subtle side-stick/hi-hat drums provide a barely-perceptible pulse. All tracks lock to the same I\u2192IV\u2192V\u2192I progression in D major, changing chords every 5.6 seconds (7 beats at 75 BPM). Energy remains flat at 0.6-0.65 throughout \u2014 no builds, no drops. Repetitive 4-bar motifs repeat with minimal variation to encourage habituation. Dynamics are gentle and narrow-range to avoid attention capture.",
+  "tracks": [
+    {
+      "name": "Piano Melody",
+      "program": 0,
+      "role": "melody",
+      "frequencyRole": "Lead voice in MIDI 62-74 (D4-D5 range). Pentatonic-based melody using D major pentatonic (D E F# A B). Hits chord tones on strong beats. Gentle, predictable, wallpaper-like phrases that repeat with minimal variation.",
+      "suggestedVolume": 0.65,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 66,
+          "velocity": 55,
+          "startTime": 0,
+          "duration": 2.0
+        },
+        {
+          "note": 69,
+          "velocity": 50,
+          "startTime": 2.0,
+          "duration": 1.5
+        },
+        {
+          "note": 66,
+          "velocity": 52,
+          "startTime": 3.5,
+          "duration": 2.0
+        },
+        {
+          "note": 64,
+          "velocity": 48,
+          "startTime": 5.6,
+          "duration": 2.4
+        },
+        {
+          "note": 66,
+          "velocity": 50,
+          "startTime": 8.0,
+          "duration": 1.6
+        },
+        {
+          "note": 69,
+          "velocity": 55,
+          "startTime": 9.6,
+          "duration": 1.6
+        },
+        {
+          "note": 71,
+          "velocity": 52,
+          "startTime": 11.2,
+          "duration": 2.0
+        },
+        {
+          "note": 69,
+          "velocity": 50,
+          "startTime": 13.2,
+          "duration": 2.4
+        },
+        {
+          "note": 66,
+          "velocity": 55,
+          "startTime": 16.0,
+          "duration": 2.0
+        },
+        {
+          "note": 69,
+          "velocity": 50,
+          "startTime": 18.0,
+          "duration": 1.5
+        },
+        {
+          "note": 66,
+          "velocity": 52,
+          "startTime": 19.5,
+          "duration": 2.1
+        },
+        {
+          "note": 64,
+          "velocity": 48,
+          "startTime": 22.4,
+          "duration": 2.4
+        },
+        {
+          "note": 66,
+          "velocity": 50,
+          "startTime": 24.8,
+          "duration": 1.6
+        },
+        {
+          "note": 69,
+          "velocity": 55,
+          "startTime": 26.4,
+          "duration": 1.6
+        },
+        {
+          "note": 71,
+          "velocity": 52,
+          "startTime": 28.0,
+          "duration": 2.0
+        },
+        {
+          "note": 69,
+          "velocity": 50,
+          "startTime": 30.0,
+          "duration": 2.4
+        },
+        {
+          "note": 66,
+          "velocity": 55,
+          "startTime": 33.6,
+          "duration": 2.0
+        },
+        {
+          "note": 69,
+          "velocity": 50,
+          "startTime": 35.6,
+          "duration": 1.5
+        },
+        {
+          "note": 66,
+          "velocity": 52,
+          "startTime": 37.1,
+          "duration": 2.1
+        },
+        {
+          "note": 64,
+          "velocity": 48,
+          "startTime": 39.2,
+          "duration": 2.4
+        },
+        {
+          "note": 66,
+          "velocity": 50,
+          "startTime": 41.6,
+          "duration": 1.6
+        },
+        {
+          "note": 69,
+          "velocity": 55,
+          "startTime": 43.2,
+          "duration": 1.8
+        }
+      ]
+    },
+    {
+      "name": "Cello Bass",
+      "program": 42,
+      "role": "bass",
+      "frequencyRole": "Foundation in MIDI 38-50 (D2-D3). Plays chord roots with long sustained tones. Anchors the harmonic progression: D\u2192G\u2192A\u2192D. Steady, warm, predictable root movement.",
+      "suggestedVolume": 0.6,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 38,
+          "velocity": 55,
+          "startTime": 0,
+          "duration": 4.0
+        },
+        {
+          "note": 38,
+          "velocity": 52,
+          "startTime": 4.0,
+          "duration": 1.6
+        },
+        {
+          "note": 43,
+          "velocity": 55,
+          "startTime": 5.6,
+          "duration": 4.0
+        },
+        {
+          "note": 43,
+          "velocity": 52,
+          "startTime": 9.6,
+          "duration": 1.6
+        },
+        {
+          "note": 45,
+          "velocity": 55,
+          "startTime": 11.2,
+          "duration": 4.0
+        },
+        {
+          "note": 45,
+          "velocity": 52,
+          "startTime": 15.2,
+          "duration": 0.8
+        },
+        {
+          "note": 38,
+          "velocity": 55,
+          "startTime": 16.0,
+          "duration": 4.0
+        },
+        {
+          "note": 38,
+          "velocity": 52,
+          "startTime": 20.0,
+          "duration": 2.4
+        },
+        {
+          "note": 43,
+          "velocity": 55,
+          "startTime": 22.4,
+          "duration": 4.0
+        },
+        {
+          "note": 43,
+          "velocity": 52,
+          "startTime": 26.4,
+          "duration": 1.6
+        },
+        {
+          "note": 45,
+          "velocity": 55,
+          "startTime": 28.0,
+          "duration": 4.0
+        },
+        {
+          "note": 45,
+          "velocity": 52,
+          "startTime": 32.0,
+          "duration": 1.6
+        },
+        {
+          "note": 38,
+          "velocity": 55,
+          "startTime": 33.6,
+          "duration": 4.0
+        },
+        {
+          "note": 38,
+          "velocity": 52,
+          "startTime": 37.6,
+          "duration": 1.6
+        },
+        {
+          "note": 43,
+          "velocity": 55,
+          "startTime": 39.2,
+          "duration": 2.4
+        },
+        {
+          "note": 45,
+          "velocity": 55,
+          "startTime": 41.6,
+          "duration": 1.6
+        },
+        {
+          "note": 38,
+          "velocity": 55,
+          "startTime": 43.2,
+          "duration": 1.8
+        }
+      ]
+    },
+    {
+      "name": "String Ensemble Chords",
+      "program": 49,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in MIDI 54-66 (F#3-F#4). Sustained triads with proper voice leading. D major (D F# A), G major (G B D), A major (A C# E). Changes every ~5.6 seconds. Warm pad-like sustained voicings.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 54,
+          "velocity": 45,
+          "startTime": 0,
+          "duration": 5.6
+        },
+        {
+          "note": 57,
+          "velocity": 45,
+          "startTime": 0,
+          "duration": 5.6
+        },
+        {
+          "note": 62,
+          "velocity": 45,
+          "startTime": 0,
+          "duration": 5.6
+        },
+        {
+          "note": 55,
+          "velocity": 45,
+          "startTime": 5.6,
+          "duration": 5.6
+        },
+        {
+          "note": 59,
+          "velocity": 45,
+          "startTime": 5.6,
+          "duration": 5.6
+        },
+        {
+          "note": 62,
+          "velocity": 45,
+          "startTime": 5.6,
+          "duration": 5.6
+        },
+        {
+          "note": 57,
+          "velocity": 45,
+          "startTime": 11.2,
+          "duration": 4.8
+        },
+        {
+          "note": 61,
+          "velocity": 45,
+          "startTime": 11.2,
+          "duration": 4.8
+        },
+        {
+          "note": 64,
+          "velocity": 45,
+          "startTime": 11.2,
+          "duration": 4.8
+        },
+        {
+          "note": 54,
+          "velocity": 45,
+          "startTime": 16.0,
+          "duration": 5.6
+        },
+        {
+          "note": 57,
+          "velocity": 45,
+          "startTime": 16.0,
+          "duration": 5.6
+        },
+        {
+          "note": 62,
+          "velocity": 45,
+          "startTime": 16.0,
+          "duration": 5.6
+        },
+        {
+          "note": 55,
+          "velocity": 45,
+          "startTime": 22.4,
+          "duration": 5.6
+        },
+        {
+          "note": 59,
+          "velocity": 45,
+          "startTime": 22.4,
+          "duration": 5.6
+        },
+        {
+          "note": 62,
+          "velocity": 45,
+          "startTime": 22.4,
+          "duration": 5.6
+        },
+        {
+          "note": 57,
+          "velocity": 45,
+          "startTime": 28.0,
+          "duration": 5.6
+        },
+        {
+          "note": 61,
+          "velocity": 45,
+          "startTime": 28.0,
+          "duration": 5.6
+        },
+        {
+          "note": 64,
+          "velocity": 45,
+          "startTime": 28.0,
+          "duration": 5.6
+        },
+        {
+          "note": 54,
+          "velocity": 45,
+          "startTime": 33.6,
+          "duration": 5.6
+        },
+        {
+          "note": 57,
+          "velocity": 45,
+          "startTime": 33.6,
+          "duration": 5.6
+        },
+        {
+          "note": 62,
+          "velocity": 45,
+          "startTime": 33.6,
+          "duration": 5.6
+        },
+        {
+          "note": 55,
+          "velocity": 45,
+          "startTime": 39.2,
+          "duration": 2.4
+        },
+        {
+          "note": 59,
+          "velocity": 45,
+          "startTime": 39.2,
+          "duration": 2.4
+        },
+        {
+          "note": 62,
+          "velocity": 45,
+          "startTime": 39.2,
+          "duration": 2.4
+        },
+        {
+          "note": 57,
+          "velocity": 45,
+          "startTime": 41.6,
+          "duration": 1.6
+        },
+        {
+          "note": 61,
+          "velocity": 45,
+          "startTime": 41.6,
+          "duration": 1.6
+        },
+        {
+          "note": 64,
+          "velocity": 45,
+          "startTime": 41.6,
+          "duration": 1.6
+        },
+        {
+          "note": 54,
+          "velocity": 45,
+          "startTime": 43.2,
+          "duration": 1.8
+        },
+        {
+          "note": 57,
+          "velocity": 45,
+          "startTime": 43.2,
+          "duration": 1.8
+        },
+        {
+          "note": 62,
+          "velocity": 45,
+          "startTime": 43.2,
+          "duration": 1.8
+        }
+      ]
+    },
+    {
+      "name": "Subtle Percussion",
+      "program": 0,
+      "role": "drums",
+      "frequencyRole": "Barely perceptible pulse using side stick (rim shot 37) and soft closed hi-hat (42). Provides gentle temporal scaffolding without demanding attention. Steady quarter-note or half-note pulse.",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 0,
+          "duration": 0.4
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 1.6,
+          "duration": 0.4
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 3.2,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 4.8,
+          "duration": 0.4
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 6.4,
+          "duration": 0.4
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 8.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 9.6,
+          "duration": 0.4
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 11.2,
+          "duration": 0.4
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 12.8,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 14.4,
+          "duration": 0.4
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 16.0,
+          "duration": 0.4
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 17.6,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 19.2,
+          "duration": 0.4
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 20.8,
+          "duration": 0.4
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 22.4,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 24.0,
+          "duration": 0.4
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 25.6,
+          "duration": 0.4
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 27.2,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 28.8,
+          "duration": 0.4
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 30.4,
+          "duration": 0.4
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 32.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 33.6,
+          "duration": 0.4
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 35.2,
+          "duration": 0.4
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 36.8,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 38.4,
+          "duration": 0.4
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 40.0,
+          "duration": 0.4
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 41.6,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 43.2,
+          "duration": 0.4
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 44.8,
+          "duration": 0.2
+        }
+      ]
+    }
+  ],
+  "key": "D",
+  "bpm": 75,
+  "scale": "major"
+}

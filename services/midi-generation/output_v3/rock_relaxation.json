@@ -1,0 +1,310 @@
+{
+  "genre": "rock",
+  "mode": "relaxation",
+  "mixStrategy": "Three-layer spectral separation: Bass (MIDI 36-48) provides a warm, slow-moving foundation with whole-note root tones; Chords/Pad (MIDI 48-67) fills the harmonic body with sustained open 5th voicings changing every 8-16 seconds; Melody/Clean Guitar (MIDI 64-79) floats above with gentle arch-shaped phrases. All tracks follow the same chord progression (Am \u2192 F \u2192 G \u2192 F \u2192 Am \u2192 G \u2192 F \u2192 Am) changing together. Dynamics follow a 0.3\u21920.5\u21920.6\u21920.5\u21920.4\u21920.3 energy arc across 45 seconds. Note density kept to 2-4 new notes per 4 seconds max, never more than 4-5 notes sounding simultaneously. Rock flavor expressed only through minor pentatonic melody choices and simple root+5th chord voicings \u2014 never through driving rhythm or high energy.",
+  "tracks": [
+    {
+      "name": "Clean Guitar Melody",
+      "program": 25,
+      "role": "melody",
+      "frequencyRole": "Lead voice in MIDI 64-79 (E4-G5). Gentle arch-shaped phrases using A minor pentatonic (A, C, D, E, G). Sits clearly above pad chords, no spectral masking with bass.",
+      "suggestedVolume": 0.6,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 69,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 42,
+          "startTime": 3.5,
+          "duration": 3.0
+        },
+        {
+          "note": 76,
+          "velocity": 45,
+          "startTime": 6.5,
+          "duration": 4.0
+        },
+        {
+          "note": 72,
+          "velocity": 40,
+          "startTime": 10.0,
+          "duration": 3.0
+        },
+        {
+          "note": 69,
+          "velocity": 43,
+          "startTime": 13.0,
+          "duration": 3.5
+        },
+        {
+          "note": 65,
+          "velocity": 48,
+          "startTime": 16.5,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 52,
+          "startTime": 19.5,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 55,
+          "startTime": 22.5,
+          "duration": 4.0
+        },
+        {
+          "note": 76,
+          "velocity": 58,
+          "startTime": 26.0,
+          "duration": 3.5
+        },
+        {
+          "note": 74,
+          "velocity": 55,
+          "startTime": 29.5,
+          "duration": 3.0
+        },
+        {
+          "note": 72,
+          "velocity": 50,
+          "startTime": 32.0,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 47,
+          "startTime": 35.0,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 43,
+          "startTime": 38.0,
+          "duration": 3.0
+        },
+        {
+          "note": 65,
+          "velocity": 40,
+          "startTime": 41.0,
+          "duration": 2.5
+        },
+        {
+          "note": 69,
+          "velocity": 36,
+          "startTime": 43.0,
+          "duration": 2.0
+        }
+      ]
+    },
+    {
+      "name": "Electric Bass Foundation",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "Foundation in MIDI 36-48 (C2-C3). Plays chord roots as slow sustained tones. Warm low-end presence without muddiness, well below pad and melody ranges.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 45,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 45,
+          "velocity": 38,
+          "startTime": 5.0,
+          "duration": 3.5
+        },
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 8.5,
+          "duration": 4.0
+        },
+        {
+          "note": 41,
+          "velocity": 40,
+          "startTime": 12.5,
+          "duration": 3.5
+        },
+        {
+          "note": 43,
+          "velocity": 45,
+          "startTime": 16.0,
+          "duration": 4.0
+        },
+        {
+          "note": 43,
+          "velocity": 47,
+          "startTime": 20.0,
+          "duration": 4.0
+        },
+        {
+          "note": 41,
+          "velocity": 50,
+          "startTime": 24.0,
+          "duration": 4.5
+        },
+        {
+          "note": 41,
+          "velocity": 48,
+          "startTime": 28.5,
+          "duration": 3.5
+        },
+        {
+          "note": 45,
+          "velocity": 45,
+          "startTime": 32.0,
+          "duration": 4.0
+        },
+        {
+          "note": 45,
+          "velocity": 43,
+          "startTime": 36.0,
+          "duration": 3.0
+        },
+        {
+          "note": 43,
+          "velocity": 42,
+          "startTime": 39.0,
+          "duration": 3.0
+        },
+        {
+          "note": 41,
+          "velocity": 40,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 40,
+          "velocity": 38,
+          "startTime": 38.0,
+          "duration": 2.5
+        },
+        {
+          "note": 45,
+          "velocity": 36,
+          "startTime": 43.5,
+          "duration": 2.0
+        },
+        {
+          "note": 45,
+          "velocity": 35,
+          "startTime": 44.0,
+          "duration": 2.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Chords",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in MIDI 48-67 (C3-G4). Sustained open root+5th voicings with gentle attack. Sits between bass and melody, providing warm harmonic bed without crowding either layer.",
+      "suggestedVolume": 0.5,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 57,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 64,
+          "velocity": 36,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 53,
+          "velocity": 40,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 60,
+          "velocity": 38,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 55,
+          "velocity": 45,
+          "startTime": 16.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 43,
+          "startTime": 16.0,
+          "duration": 8.0
+        },
+        {
+          "note": 53,
+          "velocity": 50,
+          "startTime": 24.0,
+          "duration": 8.0
+        },
+        {
+          "note": 60,
+          "velocity": 48,
+          "startTime": 24.0,
+          "duration": 8.0
+        },
+        {
+          "note": 57,
+          "velocity": 45,
+          "startTime": 32.0,
+          "duration": 6.0
+        },
+        {
+          "note": 64,
+          "velocity": 43,
+          "startTime": 32.0,
+          "duration": 6.0
+        },
+        {
+          "note": 55,
+          "velocity": 42,
+          "startTime": 38.0,
+          "duration": 4.0
+        },
+        {
+          "note": 62,
+          "velocity": 40,
+          "startTime": 38.0,
+          "duration": 4.0
+        },
+        {
+          "note": 53,
+          "velocity": 38,
+          "startTime": 42.0,
+          "duration": 3.5
+        },
+        {
+          "note": 60,
+          "velocity": 36,
+          "startTime": 42.0,
+          "duration": 3.5
+        },
+        {
+          "note": 57,
+          "velocity": 35,
+          "startTime": 44.0,
+          "duration": 2.0
+        }
+      ]
+    }
+  ],
+  "key": "Am",
+  "bpm": 62,
+  "scale": "natural minor"
+}

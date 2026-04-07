@@ -1,0 +1,806 @@
+{
+  "genre": "lofi",
+  "mode": "focus",
+  "mixStrategy": "Frequency-separated layering: Bass anchors the low end (C2-C3) with steady root notes on beats 1 and 3, Warm Pad fills the mid-range (C3-C5) with soft sustained jazz 7th voicings changing every 4-8 seconds, Electric Piano melody floats above (C4-C6) with gentle pentatonic phrases at moderate velocity, and subtle drums (side stick + soft closed hi-hat) provide a steady predictable pulse at low velocity. All tracks lock to the same ii7\u2192V7\u2192Imaj7 chord progression in C. Energy remains flat at 0.6-0.7 throughout \u2014 no builds, no drops, just warm consistent background texture the brain can habituate to.",
+  "tracks": [
+    {
+      "name": "Lofi Electric Piano Melody",
+      "program": 4,
+      "role": "melody",
+      "frequencyRole": "Lead voice: MIDI 60-76 (C4-E5). Gentle pentatonic phrases using chord tones on downbeats. Soft, unhurried, repetitive motifs with minimal variation.",
+      "suggestedVolume": 0.65,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 67,
+          "velocity": 55,
+          "startTime": 0,
+          "duration": 2.0
+        },
+        {
+          "note": 64,
+          "velocity": 50,
+          "startTime": 2.0,
+          "duration": 1.5
+        },
+        {
+          "note": 62,
+          "velocity": 52,
+          "startTime": 3.5,
+          "duration": 2.5
+        },
+        {
+          "note": 60,
+          "velocity": 48,
+          "startTime": 6.0,
+          "duration": 2.0
+        },
+        {
+          "note": 64,
+          "velocity": 50,
+          "startTime": 8.0,
+          "duration": 1.5
+        },
+        {
+          "note": 67,
+          "velocity": 55,
+          "startTime": 9.6,
+          "duration": 2.4
+        },
+        {
+          "note": 65,
+          "velocity": 52,
+          "startTime": 12.0,
+          "duration": 2.0
+        },
+        {
+          "note": 62,
+          "velocity": 50,
+          "startTime": 14.0,
+          "duration": 1.5
+        },
+        {
+          "note": 60,
+          "velocity": 48,
+          "startTime": 16.0,
+          "duration": 2.8
+        },
+        {
+          "note": 67,
+          "velocity": 55,
+          "startTime": 19.2,
+          "duration": 2.0
+        },
+        {
+          "note": 64,
+          "velocity": 50,
+          "startTime": 21.2,
+          "duration": 1.5
+        },
+        {
+          "note": 62,
+          "velocity": 52,
+          "startTime": 22.8,
+          "duration": 2.4
+        },
+        {
+          "note": 60,
+          "velocity": 48,
+          "startTime": 25.6,
+          "duration": 2.0
+        },
+        {
+          "note": 64,
+          "velocity": 50,
+          "startTime": 27.6,
+          "duration": 1.5
+        },
+        {
+          "note": 67,
+          "velocity": 55,
+          "startTime": 29.2,
+          "duration": 2.4
+        },
+        {
+          "note": 65,
+          "velocity": 52,
+          "startTime": 32.0,
+          "duration": 2.0
+        },
+        {
+          "note": 62,
+          "velocity": 50,
+          "startTime": 34.0,
+          "duration": 1.5
+        },
+        {
+          "note": 60,
+          "velocity": 48,
+          "startTime": 36.0,
+          "duration": 2.8
+        },
+        {
+          "note": 67,
+          "velocity": 55,
+          "startTime": 39.2,
+          "duration": 2.0
+        },
+        {
+          "note": 64,
+          "velocity": 50,
+          "startTime": 41.2,
+          "duration": 1.5
+        },
+        {
+          "note": 62,
+          "velocity": 52,
+          "startTime": 42.8,
+          "duration": 2.2
+        }
+      ]
+    },
+    {
+      "name": "Lofi Electric Bass",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "Foundation: MIDI 36-48 (C2-C3). Plays chord roots on beats 1 and 3 with steady, predictable rhythm. Anchors the harmonic progression.",
+      "suggestedVolume": 0.6,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 38,
+          "velocity": 60,
+          "startTime": 0,
+          "duration": 2.0
+        },
+        {
+          "note": 38,
+          "velocity": 55,
+          "startTime": 2.4,
+          "duration": 1.6
+        },
+        {
+          "note": 38,
+          "velocity": 58,
+          "startTime": 4.8,
+          "duration": 1.6
+        },
+        {
+          "note": 43,
+          "velocity": 60,
+          "startTime": 6.4,
+          "duration": 2.0
+        },
+        {
+          "note": 43,
+          "velocity": 55,
+          "startTime": 8.8,
+          "duration": 1.6
+        },
+        {
+          "note": 43,
+          "velocity": 58,
+          "startTime": 10.4,
+          "duration": 1.6
+        },
+        {
+          "note": 36,
+          "velocity": 62,
+          "startTime": 12.0,
+          "duration": 2.4
+        },
+        {
+          "note": 36,
+          "velocity": 58,
+          "startTime": 14.8,
+          "duration": 1.6
+        },
+        {
+          "note": 36,
+          "velocity": 60,
+          "startTime": 16.8,
+          "duration": 2.0
+        },
+        {
+          "note": 38,
+          "velocity": 60,
+          "startTime": 19.2,
+          "duration": 2.0
+        },
+        {
+          "note": 38,
+          "velocity": 55,
+          "startTime": 21.6,
+          "duration": 1.6
+        },
+        {
+          "note": 38,
+          "velocity": 58,
+          "startTime": 24.0,
+          "duration": 1.6
+        },
+        {
+          "note": 43,
+          "velocity": 60,
+          "startTime": 25.6,
+          "duration": 2.0
+        },
+        {
+          "note": 43,
+          "velocity": 55,
+          "startTime": 28.0,
+          "duration": 1.6
+        },
+        {
+          "note": 43,
+          "velocity": 58,
+          "startTime": 29.6,
+          "duration": 2.0
+        },
+        {
+          "note": 36,
+          "velocity": 62,
+          "startTime": 32.0,
+          "duration": 2.4
+        },
+        {
+          "note": 36,
+          "velocity": 58,
+          "startTime": 34.8,
+          "duration": 1.6
+        },
+        {
+          "note": 36,
+          "velocity": 60,
+          "startTime": 36.8,
+          "duration": 2.0
+        },
+        {
+          "note": 38,
+          "velocity": 60,
+          "startTime": 39.2,
+          "duration": 2.0
+        },
+        {
+          "note": 38,
+          "velocity": 55,
+          "startTime": 41.6,
+          "duration": 1.6
+        },
+        {
+          "note": 38,
+          "velocity": 58,
+          "startTime": 43.2,
+          "duration": 1.8
+        }
+      ]
+    },
+    {
+      "name": "Lofi Warm Pad Chords",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "Harmonic body: MIDI 48-67 (C3-G4). Sustained jazz 7th voicings (ii7\u2192V7\u2192Imaj7) changing every ~6 seconds. Soft, warm, enveloping.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 50,
+          "velocity": 45,
+          "startTime": 0,
+          "duration": 6.0
+        },
+        {
+          "note": 53,
+          "velocity": 42,
+          "startTime": 0,
+          "duration": 6.0
+        },
+        {
+          "note": 57,
+          "velocity": 43,
+          "startTime": 0,
+          "duration": 6.0
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 6.0
+        },
+        {
+          "note": 55,
+          "velocity": 45,
+          "startTime": 6.4,
+          "duration": 5.6
+        },
+        {
+          "note": 59,
+          "velocity": 42,
+          "startTime": 6.4,
+          "duration": 5.6
+        },
+        {
+          "note": 62,
+          "velocity": 43,
+          "startTime": 6.4,
+          "duration": 5.6
+        },
+        {
+          "note": 65,
+          "velocity": 40,
+          "startTime": 6.4,
+          "duration": 5.6
+        },
+        {
+          "note": 48,
+          "velocity": 45,
+          "startTime": 12.0,
+          "duration": 7.0
+        },
+        {
+          "note": 52,
+          "velocity": 42,
+          "startTime": 12.0,
+          "duration": 7.0
+        },
+        {
+          "note": 55,
+          "velocity": 43,
+          "startTime": 12.0,
+          "duration": 7.0
+        },
+        {
+          "note": 59,
+          "velocity": 40,
+          "startTime": 12.0,
+          "duration": 7.0
+        },
+        {
+          "note": 50,
+          "velocity": 45,
+          "startTime": 19.2,
+          "duration": 6.0
+        },
+        {
+          "note": 53,
+          "velocity": 42,
+          "startTime": 19.2,
+          "duration": 6.0
+        },
+        {
+          "note": 57,
+          "velocity": 43,
+          "startTime": 19.2,
+          "duration": 6.0
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 19.2,
+          "duration": 6.0
+        },
+        {
+          "note": 55,
+          "velocity": 45,
+          "startTime": 25.6,
+          "duration": 6.0
+        },
+        {
+          "note": 59,
+          "velocity": 42,
+          "startTime": 25.6,
+          "duration": 6.0
+        },
+        {
+          "note": 62,
+          "velocity": 43,
+          "startTime": 25.6,
+          "duration": 6.0
+        },
+        {
+          "note": 65,
+          "velocity": 40,
+          "startTime": 25.6,
+          "duration": 6.0
+        },
+        {
+          "note": 48,
+          "velocity": 45,
+          "startTime": 32.0,
+          "duration": 7.0
+        },
+        {
+          "note": 52,
+          "velocity": 42,
+          "startTime": 32.0,
+          "duration": 7.0
+        },
+        {
+          "note": 55,
+          "velocity": 43,
+          "startTime": 32.0,
+          "duration": 7.0
+        },
+        {
+          "note": 59,
+          "velocity": 40,
+          "startTime": 32.0,
+          "duration": 7.0
+        },
+        {
+          "note": 50,
+          "velocity": 45,
+          "startTime": 39.2,
+          "duration": 5.8
+        },
+        {
+          "note": 53,
+          "velocity": 42,
+          "startTime": 39.2,
+          "duration": 5.8
+        },
+        {
+          "note": 57,
+          "velocity": 43,
+          "startTime": 39.2,
+          "duration": 5.8
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 39.2,
+          "duration": 5.8
+        }
+      ]
+    },
+    {
+      "name": "Lofi Subtle Drums",
+      "program": 0,
+      "role": "drums",
+      "frequencyRole": "Texture/pulse: Side stick (MIDI 37) and soft closed hi-hat (MIDI 42) only. Velocity 30-45. Steady metronomic pattern for subconscious pulse. No kick or snare to avoid attention-grabbing.",
+      "suggestedVolume": 0.4,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 0.8,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 1.6,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 2.4,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 3.2,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 4.0,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 4.8,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 5.6,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 6.4,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 7.2,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 8.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 8.8,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 9.6,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 10.4,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 11.2,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 12.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 12.8,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 13.6,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 14.4,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 15.2,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 16.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 16.8,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 17.6,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 18.4,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 19.2,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 20.0,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 20.8,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 21.6,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 22.4,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 23.2,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 24.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 24.8,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 25.6,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 26.4,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 27.2,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 28.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 28.8,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 29.6,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 30.4,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 31.2,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 32.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 32.8,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 33.6,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 34.4,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 35.2,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 36.0,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 36.8,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 37.6,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 38.4,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 39.2,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 40.0,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 40.8,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 35,
+          "startTime": 41.6,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 42.4,
+          "duration": 0.3
+        },
+        {
+          "note": 37,
+          "velocity": 38,
+          "startTime": 43.2,
+          "duration": 0.3
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 44.0,
+          "duration": 0.3
+        }
+      ]
+    }
+  ],
+  "key": "C",
+  "bpm": 75,
+  "scale": "minor pentatonic / dorian"
+}

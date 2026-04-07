@@ -1,0 +1,364 @@
+{
+  "genre": "electronic",
+  "mode": "relaxation",
+  "mixStrategy": "Three-layer frequency separation: Synth Bass (GM 38) anchors the low end (MIDI 36-48, C2-C3) with slow sustained root notes; Warm Pad (GM 89) fills the harmonic body (MIDI 48-67, C3-G4) with wide voicings changing every 8-16 seconds; Sawtooth Lead (GM 81) floats above (MIDI 60-77, C4-F5) with gentle arch-shaped phrases. All tracks follow the same Cm chord progression: i (Cm) \u2192 iv (Fm) \u2192 bVI (Ab) \u2192 bVII (Bb) \u2192 i (Cm) \u2192 iv (Fm) \u2192 i (Cm). Rhythmic interplay is minimal \u2014 bass and pad sustain while melody gently moves in between, ensuring never more than 4-5 simultaneous notes. Energy arc: 0.3 \u2192 0.5 \u2192 0.6 \u2192 0.5 \u2192 0.4 \u2192 0.3 over 45 seconds.",
+  "tracks": [
+    {
+      "name": "Synth Bass Foundation",
+      "program": 38,
+      "role": "bass",
+      "frequencyRole": "Low foundation: MIDI 36-48 (C2-C3). Plays chord roots with long sustained notes, one per chord change. Provides warm harmonic grounding without rhythmic drive.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 36,
+          "velocity": 42,
+          "startTime": 0,
+          "duration": 7.5
+        },
+        {
+          "note": 36,
+          "velocity": 40,
+          "startTime": 3.5,
+          "duration": 5.0
+        },
+        {
+          "note": 41,
+          "velocity": 44,
+          "startTime": 8.0,
+          "duration": 7.0
+        },
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 11.5,
+          "duration": 5.5
+        },
+        {
+          "note": 44,
+          "velocity": 48,
+          "startTime": 16.0,
+          "duration": 7.0
+        },
+        {
+          "note": 44,
+          "velocity": 46,
+          "startTime": 19.5,
+          "duration": 5.0
+        },
+        {
+          "note": 46,
+          "velocity": 50,
+          "startTime": 23.5,
+          "duration": 6.5
+        },
+        {
+          "note": 46,
+          "velocity": 48,
+          "startTime": 26.5,
+          "duration": 5.0
+        },
+        {
+          "note": 36,
+          "velocity": 46,
+          "startTime": 30.0,
+          "duration": 7.0
+        },
+        {
+          "note": 36,
+          "velocity": 44,
+          "startTime": 33.5,
+          "duration": 5.5
+        },
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 37.5,
+          "duration": 5.5
+        },
+        {
+          "note": 41,
+          "velocity": 40,
+          "startTime": 40.0,
+          "duration": 3.5
+        },
+        {
+          "note": 36,
+          "velocity": 38,
+          "startTime": 41.0,
+          "duration": 4.0
+        },
+        {
+          "note": 48,
+          "velocity": 36,
+          "startTime": 42.5,
+          "duration": 2.5
+        },
+        {
+          "note": 36,
+          "velocity": 35,
+          "startTime": 43.5,
+          "duration": 2.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Harmonics",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "Harmonic body: MIDI 48-67 (C3-G4). Wide pad voicings with 2-3 notes per chord, changing every 8-16 seconds. Fills midrange warmth without cluttering melody space.",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 48,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 60,
+          "velocity": 36,
+          "startTime": 0.5,
+          "duration": 7.5
+        },
+        {
+          "note": 53,
+          "velocity": 42,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 65,
+          "velocity": 38,
+          "startTime": 8.5,
+          "duration": 7.5
+        },
+        {
+          "note": 56,
+          "velocity": 48,
+          "startTime": 16.0,
+          "duration": 7.5
+        },
+        {
+          "note": 63,
+          "velocity": 46,
+          "startTime": 16.0,
+          "duration": 7.5
+        },
+        {
+          "note": 48,
+          "velocity": 44,
+          "startTime": 16.5,
+          "duration": 7.0
+        },
+        {
+          "note": 58,
+          "velocity": 50,
+          "startTime": 23.5,
+          "duration": 6.5
+        },
+        {
+          "note": 65,
+          "velocity": 48,
+          "startTime": 23.5,
+          "duration": 6.5
+        },
+        {
+          "note": 50,
+          "velocity": 46,
+          "startTime": 24.0,
+          "duration": 6.0
+        },
+        {
+          "note": 48,
+          "velocity": 44,
+          "startTime": 30.0,
+          "duration": 7.5
+        },
+        {
+          "note": 55,
+          "velocity": 42,
+          "startTime": 30.0,
+          "duration": 7.5
+        },
+        {
+          "note": 60,
+          "velocity": 40,
+          "startTime": 30.5,
+          "duration": 7.0
+        },
+        {
+          "note": 53,
+          "velocity": 40,
+          "startTime": 37.5,
+          "duration": 4.5
+        },
+        {
+          "note": 60,
+          "velocity": 38,
+          "startTime": 37.5,
+          "duration": 4.5
+        },
+        {
+          "note": 48,
+          "velocity": 36,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 55,
+          "velocity": 35,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 60,
+          "velocity": 35,
+          "startTime": 42.5,
+          "duration": 2.5
+        }
+      ]
+    },
+    {
+      "name": "Sawtooth Lead Melody",
+      "program": 81,
+      "role": "melody",
+      "frequencyRole": "Lead voice: MIDI 60-77 (C4-F5). Gentle arch-shaped phrases that rise and fall, hitting chord tones on strong beats. Sparse and breathing, 2-3 notes per phrase with long durations.",
+      "suggestedVolume": 0.5,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 67,
+          "velocity": 40,
+          "startTime": 1.0,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 44,
+          "startTime": 3.5,
+          "duration": 4.0
+        },
+        {
+          "note": 67,
+          "velocity": 42,
+          "startTime": 6.0,
+          "duration": 2.5
+        },
+        {
+          "note": 65,
+          "velocity": 46,
+          "startTime": 9.0,
+          "duration": 3.0
+        },
+        {
+          "note": 72,
+          "velocity": 48,
+          "startTime": 11.0,
+          "duration": 4.0
+        },
+        {
+          "note": 69,
+          "velocity": 44,
+          "startTime": 13.5,
+          "duration": 3.0
+        },
+        {
+          "note": 68,
+          "velocity": 52,
+          "startTime": 17.0,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 55,
+          "startTime": 19.5,
+          "duration": 3.5
+        },
+        {
+          "note": 75,
+          "velocity": 52,
+          "startTime": 21.5,
+          "duration": 2.5
+        },
+        {
+          "note": 70,
+          "velocity": 50,
+          "startTime": 24.0,
+          "duration": 3.5
+        },
+        {
+          "note": 74,
+          "velocity": 53,
+          "startTime": 26.5,
+          "duration": 3.0
+        },
+        {
+          "note": 72,
+          "velocity": 48,
+          "startTime": 28.5,
+          "duration": 2.5
+        },
+        {
+          "note": 67,
+          "velocity": 46,
+          "startTime": 30.5,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 48,
+          "startTime": 33.0,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 44,
+          "startTime": 35.5,
+          "duration": 3.0
+        },
+        {
+          "note": 65,
+          "velocity": 42,
+          "startTime": 38.0,
+          "duration": 3.0
+        },
+        {
+          "note": 69,
+          "velocity": 40,
+          "startTime": 40.0,
+          "duration": 2.5
+        },
+        {
+          "note": 67,
+          "velocity": 38,
+          "startTime": 41.5,
+          "duration": 2.0
+        },
+        {
+          "note": 63,
+          "velocity": 36,
+          "startTime": 43.0,
+          "duration": 2.0
+        }
+      ]
+    }
+  ],
+  "key": "Cm",
+  "bpm": 62,
+  "scale": "dorian"
+}

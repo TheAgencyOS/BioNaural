@@ -1,0 +1,370 @@
+{
+  "genre": "blues",
+  "mode": "relaxation",
+  "mixStrategy": "Spectral separation: Bass (MIDI 33-45) provides warm foundation in low register, Chords/Piano (MIDI 48-67) fills harmonic midrange with soft voiced dominant 7th chords, Melody/Steel Guitar (MIDI 60-76) floats above in upper register. Rhythmically staggered: bass plays long sustained roots on downbeats, chords shift gently every 8-16 seconds with arpeggiated voicings, melody drifts in gentle arch phrases using blues scale tones. All dynamics kept in 35-60 velocity range for a warm, hazy, late-night blues feel that never drives or pushes. Energy arc: 0.3\u21920.5\u21920.6\u21920.5\u21920.4\u21920.3 across 45 seconds.",
+  "tracks": [
+    {
+      "name": "Steel Guitar Melody",
+      "program": 25,
+      "role": "melody",
+      "frequencyRole": "Lead voice in upper register (MIDI 60-76). Gentle arch-shaped phrases using A blues scale (A-C-D-Eb-E-G). Floats above chords with long, connected notes. Hits chord tones on strong beats, uses blues passing tones for color.",
+      "suggestedVolume": 0.6,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 64,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 4.0
+        },
+        {
+          "note": 69,
+          "velocity": 42,
+          "startTime": 3.5,
+          "duration": 3.5
+        },
+        {
+          "note": 67,
+          "velocity": 40,
+          "startTime": 6.5,
+          "duration": 3.0
+        },
+        {
+          "note": 64,
+          "velocity": 38,
+          "startTime": 9.0,
+          "duration": 4.0
+        },
+        {
+          "note": 67,
+          "velocity": 45,
+          "startTime": 12.5,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 50,
+          "startTime": 15.5,
+          "duration": 4.0
+        },
+        {
+          "note": 72,
+          "velocity": 52,
+          "startTime": 19.0,
+          "duration": 3.5
+        },
+        {
+          "note": 76,
+          "velocity": 55,
+          "startTime": 22.0,
+          "duration": 4.0
+        },
+        {
+          "note": 74,
+          "velocity": 55,
+          "startTime": 25.5,
+          "duration": 3.0
+        },
+        {
+          "note": 72,
+          "velocity": 52,
+          "startTime": 28.0,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 48,
+          "startTime": 31.0,
+          "duration": 4.0
+        },
+        {
+          "note": 67,
+          "velocity": 45,
+          "startTime": 34.5,
+          "duration": 3.5
+        },
+        {
+          "note": 64,
+          "velocity": 42,
+          "startTime": 37.5,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 40,
+          "startTime": 40.0,
+          "duration": 3.0
+        },
+        {
+          "note": 64,
+          "velocity": 36,
+          "startTime": 42.5,
+          "duration": 2.5
+        },
+        {
+          "note": 60,
+          "velocity": 35,
+          "startTime": 44.0,
+          "duration": 3.0
+        }
+      ]
+    },
+    {
+      "name": "Electric Bass",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "Warm foundation in low register (MIDI 33-45). Plays chord roots with long sustained notes. A7 root=A(33/45), D7 root=D(38), E7 root=E(40). Slow, steady, grounding presence.",
+      "suggestedVolume": 0.5,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 45,
+          "velocity": 42,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 40,
+          "velocity": 40,
+          "startTime": 4.5,
+          "duration": 4.5
+        },
+        {
+          "note": 45,
+          "velocity": 42,
+          "startTime": 8.5,
+          "duration": 4.0
+        },
+        {
+          "note": 43,
+          "velocity": 40,
+          "startTime": 12.0,
+          "duration": 4.5
+        },
+        {
+          "note": 38,
+          "velocity": 45,
+          "startTime": 16.0,
+          "duration": 5.0
+        },
+        {
+          "note": 36,
+          "velocity": 44,
+          "startTime": 20.5,
+          "duration": 4.0
+        },
+        {
+          "note": 38,
+          "velocity": 48,
+          "startTime": 24.0,
+          "duration": 4.5
+        },
+        {
+          "note": 40,
+          "velocity": 50,
+          "startTime": 28.0,
+          "duration": 4.0
+        },
+        {
+          "note": 45,
+          "velocity": 48,
+          "startTime": 31.5,
+          "duration": 4.5
+        },
+        {
+          "note": 43,
+          "velocity": 45,
+          "startTime": 35.5,
+          "duration": 4.0
+        },
+        {
+          "note": 45,
+          "velocity": 42,
+          "startTime": 39.0,
+          "duration": 3.5
+        },
+        {
+          "note": 40,
+          "velocity": 40,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 38,
+          "velocity": 38,
+          "startTime": 44.0,
+          "duration": 3.5
+        },
+        {
+          "note": 45,
+          "velocity": 38,
+          "startTime": 43.0,
+          "duration": 4.0
+        },
+        {
+          "note": 33,
+          "velocity": 36,
+          "startTime": 41.0,
+          "duration": 5.0
+        }
+      ]
+    },
+    {
+      "name": "Piano Chords",
+      "program": 0,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in mid register (MIDI 48-67). Soft dominant 7th voicings: A7(57-61-64-67), D7(50-54-57-60), E7(52-56-59-63). Chord changes every 8-16 seconds. Arpeggiated gently, never more than 3-4 notes sounding simultaneously.",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 57,
+          "velocity": 38,
+          "startTime": 0.5,
+          "duration": 6.0
+        },
+        {
+          "note": 61,
+          "velocity": 36,
+          "startTime": 1.0,
+          "duration": 5.5
+        },
+        {
+          "note": 64,
+          "velocity": 37,
+          "startTime": 1.5,
+          "duration": 5.0
+        },
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 6.0,
+          "duration": 6.0
+        },
+        {
+          "note": 52,
+          "velocity": 36,
+          "startTime": 6.5,
+          "duration": 5.5
+        },
+        {
+          "note": 59,
+          "velocity": 37,
+          "startTime": 7.0,
+          "duration": 5.0
+        },
+        {
+          "note": 57,
+          "velocity": 42,
+          "startTime": 12.0,
+          "duration": 6.0
+        },
+        {
+          "note": 61,
+          "velocity": 40,
+          "startTime": 12.5,
+          "duration": 5.5
+        },
+        {
+          "note": 64,
+          "velocity": 41,
+          "startTime": 13.0,
+          "duration": 5.0
+        },
+        {
+          "note": 50,
+          "velocity": 45,
+          "startTime": 18.0,
+          "duration": 7.0
+        },
+        {
+          "note": 54,
+          "velocity": 43,
+          "startTime": 18.5,
+          "duration": 6.5
+        },
+        {
+          "note": 57,
+          "velocity": 44,
+          "startTime": 19.0,
+          "duration": 6.0
+        },
+        {
+          "note": 60,
+          "velocity": 45,
+          "startTime": 19.5,
+          "duration": 5.5
+        },
+        {
+          "note": 52,
+          "velocity": 50,
+          "startTime": 25.5,
+          "duration": 6.0
+        },
+        {
+          "note": 56,
+          "velocity": 48,
+          "startTime": 26.0,
+          "duration": 5.5
+        },
+        {
+          "note": 59,
+          "velocity": 49,
+          "startTime": 26.5,
+          "duration": 5.0
+        },
+        {
+          "note": 63,
+          "velocity": 48,
+          "startTime": 27.0,
+          "duration": 4.5
+        },
+        {
+          "note": 57,
+          "velocity": 45,
+          "startTime": 32.0,
+          "duration": 6.0
+        },
+        {
+          "note": 61,
+          "velocity": 43,
+          "startTime": 32.5,
+          "duration": 5.5
+        },
+        {
+          "note": 64,
+          "velocity": 44,
+          "startTime": 33.0,
+          "duration": 5.0
+        },
+        {
+          "note": 57,
+          "velocity": 40,
+          "startTime": 38.5,
+          "duration": 6.5
+        },
+        {
+          "note": 61,
+          "velocity": 38,
+          "startTime": 39.0,
+          "duration": 6.0
+        },
+        {
+          "note": 64,
+          "velocity": 38,
+          "startTime": 39.5,
+          "duration": 5.5
+        },
+        {
+          "note": 67,
+          "velocity": 36,
+          "startTime": 40.0,
+          "duration": 5.0
+        }
+      ]
+    }
+  ],
+  "key": "A",
+  "bpm": 62,
+  "scale": "blues"
+}

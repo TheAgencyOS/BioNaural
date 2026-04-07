@@ -1,0 +1,310 @@
+{
+  "genre": "classical",
+  "mode": "sleep",
+  "mixStrategy": "Ultra-sparse, low-register layering with maximal frequency separation. Bass (cello) anchors the sub-low C1-C3 range with slow root notes. Chords (string ensemble) provide a warm, barely-audible harmonic bed in C3-C5, voiced in close position to avoid spectral clutter. Melody (piano) floats gently in C4-C5 with descending phrases. No rhythmic pulse \u2014 all entries are staggered and overlap organically. Maximum 3-4 notes sounding simultaneously. Energy arc descends from 0.4 to 0.2 over 45 seconds. Chord changes every ~16-20 seconds: I (C) \u2192 IV (F) \u2192 V (G) \u2192 I (C). All tracks change harmony together.",
+  "tracks": [
+    {
+      "name": "Piano Melody (Descending, Floating)",
+      "program": 0,
+      "role": "melody",
+      "frequencyRole": "Lead voice in C4-C5 range (MIDI 60-72). Descending stepwise and third motion. Sparse, dream-like phrases settling downward. Stays below C5 to maintain warmth for sleep.",
+      "suggestedVolume": 0.3,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 72,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 6.0
+        },
+        {
+          "note": 71,
+          "velocity": 38,
+          "startTime": 5.0,
+          "duration": 5.5
+        },
+        {
+          "note": 69,
+          "velocity": 36,
+          "startTime": 9.5,
+          "duration": 6.0
+        },
+        {
+          "note": 67,
+          "velocity": 35,
+          "startTime": 14.0,
+          "duration": 5.0
+        },
+        {
+          "note": 65,
+          "velocity": 34,
+          "startTime": 17.5,
+          "duration": 7.0
+        },
+        {
+          "note": 67,
+          "velocity": 33,
+          "startTime": 23.0,
+          "duration": 5.5
+        },
+        {
+          "note": 65,
+          "velocity": 32,
+          "startTime": 27.0,
+          "duration": 6.0
+        },
+        {
+          "note": 64,
+          "velocity": 31,
+          "startTime": 31.0,
+          "duration": 6.5
+        },
+        {
+          "note": 62,
+          "velocity": 30,
+          "startTime": 35.5,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 29,
+          "startTime": 39.0,
+          "duration": 6.0
+        },
+        {
+          "note": 67,
+          "velocity": 37,
+          "startTime": 3.0,
+          "duration": 4.0
+        },
+        {
+          "note": 65,
+          "velocity": 33,
+          "startTime": 12.0,
+          "duration": 4.5
+        },
+        {
+          "note": 64,
+          "velocity": 32,
+          "startTime": 20.0,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 28,
+          "startTime": 33.0,
+          "duration": 4.5
+        },
+        {
+          "note": 60,
+          "velocity": 27,
+          "startTime": 42.0,
+          "duration": 3.0
+        }
+      ]
+    },
+    {
+      "name": "Cello Bass (Root Foundation)",
+      "program": 42,
+      "role": "bass",
+      "frequencyRole": "Deep foundation in C1-C3 range (MIDI 24-48). Plays chord roots with extremely long sustained tones. Provides gravitational warmth and grounding for sleep.",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 36,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 16.0
+        },
+        {
+          "note": 36,
+          "velocity": 36,
+          "startTime": 1.0,
+          "duration": 8.0
+        },
+        {
+          "note": 43,
+          "velocity": 35,
+          "startTime": 16.0,
+          "duration": 8.0
+        },
+        {
+          "note": 41,
+          "velocity": 34,
+          "startTime": 16.5,
+          "duration": 15.0
+        },
+        {
+          "note": 43,
+          "velocity": 33,
+          "startTime": 24.0,
+          "duration": 7.5
+        },
+        {
+          "note": 31,
+          "velocity": 32,
+          "startTime": 31.5,
+          "duration": 13.5
+        },
+        {
+          "note": 36,
+          "velocity": 30,
+          "startTime": 32.0,
+          "duration": 13.0
+        },
+        {
+          "note": 48,
+          "velocity": 37,
+          "startTime": 0.5,
+          "duration": 10.0
+        },
+        {
+          "note": 41,
+          "velocity": 33,
+          "startTime": 17.0,
+          "duration": 6.0
+        },
+        {
+          "note": 43,
+          "velocity": 32,
+          "startTime": 25.0,
+          "duration": 6.5
+        },
+        {
+          "note": 36,
+          "velocity": 29,
+          "startTime": 38.0,
+          "duration": 7.0
+        },
+        {
+          "note": 31,
+          "velocity": 28,
+          "startTime": 34.0,
+          "duration": 8.0
+        },
+        {
+          "note": 48,
+          "velocity": 35,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 36,
+          "velocity": 31,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 30,
+          "startTime": 22.0,
+          "duration": 6.0
+        }
+      ]
+    },
+    {
+      "name": "String Ensemble Chords (Warm Harmonic Bed)",
+      "program": 49,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in C3-C5 range (MIDI 48-72). Close-voiced triads that shift every 16 seconds following I\u2192IV\u2192V\u2192I. Ultra-slow crossfading between voicings. Warm, enveloping blanket of harmony.",
+      "suggestedVolume": 0.25,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 48,
+          "velocity": 35,
+          "startTime": 0,
+          "duration": 16.0
+        },
+        {
+          "note": 52,
+          "velocity": 33,
+          "startTime": 0.5,
+          "duration": 15.5
+        },
+        {
+          "note": 55,
+          "velocity": 32,
+          "startTime": 1.0,
+          "duration": 15.0
+        },
+        {
+          "note": 53,
+          "velocity": 33,
+          "startTime": 16.0,
+          "duration": 15.0
+        },
+        {
+          "note": 57,
+          "velocity": 31,
+          "startTime": 16.5,
+          "duration": 14.5
+        },
+        {
+          "note": 60,
+          "velocity": 30,
+          "startTime": 17.0,
+          "duration": 14.0
+        },
+        {
+          "note": 55,
+          "velocity": 30,
+          "startTime": 31.0,
+          "duration": 7.0
+        },
+        {
+          "note": 59,
+          "velocity": 28,
+          "startTime": 31.5,
+          "duration": 6.5
+        },
+        {
+          "note": 50,
+          "velocity": 29,
+          "startTime": 32.0,
+          "duration": 6.0
+        },
+        {
+          "note": 48,
+          "velocity": 28,
+          "startTime": 38.0,
+          "duration": 7.0
+        },
+        {
+          "note": 52,
+          "velocity": 27,
+          "startTime": 38.5,
+          "duration": 6.5
+        },
+        {
+          "note": 55,
+          "velocity": 26,
+          "startTime": 39.0,
+          "duration": 6.0
+        },
+        {
+          "note": 60,
+          "velocity": 34,
+          "startTime": 7.0,
+          "duration": 9.0
+        },
+        {
+          "note": 57,
+          "velocity": 30,
+          "startTime": 23.0,
+          "duration": 8.0
+        },
+        {
+          "note": 53,
+          "velocity": 27,
+          "startTime": 41.0,
+          "duration": 4.0
+        }
+      ]
+    }
+  ],
+  "key": "C",
+  "bpm": 48,
+  "scale": "major"
+}

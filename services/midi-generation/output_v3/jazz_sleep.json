@@ -1,0 +1,328 @@
+{
+  "genre": "jazz",
+  "mode": "sleep",
+  "mixStrategy": "Ultra-sparse, slow-moving jazz voicings in low registers only. Bass provides deep root tones (C1-C3), warm pad sustains extended jazz chords (C3-C5 but constrained below C5), piano melody floats descending lines in C4-C5 range. All tracks change chords together every ~16-24 seconds following a sleepy ii7\u2192V7\u2192Imaj7 progression in F Dorian/Mixolydian. No rhythmic pulse \u2014 notes drift in freely with staggered entries. Maximum 3-4 notes sounding at once across all tracks. Energy starts at 0.4 and descends to 0.2 by end. Spectral separation: bass owns sub-low, pad fills warm mid-low, piano sits just above pad. Velocities decrease over time for a settling, sleep-inducing arc.",
+  "tracks": [
+    {
+      "name": "Dreamy Jazz Piano",
+      "program": 0,
+      "role": "melody",
+      "frequencyRole": "Lead voice in C4-C5 range (MIDI 60-72). Descending melodic motion throughout \u2014 gentle jazz phrases settling downward. Stays below C5 to maintain warmth and darkness for sleep.",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 72,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 6.0
+        },
+        {
+          "note": 70,
+          "velocity": 38,
+          "startTime": 5.5,
+          "duration": 7.0
+        },
+        {
+          "note": 68,
+          "velocity": 37,
+          "startTime": 9.0,
+          "duration": 5.5
+        },
+        {
+          "note": 65,
+          "velocity": 36,
+          "startTime": 13.5,
+          "duration": 6.5
+        },
+        {
+          "note": 63,
+          "velocity": 35,
+          "startTime": 17.0,
+          "duration": 8.0
+        },
+        {
+          "note": 65,
+          "velocity": 34,
+          "startTime": 22.0,
+          "duration": 6.0
+        },
+        {
+          "note": 63,
+          "velocity": 33,
+          "startTime": 26.0,
+          "duration": 7.0
+        },
+        {
+          "note": 61,
+          "velocity": 32,
+          "startTime": 29.5,
+          "duration": 6.5
+        },
+        {
+          "note": 60,
+          "velocity": 31,
+          "startTime": 33.0,
+          "duration": 8.0
+        },
+        {
+          "note": 63,
+          "velocity": 30,
+          "startTime": 35.5,
+          "duration": 5.5
+        },
+        {
+          "note": 61,
+          "velocity": 29,
+          "startTime": 37.5,
+          "duration": 6.0
+        },
+        {
+          "note": 60,
+          "velocity": 28,
+          "startTime": 39.5,
+          "duration": 5.5
+        },
+        {
+          "note": 65,
+          "velocity": 30,
+          "startTime": 7.0,
+          "duration": 5.0
+        },
+        {
+          "note": 67,
+          "velocity": 35,
+          "startTime": 3.0,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 27,
+          "startTime": 42.0,
+          "duration": 3.0
+        },
+        {
+          "note": 58,
+          "velocity": 26,
+          "startTime": 43.5,
+          "duration": 1.5
+        }
+      ]
+    },
+    {
+      "name": "Acoustic Jazz Bass",
+      "program": 32,
+      "role": "bass",
+      "frequencyRole": "Deep foundation in C1-C3 range (MIDI 24-48). Plays chord roots with very long sustains. Anchors the harmonic progression: Gm7 (G) \u2192 C7 (C) \u2192 Fmaj7 (F). Sub-bass warmth for sleep immersion.",
+      "suggestedVolume": 0.3,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 43,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 10.0
+        },
+        {
+          "note": 41,
+          "velocity": 38,
+          "startTime": 4.5,
+          "duration": 8.0
+        },
+        {
+          "note": 43,
+          "velocity": 37,
+          "startTime": 8.0,
+          "duration": 9.0
+        },
+        {
+          "note": 36,
+          "velocity": 36,
+          "startTime": 16.0,
+          "duration": 10.0
+        },
+        {
+          "note": 38,
+          "velocity": 35,
+          "startTime": 19.5,
+          "duration": 7.0
+        },
+        {
+          "note": 36,
+          "velocity": 34,
+          "startTime": 24.0,
+          "duration": 9.0
+        },
+        {
+          "note": 41,
+          "velocity": 33,
+          "startTime": 30.0,
+          "duration": 10.0
+        },
+        {
+          "note": 43,
+          "velocity": 32,
+          "startTime": 33.5,
+          "duration": 8.0
+        },
+        {
+          "note": 41,
+          "velocity": 30,
+          "startTime": 37.0,
+          "duration": 8.0
+        },
+        {
+          "note": 38,
+          "velocity": 29,
+          "startTime": 39.5,
+          "duration": 5.5
+        },
+        {
+          "note": 36,
+          "velocity": 28,
+          "startTime": 41.5,
+          "duration": 3.5
+        },
+        {
+          "note": 41,
+          "velocity": 27,
+          "startTime": 43.0,
+          "duration": 2.0
+        },
+        {
+          "note": 38,
+          "velocity": 36,
+          "startTime": 12.0,
+          "duration": 6.0
+        },
+        {
+          "note": 36,
+          "velocity": 34,
+          "startTime": 27.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 39,
+          "startTime": 2.0,
+          "duration": 7.0
+        },
+        {
+          "note": 41,
+          "velocity": 26,
+          "startTime": 44.0,
+          "duration": 1.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Jazz Pad",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in C3-C5 range (MIDI 48-70). Sustains extended jazz voicings \u2014 Gm9, C13, Fmaj9. Very slow chord movement every 16-24 seconds. Fills mid-low warmth between bass and piano. Maximum 2 chord tones at a time to stay sparse.",
+      "suggestedVolume": 0.28,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 55,
+          "velocity": 38,
+          "startTime": 0.5,
+          "duration": 14.0
+        },
+        {
+          "note": 58,
+          "velocity": 36,
+          "startTime": 1.0,
+          "duration": 13.5
+        },
+        {
+          "note": 53,
+          "velocity": 35,
+          "startTime": 5.0,
+          "duration": 10.0
+        },
+        {
+          "note": 52,
+          "velocity": 34,
+          "startTime": 16.0,
+          "duration": 14.0
+        },
+        {
+          "note": 55,
+          "velocity": 33,
+          "startTime": 16.5,
+          "duration": 13.0
+        },
+        {
+          "note": 50,
+          "velocity": 32,
+          "startTime": 20.0,
+          "duration": 10.0
+        },
+        {
+          "note": 53,
+          "velocity": 31,
+          "startTime": 30.5,
+          "duration": 14.5
+        },
+        {
+          "note": 57,
+          "velocity": 30,
+          "startTime": 31.0,
+          "duration": 14.0
+        },
+        {
+          "note": 50,
+          "velocity": 29,
+          "startTime": 34.0,
+          "duration": 11.0
+        },
+        {
+          "note": 48,
+          "velocity": 28,
+          "startTime": 38.0,
+          "duration": 7.0
+        },
+        {
+          "note": 55,
+          "velocity": 27,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 60,
+          "velocity": 37,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 57,
+          "velocity": 35,
+          "startTime": 11.0,
+          "duration": 5.0
+        },
+        {
+          "note": 48,
+          "velocity": 33,
+          "startTime": 23.0,
+          "duration": 7.0
+        },
+        {
+          "note": 52,
+          "velocity": 30,
+          "startTime": 27.0,
+          "duration": 5.0
+        },
+        {
+          "note": 48,
+          "velocity": 26,
+          "startTime": 43.0,
+          "duration": 2.0
+        }
+      ]
+    }
+  ],
+  "key": "F",
+  "bpm": 48,
+  "scale": "dorian"
+}

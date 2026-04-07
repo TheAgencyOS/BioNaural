@@ -1,0 +1,578 @@
+{
+  "genre": "ambient",
+  "mode": "focus",
+  "mixStrategy": "Spectral separation: Bass pad (C1-C3) provides warm root foundation, Choir pad chords (C3-C5) fill harmonic body with sustained voicings, New Age pad melody (C4-C6) floats above with gentle pentatonic-adjacent phrases. Drums use only soft side stick and closed hi-hat at minimal velocity to provide subliminal pulse. All tracks change chords together every 4-8 seconds on a Csus2\u2192Fmaj7\u2192Csus2\u2192Gsus2 progression. Energy remains flat at 0.65 throughout \u2014 steady, predictable, habituatable wallpaper for deep focus. Minimal variation in motifs; repetition is the goal.",
+  "tracks": [
+    {
+      "name": "New Age Pad Melody",
+      "program": 88,
+      "role": "melody",
+      "frequencyRole": "Lead voice: MIDI 60-76 (C4-E5). Gentle pentatonic-flavored phrases using chord tones on strong beats. Velocity 50-65, long durations 1.5-3.5s. Minimal variation \u2014 same 4-bar motif repeats with tiny embellishments.",
+      "suggestedVolume": 0.65,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 67,
+          "velocity": 55,
+          "startTime": 0,
+          "duration": 3.0
+        },
+        {
+          "note": 64,
+          "velocity": 50,
+          "startTime": 2.5,
+          "duration": 2.5
+        },
+        {
+          "note": 60,
+          "velocity": 55,
+          "startTime": 5.0,
+          "duration": 3.0
+        },
+        {
+          "note": 65,
+          "velocity": 50,
+          "startTime": 8.0,
+          "duration": 2.5
+        },
+        {
+          "note": 69,
+          "velocity": 55,
+          "startTime": 10.5,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 13.5,
+          "duration": 2.0
+        },
+        {
+          "note": 64,
+          "velocity": 55,
+          "startTime": 16.0,
+          "duration": 3.0
+        },
+        {
+          "note": 60,
+          "velocity": 50,
+          "startTime": 19.0,
+          "duration": 2.5
+        },
+        {
+          "note": 67,
+          "velocity": 55,
+          "startTime": 21.5,
+          "duration": 3.0
+        },
+        {
+          "note": 64,
+          "velocity": 50,
+          "startTime": 24.5,
+          "duration": 2.5
+        },
+        {
+          "note": 60,
+          "velocity": 55,
+          "startTime": 27.0,
+          "duration": 3.0
+        },
+        {
+          "note": 65,
+          "velocity": 50,
+          "startTime": 30.0,
+          "duration": 2.5
+        },
+        {
+          "note": 69,
+          "velocity": 55,
+          "startTime": 32.5,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 50,
+          "startTime": 35.5,
+          "duration": 2.0
+        },
+        {
+          "note": 64,
+          "velocity": 55,
+          "startTime": 37.5,
+          "duration": 3.0
+        },
+        {
+          "note": 60,
+          "velocity": 50,
+          "startTime": 40.5,
+          "duration": 3.5
+        },
+        {
+          "note": 67,
+          "velocity": 52,
+          "startTime": 43.0,
+          "duration": 2.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Bass",
+      "program": 89,
+      "role": "bass",
+      "frequencyRole": "Foundation: MIDI 36-48 (C2-C3). Plays chord roots as long sustained tones. Velocity 50-60. Moves only on chord changes every ~5.3s. Warm, steady, subliminal anchor.",
+      "suggestedVolume": 0.6,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 48,
+          "velocity": 55,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 48,
+          "velocity": 53,
+          "startTime": 5.0,
+          "duration": 3.0
+        },
+        {
+          "note": 41,
+          "velocity": 55,
+          "startTime": 5.0,
+          "duration": 5.5
+        },
+        {
+          "note": 48,
+          "velocity": 55,
+          "startTime": 10.5,
+          "duration": 5.5
+        },
+        {
+          "note": 43,
+          "velocity": 53,
+          "startTime": 16.0,
+          "duration": 5.5
+        },
+        {
+          "note": 48,
+          "velocity": 55,
+          "startTime": 21.5,
+          "duration": 5.5
+        },
+        {
+          "note": 41,
+          "velocity": 55,
+          "startTime": 27.0,
+          "duration": 5.5
+        },
+        {
+          "note": 48,
+          "velocity": 55,
+          "startTime": 32.5,
+          "duration": 5.5
+        },
+        {
+          "note": 43,
+          "velocity": 53,
+          "startTime": 37.5,
+          "duration": 4.0
+        },
+        {
+          "note": 48,
+          "velocity": 55,
+          "startTime": 40.5,
+          "duration": 4.5
+        },
+        {
+          "note": 36,
+          "velocity": 50,
+          "startTime": 2.0,
+          "duration": 3.0
+        },
+        {
+          "note": 36,
+          "velocity": 50,
+          "startTime": 13.0,
+          "duration": 3.0
+        },
+        {
+          "note": 36,
+          "velocity": 50,
+          "startTime": 24.0,
+          "duration": 3.0
+        },
+        {
+          "note": 36,
+          "velocity": 50,
+          "startTime": 35.0,
+          "duration": 2.5
+        },
+        {
+          "note": 36,
+          "velocity": 48,
+          "startTime": 43.0,
+          "duration": 2.0
+        }
+      ]
+    },
+    {
+      "name": "Choir Pad Chords",
+      "program": 91,
+      "role": "chords",
+      "frequencyRole": "Harmonic body: MIDI 48-67 (C3-G4). Sustained sus2/maj7 voicings changing every ~5.3s. Velocity 45-58. Csus2\u2192Fmaj7\u2192Csus2\u2192Gsus2 cycle. Warm, non-functional, ambient modal harmony.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 48,
+          "velocity": 50,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 55,
+          "velocity": 48,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 46,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 53,
+          "velocity": 50,
+          "startTime": 5.0,
+          "duration": 5.5
+        },
+        {
+          "note": 60,
+          "velocity": 48,
+          "startTime": 5.0,
+          "duration": 5.5
+        },
+        {
+          "note": 64,
+          "velocity": 46,
+          "startTime": 5.0,
+          "duration": 5.5
+        },
+        {
+          "note": 48,
+          "velocity": 50,
+          "startTime": 10.5,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 48,
+          "startTime": 10.5,
+          "duration": 5.5
+        },
+        {
+          "note": 62,
+          "velocity": 46,
+          "startTime": 10.5,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 50,
+          "startTime": 16.0,
+          "duration": 5.5
+        },
+        {
+          "note": 59,
+          "velocity": 48,
+          "startTime": 16.0,
+          "duration": 5.5
+        },
+        {
+          "note": 67,
+          "velocity": 46,
+          "startTime": 16.0,
+          "duration": 5.5
+        },
+        {
+          "note": 48,
+          "velocity": 50,
+          "startTime": 21.5,
+          "duration": 5.5
+        },
+        {
+          "note": 55,
+          "velocity": 48,
+          "startTime": 21.5,
+          "duration": 5.5
+        },
+        {
+          "note": 62,
+          "velocity": 46,
+          "startTime": 21.5,
+          "duration": 5.5
+        },
+        {
+          "note": 53,
+          "velocity": 50,
+          "startTime": 27.0,
+          "duration": 5.5
+        },
+        {
+          "note": 60,
+          "velocity": 48,
+          "startTime": 27.0,
+          "duration": 5.5
+        },
+        {
+          "note": 64,
+          "velocity": 46,
+          "startTime": 27.0,
+          "duration": 5.5
+        },
+        {
+          "note": 48,
+          "velocity": 50,
+          "startTime": 32.5,
+          "duration": 5.0
+        },
+        {
+          "note": 55,
+          "velocity": 48,
+          "startTime": 32.5,
+          "duration": 5.0
+        },
+        {
+          "note": 62,
+          "velocity": 46,
+          "startTime": 32.5,
+          "duration": 5.0
+        },
+        {
+          "note": 55,
+          "velocity": 50,
+          "startTime": 37.5,
+          "duration": 3.0
+        },
+        {
+          "note": 59,
+          "velocity": 48,
+          "startTime": 37.5,
+          "duration": 3.0
+        },
+        {
+          "note": 67,
+          "velocity": 46,
+          "startTime": 37.5,
+          "duration": 3.0
+        },
+        {
+          "note": 48,
+          "velocity": 50,
+          "startTime": 40.5,
+          "duration": 4.5
+        },
+        {
+          "note": 55,
+          "velocity": 48,
+          "startTime": 40.5,
+          "duration": 4.5
+        },
+        {
+          "note": 62,
+          "velocity": 46,
+          "startTime": 40.5,
+          "duration": 4.5
+        }
+      ]
+    },
+    {
+      "name": "Subtle Focus Drums",
+      "program": 0,
+      "role": "drums",
+      "frequencyRole": "Subliminal pulse: Side stick (37) and closed hi-hat (42) only. Velocity 30-42. Steady, metronomic pattern repeating every 3.2s. Provides subtle temporal anchor without drawing attention.",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 0,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 1.6,
+          "duration": 1.0
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 3.2,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 4.8,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 6.4,
+          "duration": 1.0
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 8.0,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 9.6,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 11.2,
+          "duration": 1.0
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 12.8,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 14.4,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 16.0,
+          "duration": 1.0
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 17.6,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 19.2,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 20.8,
+          "duration": 1.0
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 22.4,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 24.0,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 25.6,
+          "duration": 1.0
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 27.2,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 28.8,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 30.4,
+          "duration": 1.0
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 32.0,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 33.6,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 35.2,
+          "duration": 1.0
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 36.8,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 38.4,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 40.0,
+          "duration": 1.0
+        },
+        {
+          "note": 37,
+          "velocity": 35,
+          "startTime": 41.6,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 32,
+          "startTime": 43.2,
+          "duration": 1.0
+        },
+        {
+          "note": 42,
+          "velocity": 30,
+          "startTime": 44.8,
+          "duration": 1.0
+        }
+      ]
+    }
+  ],
+  "key": "C",
+  "bpm": 75,
+  "scale": "Lydian"
+}

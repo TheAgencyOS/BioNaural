@@ -1,0 +1,328 @@
+{
+  "genre": "ambient",
+  "mode": "relaxation",
+  "mixStrategy": "Three-layer frequency separation: Warm Pad bass anchors the low register (MIDI 38-48) with slow, sustained root notes providing a warm foundation. Choir Pad chords fill the mid register (MIDI 50-67) with open-voiced sus2 and maj7 voicings, never more than 3 notes at once, changing every 8-16 seconds. New Age Pad melody floats in the upper register (MIDI 64-79) with gentle arch-shaped phrases that breathe and drift. All layers follow the same harmonic rhythm: Dsus2 \u2192 Gmaj7 \u2192 Dsus2 \u2192 Asus2 \u2192 Gmaj7 \u2192 Dsus2. Energy arc rises gently from 0.3 to 0.6 at the midpoint, then descends back to 0.3 for a peaceful close. No rhythmic drive \u2014 all parts flow like calm water.",
+  "tracks": [
+    {
+      "name": "New Age Pad Melody",
+      "program": 88,
+      "role": "melody",
+      "frequencyRole": "Lead voice in MIDI 64-79 (C4-G5). Gentle arch contours: rises then falls within each phrase. Plays chord tones on downbeats, with slow stepwise motion between. Sparse and breathing.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 66,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 4.0
+        },
+        {
+          "note": 69,
+          "velocity": 40,
+          "startTime": 3.5,
+          "duration": 3.5
+        },
+        {
+          "note": 71,
+          "velocity": 42,
+          "startTime": 6.5,
+          "duration": 3.0
+        },
+        {
+          "note": 69,
+          "velocity": 40,
+          "startTime": 9.0,
+          "duration": 3.5
+        },
+        {
+          "note": 67,
+          "velocity": 43,
+          "startTime": 12.0,
+          "duration": 4.0
+        },
+        {
+          "note": 71,
+          "velocity": 47,
+          "startTime": 15.5,
+          "duration": 3.5
+        },
+        {
+          "note": 74,
+          "velocity": 50,
+          "startTime": 18.5,
+          "duration": 3.0
+        },
+        {
+          "note": 73,
+          "velocity": 48,
+          "startTime": 21.0,
+          "duration": 3.5
+        },
+        {
+          "note": 71,
+          "velocity": 52,
+          "startTime": 24.0,
+          "duration": 3.0
+        },
+        {
+          "note": 74,
+          "velocity": 55,
+          "startTime": 26.5,
+          "duration": 3.5
+        },
+        {
+          "note": 76,
+          "velocity": 56,
+          "startTime": 29.5,
+          "duration": 3.0
+        },
+        {
+          "note": 74,
+          "velocity": 52,
+          "startTime": 32.0,
+          "duration": 3.5
+        },
+        {
+          "note": 71,
+          "velocity": 48,
+          "startTime": 35.0,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 43,
+          "startTime": 38.0,
+          "duration": 3.5
+        },
+        {
+          "note": 66,
+          "velocity": 38,
+          "startTime": 41.0,
+          "duration": 4.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad Bass",
+      "program": 89,
+      "role": "bass",
+      "frequencyRole": "Foundation layer in MIDI 38-48 (D2-C3). Sustained root notes of each chord, very slow movement. Provides warmth and grounding beneath the other layers.",
+      "suggestedVolume": 0.45,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 38,
+          "velocity": 38,
+          "startTime": 4.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 42,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 43,
+          "velocity": 40,
+          "startTime": 12.0,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 44,
+          "startTime": 16.0,
+          "duration": 8.0
+        },
+        {
+          "note": 38,
+          "velocity": 42,
+          "startTime": 20.0,
+          "duration": 5.0
+        },
+        {
+          "note": 45,
+          "velocity": 48,
+          "startTime": 24.0,
+          "duration": 8.0
+        },
+        {
+          "note": 45,
+          "velocity": 46,
+          "startTime": 28.0,
+          "duration": 5.0
+        },
+        {
+          "note": 43,
+          "velocity": 50,
+          "startTime": 32.0,
+          "duration": 8.0
+        },
+        {
+          "note": 43,
+          "velocity": 48,
+          "startTime": 36.0,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 42,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 38,
+          "startTime": 38.0,
+          "duration": 4.0
+        },
+        {
+          "note": 50,
+          "velocity": 36,
+          "startTime": 2.0,
+          "duration": 6.0
+        },
+        {
+          "note": 45,
+          "velocity": 40,
+          "startTime": 10.0,
+          "duration": 3.0
+        },
+        {
+          "note": 50,
+          "velocity": 44,
+          "startTime": 30.0,
+          "duration": 3.0
+        },
+        {
+          "note": 38,
+          "velocity": 35,
+          "startTime": 43.0,
+          "duration": 2.0
+        }
+      ]
+    },
+    {
+      "name": "Choir Pad Chords",
+      "program": 91,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in MIDI 50-67 (D3-G4). Open sus2 and maj7 voicings, 2-3 notes per chord. Changes every 8-16 seconds aligned with bass roots. Provides ethereal harmonic color.",
+      "suggestedVolume": 0.5,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 52,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 57,
+          "velocity": 36,
+          "startTime": 0,
+          "duration": 8.0
+        },
+        {
+          "note": 55,
+          "velocity": 40,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 59,
+          "velocity": 38,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 37,
+          "startTime": 8.5,
+          "duration": 7.5
+        },
+        {
+          "note": 52,
+          "velocity": 44,
+          "startTime": 16.0,
+          "duration": 8.0
+        },
+        {
+          "note": 57,
+          "velocity": 42,
+          "startTime": 16.0,
+          "duration": 8.0
+        },
+        {
+          "note": 54,
+          "velocity": 43,
+          "startTime": 16.5,
+          "duration": 7.5
+        },
+        {
+          "note": 57,
+          "velocity": 50,
+          "startTime": 24.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 48,
+          "startTime": 24.0,
+          "duration": 8.0
+        },
+        {
+          "note": 64,
+          "velocity": 46,
+          "startTime": 24.5,
+          "duration": 7.5
+        },
+        {
+          "note": 55,
+          "velocity": 52,
+          "startTime": 32.0,
+          "duration": 8.0
+        },
+        {
+          "note": 59,
+          "velocity": 50,
+          "startTime": 32.0,
+          "duration": 8.0
+        },
+        {
+          "note": 62,
+          "velocity": 48,
+          "startTime": 32.5,
+          "duration": 7.5
+        },
+        {
+          "note": 52,
+          "velocity": 40,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 57,
+          "velocity": 38,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 54,
+          "velocity": 36,
+          "startTime": 40.5,
+          "duration": 4.5
+        }
+      ]
+    }
+  ],
+  "key": "D",
+  "bpm": 62,
+  "scale": "Lydian"
+}

@@ -1,0 +1,328 @@
+{
+  "genre": "hiphop",
+  "mode": "sleep",
+  "mixStrategy": "Ultra-sparse, low-register layering for deep sleep. Bass provides a warm sub-foundation (C1-C3) with long sustained root notes. Warm Pad chords sit in the C3-C5 range with slow, ghostly voicings that blend into the bass harmonics. Vibraphone melody floats in C4-C5 with predominantly descending motion, placed spectrally above the pad but never piercing. All tracks share the same near-static harmonic rhythm (chord changes every ~16-22 seconds): Cm \u2192 Abmaj \u2192 Bbmaj (i \u2192 bVI \u2192 bVII). No rhythmic pulse \u2014 notes drift in freely with staggered entrances. Maximum 3-4 notes sounding simultaneously. Energy arc: 0.4 at start, gently fading to 0.2 by end. Everything whisper-quiet, like a warm blanket of sound dissolving into darkness.",
+  "tracks": [
+    {
+      "name": "Vibraphone Melody (Descending Sleep)",
+      "program": 11,
+      "role": "melody",
+      "frequencyRole": "Lead voice in C4-C5 range (MIDI 60-72). Predominantly descending stepwise motion. Sparse, floating phrases with no rhythmic pulse. Sits above the pad spectrally, never above C5.",
+      "suggestedVolume": 0.3,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 72,
+          "velocity": 40,
+          "startTime": 0,
+          "duration": 6.0
+        },
+        {
+          "note": 70,
+          "velocity": 38,
+          "startTime": 5.5,
+          "duration": 7.0
+        },
+        {
+          "note": 67,
+          "velocity": 36,
+          "startTime": 10.0,
+          "duration": 6.5
+        },
+        {
+          "note": 65,
+          "velocity": 35,
+          "startTime": 16.0,
+          "duration": 7.0
+        },
+        {
+          "note": 63,
+          "velocity": 34,
+          "startTime": 20.5,
+          "duration": 8.0
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 26.0,
+          "duration": 6.0
+        },
+        {
+          "note": 63,
+          "velocity": 32,
+          "startTime": 30.0,
+          "duration": 7.5
+        },
+        {
+          "note": 62,
+          "velocity": 30,
+          "startTime": 34.0,
+          "duration": 6.0
+        },
+        {
+          "note": 60,
+          "velocity": 29,
+          "startTime": 38.0,
+          "duration": 7.0
+        },
+        {
+          "note": 67,
+          "velocity": 37,
+          "startTime": 3.0,
+          "duration": 5.5
+        },
+        {
+          "note": 68,
+          "velocity": 36,
+          "startTime": 7.5,
+          "duration": 5.0
+        },
+        {
+          "note": 65,
+          "velocity": 34,
+          "startTime": 13.5,
+          "duration": 5.5
+        },
+        {
+          "note": 63,
+          "velocity": 32,
+          "startTime": 23.5,
+          "duration": 5.5
+        },
+        {
+          "note": 62,
+          "velocity": 28,
+          "startTime": 37.0,
+          "duration": 5.0
+        },
+        {
+          "note": 58,
+          "velocity": 27,
+          "startTime": 41.0,
+          "duration": 4.0
+        },
+        {
+          "note": 60,
+          "velocity": 26,
+          "startTime": 43.0,
+          "duration": 4.0
+        }
+      ]
+    },
+    {
+      "name": "Synth Bass (Sub Foundation)",
+      "program": 38,
+      "role": "bass",
+      "frequencyRole": "Deep sub-bass foundation in C1-C3 range (MIDI 24-48). Plays chord roots with extremely long sustained notes. Anchors the harmonic progression: C\u2192Ab\u2192Bb. Warm and enveloping.",
+      "suggestedVolume": 0.35,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 36,
+          "velocity": 42,
+          "startTime": 0,
+          "duration": 16.0
+        },
+        {
+          "note": 36,
+          "velocity": 40,
+          "startTime": 1.5,
+          "duration": 12.0
+        },
+        {
+          "note": 44,
+          "velocity": 38,
+          "startTime": 16.0,
+          "duration": 10.0
+        },
+        {
+          "note": 44,
+          "velocity": 36,
+          "startTime": 18.0,
+          "duration": 8.0
+        },
+        {
+          "note": 46,
+          "velocity": 35,
+          "startTime": 26.0,
+          "duration": 10.0
+        },
+        {
+          "note": 46,
+          "velocity": 34,
+          "startTime": 28.0,
+          "duration": 8.0
+        },
+        {
+          "note": 36,
+          "velocity": 33,
+          "startTime": 36.0,
+          "duration": 9.0
+        },
+        {
+          "note": 36,
+          "velocity": 30,
+          "startTime": 38.0,
+          "duration": 7.0
+        },
+        {
+          "note": 48,
+          "velocity": 39,
+          "startTime": 4.0,
+          "duration": 10.0
+        },
+        {
+          "note": 44,
+          "velocity": 35,
+          "startTime": 20.0,
+          "duration": 6.0
+        },
+        {
+          "note": 34,
+          "velocity": 33,
+          "startTime": 30.0,
+          "duration": 6.0
+        },
+        {
+          "note": 46,
+          "velocity": 32,
+          "startTime": 32.0,
+          "duration": 5.0
+        },
+        {
+          "note": 36,
+          "velocity": 28,
+          "startTime": 40.0,
+          "duration": 5.0
+        },
+        {
+          "note": 48,
+          "velocity": 37,
+          "startTime": 8.0,
+          "duration": 8.0
+        },
+        {
+          "note": 43,
+          "velocity": 34,
+          "startTime": 14.0,
+          "duration": 6.0
+        },
+        {
+          "note": 34,
+          "velocity": 27,
+          "startTime": 42.0,
+          "duration": 4.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Pad (Harmonic Body)",
+      "program": 89,
+      "role": "chords",
+      "frequencyRole": "Harmonic body in C3-C5 range (MIDI 48-72). Slow-moving, breathy chord voicings: Cm \u2192 Abmaj \u2192 Bbmaj. Changes every 16-22 seconds. 2-3 note voicings maximum, wide spacing. Blends between bass and melody.",
+      "suggestedVolume": 0.3,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 60,
+          "velocity": 38,
+          "startTime": 0.5,
+          "duration": 15.0
+        },
+        {
+          "note": 55,
+          "velocity": 36,
+          "startTime": 0.5,
+          "duration": 15.0
+        },
+        {
+          "note": 51,
+          "velocity": 35,
+          "startTime": 1.0,
+          "duration": 14.5
+        },
+        {
+          "note": 56,
+          "velocity": 34,
+          "startTime": 16.0,
+          "duration": 10.0
+        },
+        {
+          "note": 60,
+          "velocity": 33,
+          "startTime": 16.5,
+          "duration": 10.0
+        },
+        {
+          "note": 63,
+          "velocity": 32,
+          "startTime": 17.0,
+          "duration": 9.5
+        },
+        {
+          "note": 58,
+          "velocity": 33,
+          "startTime": 26.5,
+          "duration": 9.5
+        },
+        {
+          "note": 53,
+          "velocity": 32,
+          "startTime": 27.0,
+          "duration": 9.0
+        },
+        {
+          "note": 62,
+          "velocity": 30,
+          "startTime": 27.0,
+          "duration": 9.0
+        },
+        {
+          "note": 60,
+          "velocity": 29,
+          "startTime": 36.0,
+          "duration": 9.0
+        },
+        {
+          "note": 55,
+          "velocity": 28,
+          "startTime": 36.5,
+          "duration": 8.5
+        },
+        {
+          "note": 51,
+          "velocity": 27,
+          "startTime": 37.0,
+          "duration": 8.0
+        },
+        {
+          "note": 48,
+          "velocity": 36,
+          "startTime": 5.0,
+          "duration": 10.0
+        },
+        {
+          "note": 63,
+          "velocity": 31,
+          "startTime": 21.0,
+          "duration": 5.5
+        },
+        {
+          "note": 65,
+          "velocity": 30,
+          "startTime": 10.0,
+          "duration": 6.0
+        },
+        {
+          "note": 58,
+          "velocity": 26,
+          "startTime": 41.0,
+          "duration": 4.0
+        }
+      ]
+    }
+  ],
+  "key": "Cm",
+  "bpm": 48,
+  "scale": "dorian"
+}

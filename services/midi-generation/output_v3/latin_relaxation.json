@@ -1,0 +1,388 @@
+{
+  "genre": "latin",
+  "mode": "relaxation",
+  "mixStrategy": "Three-layer frequency separation: Bass (MIDI 36-48) provides warm, slow-moving root notes anchoring the harmony; Chords/Piano (MIDI 48-67) delivers gentle, spread voicings with soft Latin-flavored Andalusian progressions changing every 8-12 seconds; Melody/Flute (MIDI 65-79) floats above in gentle arch-shaped phrases with breathy, sparse lines. All layers breathe together with minimal overlap in attack times to keep density at 3-5 simultaneous notes max. Energy arc: 0.3\u21920.5\u21920.6\u21920.5\u21920.4\u21920.3 across 45 seconds. Latin flavor comes through harmonic minor color tones and subtle syncopation in piano, but rhythm stays flowing and unhurried throughout.",
+  "tracks": [
+    {
+      "name": "Latin Flute Melody",
+      "program": 73,
+      "role": "melody",
+      "frequencyRole": "Lead voice, MIDI 65-79 (F4-G5). Gentle arch-shaped phrases that rise and fall slowly. Sparse, breathy, with 2-3 second gaps between phrases. Chord tones on downbeats, passing tones from D harmonic minor for Latin color.",
+      "suggestedVolume": 0.65,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 65,
+          "velocity": 40,
+          "startTime": 1.0,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 45,
+          "startTime": 4.5,
+          "duration": 3.0
+        },
+        {
+          "note": 72,
+          "velocity": 48,
+          "startTime": 8.0,
+          "duration": 4.0
+        },
+        {
+          "note": 70,
+          "velocity": 44,
+          "startTime": 12.5,
+          "duration": 3.5
+        },
+        {
+          "note": 67,
+          "velocity": 42,
+          "startTime": 16.0,
+          "duration": 3.0
+        },
+        {
+          "note": 69,
+          "velocity": 50,
+          "startTime": 20.0,
+          "duration": 3.5
+        },
+        {
+          "note": 74,
+          "velocity": 55,
+          "startTime": 23.5,
+          "duration": 4.0
+        },
+        {
+          "note": 77,
+          "velocity": 58,
+          "startTime": 27.0,
+          "duration": 3.0
+        },
+        {
+          "note": 76,
+          "velocity": 55,
+          "startTime": 30.5,
+          "duration": 3.5
+        },
+        {
+          "note": 72,
+          "velocity": 50,
+          "startTime": 34.0,
+          "duration": 3.0
+        },
+        {
+          "note": 70,
+          "velocity": 48,
+          "startTime": 37.0,
+          "duration": 3.5
+        },
+        {
+          "note": 69,
+          "velocity": 45,
+          "startTime": 40.0,
+          "duration": 2.5
+        },
+        {
+          "note": 67,
+          "velocity": 42,
+          "startTime": 42.0,
+          "duration": 2.0
+        },
+        {
+          "note": 65,
+          "velocity": 38,
+          "startTime": 43.5,
+          "duration": 2.5
+        },
+        {
+          "note": 62,
+          "velocity": 36,
+          "startTime": 44.0,
+          "duration": 4.0
+        }
+      ]
+    },
+    {
+      "name": "Warm Electric Bass",
+      "program": 33,
+      "role": "bass",
+      "frequencyRole": "Foundation layer, MIDI 38-48 (D2-C3). Plays chord roots with slow, sustained whole and half notes. Minimal movement, anchoring the Andalusian progression: Dm\u2192C\u2192Bb\u2192A. Warm and round tone.",
+      "suggestedVolume": 0.55,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 38,
+          "velocity": 42,
+          "startTime": 0,
+          "duration": 5.0
+        },
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 5.0,
+          "duration": 4.5
+        },
+        {
+          "note": 36,
+          "velocity": 43,
+          "startTime": 9.5,
+          "duration": 4.5
+        },
+        {
+          "note": 36,
+          "velocity": 41,
+          "startTime": 14.0,
+          "duration": 4.0
+        },
+        {
+          "note": 41,
+          "velocity": 45,
+          "startTime": 18.0,
+          "duration": 4.5
+        },
+        {
+          "note": 41,
+          "velocity": 47,
+          "startTime": 22.5,
+          "duration": 4.0
+        },
+        {
+          "note": 45,
+          "velocity": 50,
+          "startTime": 26.5,
+          "duration": 4.5
+        },
+        {
+          "note": 45,
+          "velocity": 48,
+          "startTime": 31.0,
+          "duration": 4.0
+        },
+        {
+          "note": 46,
+          "velocity": 46,
+          "startTime": 35.0,
+          "duration": 4.0
+        },
+        {
+          "note": 43,
+          "velocity": 44,
+          "startTime": 38.0,
+          "duration": 2.5
+        },
+        {
+          "note": 41,
+          "velocity": 42,
+          "startTime": 39.5,
+          "duration": 3.0
+        },
+        {
+          "note": 38,
+          "velocity": 40,
+          "startTime": 40.5,
+          "duration": 3.5
+        },
+        {
+          "note": 38,
+          "velocity": 38,
+          "startTime": 41.5,
+          "duration": 4.0
+        },
+        {
+          "note": 36,
+          "velocity": 37,
+          "startTime": 42.5,
+          "duration": 4.0
+        },
+        {
+          "note": 38,
+          "velocity": 36,
+          "startTime": 43.5,
+          "duration": 5.0
+        }
+      ]
+    },
+    {
+      "name": "Gentle Latin Piano Chords",
+      "program": 0,
+      "role": "chords",
+      "frequencyRole": "Harmonic body, MIDI 50-67 (D3-G4). Soft, spread voicings with gentle Andalusian cadence: i\u2192bVII\u2192bVI\u2192V. Very subtle montuno-inspired broken chords but played slowly and gently, never driving. 2-3 notes per voicing to keep density low.",
+      "suggestedVolume": 0.5,
+      "totalDuration": 45,
+      "notes": [
+        {
+          "note": 50,
+          "velocity": 38,
+          "startTime": 0,
+          "duration": 4.5
+        },
+        {
+          "note": 53,
+          "velocity": 40,
+          "startTime": 0.5,
+          "duration": 4.0
+        },
+        {
+          "note": 57,
+          "velocity": 38,
+          "startTime": 1.0,
+          "duration": 4.0
+        },
+        {
+          "note": 50,
+          "velocity": 40,
+          "startTime": 5.0,
+          "duration": 4.0
+        },
+        {
+          "note": 55,
+          "velocity": 42,
+          "startTime": 5.5,
+          "duration": 3.5
+        },
+        {
+          "note": 48,
+          "velocity": 42,
+          "startTime": 9.5,
+          "duration": 4.5
+        },
+        {
+          "note": 52,
+          "velocity": 44,
+          "startTime": 10.0,
+          "duration": 4.0
+        },
+        {
+          "note": 55,
+          "velocity": 42,
+          "startTime": 10.5,
+          "duration": 3.5
+        },
+        {
+          "note": 48,
+          "velocity": 40,
+          "startTime": 14.5,
+          "duration": 3.5
+        },
+        {
+          "note": 53,
+          "velocity": 42,
+          "startTime": 15.0,
+          "duration": 3.0
+        },
+        {
+          "note": 53,
+          "velocity": 48,
+          "startTime": 18.0,
+          "duration": 4.5
+        },
+        {
+          "note": 58,
+          "velocity": 50,
+          "startTime": 18.5,
+          "duration": 4.0
+        },
+        {
+          "note": 62,
+          "velocity": 48,
+          "startTime": 19.0,
+          "duration": 3.5
+        },
+        {
+          "note": 57,
+          "velocity": 52,
+          "startTime": 22.5,
+          "duration": 4.0
+        },
+        {
+          "note": 61,
+          "velocity": 50,
+          "startTime": 23.0,
+          "duration": 3.5
+        },
+        {
+          "note": 58,
+          "velocity": 55,
+          "startTime": 26.5,
+          "duration": 4.5
+        },
+        {
+          "note": 62,
+          "velocity": 53,
+          "startTime": 27.0,
+          "duration": 4.0
+        },
+        {
+          "note": 65,
+          "velocity": 55,
+          "startTime": 27.5,
+          "duration": 3.5
+        },
+        {
+          "note": 57,
+          "velocity": 50,
+          "startTime": 31.0,
+          "duration": 4.0
+        },
+        {
+          "note": 61,
+          "velocity": 52,
+          "startTime": 31.5,
+          "duration": 3.5
+        },
+        {
+          "note": 58,
+          "velocity": 48,
+          "startTime": 35.0,
+          "duration": 4.0
+        },
+        {
+          "note": 62,
+          "velocity": 46,
+          "startTime": 35.5,
+          "duration": 3.5
+        },
+        {
+          "note": 55,
+          "velocity": 44,
+          "startTime": 38.5,
+          "duration": 3.0
+        },
+        {
+          "note": 50,
+          "velocity": 42,
+          "startTime": 39.5,
+          "duration": 4.0
+        },
+        {
+          "note": 53,
+          "velocity": 40,
+          "startTime": 40.0,
+          "duration": 4.0
+        },
+        {
+          "note": 57,
+          "velocity": 38,
+          "startTime": 40.5,
+          "duration": 4.0
+        },
+        {
+          "note": 50,
+          "velocity": 36,
+          "startTime": 43.0,
+          "duration": 5.0
+        },
+        {
+          "note": 53,
+          "velocity": 36,
+          "startTime": 43.5,
+          "duration": 5.0
+        }
+      ]
+    }
+  ],
+  "key": "Dm",
+  "bpm": 62,
+  "scale": "harmonic minor"
+}
