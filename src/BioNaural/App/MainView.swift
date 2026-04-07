@@ -289,6 +289,11 @@ private struct HomeTab: View {
     @State private var showSoundDNA = false
     @State private var checkInMode: FocusMode = .focus
 
+    // Recommended track selection
+    @State private var selectedRecommendedTrack: FeaturedTrackItem?
+    @State private var showRecommendedCheckIn = false
+    @State private var recommendedDuration: Int = 15
+
     // Entrance animation
     @State private var sectionsVisible = false
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -308,9 +313,17 @@ private struct HomeTab: View {
                 Spacer()
                     .frame(height: Theme.Spacing.xxl)
 
+                // === RECOMMENDED TRACKS (quick play) ===
+                recommendedTracksSection
+                    .padding(.horizontal, Theme.Spacing.pageMargin)
+                    .staggeredFadeIn(index: 2, isVisible: sectionsVisible)
+
+                Spacer()
+                    .frame(height: Theme.Spacing.xxl)
+
                 // === WATCH STATUS ===
                 watchStatus
-                    .staggeredFadeIn(index: 2, isVisible: sectionsVisible)
+                    .staggeredFadeIn(index: 3, isVisible: sectionsVisible)
 
                 Spacer()
                     .frame(height: Theme.Spacing.xxl)
@@ -668,6 +681,160 @@ private struct HomeTab: View {
         }
         .buttonStyle(.plain)
         .accessibilityLabel(title)
+    }
+
+    // MARK: - Recommended Tracks
+
+    /// Horizontal scroll of recommended tracks based on time of day.
+    /// Morning → Focus/Energize, Afternoon → Focus, Evening → Relaxation, Night → Sleep.
+    private var recommendedTracksSection: some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
+            Text("QUICK PLAY")
+                .font(Theme.Typography.caption)
+                .tracking(1.5)
+                .foregroundStyle(Theme.Colors.textTertiary)
+
+            let recommended = recommendedTracks()
+            if !recommended.isEmpty {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: Theme.Spacing.md) {
+                        ForEach(recommended) { track in
+                            Button {
+                                selectedRecommendedTrack = track
+                                showRecommendedCheckIn = true
+                            } label: {
+                                VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
+                                    Text(track.genreEmoji)
+                                        .font(.system(size: 20))
+                                    Text(track.genre.capitalized)
+                                        .font(Theme.Typography.caption)
+                                        .foregroundStyle(Theme.Colors.textPrimary)
+                                    Text(track.mode.rawValue.capitalized)
+                                        .font(.system(size: 9))
+                                        .foregroundStyle(Theme.Colors.textTertiary)
+                                }
+                                .frame(width: 80)
+                                .padding(Theme.Spacing.sm)
+                                .background(Theme.Colors.surface.cornerRadius(Theme.Radius.md))
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+                }
+            }
+        }
+        .sheet(isPresented: $showRecommendedCheckIn) {
+            recommendedTrackCheckIn
+        }
+    }
+
+    /// Pick tracks based on time of day and user's genre preferences.
+    private func recommendedTracks() -> [FeaturedTrackItem] {
+        guard let catalog = MIDISequencePlayer.loadCatalog() else { return [] }
+
+        let hour = Calendar.current.component(.hour, from: Date())
+        let suggestedMode: FocusMode
+        if hour >= 22 || hour < 6 { suggestedMode = .sleep }
+        else if hour >= 6 && hour < 9 { suggestedMode = .energize }
+        else if hour >= 9 && hour < 17 { suggestedMode = .focus }
+        else if hour >= 17 && hour < 20 { suggestedMode = .relaxation }
+        else { suggestedMode = .relaxation }
+
+        // Get user's genre preferences if available
+        let preferredGenres = (dependencies.audioEngine.genrePreference).map { [$0] }
+            ?? ["lofi", "jazz", "ambient"]
+
+        // Filter catalog to suggested mode, prefer user's genres
+        let modeSequences = catalog.sequences.filter { $0.mode == suggestedMode.rawValue }
+        let sorted = modeSequences.sorted { a, b in
+            let aPreferred = preferredGenres.contains(a.genre)
+            let bPreferred = preferredGenres.contains(b.genre)
+            if aPreferred != bPreferred { return aPreferred }
+            return a.genre < b.genre
+        }
+
+        return sorted.prefix(6).compactMap { seq -> FeaturedTrackItem? in
+            let notes = seq.tracks.reduce(0) { $0 + $1.notes.count }
+            guard notes > 0 else { return nil }
+            return FeaturedTrackItem(
+                id: "\(seq.genre)_\(seq.mode)",
+                genre: seq.genre,
+                mode: suggestedMode,
+                bpm: seq.bpm,
+                key: seq.key,
+                trackCount: seq.tracks.count,
+                noteCount: notes
+            )
+        }
+    }
+
+    /// Check-in sheet for recommended track.
+    private var recommendedTrackCheckIn: some View {
+        NavigationStack {
+            VStack(spacing: Theme.Spacing.xl) {
+                if let track = selectedRecommendedTrack {
+                    VStack(spacing: Theme.Spacing.sm) {
+                        Text(track.genreEmoji)
+                            .font(.system(size: 48))
+                        Text(track.displayName)
+                            .font(Theme.Typography.title)
+                            .foregroundStyle(Theme.Colors.textPrimary)
+                        Text("\(track.bpm) BPM • Key of \(track.key)")
+                            .font(Theme.Typography.caption)
+                            .foregroundStyle(Theme.Colors.textSecondary)
+                    }
+                    .padding(.top, Theme.Spacing.lg)
+
+                    HStack(spacing: Theme.Spacing.sm) {
+                        ForEach([5, 10, 15, 25, 30], id: \.self) { mins in
+                            Button {
+                                recommendedDuration = mins
+                            } label: {
+                                Text("\(mins)m")
+                                    .font(Theme.Typography.callout)
+                                    .padding(.horizontal, Theme.Spacing.md)
+                                    .padding(.vertical, Theme.Spacing.xs)
+                                    .background(
+                                        Capsule().fill(recommendedDuration == mins
+                                            ? Theme.Colors.accent.opacity(0.25) : Theme.Colors.surface)
+                                    )
+                                    .foregroundStyle(recommendedDuration == mins
+                                        ? Theme.Colors.textPrimary : Theme.Colors.textSecondary)
+                            }
+                            .buttonStyle(.plain)
+                        }
+                    }
+
+                    Spacer()
+
+                    Button {
+                        showRecommendedCheckIn = false
+                        dependencies.audioEngine.genrePreference = track.genre
+                        presentCheckIn(track.mode)
+                    } label: {
+                        Text("Begin Session")
+                            .font(Theme.Typography.callout)
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, Theme.Spacing.md)
+                            .background(Theme.Colors.accent.cornerRadius(Theme.Radius.lg))
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.bottom, Theme.Spacing.lg)
+                }
+            }
+            .padding(.horizontal, Theme.Spacing.pageMargin)
+            .background(Theme.Colors.canvas.ignoresSafeArea())
+            .navigationTitle("Quick Play")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { showRecommendedCheckIn = false }
+                }
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+        }
     }
 
     // MARK: - Contextual Section (Calendar-Aware)
