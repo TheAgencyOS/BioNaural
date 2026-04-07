@@ -114,6 +114,16 @@ final class ComposerViewModel {
 
     func selectDetailTexture(_ textureName: String?) {
         selectedDetailTexture = textureName
+        // Detail textures layer on top of the ambient bed as a secondary sound
+        // For now, we crossfade the ambient bed to the texture
+        // TODO: Implement a second AmbienceLayer for texture layering
+        guard let engine = audioEngine as? AudioEngine else { return }
+        if let textureName,
+           let texture = DetailTexture(rawValue: textureName) {
+            // Play texture as an overlay — in future, this should be a second layer
+            // For now, swap the ambient bed to the texture sound
+            engine.ambienceLayer?.crossfadeTo(bedName: texture.fileName)
+        }
     }
 
     // MARK: - Melodic Preferences (Step 3)

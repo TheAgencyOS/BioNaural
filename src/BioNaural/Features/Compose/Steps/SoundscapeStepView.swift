@@ -43,9 +43,9 @@ enum AmbientBed: String, CaseIterable, Identifiable {
         switch self {
         case .rain:   return "rain-texture-60s"
         case .ocean:  return "ocean-waves-60s"
-        case .forest: return "brown-noise-60s"    // Placeholder until forest recording added
+        case .forest: return "forest-texture-30s"
         case .wind:   return "wind-texture-60s"
-        case .night:  return "pink-noise-60s"     // Placeholder until night ambience added
+        case .night:  return "night-texture-30s"
         case .space:  return "deep-space-60s"
         }
     }
@@ -73,6 +73,17 @@ enum DetailTexture: String, CaseIterable, Identifiable {
         case .crickets: return "ant.fill"
         case .fire:     return "flame.fill"
         case .chimes:   return "bell.fill"
+        }
+    }
+
+    /// Maps to the actual bundled audio file name.
+    var fileName: String {
+        switch self {
+        case .thunder:  return "thunder-texture-30s"
+        case .birdsong: return "birdsong-texture-30s"
+        case .crickets: return "crickets-texture-30s"
+        case .fire:     return "fire-texture-30s"
+        case .chimes:   return "chimes-texture-30s"
         }
     }
 }
