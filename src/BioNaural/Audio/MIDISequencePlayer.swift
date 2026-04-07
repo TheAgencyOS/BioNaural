@@ -228,6 +228,13 @@ public final class MIDISequencePlayer {
     /// Single master timer that schedules ALL notes from ALL tracks.
     /// Runs every 50ms, looks 100ms ahead. Uses a flat event list
     /// sorted by time for efficient sequential scanning.
+    ///
+    /// SEAMLESS LOOPING: Instead of hard-resetting at the loop boundary,
+    /// this scheduler treats the sequence as infinite by using modular
+    /// arithmetic on the event list. Notes that cross the loop boundary
+    /// are allowed to ring out naturally — no abrupt cutoffs.
+    /// A 2-second crossfade zone at the end gradually reduces velocity
+    /// while the beginning of the next loop fades in.
     private func startScheduler(sequence: MIDISequence) {
         // Build a flat, sorted event list from all tracks
         var events: [(time: Double, role: String, note: UInt8, velocity: UInt8, isOn: Bool)] = []
@@ -245,43 +252,83 @@ public final class MIDISequencePlayer {
         events.sort { $0.time < $1.time }
 
         let totalDuration = sequence.tracks.map(\.totalDuration).max() ?? 30.0
+        let crossfadeZone: Double = 3.0 // seconds of crossfade at loop boundary
         var eventIndex = 0
+        var absoluteTime: Double = 0 // monotonically increasing, never resets
 
         let timer = DispatchSource.makeTimerSource(queue: schedulerQueue)
         timer.schedule(deadline: .now(), repeating: .milliseconds(50))
         timer.setEventHandler { [weak self] in
             guard let self, self.isPlaying else { return }
 
-            self.playbackPosition += 0.05 // 50ms per tick
+            absoluteTime += 0.05
+            let posInLoop = absoluteTime.truncatingRemainder(dividingBy: totalDuration)
+            self.playbackPosition = posInLoop
 
-            // Loop when we reach the end
-            if self.playbackPosition >= totalDuration {
-                self.playbackPosition = 0
+            // Detect loop boundary crossing
+            let prevPos = (absoluteTime - 0.05).truncatingRemainder(dividingBy: totalDuration)
+            if posInLoop < prevPos {
+                // We crossed the loop point — reset event index to beginning
+                // but DON'T stop any notes (let them ring out naturally)
                 eventIndex = 0
                 self.loopCount += 1
             }
 
-            let lookAhead = self.playbackPosition + 0.1 // 100ms lookahead
+            // Crossfade multiplier: full volume except near the end/start
+            let fadeMultiplier: Float
+            if posInLoop > totalDuration - crossfadeZone {
+                // Fading out at end of loop
+                let fadeProgress = Float((totalDuration - posInLoop) / crossfadeZone)
+                fadeMultiplier = fadeProgress // 1.0 → 0.0
+            } else if posInLoop < crossfadeZone && self.loopCount > 0 {
+                // Fading in at start of new loop (not first play)
+                let fadeProgress = Float(posInLoop / crossfadeZone)
+                fadeMultiplier = fadeProgress // 0.0 → 1.0
+            } else {
+                fadeMultiplier = 1.0
+            }
 
-            // Fire all events within the lookahead window
+            let lookAhead = posInLoop + 0.1
+
+            // Fire events within the lookahead window
             while eventIndex < events.count && events[eventIndex].time < lookAhead {
                 let event = events[eventIndex]
 
-                // Only fire events that haven't passed
-                if event.time >= self.playbackPosition - 0.05 {
+                if event.time >= posInLoop - 0.05 {
                     guard let sampler = self.samplers[event.role] else {
                         eventIndex += 1
                         continue
                     }
 
                     if event.isOn {
-                        sampler.startNote(event.note, withVelocity: event.velocity, onChannel: 0)
+                        // Apply crossfade to velocity
+                        let fadedVelocity = UInt8(max(1, min(127, Float(event.velocity) * fadeMultiplier)))
+                        sampler.startNote(event.note, withVelocity: fadedVelocity, onChannel: 0)
                     } else {
                         sampler.stopNote(event.note, onChannel: 0)
                     }
                 }
 
                 eventIndex += 1
+            }
+
+            // Handle wrap-around: if lookAhead crossed the boundary,
+            // also check events at the beginning of the sequence
+            if lookAhead > totalDuration && self.loopCount > 0 {
+                let wrapLookAhead = lookAhead - totalDuration
+                var wrapIdx = 0
+                while wrapIdx < events.count && events[wrapIdx].time < wrapLookAhead {
+                    let event = events[wrapIdx]
+                    if let sampler = self.samplers[event.role] {
+                        if event.isOn {
+                            let fadedVelocity = UInt8(max(1, min(127, Float(event.velocity) * fadeMultiplier)))
+                            sampler.startNote(event.note, withVelocity: fadedVelocity, onChannel: 0)
+                        } else {
+                            sampler.stopNote(event.note, onChannel: 0)
+                        }
+                    }
+                    wrapIdx += 1
+                }
             }
         }
 
