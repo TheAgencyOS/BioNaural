@@ -1033,11 +1033,11 @@ extension Theme {
         /// These are user-facing defaults — the adaptive engine never overrides them.
         enum Defaults {
             /// Binaural/entrainment tones: barely perceptible, felt not heard.
-            static let binauralVolume: Double = 0.03
+            static let binauralVolume: Double = 0.01
             /// Ambient texture bed (rain, noise, wind).
-            static let ambientVolume: Double = 0.25
+            static let ambientVolume: Double = 0.20
             /// Melodic content layer (pads, piano, MIDI sequences).
-            static let melodicVolume: Double = 0.77
+            static let melodicVolume: Double = 0.79
         }
 
         // MARK: - Loop Crossfade
