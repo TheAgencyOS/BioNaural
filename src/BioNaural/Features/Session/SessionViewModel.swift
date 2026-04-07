@@ -624,16 +624,47 @@ final class SessionViewModel {
         }
     }
 
-    // MARK: - Biometric Simulation
+    // MARK: - Biometric Adaptive Feedback
 
-    /// Inject a simulated biometric reading as if it came from Apple Watch.
-    /// Used by BiometricSimulatorView for testing adaptive audio responses.
+    // Target HR ranges per mode (what we're trying to achieve)
+    private var targetHRRange: ClosedRange<Double> {
+        switch sessionMode {
+        case .sleep:       return 45...55   // Deep sleep HR target
+        case .relaxation:  return 55...65   // Relaxed resting HR
+        case .focus:       return 60...72   // Alert but calm
+        case .energize:    return 100...140 // Active workout zone
+        }
+    }
+
+    // Target HRV ranges (higher = more relaxed parasympathetic activity)
+    private var targetHRVRange: ClosedRange<Double> {
+        switch sessionMode {
+        case .sleep:       return 50...80   // High HRV = deep parasympathetic
+        case .relaxation:  return 40...70
+        case .focus:       return 35...55
+        case .energize:    return 10...30   // Low HRV during exercise is normal
+        }
+    }
+
+    /// Baseline HR (user's resting). In production, read from HealthKit.
+    private let baselineHR: Double = 65
+
+    /// Inject a simulated biometric reading and apply CORRECTIVE feedback.
+    ///
+    /// The adaptive engine compares current biometrics against the target
+    /// range for the active mode. If the user is outside the target, the
+    /// audio parameters are adjusted to STEER them back:
+    ///
+    /// - Sleep: HR too high → lower beat frequency (deeper theta/delta),
+    ///   increase ambient volume, slower carrier to encourage settling
+    /// - Focus: HR too high → lower frequency to calm; HR too low → raise
+    ///   frequency to increase alertness
+    /// - Energize: HR too low → raise frequency and volume to motivate
     func injectSimulatedBiometric(hr: Double, hrv: Double) {
-        // Update displayed values immediately
         currentHR = hr
         currentHRV = hrv
 
-        // Classify biometric state from HR
+        // Classify biometric state
         let state: BiometricState
         if hr > 120 { state = .peak }
         else if hr > 90 { state = .elevated }
@@ -641,45 +672,129 @@ final class SessionViewModel {
         else { state = .calm }
         currentState = state
 
-        // Compute normalized HR (Karvonen method)
-        let restingHR: Double = 60
-        let maxHR: Double = 185
-        let hrNormalized = max(0, min(1, (hr - restingHR) / (maxHR - restingHR)))
+        // === DEVIATION from target — how far off are we? ===
+        let targetMidHR = (targetHRRange.lowerBound + targetHRRange.upperBound) / 2
+        let hrDeviation = hr - targetMidHR // positive = too high, negative = too low
+        let hrDeviationNormalized = hrDeviation / 40.0 // normalized to ±1 range
 
-        // Compute target beat frequency based on mode
+        let targetMidHRV = (targetHRVRange.lowerBound + targetHRVRange.upperBound) / 2
+        let hrvDeviation = hrv - targetMidHRV
+
+        let isInTargetHR = targetHRRange.contains(hr)
+        let isAboveTarget = hr > targetHRRange.upperBound
+        let isBelowTarget = hr < targetHRRange.lowerBound
+
+        // === CORRECTIVE BEAT FREQUENCY ===
+        // The key insight: the beat frequency should LEAD the user toward
+        // the target state, not mirror their current state.
         let beatFreq: Double
         switch sessionMode {
         case .sleep:
-            // Theta→Delta: 6→2 Hz, lower HR = lower frequency
-            beatFreq = 6.0 - hrNormalized * 4.0
+            if isInTargetHR {
+                // In target — maintain deep delta for sustained sleep
+                beatFreq = 2.5
+            } else if isAboveTarget {
+                // HR too high (restless) — use theta (6 Hz) to calm down,
+                // then ramp toward delta as HR drops
+                let urgency = min(1, abs(hrDeviationNormalized))
+                beatFreq = 2.5 + urgency * 4.0 // 2.5→6.5 Hz (delta→theta)
+            } else {
+                // HR below target (very deep) — maintain delta
+                beatFreq = 2.0
+            }
+
         case .relaxation:
-            // Alpha: 8-12 Hz, lower HR = lower (deeper relaxation)
-            beatFreq = 12.0 - hrNormalized * 4.0
+            if isInTargetHR {
+                // In target — sustain alpha 10 Hz
+                beatFreq = 10.0
+            } else if isAboveTarget {
+                // Too activated — start at user's level then guide down
+                // "Pace and lead": meet them at 12 Hz, guide to 8 Hz
+                let urgency = min(1, abs(hrDeviationNormalized))
+                beatFreq = 10.0 + urgency * 2.0 // 10→12 Hz (meet then lead)
+            } else {
+                beatFreq = 9.0 // Slightly deeper alpha
+            }
+
         case .focus:
-            // Beta: 14-18 Hz, negative feedback (HR up → freq down to calm)
-            beatFreq = 18.0 - hrNormalized * 4.0
+            if isInTargetHR {
+                // In target — steady beta 15 Hz
+                beatFreq = 15.0
+            } else if isAboveTarget {
+                // Too distracted/anxious — lower to SMR (12-14 Hz) to calm
+                beatFreq = 13.0
+            } else {
+                // Too drowsy — raise to high beta (16-18 Hz) to sharpen
+                beatFreq = 17.0
+            }
+
         case .energize:
-            // Beta-Gamma: 18-30 Hz, positive feedback (HR up → freq up)
-            beatFreq = 18.0 + hrNormalized * 12.0
+            if isInTargetHR {
+                // In target — maintain high beta/gamma
+                beatFreq = 25.0
+            } else if isBelowTarget {
+                // Not activated enough — push higher (gamma 30+ Hz)
+                let urgency = min(1, abs(hrDeviationNormalized))
+                beatFreq = 25.0 + urgency * 10.0 // 25→35 Hz
+            } else {
+                // Over target (safety) — back off slightly
+                beatFreq = 20.0
+            }
         }
 
-        // Apply to audio parameters
-        audioEngine.parameters.beatFrequency = beatFreq
-        currentBeatFrequency = beatFreq
+        // Apply beat frequency with slew rate limiting (max 0.3 Hz/s, ~0.9 Hz per 3s reading)
+        let maxChange = 0.9 // Max change per 3-second reading interval
+        let currentFreq = audioEngine.parameters.beatFrequency
+        let clampedFreq = max(currentFreq - maxChange, min(currentFreq + maxChange, beatFreq))
+        audioEngine.parameters.beatFrequency = clampedFreq
+        currentBeatFrequency = clampedFreq
 
-        // Adjust binaural amplitude based on HRV (higher HRV = deeper state = stronger entrainment)
-        let hrvNormalized = max(0, min(1, hrv / 80.0))
-        audioEngine.parameters.binauralVolume = 0.08 + hrvNormalized * 0.12
-
-        // Adjust melodic density via stem volumes
-        // Higher HR in sleep/relax = increase pad volume (calming)
-        // Higher HR in energize = increase all volumes (positive feedback)
+        // === CORRECTIVE CARRIER FREQUENCY ===
+        // Lower carrier = warmer/calming, higher = brighter/alerting
+        let carrierAdjust: Double
         if sessionMode == .sleep || sessionMode == .relaxation {
-            audioEngine.parameters.melodicVolume = 0.5 + (1 - hrNormalized) * 0.3
-            audioEngine.parameters.ambientVolume = 0.7 + (1 - hrNormalized) * 0.2
+            carrierAdjust = isAboveTarget ? -20.0 : 0 // Warmer to calm
+        } else if sessionMode == .energize {
+            carrierAdjust = isBelowTarget ? 30.0 : 0 // Brighter to energize
         } else {
-            audioEngine.parameters.melodicVolume = 0.5 + hrNormalized * 0.3
-            audioEngine.parameters.ambientVolume = 0.6 + hrNormalized * 0.2
+            carrierAdjust = 0
+        }
+        let baseCarrier = audioEngine.parameters.carrierFrequency
+        audioEngine.parameters.carrierFrequency = max(100, min(600, baseCarrier + carrierAdjust * 0.1))
+
+        // === CORRECTIVE VOLUME MIX ===
+        // When user is outside target, increase the corrective layers:
+        // Sleep/Relax: boost ambient (calming), reduce melodic (less stimulation)
+        // Energize: boost everything (more stimulation)
+        if sessionMode == .sleep || sessionMode == .relaxation {
+            if isAboveTarget {
+                // User too activated — max ambient (calming), stronger binaural
+                audioEngine.parameters.ambientVolume = 0.95
+                audioEngine.parameters.melodicVolume = 0.4  // Reduce stimulation
+                audioEngine.parameters.binauralVolume = 0.20 // Stronger entrainment
+            } else {
+                // In range or below — normal mix
+                audioEngine.parameters.ambientVolume = 0.80
+                audioEngine.parameters.melodicVolume = 0.65
+                audioEngine.parameters.binauralVolume = 0.12
+            }
+        } else if sessionMode == .energize {
+            if isBelowTarget {
+                // Not active enough — boost everything
+                audioEngine.parameters.ambientVolume = 0.70
+                audioEngine.parameters.melodicVolume = 0.85
+                audioEngine.parameters.binauralVolume = 0.18
+                audioEngine.parameters.drumsVolume = 0.80
+                audioEngine.parameters.bassVolume = 0.75
+            } else {
+                audioEngine.parameters.melodicVolume = 0.70
+                audioEngine.parameters.binauralVolume = 0.12
+            }
+        } else {
+            // Focus: steady mix, slightly adjust binaural strength
+            audioEngine.parameters.binauralVolume = isInTargetHR ? 0.12 : 0.18
+            audioEngine.parameters.melodicVolume = 0.65
+            audioEngine.parameters.ambientVolume = 0.80
         }
     }
 }
