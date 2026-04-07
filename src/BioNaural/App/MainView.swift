@@ -241,24 +241,50 @@ struct ComposedSessionLauncher: View {
 
     var body: some View {
         if let composition = compositions.first(where: { $0.id == compositionID }) {
-            SessionView(viewModel: SessionViewModel(
-                mode: composition.focusMode ?? .focus,
-                durationMinutes: composition.durationMinutes,
-                isAdaptive: composition.isAdaptive,
-                pomodoroEnabled: false,
+            // Inner view owns the SessionViewModel via @State so that
+            // @Query-driven re-renders of this parent don't recreate
+            // the VM (which would orphan the running timer).
+            ComposedSessionContent(
+                composition: composition,
                 audioEngine: audioEngine
-            ))
+            )
+        } else {
+            Text("Composition not found")
+                .font(Theme.Typography.callout)
+                .foregroundStyle(Theme.Colors.textTertiary)
+        }
+    }
+}
+
+/// Owns the SessionViewModel via @State, preventing re-creation when
+/// the parent's @Query triggers a body re-evaluation.
+private struct ComposedSessionContent: View {
+
+    let composition: CustomComposition
+    let audioEngine: any AudioEngineProtocol
+
+    @State private var viewModel: SessionViewModel
+
+    init(composition: CustomComposition, audioEngine: any AudioEngineProtocol) {
+        self.composition = composition
+        self.audioEngine = audioEngine
+        _viewModel = State(initialValue: SessionViewModel(
+            mode: composition.focusMode ?? .focus,
+            durationMinutes: composition.durationMinutes,
+            isAdaptive: composition.isAdaptive,
+            pomodoroEnabled: false,
+            audioEngine: audioEngine
+        ))
+    }
+
+    var body: some View {
+        SessionView(viewModel: viewModel)
             .onAppear {
                 IntentDonation.donateStartSession(
                     mode: composition.focusMode ?? .focus,
                     durationMinutes: composition.durationMinutes
                 )
             }
-        } else {
-            Text("Composition not found")
-                .font(Theme.Typography.callout)
-                .foregroundStyle(Theme.Colors.textTertiary)
-        }
     }
 }
 
