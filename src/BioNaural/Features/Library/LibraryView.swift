@@ -35,6 +35,10 @@ struct LibraryView: View {
     @Query(sort: \SonicMemory.dateCreated, order: .reverse)
     private var sonicMemories: [SonicMemory]
 
+    // MARK: - Environment
+
+    @Environment(AppDependencies.self) private var dependencies
+
     // MARK: - State
 
     @State private var sectionsVisible = false
@@ -43,6 +47,12 @@ struct LibraryView: View {
     @State private var selectedTrack: FeaturedTrackItem?
     @State private var showTrackCheckIn = false
 
+    /// Duration selected in the check-in sheet.
+    @State private var selectedDuration: Int = 15
+
+    /// Navigation path for pushing to session view.
+    @State private var navigationPath = NavigationPath()
+
     // MARK: - Environment
 
     @Environment(\.modelContext) private var modelContext
@@ -50,8 +60,9 @@ struct LibraryView: View {
 
     // MARK: - Computed
 
+    /// Library always has featured tracks, so never truly empty.
     private var isLibraryEmpty: Bool {
-        compositions.isEmpty && savedTracks.isEmpty && sonicMemories.isEmpty
+        false
     }
 
     private var heroComposition: CustomComposition? {
@@ -65,7 +76,7 @@ struct LibraryView: View {
     // MARK: - Body
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $navigationPath) {
             Group {
                 if isLibraryEmpty {
                     emptyState
@@ -86,6 +97,23 @@ struct LibraryView: View {
                     SonicMemoryListView()
                 }
             }
+            .navigationDestination(for: AppDestination.self) { destination in
+                switch destination {
+                case .session(let mode):
+                    SessionView(viewModel: SessionViewModel(
+                        mode: mode,
+                        durationMinutes: selectedDuration,
+                        isAdaptive: false,
+                        pomodoroEnabled: false,
+                        audioEngine: dependencies.audioEngine
+                    ))
+                default:
+                    EmptyView()
+                }
+            }
+            .sheet(isPresented: $showTrackCheckIn) {
+                trackCheckInSheet
+            }
             .onAppear {
                 guard !reduceMotion else {
                     sectionsVisible = true
@@ -94,9 +122,6 @@ struct LibraryView: View {
                 withAnimation(Theme.Animation.standard) {
                     sectionsVisible = true
                 }
-            }
-            .task {
-                DemoContentSeeder.seedIfNeeded(in: modelContext)
             }
         }
     }
@@ -605,6 +630,106 @@ private struct LibrarySonicMemoryCard: View {
         .libraryCardGlass()
         .accessibilityElement(children: .combine)
         .accessibilityLabel("\(memory.userDescription). \(emotionLabel)")
+    }
+}
+
+// MARK: - Track Check-In Sheet
+
+extension LibraryView {
+
+    /// Quick check-in sheet when tapping a featured track.
+    /// Lets the user pick duration, then starts the session.
+    var trackCheckInSheet: some View {
+        NavigationStack {
+            VStack(spacing: Theme.Spacing.xl) {
+                if let track = selectedTrack {
+                    // Track info header
+                    VStack(spacing: Theme.Spacing.sm) {
+                        Text(track.genreEmoji)
+                            .font(.system(size: 48))
+                        Text(track.displayName)
+                            .font(Theme.Typography.title)
+                            .foregroundStyle(Theme.Colors.textPrimary)
+                        Text("\(track.bpm) BPM • Key of \(track.key) • \(track.trackCount) tracks")
+                            .font(Theme.Typography.caption)
+                            .foregroundStyle(Theme.Colors.textSecondary)
+                    }
+                    .padding(.top, Theme.Spacing.lg)
+
+                    // Duration selector
+                    VStack(alignment: .leading, spacing: Theme.Spacing.sm) {
+                        Text("Duration")
+                            .font(Theme.Typography.caption)
+                            .foregroundStyle(Theme.Colors.textSecondary)
+
+                        HStack(spacing: Theme.Spacing.sm) {
+                            ForEach([5, 10, 15, 25, 30], id: \.self) { mins in
+                                Button {
+                                    selectedDuration = mins
+                                } label: {
+                                    Text("\(mins)m")
+                                        .font(Theme.Typography.callout)
+                                        .padding(.horizontal, Theme.Spacing.md)
+                                        .padding(.vertical, Theme.Spacing.xs)
+                                        .background(
+                                            Capsule().fill(selectedDuration == mins
+                                                ? track.modeColor.opacity(0.25)
+                                                : Theme.Colors.surface)
+                                        )
+                                        .overlay(
+                                            Capsule().stroke(selectedDuration == mins
+                                                ? track.modeColor : .clear, lineWidth: 1.5)
+                                        )
+                                        .foregroundStyle(selectedDuration == mins
+                                            ? Theme.Colors.textPrimary
+                                            : Theme.Colors.textSecondary)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                        }
+                    }
+
+                    Spacer()
+
+                    // Begin button
+                    Button {
+                        showTrackCheckIn = false
+                        startTrackSession(track)
+                    } label: {
+                        Text("Begin Session")
+                            .font(Theme.Typography.callout)
+                            .foregroundStyle(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, Theme.Spacing.md)
+                            .background(track.modeColor.cornerRadius(Theme.Radius.lg))
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.bottom, Theme.Spacing.lg)
+                }
+            }
+            .padding(.horizontal, Theme.Spacing.pageMargin)
+            .background(Theme.Colors.canvas.ignoresSafeArea())
+            .navigationTitle("Start Session")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { showTrackCheckIn = false }
+                }
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+        }
+    }
+
+    /// Start a session with the selected featured track.
+    private func startTrackSession(_ track: FeaturedTrackItem) {
+        // Set genre preference so the MIDISequencePlayer picks the right sequence
+        dependencies.audioEngine.genrePreference = track.genre
+
+        // Navigate to session
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            navigationPath.append(AppDestination.session(track.mode))
+        }
     }
 }
 
