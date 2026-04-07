@@ -145,11 +145,10 @@ final class SessionViewModel {
     private let headMotionService: (any HeadMotionServiceProtocol)?
 
     deinit {
-        // Invalidate timer to remove it from the RunLoop. The [weak self]
-        // closure prevents crashes, but an orphaned timer still consumes
-        // RunLoop cycles until invalidated.
-        sessionTimer?.invalidate()
-        sessionTimer = nil
+        // Timer uses [weak self] so the closure is safe after dealloc.
+        // We cannot touch @MainActor-isolated `sessionTimer` from deinit
+        // (Swift 6 concurrency rules), but the weak reference ensures the
+        // timer callback becomes a no-op once self is deallocated.
     }
 
     // MARK: - Initialization
