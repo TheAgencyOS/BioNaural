@@ -266,19 +266,60 @@ public final class MelodicLayer {
         player.scheduleBuffer(buffer, at: nil, options: .loops, completionHandler: nil)
     }
 
-    /// Reads the entire audio file into a PCM buffer.
+    /// Reads the audio file into a PCM buffer with an equal-power crossfade
+    /// baked into the loop boundary, eliminating the audible seam when the
+    /// buffer wraps. Identical technique to `AmbienceLayer.loadBuffer`.
     private func loadBuffer(from file: AVAudioFile) -> AVAudioPCMBuffer? {
         let frameCount = AVAudioFrameCount(file.length)
-        guard let buffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: frameCount) else {
+        guard let rawBuffer = AVAudioPCMBuffer(pcmFormat: file.processingFormat, frameCapacity: frameCount) else {
             return nil
         }
         do {
-            try file.read(into: buffer)
-            return buffer
+            try file.read(into: rawBuffer)
         } catch {
             Logger.audio.warning("Failed to read melodic audio buffer: \(error.localizedDescription)")
             return nil
         }
+
+        // Bake crossfade at the loop boundary
+        let sampleRate = file.processingFormat.sampleRate
+        let crossfadeFrames = min(
+            Int(sampleRate * Theme.Audio.loopCrossfadeDuration),
+            Int(frameCount) / 4
+        )
+        guard crossfadeFrames > 100 else { return rawBuffer }
+
+        let channels = Int(file.processingFormat.channelCount)
+        let totalFrames = Int(rawBuffer.frameLength)
+        let newLength = totalFrames - crossfadeFrames
+
+        guard let crossfadedBuffer = AVAudioPCMBuffer(
+            pcmFormat: file.processingFormat,
+            frameCapacity: AVAudioFrameCount(newLength)
+        ) else { return rawBuffer }
+
+        for ch in 0..<channels {
+            guard let src = rawBuffer.floatChannelData?[ch],
+                  let dst = crossfadedBuffer.floatChannelData?[ch] else { continue }
+
+            // Copy the main body
+            for i in 0..<newLength {
+                dst[i] = src[i]
+            }
+
+            // Blend the tail into the head with equal-power curves
+            let tailStart = totalFrames - crossfadeFrames
+            for i in 0..<crossfadeFrames {
+                let t = Float(i) / Float(crossfadeFrames)
+                let fadeOut = cosf(t * .pi / 2) // tail: 1.0 -> 0.0
+                let fadeIn  = sinf(t * .pi / 2) // head: 0.0 -> 1.0
+
+                dst[i] = dst[i] * fadeIn + src[tailStart + i] * fadeOut
+            }
+        }
+
+        crossfadedBuffer.frameLength = AVAudioFrameCount(newLength)
+        return crossfadedBuffer
     }
 
     // MARK: - File Loading

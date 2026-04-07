@@ -282,8 +282,10 @@ public final class AmbienceLayer {
 
         // Apply crossfade at loop boundary
         let sampleRate = file.processingFormat.sampleRate
-        let crossfadeDuration: Double = 2.0 // 2 seconds of crossfade
-        let crossfadeFrames = min(Int(sampleRate * crossfadeDuration), Int(frameCount) / 4)
+        let crossfadeFrames = min(
+            Int(sampleRate * Theme.Audio.loopCrossfadeDuration),
+            Int(frameCount) / 4
+        )
 
         guard crossfadeFrames > 100 else { return rawBuffer } // Too short to crossfade
 

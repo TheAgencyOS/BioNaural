@@ -1027,6 +1027,26 @@ extension Theme {
             static let melodicEnergizeScale: Double = 0.3
         }
 
+        // MARK: - Default Mix Levels
+
+        /// Initial slider positions when a session starts (0.0–1.0).
+        /// These are user-facing defaults — the adaptive engine never overrides them.
+        enum Defaults {
+            /// Binaural/entrainment tones: barely perceptible, felt not heard.
+            static let binauralVolume: Double = 0.03
+            /// Ambient texture bed (rain, noise, wind).
+            static let ambientVolume: Double = 0.25
+            /// Melodic content layer (pads, piano, MIDI sequences).
+            static let melodicVolume: Double = 0.77
+        }
+
+        // MARK: - Loop Crossfade
+
+        /// Duration (seconds) of the equal-power crossfade baked into looping
+        /// buffers at the loop boundary. Applied to ambient, melodic, and stem
+        /// layers to eliminate the audible seam when a buffer wraps.
+        static let loopCrossfadeDuration: TimeInterval = 2.0
+
         // MARK: - Ambient Layer
 
         /// Crossfade duration (seconds) when switching ambient beds.

@@ -209,9 +209,9 @@ public final class AudioEngine: AudioEngineProtocol {
         // (just enough to feel the entrainment effect). Ambient and melodic
         // layers carry the actual listening experience.
         parameters.amplitude = Theme.Audio.Amplitude.binauralMax
-        parameters.binauralVolume = 0.12    // Just perceptible — felt, not heard
-        parameters.ambientVolume = 0.90     // Primary audio bed (loudest)
-        parameters.melodicVolume = 0.70     // Prominent — the musical experience
+        parameters.binauralVolume = Theme.Audio.Defaults.binauralVolume
+        parameters.ambientVolume = Theme.Audio.Defaults.ambientVolume
+        parameters.melodicVolume = Theme.Audio.Defaults.melodicVolume
         parameters.isPlaying = true
 
         if !engine.isRunning {
