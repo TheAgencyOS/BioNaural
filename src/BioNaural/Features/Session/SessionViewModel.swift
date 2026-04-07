@@ -145,8 +145,11 @@ final class SessionViewModel {
     private let headMotionService: (any HeadMotionServiceProtocol)?
 
     deinit {
-        // Timer uses [weak self] — no explicit invalidation needed.
-        // stopTimer() is called in stopSession() before deallocation.
+        // Invalidate timer to remove it from the RunLoop. The [weak self]
+        // closure prevents crashes, but an orphaned timer still consumes
+        // RunLoop cycles until invalidated.
+        sessionTimer?.invalidate()
+        sessionTimer = nil
     }
 
     // MARK: - Initialization
@@ -762,39 +765,8 @@ final class SessionViewModel {
         let baseCarrier = audioEngine.parameters.carrierFrequency
         audioEngine.parameters.carrierFrequency = max(100, min(600, baseCarrier + carrierAdjust * 0.1))
 
-        // === CORRECTIVE VOLUME MIX ===
-        // When user is outside target, increase the corrective layers:
-        // Sleep/Relax: boost ambient (calming), reduce melodic (less stimulation)
-        // Energize: boost everything (more stimulation)
-        if sessionMode == .sleep || sessionMode == .relaxation {
-            if isAboveTarget {
-                // User too activated — max ambient (calming), stronger binaural
-                audioEngine.parameters.ambientVolume = 0.95
-                audioEngine.parameters.melodicVolume = 0.4  // Reduce stimulation
-                audioEngine.parameters.binauralVolume = 0.20 // Stronger entrainment
-            } else {
-                // In range or below — normal mix
-                audioEngine.parameters.ambientVolume = 0.80
-                audioEngine.parameters.melodicVolume = 0.65
-                audioEngine.parameters.binauralVolume = 0.12
-            }
-        } else if sessionMode == .energize {
-            if isBelowTarget {
-                // Not active enough — boost everything
-                audioEngine.parameters.ambientVolume = 0.70
-                audioEngine.parameters.melodicVolume = 0.85
-                audioEngine.parameters.binauralVolume = 0.18
-                audioEngine.parameters.drumsVolume = 0.80
-                audioEngine.parameters.bassVolume = 0.75
-            } else {
-                audioEngine.parameters.melodicVolume = 0.70
-                audioEngine.parameters.binauralVolume = 0.12
-            }
-        } else {
-            // Focus: steady mix, slightly adjust binaural strength
-            audioEngine.parameters.binauralVolume = isInTargetHR ? 0.12 : 0.18
-            audioEngine.parameters.melodicVolume = 0.65
-            audioEngine.parameters.ambientVolume = 0.80
-        }
+        // Volume levels (ambient, melodic, binaural sliders) are
+        // user-controlled and must NOT be overridden by the adaptive
+        // engine. Only beat frequency and carrier are adjusted here.
     }
 }
