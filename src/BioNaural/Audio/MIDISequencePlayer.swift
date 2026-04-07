@@ -46,6 +46,7 @@ public struct MIDISequence: Codable {
     public let key: String
     public let bpm: Int
     public let scale: String
+    public let variation: Int?  // nil for v3 backward compatibility
 }
 
 /// The bundled catalog of all pre-generated sequences.
@@ -130,20 +131,24 @@ public final class MIDISequencePlayer {
         }
     }
 
-    /// Find the best matching sequence for a genre and mode.
+    /// Find a matching sequence for a genre and mode.
+    /// Randomly selects among available variations to prevent
+    /// habituation (user hears a different version each session).
     public static func findSequence(
         genre: String,
         mode: FocusMode,
         catalog: MIDISequenceCatalog
     ) -> MIDISequence? {
-        // Exact match
-        if let exact = catalog.sequences.first(where: {
+        // Collect all matching sequences (may have 10 variations)
+        let matches = catalog.sequences.filter {
             $0.genre == genre && $0.mode == mode.rawValue
-        }) {
-            return exact
+        }
+        if !matches.isEmpty {
+            return matches.randomElement()
         }
         // Fallback: any sequence for this mode
-        return catalog.sequences.first(where: { $0.mode == mode.rawValue })
+        let modeMatches = catalog.sequences.filter { $0.mode == mode.rawValue }
+        return modeMatches.randomElement()
     }
 
     // MARK: - Playback
