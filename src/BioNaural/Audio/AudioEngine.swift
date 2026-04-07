@@ -231,21 +231,20 @@ public final class AudioEngine: AudioEngineProtocol {
         // Start ambient layer with mode-appropriate default soundscape.
         startAmbienceLayer(for: mode)
 
-        // Start melodic layer — file selection filtered by key compatibility.
-        startMelodicLayer(for: mode)
+        // Start music generation — ONLY ONE source plays at a time.
+        // Pre-generated Claude sequences are preferred (they include
+        // melody, bass, chords, and drums all cohesive). If available,
+        // the native MIDI generators and file-based melodic layer are
+        // NOT started — they would just layer random noise on top.
+        let usingSequencePlayer = startMusicGeneration(mode: mode, tonality: tonality)
 
-        // Start generative MIDI layer (melody + chords in session key).
-        startGenerativeLayer(for: mode)
-
-        // Start bass line (Focus/Energize only, in session key and tempo).
-        startBassLine(tonality: tonality)
-
-        // Start drum pattern (Focus/Energize only, locked to session tempo).
-        startDrumPattern(tonality: tonality)
-
-        // Start music generation — prefer pre-generated Claude sequences,
-        // fall back to WebView SpessaSynth, then native MIDI as last resort.
-        startMusicGeneration(mode: mode, tonality: tonality)
+        if !usingSequencePlayer {
+            // Fallback: use native generators when no pre-generated sequence exists
+            startMelodicLayer(for: mode)
+            startGenerativeLayer(for: mode)
+            startBassLine(tonality: tonality)
+            startDrumPattern(tonality: tonality)
+        }
 
         // Start volume sync so user slider changes reach player nodes.
         startVolumeSyncTimer()
@@ -332,8 +331,9 @@ public final class AudioEngine: AudioEngineProtocol {
     /// Start music generation using the best available engine:
     /// 1. Pre-generated Claude MIDI sequences (highest quality)
     /// 2. WebView SpessaSynth engine (genre-aware algorithmic)
-    /// 3. Native GenerativeMIDIEngine (basic fallback)
-    private func startMusicGeneration(mode: FocusMode, tonality: SessionTonality) {
+    /// Returns true if the sequence player is handling all music.
+    @discardableResult
+    func startMusicGeneration(mode: FocusMode, tonality: SessionTonality) -> Bool {
         let genre = genrePreference ?? WebAudioEngine.availableGenres.first(where: {
             switch mode {
             case .sleep: return $0.id == "ambient"
@@ -348,7 +348,7 @@ public final class AudioEngine: AudioEngineProtocol {
            let sequence = MIDISequencePlayer.findSequence(genre: genre, mode: mode, catalog: catalog) {
             sequencePlayer?.play(sequence: sequence)
             Logger.audio.info("Music: Playing pre-generated sequence (\(genre)/\(mode.rawValue))")
-            return
+            return true
         }
 
         // Fall back to WebView SpessaSynth
@@ -358,7 +358,8 @@ public final class AudioEngine: AudioEngineProtocol {
             key: "\(tonality.root)",
             bpm: tonality.tempo
         )
-        Logger.audio.info("Music: Using WebView SpessaSynth (\(genre)/\(mode.rawValue))")
+        Logger.audio.info("Music: Using WebView SpessaSynth fallback (\(genre)/\(mode.rawValue))")
+        return false
     }
 
     /// Start bass line generator (Focus/Energize only).
