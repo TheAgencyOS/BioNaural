@@ -112,17 +112,26 @@ GENRES = {
 }
 
 # Per-mode instrument overrides: (mode, genre) -> {role: GM program}
-# Focus gets warmer timbres (Rhodes, vibraphone); energize gets brighter leads
+# Focus: warm Rhodes/vibraphone. Energize: bright piano + strings (NOT synth
+# leads — GM 80/81 sound like cheap Casio on most SoundFonts).
 MODE_INSTRUMENT_OVERRIDES = {
-    ("focus", "hiphop"):     {"melody": 4},     # Rhodes instead of Music Box
-    ("focus", "electronic"): {"melody": 5},     # Wurlitzer
-    ("focus", "rock"):       {"melody": 4},     # Rhodes
-    ("focus", "ambient"):    {"melody": 11},    # Vibraphone
-    ("focus", "blues"):      {"melody": 4},     # Rhodes
-    ("energize", "hiphop"):     {"melody": 80}, # Square Lead
-    ("energize", "electronic"): {"melody": 81, "chords": 92},  # Saw Lead + Bowed Pad
-    ("energize", "lofi"):       {"melody": 80}, # Square Lead
-    ("energize", "ambient"):    {"melody": 81}, # Saw Lead
+    # Focus: warm, non-distracting timbres
+    ("focus", "hiphop"):     {"melody": 4},                      # Rhodes
+    ("focus", "electronic"): {"melody": 5},                      # Wurlitzer
+    ("focus", "rock"):       {"melody": 4},                      # Rhodes
+    ("focus", "ambient"):    {"melody": 11},                     # Vibraphone
+    ("focus", "blues"):      {"melody": 4},                      # Rhodes
+    # Energize: bright but organic — piano, strings, EP (never synth leads)
+    ("energize", "hiphop"):     {"melody": 1, "chords": 48},    # Bright Piano + Strings
+    ("energize", "electronic"): {"melody": 5, "chords": 48},    # EP2 (DX7) + Strings
+    ("energize", "lofi"):       {"melody": 1, "chords": 48},    # Bright Piano + Strings
+    ("energize", "ambient"):    {"melody": 5, "chords": 48},    # EP2 + Strings
+    ("energize", "rock"):       {"melody": 1, "bass": 34, "chords": 48},  # Bright Piano + Picked Bass + Strings
+    ("energize", "jazz"):       {"melody": 1, "chords": 48},              # Bright Piano + Strings
+    ("energize", "blues"):      {"melody": 1, "bass": 34, "chords": 48},  # Bright Piano + Picked Bass + Strings
+    ("energize", "classical"):  {"melody": 1, "chords": 48},    # Bright Piano + Strings
+    ("energize", "latin"):      {"melody": 5, "chords": 48},    # EP2 + Strings
+    ("energize", "reggae"):     {"melody": 5, "chords": 48},    # EP2 + Strings
 }
 
 # ============================================================================
@@ -236,14 +245,15 @@ def plan_form(mode: str, bpm: float, duration: float) -> list:
             ("outro",  0.90, 1.00, 0.35),
         ]
     elif mode == "energize":
-        # Intro -> build -> drop -> build2 -> drop2 -> cooldown
+        # Cyclical form: ends with "intro" energy so the loop wraps seamlessly.
+        # intro → build → drop → build2 → drop2 → intro (mirror of opening)
         sections = [
-            ("intro",    0.0,  0.10, 0.30),
-            ("build",    0.10, 0.30, 0.65),
-            ("drop",     0.30, 0.50, 0.85),
-            ("build2",   0.50, 0.65, 0.75),
-            ("drop2",    0.65, 0.85, 0.95),
-            ("cooldown", 0.85, 1.00, 0.40),
+            ("intro",    0.0,  0.08, 0.35),
+            ("build",    0.08, 0.25, 0.65),
+            ("drop",     0.25, 0.45, 0.85),
+            ("build2",   0.45, 0.60, 0.75),
+            ("drop2",    0.60, 0.82, 0.95),
+            ("intro",    0.82, 1.00, 0.35),  # mirror of opening for seamless loop
         ]
     else:
         sections = [("full", 0.0, 1.0, 0.5)]
@@ -890,28 +900,36 @@ def _generate_energize_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
         return ch
 
     def build_riff_pitches(chord, bar_offset=0):
-        """Build a 16-note pitch sequence from chord + power intervals."""
+        """Build a 16-note pitch sequence from chord + scale.
+        Strong beats (0,4,8,12 = kick hits) get chord tones for rhythmic
+        lock with drums. Weak beats use stepwise motion for melodic flow.
+        Range constrained to C4-C6 (MIDI 60-84) for warm SoundFont tone."""
         cr = chord["root"] + 12  # melody register
-        cr = clamp(cr, 60, 84)
+        cr = clamp(cr, 60, 78)  # keep melody in warm mid-range
         intervals = CHORD_TYPES.get(chord["type"], CHORD_TYPES["maj"])
+
+        # Build chord tones in melody register
+        chord_tones = [nearest_scale(cr + iv, pool) for iv in intervals]
+        chord_tones.append(nearest_scale(cr + 12, pool))  # octave
+        chord_tones = sorted(set(ct for ct in chord_tones if 60 <= ct <= 84))
 
         pitches = []
         for step in range(16):
-            is_strong = step % 4 == 0
-            if is_strong:
-                # Power intervals: root, 5th, octave, 5th-of-octave
-                power = [cr, cr + 7, cr + 12, cr + 7 + 12]
-                power = [nearest_scale(p, pool) for p in power]
-                pitch = power[(step // 4 + bar_offset) % len(power)]
+            is_kick = step % 4 == 0  # aligns with four-on-the-floor kick
+            if is_kick and chord_tones:
+                # Land on a chord tone — locks melody to the rhythmic grid
+                pitch = chord_tones[(step // 4 + bar_offset) % len(chord_tones)]
             else:
-                # Steps from previous pitch or chord tone
+                # Stepwise motion between chord tones
                 if pitches:
                     prev = pitches[-1]
-                    step_cands = [n for n in pool if 1 <= abs(n - prev) <= 4]
+                    step_cands = [n for n in pool if 1 <= abs(n - prev) <= 3 and 60 <= n <= 84]
+                    if not step_cands:
+                        step_cands = [n for n in pool if abs(n - prev) <= 5 and 60 <= n <= 84]
                     pitch = random.choice(step_cands) if step_cands else prev
                 else:
-                    pitch = nearest_scale(cr + random.choice(intervals), pool)
-            pitches.append(clamp(pitch, 60, 96))
+                    pitch = nearest_scale(cr, pool)
+            pitches.append(clamp(pitch, 60, 84))
         return pitches
 
     def make_response(call_pitches):
@@ -2227,23 +2245,14 @@ def generate_sequence(genre: str, mode: str, var_id: int) -> dict:
     if drum_notes:
         drum_notes = humanize_track(drum_notes, genre, bpm, is_drums=True)
 
-    # === LOOP BOUNDARY SMOOTHING ===
-    # Fade velocity near the end and start of the sequence so the loop
-    # boundary is imperceptible. 5-second fade zone on each side.
-    fade_zone = 5.0
-    for track in [melody_notes, bass_notes, chord_notes]:
-        for note in track:
-            t = note["startTime"]
-            if t > DURATION - fade_zone:
-                # Fade out at end
-                fade = (DURATION - t) / fade_zone  # 1.0 → 0.0
-                note["velocity"] = max(1, int(note["velocity"] * fade))
-            elif t < fade_zone:
-                # Fade in at start (gentle — don't make the opening silent)
-                fade = 0.5 + 0.5 * (t / fade_zone)  # 0.5 → 1.0
-                note["velocity"] = max(1, int(note["velocity"] * fade))
-
-    # Trim notes that extend past the sequence boundary
+    # === LOOP BOUNDARY ===
+    # Do NOT fade velocity here — the MIDISequencePlayer has its own 8s
+    # crossfade zone that handles the audio transition. Adding a velocity
+    # fade on top creates an audible double-dip.
+    # Instead, the form structure ensures the ending section matches the
+    # opening energy (cyclical form), so the content itself loops smoothly.
+    #
+    # Trim notes that extend past the sequence boundary.
     for track in [melody_notes, bass_notes, chord_notes]:
         for note in track:
             end = note["startTime"] + note["duration"]
