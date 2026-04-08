@@ -360,6 +360,32 @@ def generate_harmony(mode: str, root_midi: int, scale: list, bpm: float,
             "tension": tension,
         })
 
+    # === HARMONIC CIRCULARITY ===
+    # Ensure the last chord resolves naturally to the first chord so the
+    # loop boundary sounds seamless. Force the final chord to dominant (V)
+    # which resolves to the tonic that starts the next loop iteration.
+    if len(chords) >= 2:
+        first_root = chords[0]["root"]
+        last = chords[-1]
+        # Set last chord to V (dominant) of the key → resolves to I at loop start
+        dominant_root = first_root + 7  # perfect 5th above tonic
+        if dominant_root > 72:
+            dominant_root -= 12
+        last["root"] = clamp(dominant_root, 36, 72)
+        last["type"] = "dom7"
+        last["degree"] = 7
+        last["tension"] = 0.6
+
+        # Second-to-last chord: subdominant (IV) for ii-V-I cadence feel
+        if len(chords) >= 3:
+            penult = chords[-2]
+            subdominant_root = first_root + 5
+            if subdominant_root > 72:
+                subdominant_root -= 12
+            penult["root"] = clamp(subdominant_root, 36, 72)
+            penult["type"] = "maj"
+            penult["degree"] = 5
+
     return chords
 
 
@@ -1531,6 +1557,43 @@ GROOVE_TEMPLATES = {
 }
 
 
+# Four-on-the-floor patterns for focus/energize (kick every beat)
+# Multiple variations for rotation — not cheesy synths, just solid grooves
+FOUR_ON_FLOOR = {
+    # Minimal deep house: kick + offbeat hats + snare on 2&4
+    "minimal": [
+        (KICK,92),(0,0),(CHH,35),(0,0),(KICK,88),(0,0),(CHH,40),(0,0),
+        (KICK,90),(0,0),(CHH,35),(0,0),(KICK,88),(0,0),(CHH,40),(OHH,30),
+    ],
+    # Driving: kick + closed hats on every 8th + clap on 2&4
+    "driving": [
+        (KICK,95),(CHH,32),(CHH,42),(CHH,32),(KICK,90),(CHH,32),(CHH,42),(CHH,32),
+        (KICK,92),(CHH,32),(CHH,42),(CHH,32),(KICK,90),(CHH,32),(CHH,42),(CHH,32),
+    ],
+    # Groove: kick on beats + syncopated hat + rimshot accents
+    "groove": [
+        (KICK,90),(0,0),(CHH,38),(CHH,25),(KICK,85),(0,0),(CHH,38),(0,0),
+        (KICK,88),(CHH,25),(CHH,38),(0,0),(KICK,85),(0,0),(CHH,38),(CHH,25),
+    ],
+    # Punchy: kick + snare on 2&4 + 16th hats for energy
+    "punchy": [
+        (KICK,95),(CHH,28),(CHH,38),(CHH,28),(KICK,92),(CHH,28),(CHH,38),(CHH,28),
+        (KICK,93),(CHH,28),(CHH,38),(CHH,28),(KICK,90),(CHH,28),(CHH,38),(OHH,35),
+    ],
+}
+
+# Snare/clap overlay for four-on-the-floor (plays on beats 2 and 4)
+FOUR_ON_FLOOR_BACKBEAT = [
+    (0,0),(0,0),(0,0),(0,0),(SNARE,75),(0,0),(0,0),(0,0),
+    (0,0),(0,0),(0,0),(0,0),(SNARE,78),(0,0),(0,0),(0,0),
+]
+
+FOUR_ON_FLOOR_FILLS = [
+    # Snare roll into crash
+    (SNARE,60),(SNARE,65),(SNARE,68),(SNARE,72),(SNARE,76),(SNARE,80),(SNARE,88),(CRASH,92),
+]
+
+
 def generate_drums(mode: str, mode_cfg: dict, genre: str, genre_cfg: dict,
                    sections: list, variation: dict, duration: float) -> list:
     """Generate drum track with fills, ghost notes, groove, and dynamic arc."""
@@ -1538,7 +1601,20 @@ def generate_drums(mode: str, mode_cfg: dict, genre: str, genre_cfg: dict,
         return []
 
     drum_style = genre_cfg["drum_style"]
-    core = DRUM_CORES.get(drum_style, [])
+
+    # === FOUR-ON-THE-FLOOR for focus and energize ===
+    # Override genre drum pattern with solid kick-on-every-beat grooves
+    if mode in ("focus", "energize"):
+        floor_styles = list(FOUR_ON_FLOOR.keys())
+        floor_key = floor_styles[variation["id"] % len(floor_styles)]
+        core = FOUR_ON_FLOOR[floor_key]
+        fill_pattern = FOUR_ON_FLOOR_FILLS
+        backbeat = FOUR_ON_FLOOR_BACKBEAT
+    else:
+        core = DRUM_CORES.get(drum_style, [])
+        fill_pattern = FILL_PATTERNS.get(drum_style, [])
+        backbeat = None
+
     if not core:
         return []
 
@@ -1553,7 +1629,14 @@ def generate_drums(mode: str, mode_cfg: dict, genre: str, genre_cfg: dict,
     step = 0
     bar_steps = 16
     total_steps = int(duration / step_dur)
-    fill_pattern = FILL_PATTERNS.get(drum_style, [])
+
+    # Use the fill pattern set earlier (four-on-the-floor or genre-specific)
+    if mode not in ("focus", "energize"):
+        fill_pattern = FILL_PATTERNS.get(drum_style, [])
+
+    # For focus/energize, use straight groove (tight, not genre-dependent)
+    if mode in ("focus", "energize"):
+        groove = GROOVE_TEMPLATES["straight"]
 
     # Phrase length for fill placement (every N bars)
     fill_interval_bars = 4
@@ -1601,6 +1684,27 @@ def generate_drums(mode: str, mode_cfg: dict, genre: str, genre_cfg: dict,
                 "startTime": round(t + timing_offset + random.uniform(-0.004, 0.004), 3),
                 "duration": round(step_dur * 0.8, 3),
             })
+
+    # === BACKBEAT OVERLAY for four-on-the-floor (snare on 2 & 4) ===
+    if backbeat:
+        for step_idx in range(total_steps):
+            t = step_idx * step_dur
+            if t >= duration:
+                break
+            bb_hit = backbeat[step_idx % len(backbeat)]
+            note_num, base_vel = bb_hit
+            if note_num > 0 and base_vel > 0:
+                progress = t / duration
+                tension = tension_curve(mode, progress, variation["tension_shift"])
+                dyn_scale = 0.7 + tension * 0.3
+                vel = int(base_vel * dyn_scale * (vel_hi / 100.0))
+                vel = clamp(vel + random.randint(-2, 2), vel_lo, vel_hi)
+                notes.append({
+                    "note": note_num,
+                    "velocity": vel,
+                    "startTime": round(t + random.uniform(-0.003, 0.003), 3),
+                    "duration": round(step_dur * 0.8, 3),
+                })
 
     # === GHOST NOTES (quiet snare hits between main beats) ===
     ghost_prob = {"jazz": 0.35, "hiphop": 0.25, "lofi": 0.18, "rock": 0.12,
@@ -1756,6 +1860,29 @@ def generate_sequence(genre: str, mode: str, var_id: int) -> dict:
 
     if drum_notes:
         drum_notes = humanize_track(drum_notes, genre, bpm, is_drums=True)
+
+    # === LOOP BOUNDARY SMOOTHING ===
+    # Fade velocity near the end and start of the sequence so the loop
+    # boundary is imperceptible. 5-second fade zone on each side.
+    fade_zone = 5.0
+    for track in [melody_notes, bass_notes, chord_notes]:
+        for note in track:
+            t = note["startTime"]
+            if t > DURATION - fade_zone:
+                # Fade out at end
+                fade = (DURATION - t) / fade_zone  # 1.0 → 0.0
+                note["velocity"] = max(1, int(note["velocity"] * fade))
+            elif t < fade_zone:
+                # Fade in at start (gentle — don't make the opening silent)
+                fade = 0.5 + 0.5 * (t / fade_zone)  # 0.5 → 1.0
+                note["velocity"] = max(1, int(note["velocity"] * fade))
+
+    # Trim notes that extend past the sequence boundary
+    for track in [melody_notes, bass_notes, chord_notes]:
+        for note in track:
+            end = note["startTime"] + note["duration"]
+            if end > DURATION:
+                note["duration"] = round(max(0.05, DURATION - note["startTime"]), 3)
 
     # Sort all tracks by start time
     melody_notes.sort(key=lambda n: n["startTime"])
