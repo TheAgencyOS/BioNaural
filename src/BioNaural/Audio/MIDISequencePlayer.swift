@@ -292,7 +292,7 @@ public final class MIDISequencePlayer {
         events.sort { $0.time < $1.time }
 
         let totalDuration = sequence.tracks.map(\.totalDuration).max() ?? 30.0
-        let crossfadeZone: Double = 8.0 // seconds of crossfade at loop boundary
+        let crossfadeZone: Double = 10.0 // seconds of crossfade at loop boundary
         var eventIndex = 0
         var absoluteTime: Double = 0 // monotonically increasing, never resets
 
