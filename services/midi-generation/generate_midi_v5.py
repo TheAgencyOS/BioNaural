@@ -69,17 +69,29 @@ MODES = {
         "contour": "flat", "octave_range": (4, 5),
         "scales": ["pentatonic_major", "dorian", "ionian", "mixolydian"],
         "keys": ["C", "Bb", "D", "G"],
-        "phrase_bars": 2, "motif_len": 8,
-        "cell_beats": 8,  # 2-bar melodic cell that loops
+        "phrase_bars": 4, "motif_len": 8,
+        "cell_beats": 16,  # 4-bar melodic cell
+        "chord_progressions": [
+            [(2, "min7"), (7, "dom7"), (0, "maj7"), (9, "min7")],   # ii7-V7-Imaj7-vi7
+            [(0, "maj7"), (5, "maj7"), (0, "maj7"), (5, "maj7")],   # Imaj7-IVmaj7 loop
+            [(9, "min7"), (2, "min7"), (7, "dom7"), (0, "maj7")],   # vi7-ii7-V7-Imaj7
+            [(0, "maj7"), (9, "min7"), (2, "min7"), (7, "dom7")],   # Imaj7-vi7-ii7-V7
+        ],
     },
     "energize": {
-        "bpm": 120, "vel_range": (70, 110), "dur_range": (0.1, 0.8),
+        "bpm": 130, "vel_range": (70, 110), "dur_range": (0.1, 0.8),
         "density": 3.0, "max_poly": 8, "has_drums": True,
         "contour": "ascending", "octave_range": (4, 6),
         "scales": ["ionian", "mixolydian", "lydian", "dorian"],
         "keys": ["D", "E", "A", "G"],
         "phrase_bars": 4, "motif_len": 4,
-        "riff_steps": 16,  # 1-bar riff pattern on 16th grid
+        "riff_steps": 16,
+        "chord_progressions": [
+            [(0, "maj"), (7, "maj"), (9, "min"), (5, "maj")],    # I-V-vi-IV anthem
+            [(0, "maj"), (5, "maj"), (7, "dom7"), (0, "maj")],   # I-IV-V-I drive
+            [(9, "min"), (5, "maj"), (0, "maj"), (7, "maj")],    # vi-IV-I-V buildup
+            [(0, "maj"), (9, "min"), (5, "maj"), (7, "dom7")],   # I-vi-IV-V pop
+        ],
     },
 }
 
@@ -97,6 +109,20 @@ GENRES = {
     "classical":  {"melody": 0,  "bass": 42,  "chords": 49, "drums": 0, "bass_style": "alberti",   "drum_style": "classical",  "feel": "rubato",   "voicing": "chorale"},
     "latin":      {"melody": 73, "bass": 33,  "chords": 0,  "drums": 0, "bass_style": "tumbao",    "drum_style": "latin",      "feel": "clave",    "voicing": "triad"},
     "electronic": {"melody": 81, "bass": 38,  "chords": 89, "drums": 0, "bass_style": "synth",     "drum_style": "electronic", "feel": "tight",    "voicing": "stacked"},
+}
+
+# Per-mode instrument overrides: (mode, genre) -> {role: GM program}
+# Focus gets warmer timbres (Rhodes, vibraphone); energize gets brighter leads
+MODE_INSTRUMENT_OVERRIDES = {
+    ("focus", "hiphop"):     {"melody": 4},     # Rhodes instead of Music Box
+    ("focus", "electronic"): {"melody": 5},     # Wurlitzer
+    ("focus", "rock"):       {"melody": 4},     # Rhodes
+    ("focus", "ambient"):    {"melody": 11},    # Vibraphone
+    ("focus", "blues"):      {"melody": 4},     # Rhodes
+    ("energize", "hiphop"):     {"melody": 80}, # Square Lead
+    ("energize", "electronic"): {"melody": 81, "chords": 92},  # Saw Lead + Bowed Pad
+    ("energize", "lofi"):       {"melody": 80}, # Square Lead
+    ("energize", "ambient"):    {"melody": 81}, # Saw Lead
 }
 
 # ============================================================================
@@ -262,6 +288,9 @@ CHORD_TYPES = {
     "sus2":  [0, 2, 7],
     "aug":   [0, 4, 8],
     "add9":  [0, 4, 7, 14],
+    "dom9":  [0, 4, 7, 10, 14],
+    "min9":  [0, 3, 7, 10, 14],
+    "maj9":  [0, 4, 7, 11, 14],
     "power": [0, 7, 12],
     "fifth": [0, 7],
 }
@@ -301,11 +330,66 @@ def tension_to_function(tension: float) -> str:
         return "dominant"
 
 
+def _generate_curated_harmony(mode: str, root_midi: int, bpm: float,
+                              duration: float, variation: dict) -> list:
+    """Use curated chord progressions for focus/energize. All tracks share
+    the same key, scale, and progression — guaranteed cohesion."""
+    mode_cfg = MODES[mode]
+    progressions = mode_cfg["chord_progressions"]
+    bar_dur = 240.0 / bpm
+    bars_per_chord = 2 if mode == "focus" else 1
+
+    # Pick progression based on variation for diversity across the 10 variations
+    prog = progressions[variation["id"] % len(progressions)]
+
+    chords = []
+    t = 0.0
+    chord_dur = bars_per_chord * bar_dur
+    prog_idx = 0
+
+    while t < duration:
+        degree, chord_type = prog[prog_idx % len(prog)]
+        chord_root = root_midi + degree - 12  # bass register
+        chord_root = clamp(chord_root, 36, 72)
+
+        tension = tension_curve(mode, t / duration, variation["tension_shift"])
+
+        chords.append({
+            "root": chord_root,
+            "degree": degree,
+            "type": chord_type,
+            "start_time": t,
+            "duration": chord_dur,
+            "tension": tension,
+        })
+
+        t += chord_dur
+        prog_idx += 1
+
+    # Harmonic circularity: last chord resolves to first
+    if len(chords) >= 2:
+        first_root = chords[0]["root"]
+        last = chords[-1]
+        dominant_root = first_root + 7
+        if dominant_root > 72:
+            dominant_root -= 12
+        last["root"] = clamp(dominant_root, 36, 72)
+        last["type"] = "dom7"
+        last["degree"] = 7
+        last["tension"] = 0.6
+
+    return chords
+
+
 def generate_harmony(mode: str, root_midi: int, scale: list, bpm: float,
                      sections: list, duration: float, variation: dict) -> list:
     """Generate chord progression driven by tension curve.
     Returns list of {"root", "type", "start_time", "duration", "tension"}
     """
+    # Use curated progressions for focus/energize (guaranteed cohesion)
+    if "chord_progressions" in MODES.get(mode, {}):
+        return _generate_curated_harmony(mode, root_midi, bpm, duration, variation)
+
     bar_dur = 240.0 / bpm
     total_bars = max(4, int(duration / bar_dur))
 
@@ -595,105 +679,126 @@ def generate_melody(mode: str, mode_cfg: dict, scale_pool: list, root_midi: int,
 
 
 # ============================================================================
-# 6a. FOCUS MELODY — Repeating 2-bar cell (lo-fi loop aesthetic)
+# 6a. FOCUS MELODY — Chord-tone melody with 4-bar phrases (lo-fi study music)
 # ============================================================================
 def _generate_focus_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
                            chords: list, variation: dict, duration: float) -> list:
-    """Focus melody: generate a 2-bar melodic cell and repeat it with subtle
-    variation each cycle. Think lo-fi piano loop — predictable enough to fade
-    into the background, musical enough to keep the mind gently engaged."""
+    """Focus melody: chord-aware 4-bar phrases that repeat with subtle variation.
+    Designed for habituation — predictable enough to fade into background,
+    musical enough to mask environmental noise. Based on lo-fi study music
+    research: pentatonic melody, jazz harmony, steady rhythm, flat dynamics."""
     notes = []
     bpm = mode_cfg["bpm"]
     beat_dur = 60.0 / bpm
+    eighth = beat_dur / 2
     vel_lo, vel_hi = mode_cfg["vel_range"]
-    oct_lo, oct_hi = mode_cfg["octave_range"]
-    reg = variation["register"]
-    oct_lo = clamp(oct_lo + reg // 2, 2, 7)
-    oct_hi = clamp(oct_hi + (reg + 1) // 2, oct_lo + 1, 8)
 
-    pool = scale_notes(root_midi, SCALES[mode_cfg["scales"][0]], oct_lo, oct_hi)
+    # Constrain to warm mid-register (C4-G5, MIDI 60-79)
+    pool = scale_notes(root_midi, SCALES[mode_cfg["scales"][0]], 4, 5)
+    pool = [n for n in pool if 60 <= n <= 79]
+    if not pool:
+        pool = scale_notes(root_midi, SCALES[mode_cfg["scales"][0]], 3, 6)
     if not pool:
         return notes
 
-    cell_beats = mode_cfg.get("cell_beats", 8)  # 2 bars of 4/4
-    cell_dur = cell_beats * beat_dur
-    eighth = beat_dur / 2
+    cell_beats = mode_cfg.get("cell_beats", 16)  # 4 bars
+    total_slots = cell_beats * 2  # 8th-note grid
 
-    # === BUILD THE CELL: rhythmic skeleton + pitch selection ===
-    # Create a rhythmic pattern on the 8th-note grid (16 slots for 2 bars)
-    total_slots = cell_beats * 2  # 8th note slots
-    # Focus rhythm: moderate density, some rests for breathing room
-    # ~60% of slots have notes — creates a recognizable pattern
+    # 5 rhythm templates (32 slots = 4 bars of 8th notes, ~50% fill rate)
     rhythm_templates = [
-        # Template 0: steady 8ths with rests — classic lo-fi
-        [1,0,1,1, 0,1,0,1, 1,0,1,0, 1,1,0,0],
-        # Template 1: syncopated but predictable
-        [1,0,0,1, 0,1,1,0, 1,0,0,1, 1,0,1,0],
-        # Template 2: dotted pattern — jazzy feel
-        [1,0,0,1, 0,0,1,0, 0,1,0,0, 1,0,0,1],
-        # Template 3: regular with pickup
-        [0,1,1,0, 1,0,1,1, 0,1,1,0, 1,0,0,1],
-        # Template 4: sparse and gentle
-        [1,0,0,0, 1,0,1,0, 0,0,1,0, 1,0,0,0],
+        # Steady 8ths with breathing room — classic lo-fi piano
+        [1,0,1,1, 0,1,0,1, 1,0,1,0, 1,1,0,0, 1,0,0,1, 0,1,1,0, 1,0,1,0, 0,1,0,0],
+        # Syncopated — jazzy Rhodes feel
+        [1,0,0,1, 0,1,1,0, 0,0,1,0, 1,0,0,1, 0,1,0,1, 1,0,0,0, 1,0,0,1, 0,0,1,0],
+        # Dotted — gentle bounce
+        [1,0,0,1, 0,0,1,0, 0,1,0,0, 1,0,0,0, 1,0,0,1, 0,0,1,0, 1,0,0,0, 0,1,0,0],
+        # Walking — regular pulse with pickup notes
+        [0,1,1,0, 1,0,1,1, 0,1,0,0, 1,0,0,1, 0,1,1,0, 1,0,0,1, 0,1,0,1, 1,0,0,0],
+        # Sparse — minimal, meditative
+        [1,0,0,0, 0,0,1,0, 0,0,0,0, 1,0,0,0, 0,0,1,0, 0,0,0,1, 0,0,0,0, 1,0,0,0],
     ]
     rhythm = rhythm_templates[variation["id"] % len(rhythm_templates)]
 
-    # Pitch selection: use chord tones + passing tones for the cell
-    # Start from a comfortable mid-range note
-    center = pool[len(pool) // 2]
-    cell_pitches = []
+    def get_chord_tones_at(t_pos):
+        """Get chord tones for the chord active at time t_pos."""
+        ch = chords[0]
+        for c in reversed(chords):
+            if c["start_time"] <= t_pos:
+                ch = c
+                break
+        intervals = CHORD_TYPES.get(ch["type"], CHORD_TYPES["maj"])
+        tones = []
+        for intv in intervals:
+            for octave_shift in [-12, 0, 12]:
+                candidate = ch["root"] + intv + octave_shift
+                snapped = nearest_scale(candidate, pool)
+                if snapped not in tones:
+                    tones.append(snapped)
+        return sorted(tones)
 
-    # Get first chord's root for harmonic grounding
-    chord_root = chords[0]["root"] if chords else root_midi
-    chord_tones = [chord_root, chord_root + 4, chord_root + 7,
-                   chord_root + 12, chord_root + 11]  # root, 3rd, 5th, octave, maj7
-    chord_tones = [nearest_scale(ct, pool) for ct in chord_tones]
+    # === BUILD INITIAL 4-BAR CELL (chord-aware) ===
+    cell_pitches = []  # list of (pitch_or_None, is_chord_tone)
+    last = pool[len(pool) // 2]  # start from center of range
 
-    last = nearest_scale(center, pool)
     for slot in range(total_slots):
         if not rhythm[slot % len(rhythm)]:
-            cell_pitches.append(None)  # rest
+            cell_pitches.append(None)
             continue
 
-        # Strong beats (0, 4, 8, 12) prefer chord tones
-        is_strong = slot % 4 == 0
-        if is_strong:
-            candidates = chord_tones
-        else:
-            # Weak beats: stepwise from last note
-            candidates = [n for n in pool if abs(n - last) <= 4]
-            if not candidates:
-                candidates = pool
+        slot_time = slot * eighth
+        chord_tones = get_chord_tones_at(slot_time)
+        is_strong = slot % 4 == 0  # beats 1, 2, 3, 4
 
-        # Pick note closest to last (stepwise preference)
-        sorted_c = sorted(set(candidates), key=lambda n: abs(n - last))
-        if len(sorted_c) >= 3:
-            chosen = sorted_c[random.randint(0, 2)]
-        elif sorted_c:
-            chosen = sorted_c[0]
+        if is_strong:
+            # Strong beats: chord tone, prefer closest to last note
+            candidates = [ct for ct in chord_tones if 60 <= ct <= 79]
+            if not candidates:
+                candidates = chord_tones
+            chosen = min(candidates, key=lambda n: abs(n - last)) if candidates else last
         else:
-            chosen = last
+            # Weak beats: stepwise passing tone
+            step_candidates = [n for n in pool if abs(n - last) <= 4 and 60 <= n <= 79]
+            if not step_candidates:
+                step_candidates = [n for n in pool if abs(n - last) <= 7]
+            if step_candidates:
+                # Prefer motion toward next strong beat's chord tone
+                sorted_c = sorted(step_candidates, key=lambda n: abs(n - last))
+                chosen = sorted_c[random.randint(0, min(2, len(sorted_c) - 1))]
+            else:
+                chosen = last
 
         cell_pitches.append(chosen)
         last = chosen
 
-    # === REPEAT THE CELL across the full duration ===
+    # === REPEAT CELL with variation across the duration ===
+    cell_dur = cell_beats * beat_dur
     t = 0.0
     cycle = 0
+
     while t < duration:
-        # Subtle variation each cycle: transpose, velocity shift, tiny timing drift
+        # Variation strategy per cycle
         pitch_shift = 0
-        if cycle > 0 and cycle % 4 == 0:
-            # Every 4th cycle, transpose the cell up or down a scale degree
-            pitch_shift = random.choice([-2, -1, 0, 0, 1, 2])
-        elif cycle > 0 and cycle % 2 == 0:
-            # Every 2nd cycle, subtle register shift
-            pitch_shift = random.choice([-1, 0, 0, 1])
+        vary_mask = []  # which slots get pitch re-selection
 
-        vel_shift = random.randint(-4, 4) if cycle > 0 else 0
+        if cycle == 0:
+            vary_mask = [False] * total_slots
+        elif cycle % 4 == 0:
+            # Every 4th cycle: transpose entire cell ±1-2 scale degrees
+            pitch_shift = random.choice([-3, -2, 2, 3])
+            vary_mask = [False] * total_slots
+        elif cycle % 2 == 0:
+            # Every other cycle: re-select ~30% of pitches via Markov
+            vary_mask = [random.random() < 0.3 for _ in range(total_slots)]
+        else:
+            # Odd cycles: rhythmic displacement (shift by 1 8th note)
+            vary_mask = [False] * total_slots
 
+        rhythmic_offset = eighth if (cycle % 2 == 1 and cycle > 0) else 0
+        vel_shift = random.randint(-3, 3) if cycle > 0 else 0
+
+        prev_note = pool[len(pool) // 2]
         for slot in range(total_slots):
-            note_time = t + slot * eighth
+            note_time = t + slot * eighth + rhythmic_offset
             if note_time >= duration:
                 break
 
@@ -702,27 +807,36 @@ def _generate_focus_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
                 continue
 
             # Apply variation
-            actual_pitch = nearest_scale(pitch + pitch_shift, pool)
+            if vary_mask[slot % len(vary_mask)]:
+                # Re-select this note: stepwise from previous
+                chord_tones = get_chord_tones_at(note_time)
+                step_cands = [n for n in pool if abs(n - prev_note) <= 4 and 60 <= n <= 79]
+                if step_cands:
+                    actual_pitch = random.choice(step_cands)
+                else:
+                    actual_pitch = nearest_scale(pitch + pitch_shift, pool)
+            else:
+                actual_pitch = nearest_scale(pitch + pitch_shift, pool)
 
-            # Velocity: gentle with hairpin within the cell
+            actual_pitch = clamp(actual_pitch, 60, 79)
+            prev_note = actual_pitch
+
+            # Velocity: very flat dynamics (science: 4-6 dB range for focus)
             cell_progress = slot / total_slots
-            hairpin = 0.85 + 0.15 * math.sin(cell_progress * math.pi)
-            vel = int(vel_lo + (vel_hi - vel_lo) * 0.7 * hairpin)
+            hairpin = 0.88 + 0.12 * math.sin(cell_progress * math.pi)
+            vel = int(vel_lo + (vel_hi - vel_lo) * 0.65 * hairpin)
             vel = clamp(vel + vel_shift + random.randint(-2, 2), vel_lo, vel_hi)
 
-            # Duration: mostly 8th notes, occasional longer on strong beats
+            # Duration: 8th notes, occasional longer on strong beats
             if slot % 4 == 0 and random.random() < 0.3:
-                dur = beat_dur * random.uniform(0.8, 1.5)
+                dur = beat_dur * random.uniform(0.9, 1.6)
             else:
-                dur = eighth * random.uniform(0.7, 0.95)
-
-            # Humanize timing slightly
-            timing_jitter = random.gauss(0, 0.008)
+                dur = eighth * random.uniform(0.75, 0.95)
 
             notes.append({
                 "note": actual_pitch,
                 "velocity": vel,
-                "startTime": round(max(0, note_time + timing_jitter), 3),
+                "startTime": round(max(0, note_time + random.gauss(0, 0.006)), 3),
                 "duration": round(dur, 3),
             })
 
@@ -733,139 +847,169 @@ def _generate_focus_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
 
 
 # ============================================================================
-# 6b. ENERGIZE MELODY — Driving riffs with build-drop dynamics
+# 6b. ENERGIZE MELODY — Call-and-response riffs with build-drop dynamics
 # ============================================================================
 def _generate_energize_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
                               sections: list, chords: list, variation: dict,
                               duration: float) -> list:
-    """Energize melody: syncopated riffs on a 16th-note grid with wide
-    intervals, driving rhythmic patterns, and build-drop energy dynamics.
-    Should make you want to move."""
+    """Energize melody: 2-bar call-and-response riffs that repeat 4x then
+    evolve. Section-driven dynamics (intro→build→drop→cooldown). Power
+    intervals on strong beats, steps on weak beats. Based on exercise music
+    science: 128-140 BPM, strong motor entrainment, emotional escalation."""
     notes = []
     bpm = mode_cfg["bpm"]
     beat_dur = 60.0 / bpm
     sixteenth = beat_dur / 4
+    eighth = beat_dur / 2
+    bar_dur = beat_dur * 4
     vel_lo, vel_hi = mode_cfg["vel_range"]
-    oct_lo, oct_hi = mode_cfg["octave_range"]
-    reg = variation["register"]
-    oct_lo = clamp(oct_lo + reg // 2, 3, 7)
-    oct_hi = clamp(oct_hi + (reg + 1) // 2, oct_lo + 1, 8)
 
-    pool = scale_notes(root_midi, SCALES[mode_cfg["scales"][0]], oct_lo, oct_hi)
+    # Wide range for energy (C4-C6, MIDI 60-96)
+    pool = scale_notes(root_midi, SCALES[mode_cfg["scales"][0]], 4, 6)
+    pool = [n for n in pool if 60 <= n <= 96]
+    if not pool:
+        pool = scale_notes(root_midi, SCALES[mode_cfg["scales"][0]], 3, 6)
     if not pool:
         return notes
 
-    bar_dur = beat_dur * 4
-
-    # === RIFF PATTERNS (16-step, one bar each) ===
-    # 1 = note, 0 = rest. Multiple patterns cycle for variety.
-    riff_rhythms = [
-        # Driving 8th notes with syncopation
-        [1,0,1,0, 1,0,1,1, 0,1,0,1, 1,0,1,0],
-        # Off-beat heavy — dance-floor energy
-        [0,1,0,1, 1,0,0,1, 0,1,1,0, 1,0,0,1],
-        # Relentless 16ths (build sections)
-        [1,1,1,0, 1,1,0,1, 1,0,1,1, 0,1,1,1],
-        # Call-and-response: busy then space
-        [1,1,0,1, 1,0,1,0, 0,0,0,0, 1,0,1,1],
-        # Syncopated hook
-        [1,0,0,1, 0,0,1,0, 1,0,0,1, 0,1,0,1],
+    # Call rhythm patterns (16 steps = 1 bar of 16th notes)
+    call_rhythms = [
+        [1,0,1,0, 1,0,1,1, 0,1,0,1, 1,0,1,0],  # driving syncopation
+        [1,0,0,1, 0,1,0,1, 1,0,0,1, 0,1,1,0],  # off-beat hook
+        [1,1,0,1, 1,0,0,0, 1,1,0,1, 0,0,1,0],  # punchy call
+        [1,0,1,0, 0,1,1,0, 1,0,1,0, 1,1,0,0],  # straight drive
+        [1,0,0,1, 1,0,1,0, 0,1,0,0, 1,0,1,1],  # hook with pickup
     ]
 
-    # Pitch patterns: intervals from chord root for each riff
-    # These create recognizable melodic hooks
-    pitch_sequences = [
-        [0, 4, 7, 4, 0, -3, 0, 4, 7, 12, 7, 4, 0, -3, 0, 4],  # arpeggiated
-        [0, 0, 7, 7, 5, 5, 4, 0, 0, 0, 7, 7, 12, 12, 7, 0],    # power intervals
-        [0, 2, 4, 7, 9, 7, 4, 2, 0, 2, 4, 7, 12, 9, 7, 4],      # scale run
-        [7, 0, 7, 0, 5, 0, 4, 0, 7, 0, 7, 0, 12, 0, 7, 0],      # octave bouncing
-        [0, 4, 0, 7, 0, 4, 12, 7, 0, 4, 0, 7, 12, 7, 4, 0],     # hook pattern
-    ]
+    def get_chord_at(t_pos):
+        ch = chords[0] if chords else {"root": root_midi, "type": "maj"}
+        for c in reversed(chords):
+            if c["start_time"] <= t_pos:
+                ch = c
+                break
+        return ch
+
+    def build_riff_pitches(chord, bar_offset=0):
+        """Build a 16-note pitch sequence from chord + power intervals."""
+        cr = chord["root"] + 12  # melody register
+        cr = clamp(cr, 60, 84)
+        intervals = CHORD_TYPES.get(chord["type"], CHORD_TYPES["maj"])
+
+        pitches = []
+        for step in range(16):
+            is_strong = step % 4 == 0
+            if is_strong:
+                # Power intervals: root, 5th, octave, 5th-of-octave
+                power = [cr, cr + 7, cr + 12, cr + 7 + 12]
+                power = [nearest_scale(p, pool) for p in power]
+                pitch = power[(step // 4 + bar_offset) % len(power)]
+            else:
+                # Steps from previous pitch or chord tone
+                if pitches:
+                    prev = pitches[-1]
+                    step_cands = [n for n in pool if 1 <= abs(n - prev) <= 4]
+                    pitch = random.choice(step_cands) if step_cands else prev
+                else:
+                    pitch = nearest_scale(cr + random.choice(intervals), pool)
+            pitches.append(clamp(pitch, 60, 96))
+        return pitches
+
+    def make_response(call_pitches):
+        """Create response by inverting interval direction and transposing up."""
+        if len(call_pitches) < 2:
+            return call_pitches[:]
+        response = [call_pitches[0] + 5]  # start a 4th higher
+        for i in range(1, len(call_pitches)):
+            interval = call_pitches[i] - call_pitches[i - 1]
+            response.append(response[-1] - interval)  # invert direction
+        return [nearest_scale(clamp(p, 60, 96), pool) for p in response]
 
     t = 0.0
-    bar_idx = 0
-    riff_idx = variation["id"] % len(riff_rhythms)
+    riff_idx = variation["id"] % len(call_rhythms)
+    riff_rep = 0
+    current_call_pitches = None
+    current_response_pitches = None
+    is_call_bar = True
 
     while t < duration:
         progress = t / duration
         section = get_section_at(sections, t)
+        section_name = section["name"]
         tension = tension_curve("energize", progress, variation["tension_shift"])
 
-        # Get current chord
-        current_chord = None
-        for ch in reversed(chords):
-            if ch["start_time"] <= t:
-                current_chord = ch
-                break
-        if not current_chord:
-            current_chord = chords[0] if chords else {"root": root_midi}
+        chord = get_chord_at(t)
 
-        chord_root_high = current_chord["root"] + 12  # melody register
-        chord_root_high = clamp(chord_root_high, 60, 84)
+        # Generate new riff every 4 repetitions (8 bars)
+        if riff_rep % 4 == 0 or current_call_pitches is None:
+            current_call_pitches = build_riff_pitches(chord, bar_offset=riff_idx)
+            current_response_pitches = make_response(current_call_pitches)
+            if riff_rep > 0:
+                riff_idx = (riff_idx + 1) % len(call_rhythms)
 
-        # Select riff pattern based on section
-        section_name = section["name"]
+        # Section-driven rhythm and density
         if section_name in ("intro", "cooldown"):
-            # Sparse pattern during intro/cooldown
-            rhythm = [1,0,0,0, 1,0,0,0, 0,0,1,0, 0,0,0,0]
-            density_mult = 0.6
+            rhythm = [1,0,0,0, 1,0,0,0, 0,0,1,0, 0,0,0,0]  # sparse
+            vel_scale = 0.6
         elif section_name in ("build", "build2"):
-            # Building intensity: switch to denser patterns
-            rhythm = riff_rhythms[(riff_idx + 2) % len(riff_rhythms)]
-            density_mult = 1.0 + progress * 0.3
+            rhythm = call_rhythms[riff_idx % len(call_rhythms)]
+            vel_scale = 0.75 + progress * 0.25
         elif section_name in ("drop", "drop2"):
-            # Drop: full energy, densest patterns
-            rhythm = riff_rhythms[(riff_idx + 2) % len(riff_rhythms)]
-            density_mult = 1.3
+            # Drop: densest pattern
+            rhythm = [1,1,0,1, 1,0,1,1, 0,1,1,0, 1,0,1,1]
+            vel_scale = 1.0
         else:
-            rhythm = riff_rhythms[riff_idx % len(riff_rhythms)]
-            density_mult = 1.0
+            rhythm = call_rhythms[riff_idx % len(call_rhythms)]
+            vel_scale = 0.8
 
-        pitches = pitch_sequences[riff_idx % len(pitch_sequences)]
+        # Select pitches: call or response bar
+        pitches = current_call_pitches if is_call_bar else current_response_pitches
 
-        # Place one bar of riff
         for step in range(16):
             step_time = t + step * sixteenth
             if step_time >= duration:
                 break
-
             if not rhythm[step % len(rhythm)]:
                 continue
 
-            # Skip some notes based on inverse density (lower density = more skips)
-            if random.random() > density_mult:
-                continue
+            pitch = pitches[step % len(pitches)]
 
-            # Pitch from pattern, mapped to current chord and scale
-            interval = pitches[step % len(pitches)]
-            raw_pitch = chord_root_high + interval
-            actual_pitch = nearest_scale(raw_pitch, pool)
+            # Velocity with strong accents (exercise music: strong motor entrainment)
+            is_downbeat = step == 0
+            is_backbeat = step == 8
+            if is_downbeat:
+                accent = 1.30
+            elif is_backbeat:
+                accent = 1.10
+            elif step % 4 == 0:
+                accent = 1.05
+            elif step % 2 == 0:
+                accent = 0.95
+            else:
+                accent = 0.85
 
-            # Velocity: accented on strong beats, dynamic arc per section
-            is_downbeat = step % 4 == 0
-            accent = 1.15 if is_downbeat else (1.05 if step % 2 == 0 else 0.90)
-            base_vel = vel_lo + (vel_hi - vel_lo) * tension
+            base_vel = vel_lo + (vel_hi - vel_lo) * tension * vel_scale
             vel = int(base_vel * accent)
             vel = clamp(vel + random.randint(-3, 3), vel_lo, vel_hi)
 
-            # Duration: short and punchy for energy
+            # Duration: punchy on 16ths, longer on strong beats
             if is_downbeat:
-                dur = sixteenth * random.uniform(2.5, 3.5)
+                dur = sixteenth * random.uniform(3.0, 4.0)
+            elif step % 4 == 0:
+                dur = sixteenth * random.uniform(2.0, 3.0)
             else:
-                dur = sixteenth * random.uniform(1.0, 2.0)
+                dur = sixteenth * random.uniform(1.2, 2.0)
 
             notes.append({
-                "note": actual_pitch,
+                "note": pitch,
                 "velocity": vel,
-                "startTime": round(max(0, step_time + random.uniform(-0.004, 0.004)), 3),
+                "startTime": round(max(0, step_time + random.uniform(-0.003, 0.003)), 3),
                 "duration": round(dur, 3),
             })
 
         t += bar_dur
-        bar_idx += 1
-        # Rotate riff pattern every 4 bars for variety
-        if bar_idx % 4 == 0:
-            riff_idx += 1
+        is_call_bar = not is_call_bar  # alternate call/response
+        if is_call_bar:
+            riff_rep += 1
 
     return notes
 
@@ -1037,6 +1181,12 @@ def generate_bass(mode: str, mode_cfg: dict, genre_cfg: dict, root_midi: int,
 
     notes = []
 
+    # Mode-specific bass overrides (cohesive with curated harmony)
+    if mode == "focus":
+        return _bass_focus_walking(chords, bass_pool, bpm, vel_lo, vel_hi, duration)
+    elif mode == "energize":
+        return _bass_energize_locked(chords, bass_pool, bpm, vel_lo, vel_hi, duration, sections)
+
     if style == "drone":
         return _bass_drone(chords, vel_lo, vel_hi, duration)
     elif style == "walking":
@@ -1053,6 +1203,135 @@ def generate_bass(mode: str, mode_cfg: dict, genre_cfg: dict, root_midi: int,
         return _bass_alberti(chords, bass_pool, bpm, vel_lo, vel_hi, duration)
     else:
         return _bass_root_fifth(chords, bpm, vel_lo, vel_hi, duration)
+
+
+def _bass_focus_walking(chords, pool, bpm, vel_lo, vel_hi, duration):
+    """Focus bass: half-time walking feel. Root on beat 1, 5th on beat 3,
+    chromatic approach to next chord on beat 4. Warm, recessed, supportive."""
+    notes = []
+    beat_dur = 60.0 / bpm
+    # Velocity: warm and low (50-60% of range)
+    bass_vel_lo = vel_lo
+    bass_vel_hi = int(vel_lo + (vel_hi - vel_lo) * 0.55)
+
+    for ci, chord in enumerate(chords):
+        root = clamp(chord["root"], 36, 55)
+        fifth = nearest_scale(root + 7, pool)
+        fifth = clamp(fifth, 36, 55)
+        next_root = chords[(ci + 1) % len(chords)]["root"]
+        next_root = clamp(next_root, 36, 55)
+        t = chord["start_time"]
+
+        beats = max(1, int(chord["duration"] / beat_dur))
+
+        for beat in range(beats):
+            bt = t + beat * beat_dur
+            if bt >= duration:
+                break
+
+            if beat == 0:
+                note = root
+                vel = bass_vel_hi  # accent beat 1
+                dur = beat_dur * 1.8  # half note (sustained)
+            elif beat == 2:
+                note = fifth
+                vel = int(bass_vel_hi * 0.9)
+                dur = beat_dur * 1.5
+            elif beat == beats - 1 and next_root != root:
+                # Chromatic approach to next chord
+                if next_root > root:
+                    note = clamp(next_root - 1, 36, 55)
+                else:
+                    note = clamp(next_root + 1, 36, 55)
+                vel = int(bass_vel_hi * 0.75)
+                dur = beat_dur * 0.9
+            else:
+                continue  # skip beats 1, 3 if no approach needed
+
+            notes.append({
+                "note": note,
+                "velocity": clamp(vel + random.randint(-2, 2), bass_vel_lo, bass_vel_hi),
+                "startTime": round(bt + random.uniform(0.003, 0.010), 3),  # slightly behind beat
+                "duration": round(min(dur, duration - bt), 3),
+            })
+
+    return notes
+
+
+def _bass_energize_locked(chords, pool, bpm, vel_lo, vel_hi, duration, sections):
+    """Energize bass: locked to four-on-the-floor kick. Root on every beat,
+    octave jump on beat 3, 8th-note subdivision with sidechain velocity dip.
+    Driving, prominent, tight with drums."""
+    notes = []
+    beat_dur = 60.0 / bpm
+    eighth = beat_dur / 2
+    bass_vel_lo = int(vel_lo * 0.9)
+    bass_vel_hi = int(vel_hi * 0.85)
+
+    for ci, chord in enumerate(chords):
+        root = clamp(chord["root"], 36, 50)
+        octave_root = clamp(root + 12, 48, 62)
+        t = chord["start_time"]
+        beats = max(1, int(chord["duration"] / beat_dur))
+
+        section = get_section_at(sections, t)
+        section_name = section["name"]
+
+        for beat in range(beats):
+            bt = t + beat * beat_dur
+            if bt >= duration:
+                break
+
+            if section_name in ("intro", "cooldown"):
+                # Sparse: half notes only on beats 1 and 3
+                if beat % 2 == 0:
+                    notes.append({
+                        "note": root,
+                        "velocity": clamp(int(bass_vel_hi * 0.7) + random.randint(-2, 2), bass_vel_lo, bass_vel_hi),
+                        "startTime": round(bt, 3),
+                        "duration": round(beat_dur * 1.8, 3),
+                    })
+            else:
+                # Full drive: 8th note subdivision with sidechain dip
+                # On-beat: full velocity root (or octave on beat 3)
+                note = octave_root if beat == 2 else root
+                vel_on = bass_vel_hi if beat in (0, 2) else int(bass_vel_hi * 0.9)
+                notes.append({
+                    "note": note,
+                    "velocity": clamp(vel_on + random.randint(-2, 2), bass_vel_lo, bass_vel_hi),
+                    "startTime": round(bt, 3),
+                    "duration": round(eighth * 0.85, 3),
+                })
+
+                # Off-beat 8th: sidechain ducked (40% velocity)
+                off_t = bt + eighth
+                if off_t < duration:
+                    vel_off = int(vel_on * 0.4)
+                    notes.append({
+                        "note": root,
+                        "velocity": clamp(vel_off + random.randint(-2, 2), bass_vel_lo, bass_vel_hi),
+                        "startTime": round(off_t, 3),
+                        "duration": round(eighth * 0.6, 3),
+                    })
+
+                # 16th note fill before chord change (last beat)
+                if section_name in ("drop", "drop2") and beat == beats - 1:
+                    next_root = chords[(ci + 1) % len(chords)]["root"]
+                    next_root = clamp(next_root, 36, 50)
+                    sixteenth = beat_dur / 4
+                    fill_notes = [root, nearest_scale(root + 2, pool),
+                                  nearest_scale(root + 4, pool), next_root]
+                    for fi, fn in enumerate(fill_notes):
+                        ft = bt + fi * sixteenth
+                        if ft < duration:
+                            notes.append({
+                                "note": clamp(fn, 36, 55),
+                                "velocity": clamp(int(bass_vel_hi * 0.8) + fi * 3, bass_vel_lo, bass_vel_hi),
+                                "startTime": round(ft + random.uniform(-0.002, 0.002), 3),
+                                "duration": round(sixteenth * 0.8, 3),
+                            })
+
+    return notes
 
 
 def _bass_drone(chords, vel_lo, vel_hi, duration):
@@ -1310,48 +1589,82 @@ def generate_chord_track(mode: str, mode_cfg: dict, genre_cfg: dict, root_midi: 
         intervals = CHORD_TYPES.get(ct, CHORD_TYPES["maj"])
         tension = chord["tension"]
 
-        # Build voicing based on style
+        # === MODE-SPECIFIC VOICING OVERRIDES ===
+        if mode == "focus":
+            # Jazz voicing: root drop, 3rd, 7th, 9th (if available)
+            voiced = _voice_jazz(cr, ct, intervals)
+            chord_vel_lo = int(vel_lo * 0.9)
+            chord_vel_hi = int(vel_hi * 0.50)  # background texture
+            # Always sustained pads for focus (never stabs)
+            notes.extend(_rhythm_sustained(voiced, chord, chord_vel_lo, chord_vel_hi, tension, duration))
+            continue
+        elif mode == "energize":
+            # Open power: root + 5th + octave + high 5th
+            voiced = _voice_open_power(cr, intervals)
+            chord_vel_lo = vel_lo
+            chord_vel_hi = int(vel_hi * 0.70)  # supportive, not dominating
+            # All-beats stabs for driving energy
+            notes.extend(_rhythm_strummed(voiced, chord, bpm, chord_vel_lo, chord_vel_hi, tension, duration, mode))
+            continue
+
+        # Build voicing based on genre style (sleep/relaxation path — untouched)
         if voicing_style == "open":
-            # Ambient: spread across octaves, open intervals
             voiced = _voice_open(cr, intervals)
         elif voicing_style == "shell":
-            # Jazz: root + 3rd + 7th (drop 5th)
             voiced = _voice_shell(cr, intervals)
         elif voicing_style == "power":
-            # Rock: root + 5th + octave
             voiced = _voice_power(cr)
         elif voicing_style == "spread":
-            # Lo-fi / Hip-hop: root low, upper voices spread with 9th
             voiced = _voice_spread(cr, intervals)
         elif voicing_style == "stacked":
-            # Electronic: dense upper-structure voicings
             voiced = _voice_stacked(cr, intervals)
         elif voicing_style == "chorale":
-            # Classical: 4-part SATB
             voiced = _voice_chorale(cr, intervals)
         else:  # "triad"
             voiced = [cr + i for i in intervals]
 
-        # Scale chord velocity down for focus/energize so melody stays prominent
         chord_vel_lo = vel_lo
         chord_vel_hi = vel_hi
-        if mode == "focus":
-            chord_vel_hi = int(vel_hi * 0.55)  # chords sit well below melody
-        elif mode == "energize":
-            chord_vel_hi = int(vel_hi * 0.60)  # chords support, don't dominate
 
-        # Rhythmic placement
+        # Rhythmic placement (sleep/relaxation path — untouched)
         if voicing_style in ("power", "stacked"):
-            # Strummed / rhythmic
             notes.extend(_rhythm_strummed(voiced, chord, bpm, chord_vel_lo, chord_vel_hi, tension, duration, mode))
         elif genre_cfg["feel"] in ("clave", "laid_back"):
-            # Upbeat stabs (reggae, latin)
             notes.extend(_rhythm_upbeat_stabs(voiced, chord, bpm, chord_vel_lo, chord_vel_hi, duration))
         else:
-            # Sustained pads
             notes.extend(_rhythm_sustained(voiced, chord, chord_vel_lo, chord_vel_hi, tension, duration))
 
     return notes
+
+
+def _voice_jazz(root, chord_type, intervals):
+    """Jazz voicing: root dropped an octave, 3rd, 7th, optional 9th.
+    Creates the warm, open sound of lo-fi and jazz piano."""
+    root_drop = clamp(root - 12, 36, 55)  # root in bass register
+    voiced = [root_drop]
+
+    if len(intervals) >= 2:
+        voiced.append(clamp(root + intervals[1], 55, 75))   # 3rd in mid-range
+    if len(intervals) >= 4:
+        voiced.append(clamp(root + intervals[3], 58, 78))   # 7th
+    elif len(intervals) >= 3:
+        voiced.append(clamp(root + intervals[2], 55, 75))   # 5th if no 7th
+    # Add 9th for richness (2 semitones above octave = 14 semitones above root)
+    if chord_type in ("min7", "maj7", "dom7", "dom9", "min9", "maj9"):
+        voiced.append(clamp(root + 14, 62, 82))             # 9th
+
+    return voiced
+
+
+def _voice_open_power(root, intervals):
+    """Open power voicing: root + 5th + octave + 5th-of-octave.
+    Wider and more powerful than basic power chords. Used for energize."""
+    return [
+        clamp(root, 36, 55),
+        clamp(root + 7, 43, 62),
+        clamp(root + 12, 48, 67),
+        clamp(root + 19, 55, 74),  # 5th of octave
+    ]
 
 
 def _voice_open(root, intervals):
@@ -1421,15 +1734,18 @@ def _rhythm_strummed(voiced, chord, bpm, vel_lo, vel_hi, tension, duration, mode
     notes = []
     beat_dur = 60.0 / bpm
 
-    # Focus/energize: quarter-note stabs (less dense, support role)
-    # Other modes: 8th-note strumming (more driving)
-    if mode in ("focus", "energize"):
+    # Energize: all-beat stabs (driving support)
+    # Focus: never reaches here (uses _rhythm_sustained via continue)
+    if mode == "energize":
         step_dur = beat_dur  # quarter notes
         patterns = [
-            [1, 0, 1, 0],  # beats 1 and 3
-            [1, 0, 0, 1],  # beats 1 and 4
-            [1, 1, 0, 0],  # beats 1 and 2
+            [1, 1, 1, 1],  # all four beats
+            [1, 1, 1, 0],  # beats 1-2-3
+            [1, 0, 1, 1],  # beats 1, 3, 4
         ]
+    elif mode == "focus":
+        step_dur = beat_dur
+        patterns = [[1, 0, 1, 0]]
     else:
         step_dur = beat_dur / 2  # 8th notes
         patterns = [
@@ -1603,13 +1919,37 @@ def generate_drums(mode: str, mode_cfg: dict, genre: str, genre_cfg: dict,
     drum_style = genre_cfg["drum_style"]
 
     # === FOUR-ON-THE-FLOOR for focus and energize ===
-    # Override genre drum pattern with solid kick-on-every-beat grooves
     if mode in ("focus", "energize"):
+        # Remove drums for focus ambient/classical (per FunctionalMusicTheory.md)
+        if mode == "focus" and genre in ("ambient", "classical"):
+            return []
+
         floor_styles = list(FOUR_ON_FLOOR.keys())
         floor_key = floor_styles[variation["id"] % len(floor_styles)]
         core = FOUR_ON_FLOOR[floor_key]
-        fill_pattern = FOUR_ON_FLOOR_FILLS
         backbeat = FOUR_ON_FLOOR_BACKBEAT
+
+        if mode == "focus":
+            # Softer drums: scale all velocities down to 60%
+            core = [(n, int(v * 0.6)) if n > 0 else (n, v) for n, v in core]
+            backbeat = [(n, int(v * 0.55)) if n > 0 else (n, v) for n, v in backbeat]
+            fill_pattern = FOUR_ON_FLOOR_FILLS
+            # Half-time for odd variations: kick on 1&3 only, hat on 2&4
+            if variation["id"] % 2 == 1:
+                core = [
+                    (KICK,55),(0,0),(0,0),(0,0),(0,0),(0,0),(CHH,20),(0,0),
+                    (KICK,50),(0,0),(0,0),(0,0),(0,0),(0,0),(CHH,20),(0,0),
+                ]
+                backbeat = [(0,0)] * 16  # no snare in half-time
+        else:
+            # Energize: multiple fill patterns rotated per variation
+            energize_fills = [
+                [(SNARE,60),(SNARE,65),(SNARE,68),(SNARE,72),(SNARE,76),(SNARE,80),(SNARE,88),(CRASH,92)],
+                [(HITOM,70),(HITOM,75),(LOTOM,72),(LOTOM,78),(SNARE,80),(SNARE,85),(KICK,90),(CRASH,95)],
+                [(KICK,70),(SNARE,65),(KICK,75),(SNARE,70),(KICK,80),(SNARE,80),(KICK,90),(CRASH,95)],
+                [(SNARE,50),(SNARE,55),(SNARE,58),(SNARE,62),(SNARE,68),(SNARE,72),(SNARE,82),(CRASH,90)],
+            ]
+            fill_pattern = energize_fills[variation["id"] % len(energize_fills)]
     else:
         core = DRUM_CORES.get(drum_style, [])
         fill_pattern = FILL_PATTERNS.get(drum_style, [])
@@ -1727,15 +2067,41 @@ def generate_drums(mode: str, mode_cfg: dict, genre: str, genre_cfg: dict,
                     "duration": round(step_dur * 0.5, 3),
                 })
 
+    # === ENERGIZE: open hi-hat on upbeats during drops ===
+    if mode == "energize":
+        for step_idx in range(total_steps):
+            t = step_idx * step_dur
+            if t >= duration:
+                break
+            bar_step = step_idx % 16
+            if bar_step in (2, 6, 10, 14):  # 8th-note upbeats
+                section = get_section_at(sections, t)
+                if section["name"] in ("drop", "drop2"):
+                    notes.append({
+                        "note": OHH,
+                        "velocity": clamp(38 + random.randint(-3, 3), vel_lo, vel_hi),
+                        "startTime": round(t + random.uniform(-0.003, 0.003), 3),
+                        "duration": round(step_dur * 0.6, 3),
+                    })
+
     # === CRASH CYMBALS at section boundaries ===
     for section in sections:
         if section["start_time"] > 0 and section["start_time"] < duration:
+            crash_vel = 85 if mode != "focus" else 50
             notes.append({
                 "note": CRASH,
-                "velocity": clamp(int(85 * (vel_hi / 100.0)), vel_lo, vel_hi),
+                "velocity": clamp(int(crash_vel * (vel_hi / 100.0)), vel_lo, vel_hi),
                 "startTime": round(section["start_time"], 3),
                 "duration": round(60.0 / bpm * 2, 3),
             })
+            # Extra crash emphasis on energize drops
+            if mode == "energize" and section["name"] in ("drop", "drop2"):
+                notes.append({
+                    "note": KICK,
+                    "velocity": clamp(int(100 * (vel_hi / 100.0)), vel_lo, vel_hi),
+                    "startTime": round(section["start_time"], 3),
+                    "duration": round(step_dur * 2, 3),
+                })
 
     return notes
 
@@ -1891,15 +2257,21 @@ def generate_sequence(genre: str, mode: str, var_id: int) -> dict:
     if drum_notes:
         drum_notes.sort(key=lambda n: n["startTime"])
 
+    # Apply per-mode instrument overrides for cohesive timbre
+    overrides = MODE_INSTRUMENT_OVERRIDES.get((mode, genre), {})
+    melody_prog = overrides.get("melody", genre_cfg["melody"])
+    bass_prog = overrides.get("bass", genre_cfg["bass"])
+    chords_prog = overrides.get("chords", genre_cfg["chords"])
+
     # Build output (same format as v4 for app compatibility)
     tracks = [
-        {"name": f"{genre.capitalize()} Melody", "program": genre_cfg["melody"], "role": "melody",
+        {"name": f"{genre.capitalize()} Melody", "program": melody_prog, "role": "melody",
          "frequencyRole": "high-mid", "suggestedVolume": 0.65,
          "notes": melody_notes, "totalDuration": DURATION},
-        {"name": f"{genre.capitalize()} Bass", "program": genre_cfg["bass"], "role": "bass",
+        {"name": f"{genre.capitalize()} Bass", "program": bass_prog, "role": "bass",
          "frequencyRole": "sub-bass", "suggestedVolume": 0.55,
          "notes": bass_notes, "totalDuration": DURATION},
-        {"name": f"{genre.capitalize()} Chords", "program": genre_cfg["chords"], "role": "chords",
+        {"name": f"{genre.capitalize()} Chords", "program": chords_prog, "role": "chords",
          "frequencyRole": "low-mid", "suggestedVolume": 0.50,
          "notes": chord_notes, "totalDuration": DURATION},
     ]
