@@ -72,7 +72,10 @@ public final class MIDISequencePlayer {
     /// AVAudioUnitSampler crashes (EXC_BAD_ACCESS in SamplerNote::Render)
     /// when too many notes accumulate without note-offs.
     private var activeNotes: [String: Set<UInt8>] = [:]
-    private let maxPolyphony = 12 // Max simultaneous notes per sampler
+    private let maxPolyphony = 6 // Max simultaneous notes per sampler
+    // Reduced from 12 — at loop boundaries the crossfade zone plays notes
+    // from BOTH loops simultaneously, so effective polyphony doubles.
+    // 6 per role × 2 (crossfade overlap) × 4 roles = 48 total voices max.
 
     /// The currently loaded sequence.
     private var currentSequence: MIDISequence?
@@ -230,7 +233,18 @@ public final class MIDISequencePlayer {
 
     /// Play a note with polyphony limiting to prevent SamplerNote::Render crash.
     private func safeNoteOn(role: String, sampler: AVAudioUnitSampler, note: UInt8, velocity: UInt8) {
-        // Ensure we don't exceed polyphony limit
+        // Global safety: if total voices across all roles exceeds ceiling,
+        // flush everything to prevent audio thread crash.
+        let totalActive = activeNotes.values.reduce(0) { $0 + $1.count }
+        if totalActive >= 32 {
+            for (r, notes) in activeNotes {
+                if let s = samplers[r] {
+                    for n in notes { s.stopNote(n, onChannel: 0) }
+                }
+            }
+            activeNotes.removeAll()
+        }
+
         var notes = activeNotes[role] ?? []
         if notes.count >= maxPolyphony {
             // Stop the oldest note to make room
@@ -308,14 +322,23 @@ public final class MIDISequencePlayer {
             // Detect loop boundary crossing
             let prevPos = (absoluteTime - 0.05).truncatingRemainder(dividingBy: totalDuration)
             if posInLoop < prevPos {
-                // We crossed the loop point — reset event index
-                // but DON'T stop any notes (let them ring out naturally)
+                // We crossed the loop point — reset event index.
                 eventIndex = 0
                 self.loopCount += 1
 
-                // Subtle variation: shift the start offset slightly each loop
-                // so the sequence doesn't sound identical every time.
-                // This is imperceptible but prevents pattern recognition.
+                // Stop ALL active notes to prevent polyphony overflow.
+                // The crossfade zone already faded their velocity to near-zero
+                // so cutting them off is inaudible.
+                for (role, notes) in self.activeNotes {
+                    if let sampler = self.samplers[role] {
+                        for note in notes {
+                            sampler.stopNote(note, onChannel: 0)
+                        }
+                    }
+                }
+                self.activeNotes.removeAll()
+
+                // Subtle jitter prevents exact pattern repetition.
                 let jitter = Double.random(in: -0.03...0.03)
                 absoluteTime += jitter
             }
