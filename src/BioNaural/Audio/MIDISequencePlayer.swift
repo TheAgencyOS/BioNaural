@@ -320,16 +320,18 @@ public final class MIDISequencePlayer {
                 absoluteTime += jitter
             }
 
-            // Crossfade multiplier: full volume except near the end/start
+            // Equal-power crossfade at loop boundary.
+            // Uses cosine/sine curves (not linear) so the perceived loudness
+            // stays constant through the overlap zone — no audible dip.
             let fadeMultiplier: Float
             if posInLoop > totalDuration - crossfadeZone {
                 // Fading out at end of loop
-                let fadeProgress = Float((totalDuration - posInLoop) / crossfadeZone)
-                fadeMultiplier = fadeProgress // 1.0 → 0.0
+                let t = Float((totalDuration - posInLoop) / crossfadeZone) // 1.0 → 0.0
+                fadeMultiplier = cos((1.0 - t) * .pi / 2.0) // equal-power fade-out
             } else if posInLoop < crossfadeZone && self.loopCount > 0 {
                 // Fading in at start of new loop (not first play)
-                let fadeProgress = Float(posInLoop / crossfadeZone)
-                fadeMultiplier = fadeProgress // 0.0 → 1.0
+                let t = Float(posInLoop / crossfadeZone) // 0.0 → 1.0
+                fadeMultiplier = sin(t * .pi / 2.0) // equal-power fade-in
             } else {
                 fadeMultiplier = 1.0
             }

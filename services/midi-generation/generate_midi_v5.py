@@ -121,17 +121,20 @@ MODE_INSTRUMENT_OVERRIDES = {
     ("focus", "rock"):       {"melody": 4},                      # Rhodes
     ("focus", "ambient"):    {"melody": 11},                     # Vibraphone
     ("focus", "blues"):      {"melody": 4},                      # Rhodes
-    # Energize: bright but organic — piano, strings, EP (never synth leads)
-    ("energize", "hiphop"):     {"melody": 1, "chords": 48},    # Bright Piano + Strings
-    ("energize", "electronic"): {"melody": 5, "chords": 48},    # EP2 (DX7) + Strings
-    ("energize", "lofi"):       {"melody": 1, "chords": 48},    # Bright Piano + Strings
-    ("energize", "ambient"):    {"melody": 5, "chords": 48},    # EP2 + Strings
-    ("energize", "rock"):       {"melody": 1, "bass": 34, "chords": 48},  # Bright Piano + Picked Bass + Strings
-    ("energize", "jazz"):       {"melody": 1, "chords": 48},              # Bright Piano + Strings
-    ("energize", "blues"):      {"melody": 1, "bass": 34, "chords": 48},  # Bright Piano + Picked Bass + Strings
-    ("energize", "classical"):  {"melody": 1, "chords": 48},    # Bright Piano + Strings
-    ("energize", "latin"):      {"melody": 5, "chords": 48},    # EP2 + Strings
-    ("energize", "reggae"):     {"melody": 5, "chords": 48},    # EP2 + Strings
+    # Energize: genre-appropriate warm instruments (never synth leads)
+    # Guitar genres use Clean Guitar (27) — warm and round
+    # Piano genres use Rhodes (4) — classic energize tone
+    # All chords use Stereo Strings Slow (49) — lush sustained pad
+    ("energize", "rock"):       {"melody": 27, "bass": 34, "chords": 49},  # Clean Guitar + Pick Bass + Strings
+    ("energize", "blues"):      {"melody": 26, "bass": 33, "chords": 49},  # Jazz Guitar + Finger Bass + Strings
+    ("energize", "reggae"):     {"melody": 27, "bass": 33, "chords": 49},  # Clean Guitar + Finger Bass + Strings
+    ("energize", "latin"):      {"melody": 27, "bass": 33, "chords": 49},  # Clean Guitar + Finger Bass + Strings
+    ("energize", "hiphop"):     {"melody": 4,  "bass": 38, "chords": 49},  # Rhodes + Synth Bass + Strings
+    ("energize", "electronic"): {"melody": 4,  "bass": 38, "chords": 49},  # Rhodes + Synth Bass + Strings
+    ("energize", "lofi"):       {"melody": 4,  "bass": 33, "chords": 49},  # Rhodes + Finger Bass + Strings
+    ("energize", "ambient"):    {"melody": 4,  "chords": 49},              # Rhodes + Strings
+    ("energize", "jazz"):       {"melody": 4,  "bass": 32, "chords": 49},  # Rhodes + Acoustic Bass + Strings
+    ("energize", "classical"):  {"melody": 0,  "bass": 42, "chords": 49},  # Grand Piano + Cello + Strings
 }
 
 # ============================================================================
@@ -874,11 +877,12 @@ def _generate_energize_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
     bar_dur = beat_dur * 4
     vel_lo, vel_hi = mode_cfg["vel_range"]
 
-    # Wide range for energy (C4-C6, MIDI 60-96)
-    pool = scale_notes(root_midi, SCALES[mode_cfg["scales"][0]], 4, 6)
-    pool = [n for n in pool if 60 <= n <= 96]
+    # Mid-range for warm tone (C3-C5, MIDI 48-72) — dropped an octave from
+    # previous version. Guitar and piano sound best in this register.
+    pool = scale_notes(root_midi, SCALES[mode_cfg["scales"][0]], 3, 5)
+    pool = [n for n in pool if 48 <= n <= 72]
     if not pool:
-        pool = scale_notes(root_midi, SCALES[mode_cfg["scales"][0]], 3, 6)
+        pool = scale_notes(root_midi, SCALES[mode_cfg["scales"][0]], 3, 5)
     if not pool:
         return notes
 
@@ -903,15 +907,15 @@ def _generate_energize_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
         """Build a 16-note pitch sequence from chord + scale.
         Strong beats (0,4,8,12 = kick hits) get chord tones for rhythmic
         lock with drums. Weak beats use stepwise motion for melodic flow.
-        Range constrained to C4-C6 (MIDI 60-84) for warm SoundFont tone."""
-        cr = chord["root"] + 12  # melody register
-        cr = clamp(cr, 60, 78)  # keep melody in warm mid-range
+        Range constrained to C3-C5 (MIDI 48-72) for warm guitar/piano tone."""
+        cr = chord["root"]  # melody register (same octave as chord root)
+        cr = clamp(cr, 48, 66)  # keep melody in warm mid-range
         intervals = CHORD_TYPES.get(chord["type"], CHORD_TYPES["maj"])
 
         # Build chord tones in melody register
         chord_tones = [nearest_scale(cr + iv, pool) for iv in intervals]
         chord_tones.append(nearest_scale(cr + 12, pool))  # octave
-        chord_tones = sorted(set(ct for ct in chord_tones if 60 <= ct <= 84))
+        chord_tones = sorted(set(ct for ct in chord_tones if 48 <= ct <= 72))
 
         pitches = []
         for step in range(16):
@@ -923,13 +927,13 @@ def _generate_energize_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
                 # Stepwise motion between chord tones
                 if pitches:
                     prev = pitches[-1]
-                    step_cands = [n for n in pool if 1 <= abs(n - prev) <= 3 and 60 <= n <= 84]
+                    step_cands = [n for n in pool if 1 <= abs(n - prev) <= 3 and 48 <= n <= 72]
                     if not step_cands:
-                        step_cands = [n for n in pool if abs(n - prev) <= 5 and 60 <= n <= 84]
+                        step_cands = [n for n in pool if abs(n - prev) <= 5 and 48 <= n <= 72]
                     pitch = random.choice(step_cands) if step_cands else prev
                 else:
                     pitch = nearest_scale(cr, pool)
-            pitches.append(clamp(pitch, 60, 84))
+            pitches.append(clamp(pitch, 48, 72))
         return pitches
 
     def make_response(call_pitches):
@@ -940,7 +944,7 @@ def _generate_energize_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
         for i in range(1, len(call_pitches)):
             interval = call_pitches[i] - call_pitches[i - 1]
             response.append(response[-1] - interval)  # invert direction
-        return [nearest_scale(clamp(p, 60, 96), pool) for p in response]
+        return [nearest_scale(clamp(p, 48, 72), pool) for p in response]
 
     t = 0.0
     riff_idx = variation["id"] % len(call_rhythms)

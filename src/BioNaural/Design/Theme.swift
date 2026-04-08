@@ -1045,9 +1045,9 @@ extension Theme {
         /// Duration (seconds) of the equal-power crossfade baked into looping
         /// buffers at the loop boundary. Applied to ambient, melodic, and stem
         /// layers to eliminate the audible seam when a buffer wraps.
-        /// 5 seconds provides enough overlap for even tonal/melodic content
-        /// to blend imperceptibly across the boundary.
-        static let loopCrossfadeDuration: TimeInterval = 5.0
+        /// 10 seconds matches the MIDI player crossfade zone for consistency
+        /// across all audio layers.
+        static let loopCrossfadeDuration: TimeInterval = 10.0
 
         // MARK: - Ambient Layer
 
