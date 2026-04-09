@@ -1891,8 +1891,8 @@ extension Theme {
         /// Energize needs much higher density for rhythmic, driving feel.
         enum Density {
             static let focus: Double = 1.0      // Steady, moderate
-            static let relaxation: Double = 0.7 // Sparse, gentle
-            static let sleep: Double = 0.3      // Very sparse
+            static let relaxation: Double = 1.2 // Present — must be audible above ambient
+            static let sleep: Double = 0.5      // Sparse but not silent
             static let energize: Double = 2.2   // Dense, driving rhythm
         }
 
@@ -1900,8 +1900,8 @@ extension Theme {
         /// Sleep = long sustaining pads, Energize = short punchy melodic notes.
         enum DurationMultiplier {
             static let focus: Double = 1.0      // 1.5-6.0s (moderate sustain)
-            static let relaxation: Double = 1.5 // 2.25-9.0s (flowing)
-            static let sleep: Double = 2.5      // 3.75-15.0s (long pads)
+            static let relaxation: Double = 1.2 // 1.8-7.2s (gentle, flowing)
+            static let sleep: Double = 2.0      // 3.0-12.0s (long pads)
             static let energize: Double = 0.3   // 0.45-1.8s (short, rhythmic, punchy)
         }
 
@@ -1911,12 +1911,12 @@ extension Theme {
         enum PresetIndex {
             // Focus: Electric Piano — clean, steady, non-distracting
             static let focusPad: Int = 4      // GM: Electric Piano 1 (Rhodes)
-            // Relaxation: Warm Pad — spacious, floating, Lydian character
-            static let relaxationStrings: Int = 89 // GM: Warm Pad
+            // Relaxation: Strings (fast attack) — present, warm, musical
+            static let relaxationStrings: Int = 48 // GM: Stereo Strings Fast
             // Sleep: Choir Pad — dark, enveloping, formless
             static let sleepPad: Int = 91     // GM: Pad 4 (Choir)
-            // Energize: Sawtooth Lead — warm, full, musical (NOT Square Lead which is harsh)
-            static let energizeBells: Int = 81 // GM: Sawtooth Lead (warm, usable for melodies)
+            // Energize: Tine Electric Piano (Rhodes) — warm, punchy, universally good
+            static let energizeBells: Int = 4  // GM: Tine Electric Piano (Rhodes)
             // Additional presets for layering
             static let strings: Int = 49      // GM: String Ensemble 1
             static let acousticPiano: Int = 0 // GM: Acoustic Grand Piano
