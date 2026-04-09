@@ -525,6 +525,9 @@ public final class AudioEngine: AudioEngineProtocol {
         let renderer = SF2MelodicRenderer(engine: engine, parameters: parameters)
         do {
             try renderer.setup(sf2URL: sf2URL, presetIndex: Theme.SF2.PresetIndex.focusPad)
+            // Connect the renderer's submixer to the main mixer — without this,
+            // the sampler generates notes but the audio goes nowhere.
+            engine.connect(renderer.outputNode, to: engine.mainMixerNode, format: nil)
             self.sf2Renderer = renderer
         } catch {
             Logger.audio.error("SF2 setup failed: \(error.localizedDescription)")
