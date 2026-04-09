@@ -105,9 +105,10 @@ public final class SF2MelodicRenderer: NotePlayer {
         self.currentPresetIndex = presetIndex
         self.isReady = true
 
-        // Start at moderate volume — the GenerativeMIDIEngine calls fadeIn()
-        // which ramps to full, but we want notes audible immediately.
-        submixer.volume = 0.6
+        // Start at the balanced level — sits within the mix alongside
+        // ambient, binaural, and other layers. The fadeIn() will ramp
+        // to the target level gradually.
+        submixer.volume = 0.0
 
         Self.logger.info("SF2 renderer ready — preset \(presetIndex)")
     }
@@ -151,11 +152,13 @@ public final class SF2MelodicRenderer: NotePlayer {
     }
 
     /// Fade in the submixer volume over the configured duration.
+    /// Target volume is scaled to sit within the overall mix — the SF2
+    /// renderer is one part of the soundscape, not the whole thing.
     public func fadeIn() {
         guard isReady else { return }
         cancelFade()
 
-        let targetVolume = Float(parameters.melodicVolume)
+        let targetVolume = mixBalancedVolume()
         let duration = Theme.SF2.fadeInDuration
         let steps = Int(duration / Theme.Audio.crossfadeStepInterval)
         var currentStep = 0
@@ -207,9 +210,19 @@ public final class SF2MelodicRenderer: NotePlayer {
         fadeTimer = nil
     }
 
-    /// Sync submixer volume with AudioParameters.
+    /// Sync submixer volume with AudioParameters, scaled for mix balance.
     public func syncVolume() {
         guard isReady else { return }
-        submixer.volume = Float(parameters.melodicVolume)
+        submixer.volume = mixBalancedVolume()
+    }
+
+    /// Compute the mix-balanced volume for the SF2 renderer.
+    /// The melodicVolume slider (0-1) is the user's overall melodic level.
+    /// The SF2 renderer sits at 35% of that — enough to be clearly audible
+    /// as the melodic voice while leaving room for ambient, binaural, and
+    /// other layers. The MelodicLayer (file-based) and MIDISequencePlayer
+    /// also reference melodicVolume, so all melodic sources share the budget.
+    private func mixBalancedVolume() -> Float {
+        return Float(parameters.melodicVolume) * 0.35
     }
 }
