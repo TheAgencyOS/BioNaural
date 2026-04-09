@@ -1169,6 +1169,31 @@ extension Theme {
         // MARK: - Stem Audio Layer (AI-Generated Content)
 
         /// Tokens for the biometric-adaptive stem mixing system.
+        // MARK: - Sub-Bass Synth (Energize)
+
+        /// Synthesised sub-bass oscillator parameters. Active only in
+        /// Energize mode — adds physical low-end (30-80 Hz) that SoundFont
+        /// samples cannot reproduce. Inspired by possibility-audio's
+        /// oscillator architecture.
+        enum SubBass {
+            /// Attack time for amplitude envelope (seconds).
+            static let attackSeconds: Double = 0.005
+            /// Decay time (seconds) — quick snap to sustain level.
+            static let decaySeconds: Double = 0.050
+            /// Sustain level [0…1] after decay.
+            static let sustainLevel: Double = 0.80
+            /// Release time (seconds) — smooth tail-off on note-off.
+            static let releaseSeconds: Double = 0.100
+            /// Exponential smoothing time constant for frequency glide.
+            static let smoothingTimeConstant: Double = 0.020
+            /// Maximum amplitude [0…1] — sits below SoundFont bass.
+            static let maxAmplitude: Double = 0.35
+        }
+
+        /// Reverb wet/dry mix for Energize mode (%).
+        /// Per FunctionalMusicTheory.md: "Short room, 15-25% wet. Tight, punchy."
+        static let energizeReverbWetDryMix: Float = 12.0
+
         /// Per-stem volumes are interpolated between biometric states
         /// using the HR_normalized value from the adaptation engine.
         enum StemMix {

@@ -86,6 +86,37 @@ public final class AudioParameters: @unchecked Sendable {
         set { _isPlaying.store(newValue, ordering: .relaxed) }
     }
 
+    // MARK: - Sub-Bass Synth (Energize Mode)
+
+    private let _subBassFrequency = ManagedAtomic<UInt64>(40.0.bitPattern)
+    private let _subBassAmplitude = ManagedAtomic<UInt64>(0.0.bitPattern)
+    private let _subBassEnabled   = ManagedAtomic<Bool>(false)
+
+    /// Target frequency for the synthesised sub-bass oscillator (Hz).
+    /// Set by MIDISequencePlayer when a bass note plays.
+    public var subBassFrequency: Double {
+        get { Double(bitPattern: _subBassFrequency.load(ordering: .relaxed)) }
+        set { _subBassFrequency.store(newValue.bitPattern, ordering: .relaxed) }
+    }
+
+    /// Target amplitude for the sub-bass [0…1].
+    /// Set to velocity/127 on noteOn, 0 on noteOff.
+    public var subBassAmplitude: Double {
+        get { Double(bitPattern: _subBassAmplitude.load(ordering: .relaxed)) }
+        set { _subBassAmplitude.store(newValue.bitPattern, ordering: .relaxed) }
+    }
+
+    /// Whether the sub-bass oscillator is active (energize mode only).
+    public var subBassEnabled: Bool {
+        get { _subBassEnabled.load(ordering: .relaxed) }
+        set { _subBassEnabled.store(newValue, ordering: .relaxed) }
+    }
+
+    /// Atomic references for sub-bass render closure capture.
+    public var atomicSubBassFrequency: ManagedAtomic<UInt64> { _subBassFrequency }
+    public var atomicSubBassAmplitude: ManagedAtomic<UInt64> { _subBassAmplitude }
+    public var atomicSubBassEnabled: ManagedAtomic<Bool> { _subBassEnabled }
+
     // MARK: - MIDI Voice Volumes (user-controllable sliders)
 
     /// Volume of the MIDI bass line [0…1].
