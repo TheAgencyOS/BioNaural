@@ -360,9 +360,18 @@ def _generate_curated_harmony(mode: str, root_midi: int, bpm: float,
     chord_dur = bars_per_chord * bar_dur
     prog_idx = 0
 
+    # Key modulation for energize: transpose up 1 semitone at 75% of sequence
+    # Per FunctionalMusicTheory.md: "Key changes: up a half step for energy boost"
+    modulation = 1 if mode == "energize" else 0
+
     while t < duration:
         degree, chord_type = prog[prog_idx % len(prog)]
         chord_root = root_midi + degree - 12  # bass register
+
+        # Apply key modulation in the final quarter (energy injection)
+        if modulation > 0 and t >= duration * 0.75:
+            chord_root += modulation
+
         chord_root = clamp(chord_root, 36, 72)
 
         tension = tension_curve(mode, t / duration, variation["tension_shift"])
@@ -865,10 +874,12 @@ def _generate_focus_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
 def _generate_energize_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
                               sections: list, chords: list, variation: dict,
                               duration: float) -> list:
-    """Energize melody: SPARSE — bass and drums are the stars. Melody plays
-    only a few accent notes per bar (chord tones on beat 1, occasional
-    beat 3), with bars of silence in between. Think: a single guitar stab
-    or piano hit punctuating a driving rhythm section."""
+    """Energize melody: hook-based riffs — present but secondary to bass+drums.
+    Per FunctionalMusicTheory.md: '4-8 note hooks and riffs that repeat.
+    Ascending, hook-based. Power intervals (4ths, 5ths, octaves).'
+
+    Structure: 1-bar hook (4 notes) repeats for 4 bars, then evolves.
+    Melody sits below bass and drums in prominence."""
     notes = []
     bpm = mode_cfg["bpm"]
     beat_dur = 60.0 / bpm
@@ -890,8 +901,28 @@ def _generate_energize_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
                 break
         return ch
 
+    def build_hook(chord):
+        """Build a 4-note hook from chord tones + passing tone."""
+        cr = clamp(chord["root"], 48, 66)
+        intervals = CHORD_TYPES.get(chord["type"], CHORD_TYPES["maj"])
+        ct = [nearest_scale(cr + iv, pool) for iv in intervals]
+        ct = [n for n in ct if 48 <= n <= 72]
+        if len(ct) < 2:
+            ct = [nearest_scale(cr, pool), nearest_scale(cr + 7, pool)]
+
+        root = ct[0]
+        fifth = nearest_scale(root + 7, pool)
+        third = nearest_scale(root + (intervals[1] if len(intervals) > 1 else 4), pool)
+        # Passing tone between root and 3rd
+        passing = nearest_scale(root + 2, pool)
+
+        # Hook: root → passing → 5th → 3rd (ascending then settle)
+        return [root, passing, fifth, third]
+
     t = 0.0
     bar_idx = 0
+    current_hook = None
+    hook_repeat = 0
 
     while t < duration:
         progress = t / duration
@@ -900,62 +931,64 @@ def _generate_energize_melody(mode_cfg: dict, scale_pool: list, root_midi: int,
         tension = tension_curve("energize", progress, variation["tension_shift"])
         chord = get_chord_at(t)
 
-        cr = clamp(chord["root"], 48, 66)
-        intervals = CHORD_TYPES.get(chord["type"], CHORD_TYPES["maj"])
-        chord_tones = sorted(set(
-            nearest_scale(cr + iv, pool) for iv in intervals
-            if 48 <= nearest_scale(cr + iv, pool) <= 72
-        ))
-        if not chord_tones:
-            chord_tones = [nearest_scale(cr, pool)]
+        # Rebuild hook every 4 bars or on chord change
+        if bar_idx % 4 == 0 or current_hook is None:
+            base_hook = build_hook(chord)
 
-        # === SPARSE MELODY: only accent notes, lots of silence ===
-        # Intro/cooldown: melody every 2 bars (one hit per 2 bars)
-        # Build: melody every bar, beat 1 only
-        # Drop: melody on beat 1 + optional beat 3, every bar
-        # Response bars (odd bars): usually silent — let bass+drums breathe
+            # Evolve the hook over the piece
+            if hook_repeat == 0:
+                current_hook = base_hook
+            elif hook_repeat % 4 == 1:
+                # Transpose up a 3rd
+                current_hook = [nearest_scale(n + 3, pool) for n in base_hook]
+            elif hook_repeat % 4 == 2:
+                # Invert contour (descending)
+                current_hook = list(reversed(base_hook))
+            else:
+                # Back to original
+                current_hook = base_hook
 
-        is_response_bar = bar_idx % 2 == 1
+            hook_repeat += 1
 
+        # Section-driven velocity (melody is secondary — 50-75% of range)
         if section_name in ("intro",):
-            # Very sparse: one note every 4 bars
-            if bar_idx % 4 == 0:
-                note = random.choice(chord_tones)
-                vel = clamp(int(vel_lo + (vel_hi - vel_lo) * 0.5), vel_lo, vel_hi)
-                notes.append({
-                    "note": note, "velocity": vel,
-                    "startTime": round(t + random.uniform(-0.005, 0.005), 3),
-                    "duration": round(beat_dur * 2.5, 3),
-                })
+            vel_scale = 0.45
+            play_this_bar = bar_idx % 2 == 0  # every other bar
         elif section_name in ("build", "build2"):
-            # Beat 1 stab on call bars, silence on response bars
-            if not is_response_bar:
-                note = random.choice(chord_tones)
-                vel = clamp(int(vel_lo + (vel_hi - vel_lo) * tension * 0.8), vel_lo, vel_hi)
-                notes.append({
-                    "note": note, "velocity": vel,
-                    "startTime": round(t + random.uniform(-0.003, 0.003), 3),
-                    "duration": round(beat_dur * 1.5, 3),
-                })
+            vel_scale = 0.55 + progress * 0.15
+            play_this_bar = True
         elif section_name in ("drop", "drop2"):
-            # Beat 1 accent (louder) + optional beat 3
-            note1 = chord_tones[0]
-            vel1 = clamp(int(vel_lo + (vel_hi - vel_lo) * 0.9), vel_lo, vel_hi)
-            notes.append({
-                "note": note1, "velocity": vel1,
-                "startTime": round(t + random.uniform(-0.003, 0.003), 3),
-                "duration": round(beat_dur * 1.0, 3),
-            })
-            # Beat 3: only on call bars, 60% probability
-            if not is_response_bar and random.random() < 0.6 and len(chord_tones) > 1:
-                note3 = chord_tones[1] if len(chord_tones) > 1 else note1
-                vel3 = clamp(int(vel1 * 0.8), vel_lo, vel_hi)
+            vel_scale = 0.70
+            play_this_bar = True
+        else:  # cooldown/intro mirror
+            vel_scale = 0.40
+            play_this_bar = bar_idx % 2 == 0
+
+        if play_this_bar:
+            # Place 4 hook notes: beats 1, 2-and, 3, 4-and
+            beat_positions = [0, 1.5, 2.0, 3.5]  # in beat units
+            for i, beat_pos in enumerate(beat_positions):
+                note_time = t + beat_pos * beat_dur
+                if note_time >= duration:
+                    break
+
+                pitch = current_hook[i % len(current_hook)]
+
+                # Accent beat 1 and beat 3 (lands with kick)
+                is_kick_beat = beat_pos in (0, 2.0)
+                accent = 1.15 if is_kick_beat else 0.85
+                vel = int((vel_lo + (vel_hi - vel_lo) * vel_scale) * accent)
+                vel = clamp(vel + random.randint(-3, 3), vel_lo, vel_hi)
+
+                # Duration: longer on kick beats
+                dur = beat_dur * (1.2 if is_kick_beat else 0.6)
+
                 notes.append({
-                    "note": note3, "velocity": vel3,
-                    "startTime": round(t + beat_dur * 2 + random.uniform(-0.003, 0.003), 3),
-                    "duration": round(beat_dur * 0.8, 3),
+                    "note": pitch,
+                    "velocity": vel,
+                    "startTime": round(max(0, note_time + random.uniform(-0.005, 0.005)), 3),
+                    "duration": round(dur, 3),
                 })
-        # else: cooldown/intro — silent melody, bass+drums only
 
         t += bar_dur
         bar_idx += 1
@@ -1243,8 +1276,21 @@ def _bass_energize_locked(chords, pool, bpm, vel_lo, vel_hi, duration, sections)
                     })
             else:
                 # Full drive: 8th note subdivision with sidechain dip
-                # On-beat: full velocity root (or octave on beat 3)
-                note = octave_root if beat == 2 else root
+                next_root = chords[(ci + 1) % len(chords)]["root"]
+                next_root = clamp(next_root, 36, 50)
+
+                # Beat 2: occasional 5th jump for variety (40% chance)
+                if beat == 2 and random.random() < 0.4:
+                    note = nearest_scale(root + 7, pool)
+                    note = clamp(note, 36, 55)
+                elif beat == 2:
+                    note = octave_root  # octave jump
+                elif beat == beats - 1 and next_root != root:
+                    # Last beat: chromatic approach to next chord
+                    note = clamp(next_root - 1 if next_root > root else next_root + 1, 36, 55)
+                else:
+                    note = root
+
                 vel_on = bass_vel_hi if beat in (0, 2) else int(bass_vel_hi * 0.9)
                 notes.append({
                     "note": note,
@@ -1940,8 +1986,11 @@ def generate_drums(mode: str, mode_cfg: dict, genre: str, genre_cfg: dict,
         progress = t / duration
         tension = tension_curve(mode, progress, variation["tension_shift"])
 
-        # Dynamic arc: scale velocity by tension
-        dyn_scale = 0.7 + tension * 0.3
+        # Dynamic arc: wider range for energize (science: 8-14 dB dynamic range)
+        if mode == "energize":
+            dyn_scale = 0.50 + tension * 0.50  # intro 55%, drops 100%
+        else:
+            dyn_scale = 0.7 + tension * 0.3
 
         # Determine if we're in a fill zone (last 2 beats before phrase boundary)
         steps_into_phrase = step_idx % fill_interval_steps
@@ -2017,22 +2066,43 @@ def generate_drums(mode: str, mode_cfg: dict, genre: str, genre_cfg: dict,
                     "duration": round(step_dur * 0.5, 3),
                 })
 
-    # === ENERGIZE: open hi-hat on upbeats during drops ===
+    # === ENERGIZE: open hi-hat on beat 4-and + ride in builds ===
     if mode == "energize":
         for step_idx in range(total_steps):
             t = step_idx * step_dur
             if t >= duration:
                 break
             bar_step = step_idx % 16
-            if bar_step in (2, 6, 10, 14):  # 8th-note upbeats
-                section = get_section_at(sections, t)
-                if section["name"] in ("drop", "drop2"):
-                    notes.append({
-                        "note": OHH,
-                        "velocity": clamp(38 + random.randint(-3, 3), vel_lo, vel_hi),
-                        "startTime": round(t + random.uniform(-0.003, 0.003), 3),
-                        "duration": round(step_dur * 0.6, 3),
-                    })
+            section = get_section_at(sections, t)
+            section_name = section["name"]
+
+            # Open hi-hat on beat 4-and (step 14) in ALL sections for lift
+            if bar_step == 14 and section_name not in ("intro",):
+                vel = 32 if section_name in ("build", "build2") else 42
+                notes.append({
+                    "note": OHH,
+                    "velocity": clamp(vel + random.randint(-3, 3), vel_lo, vel_hi),
+                    "startTime": round(t + random.uniform(-0.003, 0.003), 3),
+                    "duration": round(step_dur * 0.6, 3),
+                })
+
+            # Additional upbeat hats in drops (steps 2, 6, 10)
+            if bar_step in (2, 6, 10) and section_name in ("drop", "drop2"):
+                notes.append({
+                    "note": OHH,
+                    "velocity": clamp(38 + random.randint(-3, 3), vel_lo, vel_hi),
+                    "startTime": round(t + random.uniform(-0.003, 0.003), 3),
+                    "duration": round(step_dur * 0.6, 3),
+                })
+
+            # Ride cymbal on every beat during builds (creates momentum)
+            if bar_step % 4 == 0 and section_name in ("build", "build2"):
+                notes.append({
+                    "note": RIDE,
+                    "velocity": clamp(45 + random.randint(-3, 3), vel_lo, vel_hi),
+                    "startTime": round(t + random.uniform(-0.002, 0.002), 3),
+                    "duration": round(step_dur * 3, 3),
+                })
 
     # === CRASH CYMBALS at section boundaries ===
     for section in sections:

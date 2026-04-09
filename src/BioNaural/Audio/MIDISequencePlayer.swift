@@ -260,12 +260,25 @@ public final class MIDISequencePlayer {
         sampler.startNote(note, withVelocity: velocity, onChannel: 0)
         notes.insert(note)
         activeNotes[role] = notes
+
+        // Drive sub-bass synth from bass notes (energize mode)
+        if role == "bass" && parameters.subBassEnabled {
+            // MIDI note → Hz, then drop one octave for sub-bass rumble
+            let hz = 440.0 * pow(2.0, (Double(note) - 69.0) / 12.0)
+            parameters.subBassFrequency = hz / 2.0  // one octave below
+            parameters.subBassAmplitude = Double(velocity) / 127.0
+        }
     }
 
     /// Stop a note and update tracking.
     private func safeNoteOff(role: String, sampler: AVAudioUnitSampler, note: UInt8) {
         sampler.stopNote(note, onChannel: 0)
         activeNotes[role]?.remove(note)
+
+        // Release sub-bass on bass note-off
+        if role == "bass" && parameters.subBassEnabled {
+            parameters.subBassAmplitude = 0.0
+        }
     }
 
     /// Update per-role volumes from AudioParameters sliders.

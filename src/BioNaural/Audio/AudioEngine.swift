@@ -54,6 +54,10 @@ public final class AudioEngine: AudioEngineProtocol {
     public private(set) var bassLine: BassLineGenerator?
     public private(set) var drums: DrumPatternGenerator?
 
+    /// Synthesised sub-bass oscillator (energize mode only).
+    /// Adds physical low-end (30-80 Hz) that SoundFont samples can't produce.
+    private var subBassNode: AVAudioSourceNode?
+
     // WebView engine removed — MIDISequencePlayer handles all melodic content.
 
     /// Pre-generated MIDI sequence player. Plays Claude-composed sequences
@@ -163,6 +167,13 @@ public final class AudioEngine: AudioEngineProtocol {
             Logger.audio.info("MIDI catalog loaded — \(self.midiCatalog!.sequences.count) sequences")
         }
 
+        // -- Sub-bass synth (energize only) -----------------------------------
+        let subBass = SubBassNode.makeNode(parameters: parameters, sampleRate: sampleRate)
+        engine.attach(subBass)
+        // Connect direct to mixer (not through reverb — sub-bass needs to stay tight)
+        engine.connect(subBass, to: engine.mainMixerNode, format: nil)
+        self.subBassNode = subBass
+
         // -- Output configuration -----------------------------------------
         // Spatial Audio MUST be disabled to preserve stereo binaural beat
         // separation. HRTF processing corrupts the precise L/R frequency
@@ -213,6 +224,20 @@ public final class AudioEngine: AudioEngineProtocol {
         parameters.ambientVolume = Theme.Audio.Defaults.ambientVolume
         parameters.melodicVolume = Theme.Audio.Defaults.melodicVolume
         parameters.isPlaying = true
+
+        // Enable sub-bass synth for energize mode only
+        parameters.subBassEnabled = (mode == .energize)
+        if mode == .energize {
+            parameters.subBassFrequency = 40.0  // will be overridden by bass notes
+            parameters.subBassAmplitude = 0.0
+        }
+
+        // Tighter reverb for energize (per FunctionalMusicTheory.md)
+        if mode == .energize {
+            reverb?.wetDryMix = Theme.Audio.energizeReverbWetDryMix
+        } else {
+            reverb?.wetDryMix = Theme.Audio.reverbWetDryMix
+        }
 
         if !engine.isRunning {
             try engine.start()
