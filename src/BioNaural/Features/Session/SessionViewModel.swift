@@ -269,6 +269,10 @@ final class SessionViewModel {
         currentState = state
         currentBeatFrequency = beatFrequency
 
+        // Forward biometric state to real-time generative layers
+        // so melody density, drum intensity, and volume adapt in real-time.
+        audioEngine.updateBiometricState(state)
+
         // Record adaptation event if frequency changed.
         let threshold = Theme.Audio.SlewRate.beatFrequencyMax * Theme.Audio.ControlLoop.intervalSeconds
         if abs(beatFrequency - oldFrequency) > threshold {

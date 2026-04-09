@@ -246,20 +246,14 @@ public final class AudioEngine: AudioEngineProtocol {
         // Start ambient layer with mode-appropriate default soundscape.
         startAmbienceLayer(for: mode)
 
-        // Start music generation — ONLY ONE source plays at a time.
-        // Pre-generated Claude sequences are preferred (they include
-        // melody, bass, chords, and drums all cohesive). If available,
-        // the native MIDI generators and file-based melodic layer are
-        // NOT started — they would just layer random noise on top.
-        let usingSequencePlayer = startMusicGeneration(mode: mode, tonality: tonality)
-
-        if !usingSequencePlayer {
-            // Fallback: use native generators when no pre-generated sequence exists
-            startMelodicLayer(for: mode)
-            startGenerativeLayer(for: mode)
-            startBassLine(tonality: tonality)
-            startDrumPattern(tonality: tonality)
-        }
+        // v2: Real-time generative MIDI is the PRIMARY music path.
+        // GenerativeMIDIEngine produces melody notes in real-time with
+        // voice leading, phrase structure, and biometric-responsive density.
+        // BassLineGenerator and DrumPatternGenerator provide rhythm section.
+        // MIDISequencePlayer is kept as infrastructure but not the default.
+        startGenerativeLayer(for: mode)
+        startBassLine(tonality: tonality)
+        startDrumPattern(tonality: tonality)
 
         // Start volume sync so user slider changes reach player nodes.
         startVolumeSyncTimer()
@@ -442,6 +436,13 @@ public final class AudioEngine: AudioEngineProtocol {
 
     public func selectSoundscape(_ bedName: String) {
         ambienceLayer?.crossfadeTo(bedName: bedName)
+    }
+
+    /// Forward biometric state to real-time generative layers.
+    /// Drives melody density/register, drum intensity, and volume mixing.
+    public func updateBiometricState(_ state: BiometricState) {
+        generativeMIDI?.updateBiometricState(state)
+        drums?.updateBiometricState(state)
     }
 
     // MARK: - Stem Pack Loading

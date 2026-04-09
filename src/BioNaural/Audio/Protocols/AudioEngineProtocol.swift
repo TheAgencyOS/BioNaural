@@ -54,4 +54,9 @@ public protocol AudioEngineProtocol: AnyObject {
     /// - Parameter bedName: The bundle filename (without extension) of the
     ///   ambient bed to crossfade to (e.g. "rain", "wind", "pink_noise").
     func selectSoundscape(_ bedName: String)
+
+    /// Forward a biometric state update to the real-time generative layers.
+    /// Called by SessionViewModel when new HR/HRV data arrives.
+    /// Drives melody density, drum intensity, and volume mixing.
+    func updateBiometricState(_ state: BiometricState)
 }
