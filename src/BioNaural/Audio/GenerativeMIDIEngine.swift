@@ -334,8 +334,8 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         // Sleep: very soft (30-55), Relaxation: soft (40-65), Focus: moderate (50-80), Energize: strong (70-100)
         let range: ClosedRange<UInt8>
         switch mode {
-        case .sleep:       range = 30...55
-        case .relaxation:  range = 40...65
+        case .sleep:       range = 45...70
+        case .relaxation:  range = 55...80
         case .focus:       range = 50...80
         case .energize:    range = 70...100
         }
@@ -431,9 +431,9 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         let restProb: Double
         switch mode {
         case .energize:    restProb = 0.15  // Rarely pause — keep driving
-        case .focus:       restProb = 0.25  // Occasional breath
-        case .relaxation:  restProb = 0.35  // Gentle pauses
-        case .sleep:       restProb = 0.50  // Lots of silence
+        case .focus:       restProb = 0.20  // Occasional breath
+        case .relaxation:  restProb = 0.20  // Gentle pauses (not too many — must stay musical)
+        case .sleep:       restProb = 0.35  // Lots of silence
         }
         return Double.random(in: 0...1) < restProb
     }
@@ -552,10 +552,10 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         // Play chord notes with soft velocity (pad layer, not dominant)
         let chordVelocity: UInt8
         switch mode {
-        case .sleep:       chordVelocity = 35  // Very soft
-        case .relaxation:  chordVelocity = 45  // Soft
-        case .focus:       chordVelocity = 50  // Moderate
-        case .energize:    chordVelocity = 65  // Present
+        case .sleep:       chordVelocity = 50  // Present but gentle
+        case .relaxation:  chordVelocity = 60  // Clearly audible harmonic bed
+        case .focus:       chordVelocity = 55  // Steady background
+        case .energize:    chordVelocity = 70  // Strong harmonic support
         }
 
         for note in chordNotes {
