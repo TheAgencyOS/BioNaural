@@ -280,6 +280,19 @@ private struct ComposedSessionContent: View {
     var body: some View {
         SessionView(viewModel: viewModel)
             .onAppear {
+                // Apply the composition's saved audio parameters so playback
+                // sounds the same as the Compose preview. Without this, the
+                // session uses hardcoded Theme.Audio.Defaults and ignores the
+                // user's custom mix settings.
+                audioEngine.parameters.binauralVolume = composition.binauralVolume
+                audioEngine.parameters.ambientVolume = composition.ambientVolume
+                audioEngine.parameters.melodicVolume = composition.melodicVolume
+
+                // Apply reverb if the engine exposes it
+                if let engine = audioEngine as? AudioEngine {
+                    engine.reverb?.wetDryMix = composition.reverbWetDry
+                }
+
                 IntentDonation.donateStartSession(
                     mode: composition.focusMode ?? .focus,
                     durationMinutes: composition.durationMinutes

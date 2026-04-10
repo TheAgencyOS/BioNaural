@@ -84,7 +84,10 @@ public final class DrumPatternGenerator: @unchecked Sendable {
         }
 
         for hit in hits {
-            renderer.noteOn(hit.note, velocity: hit.velocity)
+            // ALL renderer calls must be on main thread (AVAudioUnitSampler not thread-safe)
+            DispatchQueue.main.async { [weak self] in
+                self?.renderer.noteOn(hit.note, velocity: hit.velocity)
+            }
             // Drums are percussive — short note-off after 50ms
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
                 self?.renderer.noteOff(hit.note)

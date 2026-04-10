@@ -44,7 +44,9 @@ public final class BassLineGenerator: @unchecked Sendable {
     public func stop() {
         isRunning = false
         if let note = activeNote {
-            renderer.noteOff(note)
+            DispatchQueue.main.async { [weak self] in
+                self?.renderer.noteOff(note)
+            }
             activeNote = nil
         }
     }
@@ -56,6 +58,8 @@ public final class BassLineGenerator: @unchecked Sendable {
 
     /// Called by GenerativeMIDIEngine's master clock at 16th-note resolution.
     /// stepInBar: 0-15 (position within the current bar).
+    /// NOTE: This runs on generationQueue. All renderer calls MUST
+    /// dispatch to main thread (AVAudioUnitSampler is not thread-safe).
     public func tick(stepInBar: Int) {
         guard isRunning, let tonality else { return }
 
@@ -78,7 +82,9 @@ public final class BassLineGenerator: @unchecked Sendable {
         if stepInBar == 0 {
             releaseActive()
             let note = clampBass(currentChordRoot)
-            renderer.noteOn(note, velocity: 55)
+            DispatchQueue.main.async { [weak self] in
+                self?.renderer.noteOn(note, velocity: 55)
+            }
             activeNote = note
         }
         // Release at end of bar (step 15) to prepare for next bar
@@ -110,7 +116,9 @@ public final class BassLineGenerator: @unchecked Sendable {
         default: note = root
         }
 
-        renderer.noteOn(note, velocity: 80)
+        DispatchQueue.main.async { [weak self] in
+            self?.renderer.noteOn(note, velocity: 80)
+        }
         activeNote = note
     }
 
@@ -118,7 +126,9 @@ public final class BassLineGenerator: @unchecked Sendable {
 
     private func releaseActive() {
         if let note = activeNote {
-            renderer.noteOff(note)
+            DispatchQueue.main.async { [weak self] in
+                self?.renderer.noteOff(note)
+            }
             activeNote = nil
         }
     }
