@@ -4,8 +4,9 @@
 // Generates rhythmic drum/percussion patterns locked to the session tempo.
 // Uses GM drum map (channel 10) MIDI notes for the SoundFont renderer.
 //
-// v2: No internal timer. The master clock in GenerativeMIDIEngine calls
-// tick() at 16th-note resolution. All tracks share one clock — zero drift.
+// v2: No internal timer. Called via tick() from GenerativeMIDIEngine's
+// master clock. Note-offs tracked inline (no asyncAfter backlog).
+// All renderer calls happen directly — NO main thread dispatch.
 
 import BioNauralShared
 import Foundation
@@ -44,7 +45,10 @@ public final class DrumPatternGenerator: @unchecked Sendable {
     private var mode: FocusMode = .focus
     private var biometricState: BiometricState = .calm
     private var isRunning = false
-    private var totalSteps: Int = 0  // total 16th notes since start (for fills)
+    private var totalSteps: Int = 0
+
+    /// Pending note-offs: (note, offTick). Processed inline at start of tick().
+    private var pendingOffs: [(note: UInt8, offTick: Int)] = []
 
     // MARK: - Init
 
@@ -54,16 +58,21 @@ public final class DrumPatternGenerator: @unchecked Sendable {
 
     // MARK: - Public API
 
-    /// Prepare the drum generator (no timer — master clock calls tick).
     public func start(tonality: SessionTonality) {
         guard Theme.ModeInstrumentation.allowsRhythmStem(for: tonality.mode) else { return }
         self.mode = tonality.mode
         self.isRunning = true
         self.totalSteps = 0
+        self.pendingOffs.removeAll()
     }
 
     public func stop() {
         isRunning = false
+        // Release all pending drum notes
+        for off in pendingOffs {
+            renderer.noteOff(off.note)
+        }
+        pendingOffs.removeAll()
         totalSteps = 0
     }
 
@@ -71,11 +80,19 @@ public final class DrumPatternGenerator: @unchecked Sendable {
         biometricState = state
     }
 
-    /// Called by GenerativeMIDIEngine's master clock at 16th-note resolution.
-    /// stepInBar: 0-15 (position within the current bar).
+    /// Called by master clock at 16th-note resolution.
     public func tick(stepInBar: Int) {
         guard isRunning else { return }
 
+        // 1. Process pending note-offs FIRST (release drums from previous ticks)
+        let current = totalSteps
+        let expired = pendingOffs.filter { $0.offTick <= current }
+        for off in expired {
+            renderer.noteOff(off.note)
+        }
+        pendingOffs.removeAll { $0.offTick <= current }
+
+        // 2. Generate hits for this step
         let hits: [DrumHit]
         switch mode {
         case .focus:    hits = focusPattern(step: stepInBar)
@@ -83,15 +100,10 @@ public final class DrumPatternGenerator: @unchecked Sendable {
         default:        hits = []
         }
 
+        // 3. Play hits and schedule note-offs for next tick
         for hit in hits {
-            // ALL renderer calls must be on main thread (AVAudioUnitSampler not thread-safe)
-            DispatchQueue.main.async { [weak self] in
-                self?.renderer.noteOn(hit.note, velocity: hit.velocity)
-            }
-            // Drums are percussive — short note-off after 50ms
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
-                self?.renderer.noteOff(hit.note)
-            }
+            renderer.noteOn(hit.note, velocity: hit.velocity)
+            pendingOffs.append((note: hit.note, offTick: current + 1))
         }
 
         totalSteps += 1
@@ -160,7 +172,7 @@ public final class DrumPatternGenerator: @unchecked Sendable {
             hits.append(DrumHit(note: GMDrum.closedHiHat, velocity: max(25, hhVel - 20)))
         }
 
-        // Tom fill every 4 bars (64 steps)
+        // Tom fill every 4 bars
         if totalSteps > 0 && step >= 13 && (totalSteps / 16) % 4 == 3 {
             let fillNotes: [UInt8] = [GMDrum.highTom, GMDrum.midTom, GMDrum.lowTom]
             let fillIdx = step - 13

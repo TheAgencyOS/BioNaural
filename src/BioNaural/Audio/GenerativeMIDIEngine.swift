@@ -52,14 +52,15 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
     private var patternLength: Int = 0               // in ticks
     private var patternRepeatCount: Int = 0
 
+    // Melody note tracking (simple tick-based release)
+    private var activeMelodyNote: UInt8?
+    private var melodyNoteOffTick: Int = -1  // tick at which to release melody note
+
     // Chord state
     private var chordProgression: [[Int]] = []
     private var currentChordIndex: Int = 0
     private var activeChordNotes: [UInt8] = []
     private var barsPerChord: Int = 4
-
-    // Active notes for cleanup
-    private var activeMelodyNote: UInt8?
 
     private let generationQueue = DispatchQueue(
         label: "com.bionaural.generativemidi",
@@ -149,7 +150,7 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         let tickInterval = tonality.beatDuration / 4.0
 
         let timer = DispatchSource.makeTimerSource(queue: generationQueue)
-        timer.schedule(deadline: .now() + tickInterval, repeating: tickInterval, leeway: .milliseconds(2))
+        timer.schedule(deadline: .now() + tickInterval, repeating: tickInterval, leeway: .milliseconds(5))
         timer.setEventHandler { [weak self] in
             self?.masterTick()
         }
@@ -186,41 +187,26 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
             }
         }
 
-        // === MELODY: play pattern notes on the grid ===
+        // === MELODY: simple tick-based note tracking ===
+        // Release melody note when its duration expires
+        if tickCount >= melodyNoteOffTick, let active = activeMelodyNote {
+            renderer.noteOff(active)
+            activeMelodyNote = nil
+            melodyNoteOffTick = -1
+        }
+
+        // Play new pattern note if one falls on this tick
         if !melodyPattern.isEmpty {
             let patternTick = tickCount % patternLength
-
-            // Note-off for previous melody note
-            if let active = activeMelodyNote {
-                // Check if this tick should release the note
-                let prevTick = (patternTick == 0) ? patternLength - 1 : patternTick - 1
-                if let prevNote = melodyPattern[prevTick % melodyPattern.count],
-                   prevNote.note == active {
-                    let ticksSinceNoteStart = ticksSinceLastNoteOn(patternTick: patternTick)
-                    if let currentNote = melodyPattern[patternTick % melodyPattern.count],
-                       currentNote.note != active {
-                        // New note starting — release old one
-                        noteOff(active)
-                        activeMelodyNote = nil
-                    }
-                }
-            }
-
-            // Note-on for current tick
             if let pNote = melodyPattern[patternTick % melodyPattern.count] {
+                // Only start if different note or no note active
                 if activeMelodyNote != pNote.note {
-                    // Release any previous note
                     if let active = activeMelodyNote {
-                        noteOff(active)
+                        renderer.noteOff(active)
                     }
-                    noteOn(pNote.note, velocity: pNote.velocity)
+                    renderer.noteOn(pNote.note, velocity: pNote.velocity)
                     activeMelodyNote = pNote.note
-                }
-            } else {
-                // Rest tick — release any held note
-                if let active = activeMelodyNote {
-                    noteOff(active)
-                    activeMelodyNote = nil
+                    melodyNoteOffTick = tickCount + pNote.durationTicks
                 }
             }
         }
@@ -231,15 +217,6 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         drumPatternGenerator?.tick(stepInBar: currentTickInBar)
 
         tickCount += 1
-    }
-
-    private func ticksSinceLastNoteOn(patternTick: Int) -> Int {
-        var t = patternTick - 1
-        while t >= 0 {
-            if melodyPattern[t % melodyPattern.count] != nil { return patternTick - t }
-            t -= 1
-        }
-        return patternTick
     }
 
     // MARK: - Pattern Generation
@@ -405,9 +382,7 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         }
 
         for note in chordNotes {
-            DispatchQueue.main.async { [weak self] in
-                self?.renderer.noteOn(note, velocity: chordVelocity)
-            }
+            renderer.noteOn(note, velocity: chordVelocity)
         }
         activeChordNotes = chordNotes
 
@@ -484,30 +459,21 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
     }
 
     // MARK: - Note Helpers
-
-    private func noteOn(_ note: UInt8, velocity: UInt8) {
-        DispatchQueue.main.async { [weak self] in
-            self?.renderer.noteOn(note, velocity: velocity)
-        }
-    }
-
-    private func noteOff(_ note: UInt8) {
-        DispatchQueue.main.async { [weak self] in
-            self?.renderer.noteOff(note)
-        }
-    }
+    // All renderer calls happen directly on generationQueue — NO main thread
+    // dispatch. MIDISequencePlayer has proven this is safe and stutter-free.
 
     private func releaseAllNotes() {
         if let active = activeMelodyNote {
-            noteOff(active)
+            renderer.noteOff(active)
             activeMelodyNote = nil
+            melodyNoteOffTick = -1
         }
         releaseChordNotes()
     }
 
     private func releaseChordNotes() {
         for note in activeChordNotes {
-            noteOff(note)
+            renderer.noteOff(note)
         }
         activeChordNotes.removeAll()
     }
