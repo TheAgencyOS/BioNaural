@@ -584,12 +584,18 @@ public final class AudioEngine: AudioEngineProtocol {
             renderer.changePreset(presetIndex)
         }
 
-        // Wire bass generator to MIDI engine so chord changes propagate
+        // Wire bass AND drum generators to the master clock in GenerativeMIDIEngine.
+        // The master clock calls tick() on all three (melody, bass, drums) from
+        // ONE timer — zero drift, perfect sync.
         if let bassGen = bassLine {
             generativeMIDI?.bassLineGenerator = bassGen
         }
+        if let drumGen = drums {
+            generativeMIDI?.drumPatternGenerator = drumGen
+        }
 
-        // Start generative melody with calm initial state and shared tonality
+        // Start generative melody with calm initial state and shared tonality.
+        // This also starts the master clock that drives bass and drums.
         generativeMIDI?.start(mode: mode, biometricState: .calm, tonality: sessionTonality)
     }
 

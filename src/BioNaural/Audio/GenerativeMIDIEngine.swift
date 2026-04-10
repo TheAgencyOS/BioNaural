@@ -30,8 +30,10 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
     /// Shared tonality — key/scale/tempo for the entire session.
     private var tonality: SessionTonality?
 
-    /// Bass generator — receives chord root updates.
+    /// Bass generator — driven by master clock tick().
     public weak var bassLineGenerator: BassLineGenerator?
+    /// Drum generator — driven by master clock tick().
+    public weak var drumPatternGenerator: DrumPatternGenerator?
 
     // MARK: - State (generationQueue only)
 
@@ -222,6 +224,11 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
                 }
             }
         }
+
+        // === BASS + DRUMS: tick from the same master clock ===
+        let currentTickInBar = tickCount % ticksPerBar
+        bassLineGenerator?.tick(stepInBar: currentTickInBar)
+        drumPatternGenerator?.tick(stepInBar: currentTickInBar)
 
         tickCount += 1
     }

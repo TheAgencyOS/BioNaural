@@ -4,43 +4,36 @@
 // Generates rhythmic drum/percussion patterns locked to the session tempo.
 // Uses GM drum map (channel 10) MIDI notes for the SoundFont renderer.
 //
-// Only active for Focus and Energize modes:
-// - Focus: minimal — soft brush/shaker on beats 2 & 4, very quiet
-// - Energize: full kit — kick on 1 & 3, snare/clap on 2 & 4,
-//   hi-hat 8ths, occasional fills
-//
-// All patterns are in the session tempo. Drum velocity and density
-// respond to biometric state (calmer = sparser, elevated = denser).
+// v2: No internal timer. The master clock in GenerativeMIDIEngine calls
+// tick() at 16th-note resolution. All tracks share one clock — zero drift.
 
 import BioNauralShared
 import Foundation
 
 // MARK: - GM Drum Map (Standard)
 
-/// General MIDI percussion note numbers (channel 10).
-/// These are the same across all GM-compatible SoundFonts.
 public enum GMDrum {
-    static let kick: UInt8          = 36  // Bass Drum 1
-    static let sideStick: UInt8     = 37  // Side Stick
-    static let snare: UInt8         = 38  // Acoustic Snare
-    static let clap: UInt8          = 39  // Hand Clap
-    static let closedHiHat: UInt8   = 42  // Closed Hi-Hat
-    static let openHiHat: UInt8     = 46  // Open Hi-Hat
-    static let pedalHiHat: UInt8    = 44  // Pedal Hi-Hat
-    static let lowTom: UInt8        = 41  // Low Floor Tom
-    static let midTom: UInt8        = 47  // Low-Mid Tom
-    static let highTom: UInt8       = 50  // High Tom
-    static let crash: UInt8         = 49  // Crash Cymbal 1
-    static let ride: UInt8          = 51  // Ride Cymbal 1
-    static let rideBell: UInt8      = 53  // Ride Bell
-    static let tambourine: UInt8    = 54  // Tambourine
-    static let cowbell: UInt8       = 56  // Cowbell
-    static let shaker: UInt8        = 70  // Maracas (shaker-like)
-    static let cabasa: UInt8        = 69  // Cabasa
-    static let guiro: UInt8         = 73  // Short Guiro
-    static let claves: UInt8        = 75  // Claves
-    static let woodBlock: UInt8     = 76  // Hi Wood Block
-    static let triangle: UInt8      = 81  // Open Triangle
+    static let kick: UInt8          = 36
+    static let sideStick: UInt8     = 37
+    static let snare: UInt8         = 38
+    static let clap: UInt8          = 39
+    static let closedHiHat: UInt8   = 42
+    static let openHiHat: UInt8     = 46
+    static let pedalHiHat: UInt8    = 44
+    static let lowTom: UInt8        = 41
+    static let midTom: UInt8        = 47
+    static let highTom: UInt8       = 50
+    static let crash: UInt8         = 49
+    static let ride: UInt8          = 51
+    static let rideBell: UInt8      = 53
+    static let tambourine: UInt8    = 54
+    static let cowbell: UInt8       = 56
+    static let shaker: UInt8        = 70
+    static let cabasa: UInt8        = 69
+    static let guiro: UInt8         = 73
+    static let claves: UInt8        = 75
+    static let woodBlock: UInt8     = 76
+    static let triangle: UInt8      = 81
 }
 
 // MARK: - DrumPatternGenerator
@@ -48,16 +41,10 @@ public enum GMDrum {
 public final class DrumPatternGenerator: @unchecked Sendable {
 
     private let renderer: NotePlayer
-    private var tonality: SessionTonality?
+    private var mode: FocusMode = .focus
     private var biometricState: BiometricState = .calm
     private var isRunning = false
-    private var drumTimer: DispatchSourceTimer?
-    private var stepInBar: Int = 0  // 0-15 for 16th note resolution
-
-    private let generationQueue = DispatchQueue(
-        label: "com.bionaural.drums",
-        qos: .userInitiated
-    )
+    private var totalSteps: Int = 0  // total 16th notes since start (for fills)
 
     // MARK: - Init
 
@@ -67,130 +54,72 @@ public final class DrumPatternGenerator: @unchecked Sendable {
 
     // MARK: - Public API
 
+    /// Prepare the drum generator (no timer — master clock calls tick).
     public func start(tonality: SessionTonality) {
-        generationQueue.async { [weak self] in
-            guard let self, !self.isRunning else { return }
-
-            self.tonality = tonality
-            self.isRunning = true
-            self.stepInBar = 0
-
-            // Only Focus and Energize get drums
-            guard Theme.ModeInstrumentation.allowsRhythmStem(for: tonality.mode) else { return }
-
-            // Switch renderer to drum bank (GM bank 128, channel 10)
-            // Note: AVAudioUnitSampler doesn't natively support channel 10 drums
-            // in the same way as a full MIDI synth. We use regular note-on with
-            // drum-range MIDI notes which GeneralUser GS maps to percussion.
-            self.scheduleNextStep()
-        }
+        guard Theme.ModeInstrumentation.allowsRhythmStem(for: tonality.mode) else { return }
+        self.mode = tonality.mode
+        self.isRunning = true
+        self.totalSteps = 0
     }
 
     public func stop() {
-        generationQueue.async { [weak self] in
-            guard let self else { return }
-            self.isRunning = false
-            self.drumTimer?.cancel()
-            self.drumTimer = nil
-        }
+        isRunning = false
+        totalSteps = 0
     }
 
     public func updateBiometricState(_ state: BiometricState) {
-        generationQueue.async { [weak self] in
-            self?.biometricState = state
-        }
+        biometricState = state
     }
 
-    // MARK: - Pattern Sequencer
+    /// Called by GenerativeMIDIEngine's master clock at 16th-note resolution.
+    /// stepInBar: 0-15 (position within the current bar).
+    public func tick(stepInBar: Int) {
+        guard isRunning else { return }
 
-    private func scheduleNextStep() {
-        guard isRunning, let tonality else { return }
-
-        // 16th note resolution
-        let stepDuration = tonality.beatDuration / 4.0
-
-        let timer = DispatchSource.makeTimerSource(queue: generationQueue)
-        timer.schedule(deadline: .now() + stepDuration)
-        timer.setEventHandler { [weak self] in
-            self?.executeStep()
+        let hits: [DrumHit]
+        switch mode {
+        case .focus:    hits = focusPattern(step: stepInBar)
+        case .energize: hits = energizePattern(step: stepInBar)
+        default:        hits = []
         }
-        drumTimer?.cancel()
-        drumTimer = timer
-        timer.resume()
-    }
-
-    private func executeStep() {
-        guard isRunning, let tonality else { return }
-
-        let hits = patternForMode(tonality: tonality)
-        let humanize = TimeInterval.random(in: -0.005...0.005) // ±5ms jitter
 
         for hit in hits {
-            let delay = max(0, humanize)
-            generationQueue.asyncAfter(deadline: .now() + delay) { [weak self] in
-                self?.renderer.noteOn(hit.note, velocity: hit.velocity)
-                // Drums are very short — schedule note-off after 50ms
-                self?.generationQueue.asyncAfter(deadline: .now() + 0.05) { [weak self] in
-                    self?.renderer.noteOff(hit.note)
-                }
+            renderer.noteOn(hit.note, velocity: hit.velocity)
+            // Drums are percussive — short note-off after 50ms
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05) { [weak self] in
+                self?.renderer.noteOff(hit.note)
             }
         }
 
-        stepInBar = (stepInBar + 1) % 16
-        scheduleNextStep()
+        totalSteps += 1
     }
 
-    // MARK: - Mode-Specific Patterns
+    // MARK: - Patterns
 
     private struct DrumHit {
         let note: UInt8
         let velocity: UInt8
     }
 
-    /// Returns the drum hits for the current step in the current mode.
-    /// Step 0-15 represents 16th notes within a bar of 4/4.
-    private func patternForMode(tonality: SessionTonality) -> [DrumHit] {
-        switch tonality.mode {
-        case .focus:
-            return focusPattern()
-        case .energize:
-            return energizePattern()
-        default:
-            return [] // Sleep/Relaxation: no drums
-        }
-    }
-
-    /// Focus: minimal percussion — soft shaker/brush.
-    /// Only on beats 2 and 4 (backbeat) at very low velocity.
-    /// At calm state: nearly silent. At elevated: slightly more present.
-    private func focusPattern() -> [DrumHit] {
+    private func focusPattern(step: Int) -> [DrumHit] {
         let velocity: UInt8
         switch biometricState {
-        case .calm:     velocity = 25  // Barely audible
-        case .focused:  velocity = 35  // Subtle presence
-        case .elevated: velocity = 30  // Slightly reduced to calm
-        case .peak:     velocity = 20  // Pull back when stressed
+        case .calm:     velocity = 25
+        case .focused:  velocity = 35
+        case .elevated: velocity = 30
+        case .peak:     velocity = 20
         }
 
-        switch stepInBar {
-        case 4:  // Beat 2
-            return [DrumHit(note: GMDrum.sideStick, velocity: velocity)]
-        case 12: // Beat 4
-            return [DrumHit(note: GMDrum.sideStick, velocity: velocity)]
-        case 8:  // Beat 3 — occasional soft shaker
-            if biometricState == .focused {
-                return [DrumHit(note: GMDrum.shaker, velocity: velocity - 10)]
-            }
-            return []
-        default:
-            return []
+        switch step {
+        case 4:  return [DrumHit(note: GMDrum.sideStick, velocity: velocity)]
+        case 12: return [DrumHit(note: GMDrum.sideStick, velocity: velocity)]
+        case 8 where biometricState == .focused:
+            return [DrumHit(note: GMDrum.shaker, velocity: max(15, velocity - 10))]
+        default: return []
         }
     }
 
-    /// Energize: full driving pattern.
-    /// Kick on 1 & 3, snare/clap on 2 & 4, hi-hat 8ths.
-    /// Density increases with biometric arousal (positive feedback).
-    private func energizePattern() -> [DrumHit] {
+    private func energizePattern(step: Int) -> [DrumHit] {
         var hits: [DrumHit] = []
 
         let kickVel: UInt8 = 90
@@ -203,54 +132,40 @@ public final class DrumPatternGenerator: @unchecked Sendable {
         case .peak:     hhVel = 75
         }
 
-        // Kick: beats 1 and 3 (steps 0 and 8)
-        if stepInBar == 0 || stepInBar == 8 {
+        // Kick: beats 1 and 3
+        if step == 0 || step == 8 {
             hits.append(DrumHit(note: GMDrum.kick, velocity: kickVel))
         }
 
-        // Snare/clap: beats 2 and 4 (steps 4 and 12)
-        if stepInBar == 4 || stepInBar == 12 {
+        // Snare: beats 2 and 4
+        if step == 4 || step == 12 {
             hits.append(DrumHit(note: GMDrum.snare, velocity: snareVel))
-            // Layer a clap for extra punch at elevated/peak
             if biometricState == .elevated || biometricState == .peak {
                 hits.append(DrumHit(note: GMDrum.clap, velocity: snareVel - 15))
             }
         }
 
-        // Hi-hat: every 8th note (steps 0, 2, 4, 6, 8, 10, 12, 14)
-        if stepInBar % 2 == 0 {
-            let isOpen = stepInBar == 6 || stepInBar == 14 // Open on 'and' of 2 & 4
+        // Hi-hat: every 8th note
+        if step % 2 == 0 {
+            let isOpen = step == 6 || step == 14
             let hhNote = isOpen ? GMDrum.openHiHat : GMDrum.closedHiHat
             hits.append(DrumHit(note: hhNote, velocity: hhVel))
         }
 
-        // 16th note hi-hats at elevated/peak (adds energy)
-        if biometricState == .elevated || biometricState == .peak {
-            if stepInBar % 2 == 1 {
-                hits.append(DrumHit(note: GMDrum.closedHiHat, velocity: hhVel - 20))
-            }
+        // 16th hi-hats at elevated/peak
+        if (biometricState == .elevated || biometricState == .peak) && step % 2 == 1 {
+            hits.append(DrumHit(note: GMDrum.closedHiHat, velocity: max(25, hhVel - 20)))
         }
 
-        // Optional: kick on the 'and' of 4 for syncopation at peak
-        if biometricState == .peak && stepInBar == 14 {
-            hits.append(DrumHit(note: GMDrum.kick, velocity: kickVel - 15))
-        }
-
-        // Occasional tom fill every 4 bars (64 steps)
-        if patternStep > 0 && stepInBar >= 13 && (patternStep / 16) % 4 == 3 {
+        // Tom fill every 4 bars (64 steps)
+        if totalSteps > 0 && step >= 13 && (totalSteps / 16) % 4 == 3 {
             let fillNotes: [UInt8] = [GMDrum.highTom, GMDrum.midTom, GMDrum.lowTom]
-            let fillIdx = stepInBar - 13
+            let fillIdx = step - 13
             if fillIdx < fillNotes.count {
                 hits.append(DrumHit(note: fillNotes[fillIdx], velocity: 70))
             }
         }
 
         return hits
-    }
-
-    /// Total step counter (doesn't reset at bar boundaries, for fill tracking).
-    private var patternStep: Int {
-        // Derived from stepInBar but tracks across bars
-        return stepInBar
     }
 }
