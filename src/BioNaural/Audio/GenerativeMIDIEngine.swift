@@ -1,21 +1,18 @@
 // GenerativeMIDIEngine.swift
 // BioNaural
 //
-// Algorithmic note generator that drives the SF2MelodicRenderer.
-// Reads biometric state and session mode, queries ScaleMapper for
-// valid pitches, and emits note-on/note-off events at musically
-// coherent intervals.
+// v2: Single master sequencer with pattern-based generation.
 //
-// This is NOT random noise. It uses voice leading (prefer stepwise
-// motion), phrase structure (note groups with rests), humanization
-// (velocity/timing jitter), and density modulation (biometric state
-// controls how many notes per beat).
+// Architecture: ONE DispatchSourceTimer ticks at 16th-note resolution.
+// All melody, chord, and note-off events fire from this single clock —
+// no independent timers, no drift between tracks.
 //
-// Threading: ALL mutable state lives on generationQueue. Public
-// methods dispatch to generationQueue for thread safety. Note events
-// are dispatched to main thread for AVAudioUnit compatibility.
+// Melody uses pre-generated multi-bar PATTERNS that repeat with subtle
+// variation, not random single notes. Chord changes happen on exact bar
+// boundaries. Everything stays in sync because everything shares one clock.
 //
-// v1.5: Rule-based. v2: ML contextual bandit replaces the rules.
+// Threading: ALL mutable state on generationQueue. Note events dispatched
+// to main thread for AVAudioUnit safety.
 
 import Foundation
 import BioNauralShared
@@ -30,50 +27,52 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
     private let renderer: SF2MelodicRenderer
     private let parameters: AudioParameters
 
-    /// Shared tonality — all notes, chords, and bass must be in this key/scale/tempo.
+    /// Shared tonality — key/scale/tempo for the entire session.
     private var tonality: SessionTonality?
 
-    /// Reference to bass generator so chord changes can update the bass root.
+    /// Bass generator — receives chord root updates.
     public weak var bassLineGenerator: BassLineGenerator?
 
-    // MARK: - State (accessed ONLY on generationQueue)
+    // MARK: - State (generationQueue only)
 
     private var mode: FocusMode = .focus
     private var biometricState: BiometricState = .calm
     private var isRunning = false
 
-    /// Timer driving note generation.
-    private var noteTimer: DispatchSourceTimer?
+    // Master clock state
+    private var masterTimer: DispatchSourceTimer?
+    private var tickCount: Int = 0           // 16th-note ticks since start
+    private var currentBar: Int = 0          // bars elapsed
+    private var ticksPerBar: Int = 16        // 16th notes per 4/4 bar
 
-    /// Currently sounding notes with their scheduled-off times.
-    private var pendingNoteOffs: [(note: UInt8, offTime: Date)] = []
+    // Melody pattern state
+    private var melodyPattern: [PatternNote?] = []  // nil = rest
+    private var patternLength: Int = 0               // in ticks
+    private var patternRepeatCount: Int = 0
 
-    /// Last note played (for voice leading — prefer small intervals).
-    private var lastNote: UInt8?
-
-    /// Phrase counter — rest after N notes.
-    private var notesSinceRest: Int = 0
-
-    // MARK: - Chord Progression State
-
-    /// Current chord progression for the active mode.
+    // Chord state
     private var chordProgression: [[Int]] = []
-    /// Current chord index within the progression.
     private var currentChordIndex: Int = 0
-    /// Timer for chord changes (separate from melody notes).
-    private var chordTimer: DispatchSourceTimer?
-    /// Currently sounding chord notes.
     private var activeChordNotes: [UInt8] = []
-    /// Number of chord changes made (for progression cycling).
-    private var chordChangeCount: Int = 0
+    private var barsPerChord: Int = 4
 
-    /// The generation queue — ALL mutable state access is serialized here.
+    // Active notes for cleanup
+    private var activeMelodyNote: UInt8?
+
     private let generationQueue = DispatchQueue(
         label: "com.bionaural.generativemidi",
         qos: .userInitiated
     )
 
-    // MARK: - Initializer
+    // MARK: - Pattern Note
+
+    private struct PatternNote {
+        let note: UInt8
+        let velocity: UInt8
+        let durationTicks: Int  // how many 16th-note ticks to sustain
+    }
+
+    // MARK: - Init
 
     public init(renderer: SF2MelodicRenderer, parameters: AudioParameters) {
         self.renderer = renderer
@@ -82,8 +81,6 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
 
     // MARK: - Public API
 
-    /// Start generating notes for the given mode and tonality.
-    /// All generated notes, chords, and bass will be in the tonality's key/scale/tempo.
     public func start(mode: FocusMode, biometricState: BiometricState, tonality: SessionTonality? = nil) {
         generationQueue.async { [weak self] in
             guard let self, !self.isRunning else { return }
@@ -92,41 +89,48 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
             self.biometricState = biometricState
             self.tonality = tonality
             self.isRunning = true
-            self.lastNote = nil
-            self.notesSinceRest = 0
-            self.pendingNoteOffs.removeAll()
+            self.tickCount = 0
+            self.currentBar = 0
+            self.patternRepeatCount = 0
+            self.activeMelodyNote = nil
+            self.activeChordNotes = []
 
-            // Select SF2 preset for this mode.
+            // Select preset
             let presetIndex = self.presetIndex(for: mode)
             DispatchQueue.main.async { [weak self] in
                 self?.renderer.changePreset(presetIndex)
                 self?.renderer.fadeIn()
             }
 
-            // Start both melody generation and chord progression.
-            self.scheduleNextNote()
-            self.startChordProgression()
+            // Set up chord progression and timing
+            self.chordProgression = self.progressionsForMode(mode)
+            self.currentChordIndex = 0
+            self.barsPerChord = self.barsPerChordForMode(mode)
+
+            // Generate initial melody pattern
+            self.generateNewPattern()
+
+            // Play first chord immediately
+            self.playChord()
+
+            // Start the master clock
+            self.startMasterClock()
         }
     }
 
-    /// Update biometric state (thread-safe — dispatches to generationQueue).
     public func updateBiometricState(_ state: BiometricState) {
         generationQueue.async { [weak self] in
             self?.biometricState = state
         }
     }
 
-    /// Stop generating notes and fade out.
     public func stop() {
         generationQueue.async { [weak self] in
             guard let self else { return }
             self.isRunning = false
-            self.noteTimer?.cancel()
-            self.noteTimer = nil
-            self.stopChordProgression()
-            self.pendingNoteOffs.removeAll()
-            self.lastNote = nil
-            self.notesSinceRest = 0
+            self.masterTimer?.cancel()
+            self.masterTimer = nil
+            self.releaseAllNotes()
 
             DispatchQueue.main.async { [weak self] in
                 self?.renderer.fadeOutAndStop()
@@ -134,99 +138,317 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         }
     }
 
-    // MARK: - Note Generation Loop (runs on generationQueue)
+    // MARK: - Master Clock
 
-    private func scheduleNextNote() {
-        guard isRunning else { return }
+    private func startMasterClock() {
+        guard let tonality else { return }
 
-        let interval = nextNoteInterval()
+        // Tick at 16th-note resolution: beatDuration / 4
+        let tickInterval = tonality.beatDuration / 4.0
 
         let timer = DispatchSource.makeTimerSource(queue: generationQueue)
-        timer.schedule(deadline: .now() + interval)
+        timer.schedule(deadline: .now() + tickInterval, repeating: tickInterval, leeway: .milliseconds(2))
         timer.setEventHandler { [weak self] in
-            self?.generateNote()
+            self?.masterTick()
         }
-        self.noteTimer?.cancel()
-        self.noteTimer = timer
+        masterTimer?.cancel()
+        masterTimer = timer
         timer.resume()
     }
 
-    private func generateNote() {
+    /// Single master tick — processes ALL musical events from one clock.
+    private func masterTick() {
         guard isRunning else { return }
 
-        // Process pending note-offs first.
-        processNoteOffs()
+        let tickInBar = tickCount % ticksPerBar
+        let barChanged = tickInBar == 0 && tickCount > 0
 
-        // Check rest probability — insert silence between phrases.
-        if shouldRest() {
-            notesSinceRest = 0
-            scheduleNextNote()
-            return
-        }
+        // === BAR BOUNDARY: chord changes and pattern evolution ===
+        if barChanged {
+            currentBar += 1
 
-        // Get valid pitches from ScaleMapper.
-        let validNotes = validMIDINotes()
-        guard !validNotes.isEmpty else {
-            scheduleNextNote()
-            return
-        }
+            // Chord change on exact bar boundary
+            if currentBar % barsPerChord == 0 {
+                currentChordIndex += 1
+                playChord()
+            }
 
-        // Check polyphony cap.
-        if pendingNoteOffs.count >= Theme.SF2.maxConcurrentNotes {
-            scheduleNextNote()
-            return
-        }
-
-        // Pick the next note using voice leading.
-        let note = pickNote(from: validNotes)
-        let velocity = generateVelocity()
-        let duration = generateDuration()
-
-        // Schedule note-on (dispatch to main for AVAudioUnit safety).
-        DispatchQueue.main.async { [weak self] in
-            self?.renderer.noteOn(note, velocity: velocity)
-        }
-
-        // Track for note-off.
-        let offTime = Date().addingTimeInterval(duration)
-        pendingNoteOffs.append((note: note, offTime: offTime))
-
-        lastNote = note
-        notesSinceRest += 1
-
-        scheduleNextNote()
-    }
-
-    // MARK: - Note-Off Processing
-
-    private func processNoteOffs() {
-        let now = Date()
-        let expired = pendingNoteOffs.filter { $0.offTime <= now }
-
-        for entry in expired {
-            DispatchQueue.main.async { [weak self] in
-                self?.renderer.noteOff(entry.note)
+            // Pattern evolution: generate new pattern every N bars
+            let patternBars = patternLength / ticksPerBar
+            if patternBars > 0 && currentBar % patternBars == 0 {
+                patternRepeatCount += 1
+                // Evolve pattern every 2nd repeat
+                if patternRepeatCount % 2 == 0 {
+                    generateNewPattern()
+                }
             }
         }
 
-        pendingNoteOffs.removeAll { $0.offTime <= now }
+        // === MELODY: play pattern notes on the grid ===
+        if !melodyPattern.isEmpty {
+            let patternTick = tickCount % patternLength
+
+            // Note-off for previous melody note
+            if let active = activeMelodyNote {
+                // Check if this tick should release the note
+                let prevTick = (patternTick == 0) ? patternLength - 1 : patternTick - 1
+                if let prevNote = melodyPattern[prevTick % melodyPattern.count],
+                   prevNote.note == active {
+                    let ticksSinceNoteStart = ticksSinceLastNoteOn(patternTick: patternTick)
+                    if let currentNote = melodyPattern[patternTick % melodyPattern.count],
+                       currentNote.note != active {
+                        // New note starting — release old one
+                        noteOff(active)
+                        activeMelodyNote = nil
+                    }
+                }
+            }
+
+            // Note-on for current tick
+            if let pNote = melodyPattern[patternTick % melodyPattern.count] {
+                if activeMelodyNote != pNote.note {
+                    // Release any previous note
+                    if let active = activeMelodyNote {
+                        noteOff(active)
+                    }
+                    noteOn(pNote.note, velocity: pNote.velocity)
+                    activeMelodyNote = pNote.note
+                }
+            } else {
+                // Rest tick — release any held note
+                if let active = activeMelodyNote {
+                    noteOff(active)
+                    activeMelodyNote = nil
+                }
+            }
+        }
+
+        tickCount += 1
     }
 
-    // MARK: - Pitch Selection
+    private func ticksSinceLastNoteOn(patternTick: Int) -> Int {
+        var t = patternTick - 1
+        while t >= 0 {
+            if melodyPattern[t % melodyPattern.count] != nil { return patternTick - t }
+            t -= 1
+        }
+        return patternTick
+    }
+
+    // MARK: - Pattern Generation
+
+    /// Generate a multi-bar melody pattern that repeats.
+    /// Pattern is chord-aware: strong beats use chord tones, weak beats use steps.
+    private func generateNewPattern() {
+        let patternBars = patternBarsForMode(mode)
+        patternLength = patternBars * ticksPerBar
+
+        let validNotes = validMIDINotes()
+        guard !validNotes.isEmpty else {
+            melodyPattern = Array(repeating: nil, count: patternLength)
+            return
+        }
+
+        // Get current chord tones
+        let chordTones = currentChordTones()
+
+        // Build rhythm template: which ticks get notes vs rests
+        let rhythm = rhythmTemplateForMode(mode)
+
+        var pattern: [PatternNote?] = []
+        var lastPitch: UInt8 = validNotes[validNotes.count / 2] // start center
+
+        for tick in 0..<patternLength {
+            let tickInBar = tick % ticksPerBar
+            let shouldPlay = rhythm[tickInBar % rhythm.count]
+
+            guard shouldPlay else {
+                pattern.append(nil) // rest
+                continue
+            }
+
+            // Strong beat (beats 1, 2, 3, 4 = ticks 0, 4, 8, 12): use chord tone
+            let isStrongBeat = tickInBar % 4 == 0
+
+            let pitch: UInt8
+            if isStrongBeat && !chordTones.isEmpty {
+                // Pick closest chord tone to last pitch (voice leading)
+                pitch = chordTones.min(by: { abs(Int($0) - Int(lastPitch)) < abs(Int($1) - Int(lastPitch)) }) ?? lastPitch
+            } else {
+                // Weak beat: stepwise motion from last pitch
+                let nearby = validNotes.filter { abs(Int($0) - Int(lastPitch)) <= 4 }
+                let biased = applyContourBias(nearby, lastPitch: lastPitch)
+                pitch = biased.randomElement() ?? lastPitch
+            }
+
+            let velocity = patternVelocity(tickInBar: tickInBar)
+            let duration = isStrongBeat ? 3 : 2 // ticks
+
+            pattern.append(PatternNote(note: pitch, velocity: velocity, durationTicks: duration))
+            lastPitch = pitch
+        }
+
+        melodyPattern = pattern
+    }
+
+    /// Rhythm templates: which 16th-note ticks get notes (true) vs rests (false).
+    /// These encode the feel per mode — how many notes, where they fall.
+    private func rhythmTemplateForMode(_ mode: FocusMode) -> [Bool] {
+        switch mode {
+        case .sleep:
+            // Very sparse: note on beat 1 only, rest for 3 beats
+            //                beat1         beat2         beat3         beat4
+            return [true, false,false,false, false,false,false,false, false,false,false,false, false,false,false,false]
+
+        case .relaxation:
+            // Gentle: notes on beats 1 and 3, with occasional passing tone on beat 2-and
+            return [true, false,false,false, false,false,true, false, true, false,false,false, false,false,false,false]
+
+        case .focus:
+            // Steady 8ths with rests — lo-fi feel
+            return [true, false,true, false, false,true, false,true,  true, false,true, false, true, false,false,false]
+
+        case .energize:
+            // Sparse accents — bass and drums carry the groove
+            return [true, false,false,false, false,false,false,false, true, false,false,false, false,false,false,false]
+        }
+    }
+
+    /// How many bars the melody pattern spans before repeating.
+    private func patternBarsForMode(_ mode: FocusMode) -> Int {
+        switch mode {
+        case .sleep:       return 8  // Long phrases, slow evolution
+        case .relaxation:  return 4  // Medium phrases
+        case .focus:       return 4  // Predictable loops
+        case .energize:    return 2  // Short riffs
+        }
+    }
+
+    private func patternVelocity(tickInBar: Int) -> UInt8 {
+        let range: ClosedRange<UInt8>
+        switch mode {
+        case .sleep:       range = 45...60
+        case .relaxation:  range = 55...70
+        case .focus:       range = 50...68
+        case .energize:    range = 70...90
+        }
+
+        // Accent on beat 1 (tick 0)
+        let isDownbeat = tickInBar == 0
+        let base = isDownbeat ? range.upperBound : UInt8.random(in: range)
+        return base
+    }
+
+    /// Apply mode-specific contour bias to note candidates.
+    private func applyContourBias(_ candidates: [UInt8], lastPitch: UInt8) -> [UInt8] {
+        guard !candidates.isEmpty else { return candidates }
+
+        switch mode {
+        case .sleep:
+            // Prefer descending
+            let below = candidates.filter { $0 <= lastPitch }
+            return below.isEmpty ? candidates : below
+        case .relaxation:
+            // Gentle arch — alternate up/down based on pattern position
+            return candidates // balanced, no strong bias
+        case .focus:
+            // Stay near center — prefer same or close
+            let near = candidates.filter { abs(Int($0) - Int(lastPitch)) <= 2 }
+            return near.isEmpty ? candidates : near
+        case .energize:
+            // Prefer ascending
+            let above = candidates.filter { $0 >= lastPitch }
+            return above.isEmpty ? candidates : above
+        }
+    }
+
+    // MARK: - Chord System (plays on exact bar boundaries from master clock)
+
+    private func playChord() {
+        releaseChordNotes()
+
+        guard !chordProgression.isEmpty else { return }
+
+        let chordOffsets = chordProgression[currentChordIndex % chordProgression.count]
+        let root = tonality?.root ?? ScaleMapper.rootNote(for: mode)
+        let baseOctave: Int
+        switch mode {
+        case .sleep:       baseOctave = 2
+        case .relaxation:  baseOctave = 3
+        case .focus:       baseOctave = 3
+        case .energize:    baseOctave = 3
+        }
+
+        let baseMIDI = root.intValue + (baseOctave * 12)
+        var chordNotes: [UInt8] = []
+
+        for offset in chordOffsets {
+            let midi = baseMIDI + offset
+            if midi >= 0, midi <= 127 {
+                chordNotes.append(UInt8(midi))
+            }
+        }
+
+        let chordVelocity: UInt8
+        switch mode {
+        case .sleep:       chordVelocity = 45
+        case .relaxation:  chordVelocity = 55
+        case .focus:       chordVelocity = 50
+        case .energize:    chordVelocity = 65
+        }
+
+        for note in chordNotes {
+            DispatchQueue.main.async { [weak self] in
+                self?.renderer.noteOn(note, velocity: chordVelocity)
+            }
+        }
+        activeChordNotes = chordNotes
+
+        // Update bass
+        if let firstNote = chordNotes.first {
+            bassLineGenerator?.updateChordRoot(firstNote)
+        }
+    }
+
+    /// How many bars between chord changes per mode.
+    private func barsPerChordForMode(_ mode: FocusMode) -> Int {
+        switch mode {
+        case .sleep:       return 8   // Near-static
+        case .relaxation:  return 4   // Gentle motion
+        case .focus:       return 4   // Predictable
+        case .energize:    return 2   // Driving
+        }
+    }
+
+    // MARK: - Helpers
+
+    private func currentChordTones() -> [UInt8] {
+        guard !chordProgression.isEmpty else { return [] }
+        let chordOffsets = chordProgression[currentChordIndex % chordProgression.count]
+        let root = tonality?.root ?? ScaleMapper.rootNote(for: mode)
+        let octaveRange = midiOctaveRange()
+
+        var tones: [UInt8] = []
+        for octave in octaveRange {
+            let baseMIDI = root.intValue + (octave * 12)
+            for offset in chordOffsets {
+                let midi = baseMIDI + offset
+                if midi >= 0, midi <= 127 {
+                    tones.append(UInt8(midi))
+                }
+            }
+        }
+        return tones.sorted()
+    }
 
     private func validMIDINotes() -> [UInt8] {
         let octaveRange = midiOctaveRange()
-
-        // Use SessionTonality if available (ensures all layers share the same key)
         if let tonality {
             return tonality.validNotes(octaveRange: octaveRange)
         }
-
-        // Fallback to ScaleMapper
         let scale = ScaleMapper.scale(for: mode, biometricState: biometricState)
         let root = ScaleMapper.rootNote(for: mode)
         let key = Key(root: root, scale: scale)
-
         return key.noteSet.array.flatMap { note -> [UInt8] in
             octaveRange.compactMap { octave -> UInt8? in
                 let midi = Int(note.intValue) + (octave * 12)
@@ -245,201 +467,6 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         }
     }
 
-    private func pickNote(from candidates: [UInt8]) -> UInt8 {
-        guard let last = lastNote else {
-            // First note — pick based on mode character.
-            // Sleep: start high in range (to descend). Energize: start low (to ascend).
-            let startPosition: Double
-            switch mode {
-            case .sleep:       startPosition = 0.7  // Upper range — will descend
-            case .relaxation:  startPosition = 0.5  // Middle — arch shape
-            case .focus:       startPosition = 0.5  // Middle — stay centered
-            case .energize:    startPosition = 0.3  // Lower range — will ascend
-            }
-            let targetIndex = Int(Double(candidates.count) * startPosition)
-            let jitterRange = Theme.SF2.VoiceLeading.firstNoteJitter
-            let jitter = Int.random(in: -jitterRange...jitterRange)
-            let index = max(0, min(candidates.count - 1, targetIndex + jitter))
-            return candidates[index]
-        }
-
-        // Mode-specific melodic contour bias:
-        // Sleep: prefer descending motion (settling)
-        // Relaxation: prefer arch (rise then fall within phrase)
-        // Focus: prefer flat/oscillating (stability)
-        // Energize: prefer ascending motion (building energy)
-        let directionalBias = melodicDirectionBias()
-
-        // Separate candidates into those above and below last note
-        let below = candidates.filter { $0 < last }
-        let above = candidates.filter { $0 > last }
-        let same = candidates.filter { $0 == last }
-
-        // Apply directional bias
-        let roll = Double.random(in: 0...1)
-        let preferDown = roll < directionalBias.descendProbability
-        let preferUp = roll > (1.0 - directionalBias.ascendProbability)
-
-        var pool: [UInt8]
-        if preferDown && !below.isEmpty {
-            pool = below
-        } else if preferUp && !above.isEmpty {
-            pool = above
-        } else {
-            pool = candidates
-        }
-
-        // Within the directional pool, still prefer small intervals (voice leading)
-        let sorted = pool.sorted { a, b in
-            abs(Int(a) - Int(last)) < abs(Int(b) - Int(last))
-        }
-
-        let useNear = Double.random(in: 0...1) < Theme.SF2.VoiceLeading.nearProbability
-        if useNear {
-            let nearCount = min(Theme.SF2.VoiceLeading.nearCount, sorted.count)
-            return sorted[Int.random(in: 0..<nearCount)]
-        } else {
-            return sorted.randomElement() ?? candidates[0]
-        }
-    }
-
-    /// Returns mode-specific melodic direction probabilities.
-    /// These encode the contour research from FunctionalMusicTheory.md.
-    private func melodicDirectionBias() -> (descendProbability: Double, ascendProbability: Double) {
-        switch mode {
-        case .sleep:
-            // Strongly descending — settling, lullaby-like
-            return (descendProbability: 0.65, ascendProbability: 0.15)
-        case .relaxation:
-            // Gentle arch — rise then fall. Balanced with slight downward bias.
-            let phraseProgress = Double(notesSinceRest) / Double(max(1, Theme.SF2.PhraseLength.relaxation))
-            if phraseProgress < 0.5 {
-                return (descendProbability: 0.25, ascendProbability: 0.45)  // Rising phase
-            } else {
-                return (descendProbability: 0.50, ascendProbability: 0.20)  // Falling phase
-            }
-        case .focus:
-            // Flat/oscillating — stay near center. Equal probability.
-            return (descendProbability: 0.35, ascendProbability: 0.35)
-        case .energize:
-            // Ascending, building energy. Large leaps allowed.
-            return (descendProbability: 0.20, ascendProbability: 0.55)
-        }
-    }
-
-    // MARK: - Velocity
-
-    private func generateVelocity() -> UInt8 {
-        // Mode-specific velocity ranges:
-        // Sleep: very soft (30-55), Relaxation: soft (40-65), Focus: moderate (50-80), Energize: strong (70-100)
-        let range: ClosedRange<UInt8>
-        switch mode {
-        case .sleep:       range = 45...70
-        case .relaxation:  range = 55...80
-        case .focus:       range = 50...80
-        case .energize:    range = 70...100
-        }
-
-        let base = Int(UInt8.random(in: range))
-
-        let offset: Int
-        switch biometricState {
-        case .calm:     offset = Theme.SF2.VelocityOffset.calm
-        case .focused:  offset = Theme.SF2.VelocityOffset.focused
-        case .elevated: offset = Theme.SF2.VelocityOffset.elevated
-        case .peak:     offset = Theme.SF2.VelocityOffset.peak
-        }
-
-        let clamped = max(Int(range.lowerBound), min(127, base + offset))
-        return UInt8(clamped)
-    }
-
-    // MARK: - Duration
-
-    private func generateDuration() -> TimeInterval {
-        let multiplier = durationMultiplier()
-        let minDur = Theme.SF2.durationMin * multiplier
-        let maxDur = Theme.SF2.durationMax * multiplier
-        return TimeInterval.random(in: minDur...maxDur)
-    }
-
-    private func durationMultiplier() -> Double {
-        switch mode {
-        case .focus:       return Theme.SF2.DurationMultiplier.focus
-        case .relaxation:  return Theme.SF2.DurationMultiplier.relaxation
-        case .sleep:       return Theme.SF2.DurationMultiplier.sleep
-        case .energize:    return Theme.SF2.DurationMultiplier.energize
-        }
-    }
-
-    // MARK: - Timing
-
-    private func nextNoteInterval() -> TimeInterval {
-        // Use tonality tempo if available — notes align to musical beats.
-        // One beat = 60/BPM seconds. Note interval is a fraction of a beat
-        // multiplied by the mode density.
-        let base: TimeInterval
-        if let tonality {
-            // Base interval = one beat, scaled by density
-            base = tonality.beatDuration
-        } else {
-            base = Theme.SF2.noteInterval
-        }
-        let jitter = TimeInterval.random(
-            in: -Theme.SF2.noteIntervalJitter...Theme.SF2.noteIntervalJitter
-        )
-        let density = densityMultiplier()
-
-        return max(Theme.SF2.minimumNoteInterval, (base + jitter) / density)
-    }
-
-    private func densityMultiplier() -> Double {
-        let modeDensity: Double
-        switch mode {
-        case .focus:       modeDensity = Theme.SF2.Density.focus
-        case .relaxation:  modeDensity = Theme.SF2.Density.relaxation
-        case .sleep:       modeDensity = Theme.SF2.Density.sleep
-        case .energize:    modeDensity = Theme.SF2.Density.energize
-        }
-
-        let biometricModifier: Double
-        switch biometricState {
-        case .calm:     biometricModifier = Theme.SF2.BiometricDensity.calm
-        case .focused:  biometricModifier = Theme.SF2.BiometricDensity.focused
-        case .elevated: biometricModifier = Theme.SF2.BiometricDensity.elevated
-        case .peak:     biometricModifier = Theme.SF2.BiometricDensity.peak
-        }
-
-        return modeDensity * biometricModifier
-    }
-
-    // MARK: - Rest Logic
-
-    private func shouldRest() -> Bool {
-        let phraseLength: Int
-        switch mode {
-        case .focus:       phraseLength = Theme.SF2.PhraseLength.focus
-        case .relaxation:  phraseLength = Theme.SF2.PhraseLength.relaxation
-        case .sleep:       phraseLength = Theme.SF2.PhraseLength.sleep
-        case .energize:    phraseLength = Theme.SF2.PhraseLength.energize
-        }
-
-        guard notesSinceRest >= phraseLength else { return false }
-
-        // Mode-specific rest probability:
-        // Energize rarely rests (momentum), Sleep rests often (silence is music)
-        let restProb: Double
-        switch mode {
-        case .energize:    restProb = 0.15  // Rarely pause — keep driving
-        case .focus:       restProb = 0.20  // Occasional breath
-        case .relaxation:  restProb = 0.20  // Gentle pauses (not too many — must stay musical)
-        case .sleep:       restProb = 0.35  // Lots of silence
-        }
-        return Double.random(in: 0...1) < restProb
-    }
-
-    // MARK: - Preset Mapping
-
     private func presetIndex(for mode: FocusMode) -> Int {
         switch mode {
         case .focus:       return Theme.SF2.PresetIndex.focusPad
@@ -449,173 +476,75 @@ public final class GenerativeMIDIEngine: @unchecked Sendable {
         }
     }
 
-    // MARK: - Chord Progression System
+    // MARK: - Note Helpers
 
-    /// Returns mode-appropriate chord progressions as arrays of scale degrees.
-    /// Each chord is represented as offsets from root (in semitones).
-    /// Progressions are musically informed by functional music theory research.
-    private func progressionsForMode(_ mode: FocusMode) -> [[Int]] {
-        switch mode {
-        case .sleep:
-            // Static/minimal: I → I → IV → I. No tension, no dominant.
-            // Pentatonic minor: root-based drones with occasional subdominant.
-            return [
-                [0, 7],      // Root + 5th (open voicing, drone)
-                [0, 7],      // Repeat (stability)
-                [5, 12],     // IV chord (subdominant, gentle motion)
-                [0, 7],      // Return to root
-            ]
-        case .relaxation:
-            // Lydian color: I → IVmaj7 → I → vi.
-            // Floating quality from the #4 (Lydian). Gentle harmonic rhythm.
-            return [
-                [0, 4, 7],       // I major (root position)
-                [5, 9, 12],      // IV (with Lydian #4 implied by scale)
-                [0, 4, 7],       // I major
-                [9, 12, 16],     // vi minor (relative minor, reflective)
-                [0, 4, 7],       // I major
-                [5, 9, 12],      // IV
-                [7, 11, 14],     // V (gentle dominant)
-                [0, 4, 7],       // I (resolution)
-            ]
-        case .focus:
-            // Steady, predictable loop: I → vi → IV → I.
-            // Familiar pop progression that fades into background.
-            return [
-                [0, 4, 7],      // I major
-                [9, 12, 16],    // vi minor
-                [5, 9, 12],     // IV major
-                [0, 4, 7],      // I major
-            ]
-        case .energize:
-            // Driving, forward: I → V → vi → IV (anthem progression).
-            // With occasional key lifts for energy injection.
-            return [
-                [0, 4, 7],      // I major
-                [7, 11, 14],    // V major
-                [9, 12, 16],    // vi minor
-                [5, 9, 12],     // IV major
-                [0, 4, 7],      // I (repeat with variation)
-                [5, 9, 12],     // IV
-                [7, 11, 14],    // V (building)
-                [0, 4, 7, 12],  // I (octave doubling for power)
-            ]
+    private func noteOn(_ note: UInt8, velocity: UInt8) {
+        DispatchQueue.main.async { [weak self] in
+            self?.renderer.noteOn(note, velocity: velocity)
         }
     }
 
-    /// Start the chord progression loop. Plays sustained chord tones
-    /// underneath the melodic line for harmonic foundation.
-    private func startChordProgression() {
-        chordProgression = progressionsForMode(mode)
-        currentChordIndex = 0
-        chordChangeCount = 0
-        playNextChord()
+    private func noteOff(_ note: UInt8) {
+        DispatchQueue.main.async { [weak self] in
+            self?.renderer.noteOff(note)
+        }
     }
 
-    /// Stop chord progression and release all chord notes.
-    private func stopChordProgression() {
-        chordTimer?.cancel()
-        chordTimer = nil
+    private func releaseAllNotes() {
+        if let active = activeMelodyNote {
+            noteOff(active)
+            activeMelodyNote = nil
+        }
         releaseChordNotes()
-    }
-
-    private func playNextChord() {
-        guard isRunning, !chordProgression.isEmpty else { return }
-
-        // Release previous chord notes
-        releaseChordNotes()
-
-        // Get current chord (scale degree offsets from root)
-        let chordOffsets = chordProgression[currentChordIndex % chordProgression.count]
-
-        // Use SessionTonality root if available, otherwise fall back to ScaleMapper
-        let root = tonality?.root ?? ScaleMapper.rootNote(for: mode)
-        let baseOctave: Int
-        switch mode {
-        case .sleep:       baseOctave = 2  // Low register for sleep
-        case .relaxation:  baseOctave = 3  // Mid-low for relaxation
-        case .focus:       baseOctave = 3  // Mid for focus
-        case .energize:    baseOctave = 3  // Mid, with octave doublings
-        }
-
-        // Convert scale degree offsets to MIDI notes using the session root
-        let baseMIDI = root.intValue + (baseOctave * 12)
-        var chordNotes: [UInt8] = []
-
-        for offset in chordOffsets {
-            let midi = baseMIDI + offset
-            if midi >= 0, midi <= 127 {
-                chordNotes.append(UInt8(midi))
-            }
-        }
-
-        // Play chord notes with soft velocity (pad layer, not dominant)
-        let chordVelocity: UInt8
-        switch mode {
-        case .sleep:       chordVelocity = 50  // Present but gentle
-        case .relaxation:  chordVelocity = 60  // Clearly audible harmonic bed
-        case .focus:       chordVelocity = 55  // Steady background
-        case .energize:    chordVelocity = 70  // Strong harmonic support
-        }
-
-        for note in chordNotes {
-            // Add slight timing humanization (±15ms between chord tones)
-            let delay = Double.random(in: 0...0.015)
-            DispatchQueue.main.asyncAfter(deadline: .now() + delay) { [weak self] in
-                self?.renderer.noteOn(note, velocity: chordVelocity)
-            }
-        }
-        activeChordNotes = chordNotes
-
-        // Notify bass generator of the new chord root so bass follows the harmony
-        if let firstChordNote = chordNotes.first {
-            bassLineGenerator?.updateChordRoot(firstChordNote)
-        }
-
-        // Advance to next chord
-        currentChordIndex += 1
-        chordChangeCount += 1
-
-        // Schedule next chord change based on mode's harmonic rhythm
-        let chordDuration = chordChangeInterval()
-
-        let timer = DispatchSource.makeTimerSource(queue: generationQueue)
-        timer.schedule(deadline: .now() + chordDuration)
-        timer.setEventHandler { [weak self] in
-            self?.playNextChord()
-        }
-        chordTimer?.cancel()
-        chordTimer = timer
-        timer.resume()
-    }
-
-    /// Harmonic rhythm: how often chords change.
-    /// Expressed in bars (4 beats) using the session tempo for cohesion.
-    private func chordChangeInterval() -> TimeInterval {
-        let barDuration = tonality?.barDuration ?? 4.0 // fallback 4s per bar
-
-        switch mode {
-        case .sleep:
-            // 4-8 bars per chord (near-static harmony)
-            return barDuration * Double.random(in: 4.0...8.0)
-        case .relaxation:
-            // 2-4 bars per chord
-            return barDuration * Double.random(in: 2.0...4.0)
-        case .focus:
-            // 1-2 bars per chord (steady, predictable)
-            return barDuration * Double.random(in: 1.0...2.0)
-        case .energize:
-            // 1 bar per chord (driving harmonic motion)
-            return barDuration * Double.random(in: 0.5...1.0)
-        }
     }
 
     private func releaseChordNotes() {
         for note in activeChordNotes {
-            DispatchQueue.main.async { [weak self] in
-                self?.renderer.noteOff(note)
-            }
+            noteOff(note)
         }
         activeChordNotes.removeAll()
+    }
+
+    // MARK: - Chord Progressions
+
+    private func progressionsForMode(_ mode: FocusMode) -> [[Int]] {
+        switch mode {
+        case .sleep:
+            return [
+                [0, 7],      // Root + 5th (drone)
+                [0, 7],      // Repeat
+                [5, 12],     // IV
+                [0, 7],      // Root
+            ]
+        case .relaxation:
+            return [
+                [0, 4, 7],       // I
+                [5, 9, 12],      // IV
+                [0, 4, 7],       // I
+                [9, 12, 16],     // vi
+                [0, 4, 7],       // I
+                [5, 9, 12],      // IV
+                [7, 11, 14],     // V
+                [0, 4, 7],       // I
+            ]
+        case .focus:
+            return [
+                [0, 4, 7],      // I
+                [9, 12, 16],    // vi
+                [5, 9, 12],     // IV
+                [0, 4, 7],      // I
+            ]
+        case .energize:
+            return [
+                [0, 4, 7],      // I
+                [7, 11, 14],    // V
+                [9, 12, 16],    // vi
+                [5, 9, 12],     // IV
+                [0, 4, 7],      // I
+                [5, 9, 12],     // IV
+                [7, 11, 14],    // V
+                [0, 4, 7, 12],  // I (power)
+            ]
+        }
     }
 }
