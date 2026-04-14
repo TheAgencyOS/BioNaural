@@ -314,11 +314,16 @@ public enum ClassLibrary {
             allowedAtomTypes: [.alpha],                      // no .empty — drums must be constant
             atomicRepetitiveness: .same,
             weirdnessRange: WeirdnessRange(.zero, .safe),  // unused for drums
-            density: 0.85,                                   // steady rhythmic pulse
+            density: 0.85,
             allowedEventTypes: [.note],
             octaveRange: 0...0,                              // unused for drums
-            velocityRange: 70...95,
-            allowedAtomSizes: [4]                            // only 4-quarter patterns
+            // CRITICAL: the full 20..127 range is required so atom
+            // intensity tiers (hat 0.55, snare 0.72, kick 0.95) map
+            // to velocities that land in the resolver's drum tiers.
+            // Previously 70..95 clamped every hit into the snare
+            // tier — kicks weren't actually firing kick notes.
+            velocityRange: 20...127,
+            allowedAtomSizes: [4]
         )
     }
 

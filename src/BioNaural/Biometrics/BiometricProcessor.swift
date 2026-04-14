@@ -647,11 +647,18 @@ public actor BiometricProcessor {
     // MARK: - Audio Parameter Bridge
 
     /// Write computed targets to the lock-free AudioParameters store.
-    /// This is the only point where the biometric domain touches the audio domain.
+    /// This is the only point where the biometric domain touches the
+    /// audio domain. The binaural tone is opt-in — if the user hasn't
+    /// enabled it (volume > 0), the processor leaves it at 0 instead
+    /// of overriding with the computed target. Once the user raises
+    /// the binaural slider above 0, future ticks will start writing
+    /// biometric-adaptive values.
     private func writeToAudioParameters(_ targets: AudioTargets) {
         audioParameters.beatFrequency = targets.beatFrequency
         audioParameters.carrierFrequency = targets.carrierFrequency
-        audioParameters.binauralVolume = targets.binauralAmplitude
+        if audioParameters.binauralVolume > 0 {
+            audioParameters.binauralVolume = targets.binauralAmplitude
+        }
         audioParameters.ambientVolume = targets.ambientLevel
         audioParameters.melodicVolume = targets.melodicLevel
     }

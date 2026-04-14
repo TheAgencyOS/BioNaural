@@ -104,7 +104,7 @@ public final class CustomComposition {
         brightness: Double = 0.5,
         density: Double = 0.3,
         reverbWetDry: Float = 15.0,
-        binauralVolume: Double = 0.5,
+        binauralVolume: Double = 0.0,   // default-off; user must opt in via slider
         ambientVolume: Double = 0.7,
         melodicVolume: Double = 0.55,
         durationMinutes: Int = 25,
