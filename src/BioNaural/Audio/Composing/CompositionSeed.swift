@@ -80,6 +80,14 @@ public struct CompositionSeed: Sendable, Hashable {
     /// regenerating the whole seed.
     public var roleAtomOffset: [TrackRole: Int] = [:]
 
+    /// Parametrically-generated atoms per role, created at
+    /// seed-generation time. These are prepended to the hand-authored
+    /// AtomLibrary pool by CompositionPlanner.buildMolecule so each
+    /// session has its own rhythmic vocabulary. Stable for the life
+    /// of the seed — regenerations during biometric/arc changes
+    /// pick from the same generated pool.
+    public let generatedAtoms: [TrackRole: [Atom]]
+
     // MARK: - Generation
 
     /// Build a fresh random seed for the given mode using `generator`
@@ -103,13 +111,30 @@ public struct CompositionSeed: Sendable, Hashable {
         let tempoRange = tempoOffsetRange(for: mode)
         let tempoOffset = Double.random(in: tempoRange, using: &generator)
         let swing = swingTicks(for: mode)
-        // Focus is trip-hop / lo-fi now — sparseKit (kick / snare /
-        // hat) is the right palette. Tabla and congas were removed
-        // from the focus pool because they read as ambient
-        // percussion, not hip-hop.
         let drumKit: DrumKit? = (mode == .focus) ? .sparseKit : nil
 
-        return CompositionSeed(
+        // Randomize roleAtomOffset so two back-to-back sessions
+        // start with different atom picks instead of always landing
+        // on candidates[0]. The molecule builder applies this as
+        // `shuffleOffset % candidates.count`, so any int in a
+        // reasonable range wraps onto a real candidate.
+        var atomOffsets: [TrackRole: Int] = [:]
+        for role in TrackRole.allCases {
+            atomOffsets[role] = Int.random(in: 0..<16, using: &generator)
+        }
+
+        // Parametrically generate atoms per role so each session
+        // has its own rhythmic vocabulary. Currently only Focus
+        // has generators; Sleep and Relax continue to use the
+        // hand-authored AtomLibrary pools.
+        var generated: [TrackRole: [Atom]] = [:]
+        if mode == .focus {
+            generated[.drums]  = AtomGenerator.generateFocusDrumAtoms(count: 8, using: &generator)
+            generated[.bass]   = AtomGenerator.generateFocusBassAtoms(count: 8, using: &generator)
+            generated[.melody] = AtomGenerator.generateFocusMelodyAtoms(count: 8, using: &generator)
+        }
+
+        var seed = CompositionSeed(
             mode: mode,
             root: root,
             scale: scale,
@@ -117,8 +142,11 @@ public struct CompositionSeed: Sendable, Hashable {
             progressionVariant: variant,
             tempoOffsetBPM: tempoOffset,
             swingTicks: swing,
-            drumKit: drumKit
+            drumKit: drumKit,
+            generatedAtoms: generated
         )
+        seed.roleAtomOffset = atomOffsets
+        return seed
     }
 
     /// Per-mode tempo variation ranges. Sleep and relaxation get small

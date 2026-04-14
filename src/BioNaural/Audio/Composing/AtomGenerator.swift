@@ -1,0 +1,238 @@
+// AtomGenerator.swift
+// BioNaural — v3 Composing Core
+//
+// Parametric atom generators. The hand-authored AtomLibrary ships a
+// handful of rhythmic variants per (mode, role) combo — enough for
+// stylistic flavor but not enough for near-infinite session variety.
+// This file adds rule-based generators that produce fresh atoms at
+// seed-creation time so every session gets its own rhythmic content.
+//
+// Each generator takes a seeded RandomNumberGenerator and emits a
+// batch of atoms sampled from a stylistic probability envelope. The
+// envelopes are hand-tuned to each genre's conventions:
+//
+//   Focus — trip-hop / lo-fi hip-hop: kick on 1 + snare on 3 are
+//   fixed anchors; ghost kicks land on the "and" of 2 / 3 / 4 with
+//   staged probability; snare ghost notes sit on the "e" of 2 or 4;
+//   hat patterns are drawn from {quarter / 8th / 16th / dotted}.
+//
+//   Bass follows the drum kick pattern for rhythmic lock but
+//   varies its own internal voicing: sometimes held, sometimes
+//   re-articulated, sometimes walking.
+//
+//   Melody draws 1-4 note positions from a beat-weighted distribution
+//   (beats 1 and 3 most likely, offbeats less, 16ths rarely).
+//
+// Deterministic per seed: passing the same RNG state to any of the
+// generators produces the same atom pool, so regeneration within a
+// session stays consistent. Different seeds → different pools.
+
+import BioNauralShared
+import Foundation
+
+public enum AtomGenerator {
+
+    // MARK: - Tick helpers (480 PPQN)
+
+    private static let q: Int = Composing.ticksPerQuarter        // 480 = 1 quarter
+    private static let e: Int = Composing.ticksPerQuarter / 2    // 240 = 1 eighth
+    private static let s: Int = Composing.ticksPerQuarter / 4    // 120 = 1 sixteenth
+
+    // MARK: - Public API
+
+    /// Generate a batch of focus drum atoms for one session. Each
+    /// atom is a 4-quarter (1-bar) pattern with kick on beat 1,
+    /// snare on beat 3, and randomized ghost kicks + hat style.
+    public static func generateFocusDrumAtoms<G: RandomNumberGenerator>(
+        count: Int = 8,
+        using generator: inout G
+    ) -> [Atom] {
+        var atoms: [Atom] = []
+        for i in 0..<count {
+            atoms.append(generateFocusDrum(index: i, using: &generator))
+        }
+        return atoms
+    }
+
+    /// Generate a batch of focus bass atoms. Each atom hits the root
+    /// on beat 1 (lock with kick) and adds a random selection of
+    /// secondary hits on off-beats / beat 3 "and" / beat 4.
+    public static func generateFocusBassAtoms<G: RandomNumberGenerator>(
+        count: Int = 8,
+        using generator: inout G
+    ) -> [Atom] {
+        var atoms: [Atom] = []
+        for i in 0..<count {
+            atoms.append(generateFocusBass(index: i, using: &generator))
+        }
+        return atoms
+    }
+
+    /// Generate a batch of focus melody atoms. 4-quarter bars with
+    /// 1-4 sparse notes drawn from a beat-weighted position set.
+    public static func generateFocusMelodyAtoms<G: RandomNumberGenerator>(
+        count: Int = 8,
+        using generator: inout G
+    ) -> [Atom] {
+        var atoms: [Atom] = []
+        for i in 0..<count {
+            atoms.append(generateFocusMelody(index: i, using: &generator))
+        }
+        return atoms
+    }
+
+    // MARK: - Focus drums
+
+    private static func generateFocusDrum<G: RandomNumberGenerator>(
+        index: Int,
+        using generator: inout G
+    ) -> Atom {
+        var markers: [Marker] = []
+
+        // Fixed anchors: kick on beat 1, snare on beat 3. Every
+        // trip-hop / lo-fi pattern rests on these.
+        markers.append(Marker(startTick: 0,         stopTick: s,         intensity: 0.95))
+        markers.append(Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.72))
+
+        // Ghost kick candidates — syncopated positions that the
+        // J Dilla / Nujabes school uses to create the trip-hop bounce.
+        let ghostKickCandidates: [Int] = [
+            q + e,          // "and" of 2
+            2 * q + e,      // "and" of 3 (the Massive Attack pocket)
+            3 * q,          // beat 4
+            3 * q + e       // "and" of 4
+        ]
+        let numGhostKicks = Int.random(in: 1...3, using: &generator)
+        for tick in ghostKickCandidates.shuffled(using: &generator).prefix(numGhostKicks) {
+            markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: 0.88))
+        }
+
+        // Optional ghost snare on the "e" of 2 or 4 — classic
+        // linear-funk move for extra pocket depth.
+        if Double.random(in: 0...1, using: &generator) < 0.35 {
+            let ghostSnarePositions = [q + s, 3 * q + s]
+            if let tick = ghostSnarePositions.randomElement(using: &generator) {
+                markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: 0.62))
+            }
+        }
+
+        // Hat pattern drawn from four styles: quarters (sparse),
+        // 8ths (standard), 16ths (busy), dotted (shuffle-heavy).
+        let hatStyles: [Int] = [q, e, s, e]   // duplicate 8ths to bias toward them
+        let hatStep = hatStyles.randomElement(using: &generator) ?? e
+        var hatTick = 0
+        while hatTick < 4 * q {
+            // Alternate slightly louder / softer hats for groove
+            let intensity: Double = (hatTick / hatStep) % 2 == 0 ? 0.58 : 0.52
+            markers.append(Marker(startTick: hatTick, stopTick: hatTick + s, intensity: intensity))
+            hatTick += hatStep
+        }
+
+        return Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: markers,
+            name: "gen_focus_drum_\(index)"
+        )
+    }
+
+    // MARK: - Focus bass
+
+    private static func generateFocusBass<G: RandomNumberGenerator>(
+        index: Int,
+        using generator: inout G
+    ) -> Atom {
+        var markers: [Marker] = []
+
+        // Always root on beat 1 — locks with the drum kick.
+        let anchor1Length = [q, 2 * q, 3 * q].randomElement(using: &generator) ?? q
+        markers.append(Marker(startTick: 0, stopTick: anchor1Length, intensity: 0.65))
+
+        // Possible passing hits on the off-beats. Each has an
+        // independent probability; at most two are picked so the
+        // bass stays sparse.
+        let passingCandidates: [(tick: Int, length: Int, intensity: Double)] = [
+            (q + e,     e,      0.55),   // "and" of 2
+            (2 * q + e, q + e,  0.60),   // "and" of 3 (trip-hop lock)
+            (3 * q,     q,      0.55),   // beat 4
+            (3 * q + e, e,      0.60)    // "and" of 4
+        ]
+        let numPassing = Int.random(in: 0...2, using: &generator)
+        for candidate in passingCandidates.shuffled(using: &generator).prefix(numPassing) {
+            let stopTick = min(4 * q, candidate.tick + candidate.length)
+            markers.append(Marker(
+                startTick: candidate.tick,
+                stopTick: stopTick,
+                intensity: candidate.intensity
+            ))
+        }
+
+        return Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: markers,
+            name: "gen_focus_bass_\(index)"
+        )
+    }
+
+    // MARK: - Focus melody
+
+    private static func generateFocusMelody<G: RandomNumberGenerator>(
+        index: Int,
+        using generator: inout G
+    ) -> Atom {
+        var markers: [Marker] = []
+
+        // Beat-weighted position set. Beats 1 and 3 (strong) are
+        // most likely; weak beats, off-8ths, and 16ths are rarer.
+        let weightedPositions: [Int] = [
+            0,          0,          0,                 // beat 1 (heavy)
+            q,                                          // beat 2
+            2 * q,      2 * q,                          // beat 3
+            3 * q,                                      // beat 4
+            q + e,                                      // "and" of 2
+            2 * q + e,                                  // "and" of 3
+            3 * q + e,                                  // "and" of 4
+            q + s,      2 * q + 3 * s                   // 16th accents (rare)
+        ]
+
+        // Number of notes: 1-4. Favor 2-3 — real lo-fi melodies
+        // are sparse but not silent.
+        let noteCount = [1, 2, 2, 3, 3, 4].randomElement(using: &generator) ?? 2
+
+        // Sample distinct positions without replacement.
+        var pool = weightedPositions
+        var chosenTicks: [Int] = []
+        for _ in 0..<noteCount {
+            guard !pool.isEmpty else { break }
+            let pickIdx = Int.random(in: 0..<pool.count, using: &generator)
+            let tick = pool[pickIdx]
+            if !chosenTicks.contains(tick) {
+                chosenTicks.append(tick)
+            }
+            pool.remove(at: pickIdx)
+        }
+        chosenTicks.sort()
+
+        // Emit markers. Each note runs to the next note's start
+        // position so sustained tones are possible when the melody
+        // is very sparse.
+        for (i, tick) in chosenTicks.enumerated() {
+            let next = (i + 1 < chosenTicks.count) ? chosenTicks[i + 1] : 4 * q
+            let intensity = 0.55 + Double.random(in: -0.05...0.12, using: &generator)
+            markers.append(Marker(
+                startTick: tick,
+                stopTick: next,
+                intensity: max(0.1, min(0.9, intensity)),
+                moveAbility: 0.1
+            ))
+        }
+
+        return Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: markers,
+            name: "gen_focus_melody_\(index)"
+        )
+    }
+}

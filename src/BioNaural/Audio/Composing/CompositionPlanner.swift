@@ -83,6 +83,7 @@ public enum CompositionPlanner {
 
             let molecule: Molecule
             let shuffleOffset = seed?.roleAtomOffset[role] ?? 0
+            let generatedPool = seed?.generatedAtoms[role] ?? []
             if role == .bass, let drums = drumMolecule, shouldInterlockBassWithDrums(mode: mode) {
                 molecule = deriveBassMolecule(from: drums, musicalClass: mclass, loopLengthTicks: loopLengthTicks)
             } else {
@@ -92,7 +93,8 @@ public enum CompositionPlanner {
                     musicalClass: mclass,
                     loopLengthTicks: loopLengthTicks,
                     styleMemory: styleMemory,
-                    shuffleOffset: shuffleOffset
+                    shuffleOffset: shuffleOffset,
+                    generatedAtoms: generatedPool
                 )
             }
             // Record the atoms we chose so the next regeneration's
@@ -498,9 +500,18 @@ public enum CompositionPlanner {
         musicalClass: MusicalClass,
         loopLengthTicks: Int,
         styleMemory: SessionStyleMemory? = nil,
-        shuffleOffset: Int = 0
+        shuffleOffset: Int = 0,
+        generatedAtoms: [Atom] = []
     ) -> Molecule {
-        var allMatching = AtomLibrary.allAtoms(mode: mode, role: role).filter { atom in
+        // Prepend any parametrically-generated atoms so .same
+        // repetitiveness picks from the session-unique pool first,
+        // and the shuffle offset cycles through generated atoms
+        // before falling back to the hand-authored library.
+        let filteredGenerated = generatedAtoms.filter { atom in
+            musicalClass.allowedAtomTypes.contains(atom.type)
+                && musicalClass.allowedAtomSizes.contains(atom.sizeQuarters)
+        }
+        var allMatching = filteredGenerated + AtomLibrary.allAtoms(mode: mode, role: role).filter { atom in
             musicalClass.allowedAtomTypes.contains(atom.type)
                 && musicalClass.allowedAtomSizes.contains(atom.sizeQuarters)
         }
