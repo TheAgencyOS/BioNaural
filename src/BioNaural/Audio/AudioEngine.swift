@@ -330,8 +330,12 @@ public final class AudioEngine: AudioEngineProtocol {
     // MARK: - Ambience Layer Kickoff
 
     /// Selects and starts a mode-appropriate ambient bed.
-    /// Sleep/Relaxation: nature sounds (rain, ocean, wind).
-    /// Focus: pink noise or rain. Energize: no ambient (music is the texture).
+    /// Sleep/Relaxation: nature sounds (rain, ocean).
+    /// Focus: pink noise at a reduced gain — broadband noise reads
+    /// perceptually louder than nature loops at the same level, so
+    /// Focus takes half the default ambient volume to match the
+    /// Sleep/Relax ambient-vs-melodic balance. Energize: brown noise
+    /// even quieter since music carries the texture.
     private func startAmbienceLayer(for mode: FocusMode) {
         let bedName: String
         switch mode {
@@ -341,8 +345,9 @@ public final class AudioEngine: AudioEngineProtocol {
             bedName = "ocean-waves-60s"
         case .focus:
             bedName = "pink-noise-60s"
+            // Perceptual match: rain/ocean at 0.10 ≈ pink noise at 0.05.
+            parameters.ambientVolume = 0.05
         case .energize:
-            // Energize uses music as texture — ambient is quieter
             bedName = "brown-noise-60s"
             parameters.ambientVolume = 0.3
         }
