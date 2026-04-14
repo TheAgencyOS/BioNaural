@@ -379,83 +379,82 @@ public enum AtomLibrary {
 
     // MARK: - FOCUS — Melody (lo-fi piano feel)
 
-    /// Focus is steady and predictable: 4-6 notes per 2-quarter atom,
-    /// 8th-note grid, lo-fi piano feel. Tight to the grid.
+    /// Focus melody is SPARSE trip-hop / lo-fi. A few long tones per
+    /// bar, not running 8ths. Each atom is 4 quarters (one bar) so
+    /// it aligns with drum bars and bass changes, and each carries
+    /// 1-3 markers max — deliberate breath between events.
     private static let focusMelody: [Atom] = [
-        // ALPHA: steady 8ths (4 notes in 2 quarters)
+        // Single long tone on beat 1, held for the bar. The simplest
+        // possible focus melody — one sustained note that lets the
+        // drums carry the groove.
         Atom(
-            sizeQuarters: 2,
+            sizeQuarters: 4,
             type: .alpha,
             markers: [
-                Marker(startTick: 0,        stopTick: e,         intensity: 0.65, moveAbility: 0.1),
-                Marker(startTick: e,        stopTick: q,         intensity: 0.50, moveAbility: 0.1),
-                Marker(startTick: q,        stopTick: q + e,     intensity: 0.60, moveAbility: 0.1),
-                Marker(startTick: q + e,    stopTick: 2 * q,     intensity: 0.50, moveAbility: 0.1)
+                Marker(startTick: 0, stopTick: 4 * q, intensity: 0.60, moveAbility: 0.0)
             ],
-            name: "focus_alpha_8ths_2q"
+            name: "focus_alpha_hold_4q"
         ),
-        // ALPHA: dotted (note + rest + note pattern)
+        // Two-note call: tone on beat 1, answer on beat 3. Classic
+        // trip-hop / lo-fi vibe with lots of rest between.
         Atom(
-            sizeQuarters: 2,
+            sizeQuarters: 4,
             type: .alpha,
             markers: [
-                Marker(startTick: 0,        stopTick: de,        intensity: 0.65, moveAbility: 0.15),
-                Marker(startTick: de,       stopTick: q,         intensity: 0.55, moveAbility: 0.15),
-                Marker(startTick: q + e,    stopTick: 2 * q,     intensity: 0.55, moveAbility: 0.15)
+                Marker(startTick: 0,     stopTick: 2 * q, intensity: 0.60, moveAbility: 0.1),
+                Marker(startTick: 2 * q, stopTick: 4 * q, intensity: 0.55, moveAbility: 0.1),
             ],
-            name: "focus_alpha_dotted_2q"
+            name: "focus_alpha_call_answer_4q"
         ),
-        // ALPHA: lo-fi gap (1 note + space + 2 notes)
+        // Three-note phrase: beat 1, "and" of 2, beat 3. Short
+        // phrase then silence on beat 4.
         Atom(
-            sizeQuarters: 2,
+            sizeQuarters: 4,
             type: .alpha,
             markers: [
-                Marker(startTick: 0,        stopTick: q,         intensity: 0.60, moveAbility: 0.15),
-                Marker(startTick: q,        stopTick: q + e,     intensity: 0.55, moveAbility: 0.15),
-                Marker(startTick: q + e,    stopTick: 2 * q,     intensity: 0.50, moveAbility: 0.15)
+                Marker(startTick: 0,         stopTick: q,         intensity: 0.62, moveAbility: 0.1),
+                Marker(startTick: q + e,     stopTick: 2 * q,     intensity: 0.55, moveAbility: 0.1),
+                Marker(startTick: 2 * q,     stopTick: 3 * q,     intensity: 0.58, moveAbility: 0.1),
             ],
-            name: "focus_alpha_gap_2q"
+            name: "focus_alpha_three_note_4q"
         ),
-        // BETA: syncopated (off-beat emphasis)
+        // Dotted-half + quarter: one long tone, one punctuation.
         Atom(
-            sizeQuarters: 2,
-            type: .beta,
+            sizeQuarters: 4,
+            type: .alpha,
             markers: [
-                Marker(startTick: 0,        stopTick: e,         intensity: 0.55, moveAbility: 0.1),
-                Marker(startTick: e,        stopTick: 3 * e,     intensity: 0.65, moveAbility: 0.1),
-                Marker(startTick: 3 * e,    stopTick: q + e,     intensity: 0.55, moveAbility: 0.1),
-                Marker(startTick: q + e,    stopTick: 2 * q,     intensity: 0.60, moveAbility: 0.1)
+                Marker(startTick: 0,         stopTick: 3 * q,     intensity: 0.62, moveAbility: 0.1),
+                Marker(startTick: 3 * q,     stopTick: 4 * q,     intensity: 0.55, moveAbility: 0.1),
             ],
-            name: "focus_beta_syncopated_2q"
+            name: "focus_alpha_dotted_half_4q"
         ),
-        // GAMMA: busy 16ths
+        // Empty bar — a full bar of rest. Real trip-hop tracks let
+        // the drums breathe alone often.
         Atom(
-            sizeQuarters: 2,
-            type: .gamma,
-            markers: [
-                Marker(startTick: 0,        stopTick: s,         intensity: 0.60, moveAbility: 0.1),
-                Marker(startTick: s,        stopTick: 2 * s,     intensity: 0.45, moveAbility: 0.1),
-                Marker(startTick: 2 * s,    stopTick: 3 * s,     intensity: 0.55, moveAbility: 0.1),
-                Marker(startTick: e + s,    stopTick: q,         intensity: 0.45, moveAbility: 0.1),
-                Marker(startTick: q,        stopTick: q + s,     intensity: 0.60, moveAbility: 0.1),
-                Marker(startTick: q + 2*s,  stopTick: q + 3*s,   intensity: 0.50, moveAbility: 0.1),
-                Marker(startTick: q + e + s,stopTick: 2 * q,     intensity: 0.50, moveAbility: 0.1)
-            ],
-            name: "focus_gamma_16ths_2q"
-        ),
-        // EMPTY
-        Atom(
-            sizeQuarters: 2,
+            sizeQuarters: 4,
             type: .empty,
             markers: [],
-            name: "focus_empty_2q"
+            name: "focus_empty_4q"
         ),
     ]
 
     // MARK: - FOCUS — Bass (warm whole notes)
 
     private static let focusBass: [Atom] = [
-        // Whole note root — the simplest focus bass.
+        // Trip-hop pocket — root on beat 1 (locks with the kick),
+        // another root hit on the "and" of 3. Sparse and grooving.
+        // First in the list so .same repetitiveness picks this as
+        // the default focus bass pattern.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,             stopTick: q,         intensity: 0.65, moveAbility: 0.0),
+                Marker(startTick: 2 * q + e,     stopTick: 3 * q + e, intensity: 0.58, moveAbility: 0.0),
+            ],
+            name: "focus_bass_triphop_4q"
+        ),
+        // Whole note root — softer option, single note held out.
         Atom(
             sizeQuarters: 4,
             type: .alpha,

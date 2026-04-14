@@ -206,24 +206,28 @@ public struct CompositionSeed: Sendable, Hashable {
     public static func programPool(mode: FocusMode, role: TrackRole) -> [UInt8]? {
         switch (mode, role) {
 
-        // MARK: Sleep — ambient drone palette
-        case (.sleep, .melody):  return [88, 89, 91, 94, 52, 46]      // pads, choir, harp
-        case (.sleep, .bass):    return [89, 88, 42]                   // warm pad + cello
-        case (.sleep, .chords):  return [48, 49, 52, 89, 94]           // strings, choir pads
-        case (.sleep, .pad):     return [88, 89, 91, 94]
-        case (.sleep, .texture): return [97, 94, 91]
+        // MARK: Sleep — ambient drone palette (widened).
+        // GM pad family: 88 New Age, 89 Warm, 90 Polysynth,
+        // 91 Choir, 92 Bowed, 93 Metallic, 94 Halo, 95 Sweep,
+        // 98 Crystal, 99 Atmosphere, 100 Brightness.
+        // Plus 52 Choir Aahs, 53 Voice Oohs, 46 Harp, 48 Strings,
+        // 49 Slow Strings, 50 Synth Strings, 14 Tubular Bells.
+        case (.sleep, .melody):  return [88, 89, 90, 91, 92, 94, 95, 98, 99, 52, 53, 46, 14]
+        case (.sleep, .bass):    return [89, 88, 92, 42]               // warm pad, new age, bowed, cello
+        case (.sleep, .chords):  return [48, 49, 50, 52, 53, 89, 91, 92, 94]
+        case (.sleep, .pad):     return [88, 89, 90, 91, 94, 95, 99]
+        case (.sleep, .texture): return [97, 94, 91, 98, 99, 100]      // shimmer / rain / crystal / atmosphere
         case (.sleep, .drums):   return nil
 
-        // MARK: Relaxation — new-age / neo-classical palette.
-        // Violin (40) and flute (73) were removed — GM solo string
-        // and woodwind presets sound thin and synthetic without deep
-        // velocity layering. The kept instruments all render well in
-        // GeneralUser GS with our new reverb tail.
-        case (.relaxation, .melody):  return [0, 4, 11, 46, 5, 89]      // piano, rhodes, vibes, harp, DX, warm pad
-        case (.relaxation, .bass):    return [32, 42, 33]               // acoustic, cello, finger bass
-        case (.relaxation, .chords):  return [48, 49, 89, 0, 88]
-        case (.relaxation, .pad):     return [89, 91, 88]
-        case (.relaxation, .texture): return [97, 94]
+        // MARK: Relaxation — new-age / neo-classical palette (widened).
+        // Keeps the warm acoustic voices (piano, rhodes, vibes, harp)
+        // and adds more pad colors so two relaxation sessions sound
+        // sonically different even when they share a scale.
+        case (.relaxation, .melody):  return [0, 4, 11, 46, 5, 89, 88, 90, 92, 14, 98]
+        case (.relaxation, .bass):    return [32, 42, 33, 89]           // acoustic, cello, finger, warm pad
+        case (.relaxation, .chords):  return [48, 49, 50, 89, 0, 88, 91, 92, 94, 98]
+        case (.relaxation, .pad):     return [88, 89, 90, 91, 92, 94, 95]
+        case (.relaxation, .texture): return [97, 94, 98, 99, 100]
         case (.relaxation, .drums):   return nil
 
         // MARK: Focus — trip-hop / lo-fi hip-hop palette.
@@ -234,8 +238,8 @@ public struct CompositionSeed: Sendable, Hashable {
         case (.focus, .bass):    return [32, 33, 35]                    // acoustic bass, electric bass, fretless
         case (.focus, .chords):  return [4, 5, 89, 0]                   // rhodes, DX, warm pad, piano
         case (.focus, .drums):   return [0]                             // percussion bank (sparseKit)
-        case (.focus, .pad):     return [89, 88]
-        case (.focus, .texture): return [89, 88, 94]
+        case (.focus, .pad):     return [89, 88, 90, 94]
+        case (.focus, .texture): return [89, 88, 94, 95, 98]
 
         // MARK: Energize — hip-hop palette (was synthwave, reframed).
         // Rhodes and electric piano for the melodic hook, sub bass /
