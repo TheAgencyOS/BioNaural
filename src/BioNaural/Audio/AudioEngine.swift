@@ -45,18 +45,14 @@ public final class AudioEngine: AudioEngineProtocol {
     /// When `nil`, the selector falls back to neutral defaults.
     public var soundSelectionProfile: SoundSelectionProfile?
 
-    // SF2 generative layer — real-time MIDI synthesis via SoundFont.
-    // GenerativeMIDIEngine produces notes using ScaleMapper + Tonic;
-    // SF2MelodicRenderer renders them through the SoundFont.
+    // SF2 layer — SoundFont samplers that the v3 MusicPatternPlayer
+    // routes AVAudioSequencer tracks into.
     public private(set) var sf2Renderer: SF2MelodicRenderer?
     public private(set) var multiVoice: MultiVoiceRenderer?
-    public private(set) var generativeMIDI: GenerativeMIDIEngine?
-    public private(set) var bassLine: BassLineGenerator?
-    public private(set) var drums: DrumPatternGenerator?
 
     /// v3 NWL composing-core player. Runs a pre-built Standard MIDI File
-    /// through AVAudioSequencer on the audio thread. Replaces
-    /// GenerativeMIDIEngine / BassLineGenerator / DrumPatternGenerator.
+    /// through AVAudioSequencer on the audio thread — the single music
+    /// source of truth for all melody/bass/drums/chords playback.
     public private(set) var musicPatternPlayer: MusicPatternPlayer?
 
     /// Most recent biometric state — used to regenerate the MusicPattern
@@ -366,18 +362,6 @@ public final class AudioEngine: AudioEngineProtocol {
         return false
     }
 
-    /// Start bass line generator (Focus/Energize only).
-    private func startBassLine(tonality: SessionTonality) {
-        guard Theme.ModeInstrumentation.allowsRhythmStem(for: tonality.mode) else { return }
-        bassLine?.start(tonality: tonality)
-    }
-
-    /// Start drum pattern generator (Focus/Energize only).
-    private func startDrumPattern(tonality: SessionTonality) {
-        guard Theme.ModeInstrumentation.allowsRhythmStem(for: tonality.mode) else { return }
-        drums?.start(tonality: tonality)
-    }
-
     // MARK: - v3 Music Pattern Layer
 
     /// Build and play a complete MusicPattern for the given mode + tonality.
@@ -433,9 +417,6 @@ public final class AudioEngine: AudioEngineProtocol {
         stopVolumeSyncTimer()
         sequencePlayer?.stop()
         musicPatternPlayer?.stop()
-        drums?.stop()
-        bassLine?.stop()
-        generativeMIDI?.stop()
         stemAudioLayer?.stop()
         melodicLayer?.stop()
         ambienceLayer?.stop()
@@ -494,8 +475,6 @@ public final class AudioEngine: AudioEngineProtocol {
     public func updateBiometricState(_ state: BiometricState) {
         guard state != currentBiometricState else { return }
         currentBiometricState = state
-        generativeMIDI?.updateBiometricState(state)
-        drums?.updateBiometricState(state)
 
         guard let mode = currentMode, let tonality = sessionTonality else { return }
         let pattern = CompositionPlanner.buildMusicPattern(
@@ -565,99 +544,43 @@ public final class AudioEngine: AudioEngineProtocol {
         volumeSyncTimer = nil
     }
 
-    // MARK: - SF2 Generative Layer Setup
+    // MARK: - SF2 Layer Setup
 
-    /// Sets up the SoundFont renderer and generative MIDI engine.
-    /// Uses SF2MelodicRenderer (AVAudioUnitSampler) to render notes
-    /// produced by GenerativeMIDIEngine using Tonic-powered ScaleMapper.
+    /// Attach the SoundFont samplers. The v3 MusicPatternPlayer routes
+    /// AVAudioSequencer tracks into `multiVoice.melody/bass/drums` — this
+    /// method just wires the nodes into the engine graph.
     private func setupSF2Layer() {
-        // Only create once — reuse across session starts.
         guard sf2Renderer == nil else { return }
 
-        guard let sf2URL = Bundle.main.url(
+        guard Bundle.main.url(
             forResource: Theme.SF2.resourceName,
             withExtension: Theme.SF2.resourceExtension
-        ) else {
-            Logger.audio.error("SoundFont NOT FOUND: \(Theme.SF2.resourceName).\(Theme.SF2.resourceExtension) — generative MIDI disabled")
+        ) != nil else {
+            Logger.audio.error("SoundFont NOT FOUND: \(Theme.SF2.resourceName).\(Theme.SF2.resourceExtension)")
             return
         }
 
-        // Create single-voice renderer for melody (GenerativeMIDIEngine uses this)
+        // SF2MelodicRenderer is retained for MIDISequencePlayer compatibility
+        // and the composition preview. v3 music playback uses MultiVoiceRenderer.
         let renderer = SF2MelodicRenderer(engine: engine, parameters: parameters)
-        do {
-            try renderer.setup(sf2URL: sf2URL, presetIndex: Theme.SF2.PresetIndex.focusPad)
-            // Connect the renderer's submixer to the main mixer — without this,
-            // the sampler generates notes but the audio goes nowhere.
-            engine.connect(renderer.outputNode, to: engine.mainMixerNode, format: nil)
-            self.sf2Renderer = renderer
-        } catch {
-            Logger.audio.error("SF2 setup failed: \(error.localizedDescription)")
-            return
+        if let sf2URL = Bundle.main.url(
+            forResource: Theme.SF2.resourceName,
+            withExtension: Theme.SF2.resourceExtension
+        ) {
+            do {
+                try renderer.setup(sf2URL: sf2URL, presetIndex: Theme.SF2.PresetIndex.focusPad)
+                engine.connect(renderer.outputNode, to: engine.mainMixerNode, format: nil)
+                self.sf2Renderer = renderer
+            } catch {
+                Logger.audio.error("SF2 setup failed: \(error.localizedDescription)")
+            }
         }
 
-        // Create multi-voice renderer (separate samplers for melody, bass, drums)
         let mv = MultiVoiceRenderer(engine: engine)
         engine.connect(mv.outputNode, to: engine.mainMixerNode, format: nil)
         self.multiVoice = mv
 
-        // GenerativeMIDIEngine drives the melody voice
-        let midi = GenerativeMIDIEngine(renderer: renderer, parameters: parameters)
-        self.generativeMIDI = midi
-
-        Logger.audio.info("Multi-voice renderer created: melody + bass + drums")
-    }
-
-    /// Starts the generative MIDI engine for the given mode.
-    /// Selects the appropriate SoundFont preset and begins algorithmic
-    /// note generation using ScaleMapper-driven pitch selection.
-    private func startGenerativeLayer(for mode: FocusMode) {
-        guard let sf2URL = Bundle.main.url(
-            forResource: Theme.SF2.resourceName,
-            withExtension: Theme.SF2.resourceExtension
-        ) else { return }
-
-        // Set up the multi-voice renderer with mode-specific presets
-        if let mv = multiVoice {
-            do {
-                try mv.setup(sf2URL: sf2URL, mode: mode)
-
-                // Create bass and drum generators with their own voice handles
-                let bassGen = BassLineGenerator(renderer: mv.bass)
-                let drumGen = DrumPatternGenerator(renderer: mv.drums)
-                self.bassLine = bassGen
-                self.drums = drumGen
-
-                Logger.audio.info("Multi-voice renderer configured for \(mode.rawValue)")
-            } catch {
-                Logger.audio.error("Multi-voice setup failed: \(error.localizedDescription)")
-            }
-        }
-
-        // Change the melody renderer's preset for the mode
-        if let renderer = sf2Renderer {
-            let presetIndex: Int
-            switch mode {
-            case .focus:       presetIndex = Theme.SF2.PresetIndex.focusPad
-            case .relaxation:  presetIndex = Theme.SF2.PresetIndex.relaxationStrings
-            case .sleep:       presetIndex = Theme.SF2.PresetIndex.sleepPad
-            case .energize:    presetIndex = Theme.SF2.PresetIndex.energizeBells
-            }
-            renderer.changePreset(presetIndex)
-        }
-
-        // Wire bass AND drum generators to the master clock in GenerativeMIDIEngine.
-        // The master clock calls tick() on all three (melody, bass, drums) from
-        // ONE timer — zero drift, perfect sync.
-        if let bassGen = bassLine {
-            generativeMIDI?.bassLineGenerator = bassGen
-        }
-        if let drumGen = drums {
-            generativeMIDI?.drumPatternGenerator = drumGen
-        }
-
-        // Start generative melody with calm initial state and shared tonality.
-        // This also starts the master clock that drives bass and drums.
-        generativeMIDI?.start(mode: mode, biometricState: .calm, tonality: sessionTonality)
+        Logger.audio.info("SF2 samplers ready — melody + bass + drums")
     }
 
     // MARK: - Preset Application

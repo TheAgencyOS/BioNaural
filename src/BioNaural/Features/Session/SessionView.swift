@@ -975,9 +975,7 @@ extension SessionView {
                                     if let audioEngine = viewModel.audioEngine as? AudioEngine,
                                        let tonality = audioEngine.sessionTonality {
                                         audioEngine.sequencePlayer?.stop()
-                                        audioEngine.generativeMIDI?.stop()
-                                        audioEngine.bassLine?.stop()
-                                        audioEngine.drums?.stop()
+                                        audioEngine.musicPatternPlayer?.stop()
                                         audioEngine.startMusicGeneration(
                                             mode: viewModel.sessionMode,
                                             tonality: tonality
