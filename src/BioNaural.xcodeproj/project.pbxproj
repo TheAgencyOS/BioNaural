@@ -23,7 +23,6 @@
 		136A4167C0267668D60E316D /* SF2MelodicRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A0D19A9E78CFFD7A927E59A /* SF2MelodicRenderer.swift */; };
 		138626C28ABDFE89A5CB5C5A /* BodyMusicRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D1961454214E94CFB60F91 /* BodyMusicRecorder.swift */; };
 		138933296647F8D66EED53C8 /* ExploreView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3024A039051D804CA0968BA /* ExploreView.swift */; };
-		1483EB1174D67E9026B64DCA /* GenerativeMIDIEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85BE4969B05483D373C13584 /* GenerativeMIDIEngine.swift */; };
 		155D4F27818C2985DD25674D /* SessionControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA04975E12573D037FB9497 /* SessionControlsView.swift */; };
 		15FFCF383816F35FBE4B048F /* MockHealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 45497D12AC0172D49070F47A /* MockHealthKitService.swift */; };
 		165BFF1DB0661DF7731B3107 /* relax-pad-airy-60s.caf in Resources */ = {isa = PBXBuildFile; fileRef = 4AB31CB42A8C9A7281796B9C /* relax-pad-airy-60s.caf */; };
@@ -111,7 +110,6 @@
 		5FB941DD9EE90D6C1769580E /* FocusFilterIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 627E47AA48CF364186E572BF /* FocusFilterIntent.swift */; };
 		62E308740B12D4EDD0755BD8 /* ComposerSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 255805D7D7C5A790C22BD6D1 /* ComposerSheetView.swift */; };
 		6451155B8ED6AC4DB2039F23 /* CalendarInsightsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D132A4EE2AAD6623FA0BB09 /* CalendarInsightsView.swift */; };
-		66A54C206C330C72C763F39E /* BassLineGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA7302A02A14A800D102F27 /* BassLineGenerator.swift */; };
 		66E22C383D3661952CC4FB9F /* ComposerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 706D5E6BDD285EB3F950CB29 /* ComposerViewModel.swift */; };
 		68316248CECB5C677C41146C /* SessionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2255173BBFD40259F6BDAB /* SessionStore.swift */; };
 		686FF140BA4B293E723456C4 /* Satoshi-VariableItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B85873E7AC504B2807155E6B /* Satoshi-VariableItalic.ttf */; };
@@ -292,7 +290,6 @@
 		FC4B1DEF427AA098D908255E /* musicgen-focus-30s.wav in Resources */ = {isa = PBXBuildFile; fileRef = FE59F63746F7BF0BE76919E3 /* musicgen-focus-30s.wav */; };
 		FC8292AF5065D72CA916B7D3 /* Vortex in Frameworks */ = {isa = PBXBuildFile; productRef = 993FB044E8F8CDA426D03271 /* Vortex */; };
 		FDA7F89028B1B7C060B9BBB7 /* BioNauralWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5710E38BD60BB0A15CEAB77A /* BioNauralWidgets.swift */; };
-		FDBA4C7F3FBDD930DE8AC2AC /* DrumPatternGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214A38A36097D6814865F026 /* DrumPatternGenerator.swift */; };
 		FEEBDA09B2646FDCE09B9BF4 /* MicroVariationEngine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D6BEB0CDA6210074A1647BB /* MicroVariationEngine.swift */; };
 		FF961F41A2E3C66371930F1F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDD1BF07F856F0F099B5E9E9 /* Constants.swift */; };
 		FFCDFB54B6C61CB92CD07038 /* SoundSelector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6135249B414F7ABBF2453EA5 /* SoundSelector.swift */; };
@@ -333,7 +330,6 @@
 		1D8B2D4C64B97CA8818F937D /* EmptyAndErrorStates.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyAndErrorStates.swift; sourceTree = "<group>"; };
 		1D9C8212DF982CE497E8BD82 /* ContextTrackDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextTrackDetailView.swift; sourceTree = "<group>"; };
 		1FBBC7AFF621F30C99B3E688 /* ContextTrackLibraryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextTrackLibraryView.swift; sourceTree = "<group>"; };
-		214A38A36097D6814865F026 /* DrumPatternGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrumPatternGenerator.swift; sourceTree = "<group>"; };
 		21A370CC9A5A57CD1831FE02 /* WatchAudioEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchAudioEngine.swift; sourceTree = "<group>"; };
 		255805D7D7C5A790C22BD6D1 /* ComposerSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerSheetView.swift; sourceTree = "<group>"; };
 		2636C21E3B550DE888361250 /* AdaptationMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdaptationMapView.swift; sourceTree = "<group>"; };
@@ -440,7 +436,6 @@
 		81AE324E4809850378E218F1 /* MultiVoiceRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiVoiceRenderer.swift; sourceTree = "<group>"; };
 		81FBA1861B864939B293BFD3 /* MelodicStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MelodicStepView.swift; sourceTree = "<group>"; };
 		835DCFE52206D530BE593136 /* BioNaural.app */ = {isa = PBXFileReference; includeInIndex = 0; lastKnownFileType = wrapper.application; path = BioNaural.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		85BE4969B05483D373C13584 /* GenerativeMIDIEngine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GenerativeMIDIEngine.swift; sourceTree = "<group>"; };
 		8667E958B039D62FB0E7E7E4 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
 		88443F39F9D50BAFB1963B5D /* WatchLearningIndicator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchLearningIndicator.swift; sourceTree = "<group>"; };
 		88D7AF89E8F82D6CFEFD4DA4 /* AudioParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioParameters.swift; sourceTree = "<group>"; };
@@ -465,7 +460,6 @@
 		9611A630C77A035FFA414B0F /* UserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfile.swift; sourceTree = "<group>"; };
 		98C65CA187F9BEDBF0A13B9A /* SessionSummaryWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionSummaryWidget.swift; sourceTree = "<group>"; };
 		9AA04975E12573D037FB9497 /* SessionControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionControlsView.swift; sourceTree = "<group>"; };
-		9AA7302A02A14A800D102F27 /* BassLineGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BassLineGenerator.swift; sourceTree = "<group>"; };
 		9AAD1C26D2B707725E040DA9 /* WatchWavelengthView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchWavelengthView.swift; sourceTree = "<group>"; };
 		9BBEBFFE44B2389D656258B1 /* wind-texture-60s.caf */ = {isa = PBXFileReference; path = "wind-texture-60s.caf"; sourceTree = "<group>"; };
 		9C0CBB173266F8FEE824B3CE /* AppIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntents.swift; sourceTree = "<group>"; };
@@ -1285,7 +1279,6 @@
 				9D38D6BB852EF76F88A0112D /* AmbienceLayer.swift */,
 				CFF1FF3D3448347AFB6523DF /* AudioEngine.swift */,
 				88D7AF89E8F82D6CFEFD4DA4 /* AudioParameters.swift */,
-				9AA7302A02A14A800D102F27 /* BassLineGenerator.swift */,
 				68C6F0441D6541D4BF864AD1 /* BinauralBeatNode.swift */,
 				F2E1D0C9B8A7F6E5D4C3B2A1 /* SubBassNode.swift */,
 				9786A5B4C3D2E1F0 /* Weirdness.swift */,
@@ -1304,8 +1297,6 @@
 				9793A5B4C3D2E1F0 /* MusicPatternPlayer.swift */,
 				9794A5B4C3D2E1F0 /* CompositionPlanner.swift */,
 				F3E719F5490497C1B4C9A00E /* BiometricStemMixer.swift */,
-				214A38A36097D6814865F026 /* DrumPatternGenerator.swift */,
-				85BE4969B05483D373C13584 /* GenerativeMIDIEngine.swift */,
 				BF72961F52C034FCF105C594 /* MelodicLayer.swift */,
 				6D6BEB0CDA6210074A1647BB /* MicroVariationEngine.swift */,
 				8CD87895A990FBBA5B371245 /* MIDISequencePlayer.swift */,
@@ -1639,7 +1630,6 @@
 				40405C543276D5490DE617A5 /* AudioEngineProtocol.swift in Sources */,
 				8E723F45424AB9E87DD862AA /* AudioParameters.swift in Sources */,
 				882EDE35AA3E38256E634468 /* BackgroundTaskService.swift in Sources */,
-				66A54C206C330C72C763F39E /* BassLineGenerator.swift in Sources */,
 				9111CDBD81E5969DC50B019D /* BinauralBeatNode.swift in Sources */,
 				A1B2C3D4E5F6A7B8C9D0E1F2 /* SubBassNode.swift in Sources */,
 				E1D2C3B4A5969786 /* Weirdness.swift in Sources */,
@@ -1693,7 +1683,6 @@
 				8433EE1E110FF6A4D7BFE514 /* Date+Formatting.swift in Sources */,
 				D45B6A9D2B2525CE2790DB45 /* DemoContentSeeder.swift in Sources */,
 				E8607FCE517B3AED967F5C2A /* Double+Frequency.swift in Sources */,
-				FDBA4C7F3FBDD930DE8AC2AC /* DrumPatternGenerator.swift in Sources */,
 				805EC4F0117AEFC233EA41BB /* EmptyAndErrorStates.swift in Sources */,
 				03B9C2616F63B2C729AA33E6 /* EnergizeSafetyEducationView.swift in Sources */,
 				B733854E46A9F15544720E16 /* EnergizeSafetyIndicator.swift in Sources */,
@@ -1705,7 +1694,6 @@
 				5FB941DD9EE90D6C1769580E /* FocusFilterIntent.swift in Sources */,
 				1F7A609383E632152C8C8906 /* FocusFilterSettingsView.swift in Sources */,
 				579BDDDF52DCDDF6EE2E158B /* FocusSession.swift in Sources */,
-				1483EB1174D67E9026B64DCA /* GenerativeMIDIEngine.swift in Sources */,
 				8F0AF71BF0695325C8B8B020 /* GenrePickerView.swift in Sources */,
 				A28A01FB192F6FBDD82F142C /* HapticService.swift in Sources */,
 				CE62A3D4357CE290B2CA59CA /* HeadMotionService.swift in Sources */,
