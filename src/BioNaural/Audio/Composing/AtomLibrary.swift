@@ -557,90 +557,86 @@ public enum AtomLibrary {
 
     // MARK: - FOCUS — Drums (very minimal, side stick on 2 & 4)
 
-    // MARK: - FOCUS — Drums (kit-neutral trance patterns)
+    // MARK: - FOCUS — Drums (sparse trip-hop / lo-fi hip-hop)
     //
-    // Focus drum atoms are kit-neutral: they encode the RHYTHM and
-    // general intensity tier (low / mid / high-accent). The
-    // WeirdnessResolver translates each intensity tier into the
-    // correct percussion note for the seed's selected DrumKit —
-    // sparse rock kit, congas, or tabla. That lets a single pattern
-    // sound like a sidestick loop, a conga pattern, or a tabla cycle
-    // without maintaining three parallel atom libraries.
+    // Focus is trip-hop / lo-fi hip-hop: slow (68-86 BPM), sparse,
+    // swung, head-nod. These atoms encode classic boom-bap / trip-hop
+    // patterns with the intensity tiers the resolver uses:
     //
-    // Intensity tiers used throughout:
-    //   0.92+  → low-tier hit (kick / low conga / bayan)
-    //   0.72-  → mid-tier hit (snare / mid conga / tabla slap)
-    //   0.55-  → high-tier hit (closed hat / high conga / tabla tin)
+    //   0.92+  → kick (low tier)
+    //   0.72-  → snare (mid tier)
+    //   0.55-  → closed hat (high tier)
+    //
+    // Patterns are deliberately sparse and contain NO fills. Each is
+    // a 4-quarter (1-bar) loop that repeats across the entire
+    // MusicPattern so focus stays consistent and hypnotic.
     private static let focusDrums: [Atom] = [
-        // Hypnotic downbeat pulse: low hit on beat 1, high hit on
-        // every 8th after. Trance four-on-the-floor without snares.
+        // Classic boom-bap: kick on 1, snare on 3, hat on every 8th.
+        // The DJ Premier / J Dilla foundation.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
             markers: [
-                Marker(startTick: 0,         stopTick: s,         intensity: 0.95, moveAbility: 0.0),
-                Marker(startTick: e,         stopTick: e + s,     intensity: 0.55, moveAbility: 0.0),
-                Marker(startTick: q,         stopTick: q + s,     intensity: 0.95, moveAbility: 0.0),
-                Marker(startTick: q + e,     stopTick: q + e + s, intensity: 0.55, moveAbility: 0.0),
-                Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.95, moveAbility: 0.0),
+                Marker(startTick: 0,         stopTick: s,         intensity: 0.95, moveAbility: 0.0),  // kick 1
+                Marker(startTick: 0,         stopTick: s,         intensity: 0.55, moveAbility: 0.0),  // hat 1
+                Marker(startTick: e,         stopTick: e + s,     intensity: 0.55, moveAbility: 0.0),  // hat "and"
+                Marker(startTick: q,         stopTick: q + s,     intensity: 0.55, moveAbility: 0.0),  // hat 2
+                Marker(startTick: q + e,     stopTick: q + e + s, intensity: 0.55, moveAbility: 0.0),  // hat "and"
+                Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.72, moveAbility: 0.0),  // snare 3
+                Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.55, moveAbility: 0.0),  // hat 3
                 Marker(startTick: 2 * q + e, stopTick: 2 * q + e + s, intensity: 0.55, moveAbility: 0.0),
-                Marker(startTick: 3 * q,     stopTick: 3 * q + s, intensity: 0.95, moveAbility: 0.0),
+                Marker(startTick: 3 * q,     stopTick: 3 * q + s, intensity: 0.55, moveAbility: 0.0),  // hat 4
                 Marker(startTick: 3 * q + e, stopTick: 3 * q + e + s, intensity: 0.55, moveAbility: 0.0),
             ],
-            name: "focus_drum_pulse_4q"
+            name: "focus_drum_boombap_4q"
         ),
-        // Downbeat + backbeat spine — low on 1+3, mid on 2+4,
-        // high on the "ands". The most song-like focus drum.
+        // Trip-hop pocket: kick on 1 AND the "and" of 2, snare on 3.
+        // Two kicks per bar creates the Massive Attack / Portishead
+        // laid-back bounce.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
             markers: [
-                Marker(startTick: 0,         stopTick: s,         intensity: 0.95),
-                Marker(startTick: e,         stopTick: e + s,     intensity: 0.55),
-                Marker(startTick: q,         stopTick: q + s,     intensity: 0.72),
-                Marker(startTick: q + e,     stopTick: q + e + s, intensity: 0.55),
-                Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.95),
+                Marker(startTick: 0,         stopTick: s,         intensity: 0.95),   // kick 1
+                Marker(startTick: 0,         stopTick: s,         intensity: 0.55),   // hat 1
+                Marker(startTick: e,         stopTick: e + s,     intensity: 0.55),   // hat
+                Marker(startTick: q,         stopTick: q + s,     intensity: 0.55),   // hat 2
+                Marker(startTick: q + e,     stopTick: q + e + s, intensity: 0.92),   // kick 2-and (trip-hop)
+                Marker(startTick: q + e,     stopTick: q + e + s, intensity: 0.55),   // hat
+                Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.72),   // snare 3
+                Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.55),   // hat
                 Marker(startTick: 2 * q + e, stopTick: 2 * q + e + s, intensity: 0.55),
-                Marker(startTick: 3 * q,     stopTick: 3 * q + s, intensity: 0.72),
+                Marker(startTick: 3 * q,     stopTick: 3 * q + s, intensity: 0.55),   // hat 4
                 Marker(startTick: 3 * q + e, stopTick: 3 * q + e + s, intensity: 0.55),
             ],
-            name: "focus_drum_backbeat_4q"
+            name: "focus_drum_triphop_4q"
         ),
-        // Syncopated trance pattern — low on 1 + 2-and, mid on 3,
-        // scattered high hits.
+        // Sparse kick + snare with no hat. For when the melody
+        // needs more space. Kick on 1, snare on 3, that's it.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
             markers: [
-                Marker(startTick: 0,         stopTick: s,         intensity: 0.95),
-                Marker(startTick: e,         stopTick: e + s,     intensity: 0.55),
-                Marker(startTick: q + e,     stopTick: q + e + s, intensity: 0.92),
-                Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.72),
-                Marker(startTick: 2 * q + e, stopTick: 2 * q + e + s, intensity: 0.55),
-                Marker(startTick: 3 * q,     stopTick: 3 * q + s, intensity: 0.55),
-                Marker(startTick: 3 * q + e, stopTick: 3 * q + e + s, intensity: 0.55),
+                Marker(startTick: 0,     stopTick: s,         intensity: 0.95),  // kick 1
+                Marker(startTick: 2 * q, stopTick: 2 * q + s, intensity: 0.72),  // snare 3
             ],
-            name: "focus_drum_synco_4q"
+            name: "focus_drum_skeleton_4q"
         ),
-        // Sparse groove — every beat a high hit, low on 1 only.
-        // The minimum-viable focus drum atom.
+        // Half-time: kick on 1, snare on beat 3 only, hat on every
+        // quarter. Feels like the bar is twice as long — the
+        // deepest head-nod tempo.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
             markers: [
-                Marker(startTick: 0,     stopTick: s,         intensity: 0.95),
-                Marker(startTick: q,     stopTick: q + s,     intensity: 0.55),
-                Marker(startTick: 2 * q, stopTick: 2 * q + s, intensity: 0.55),
-                Marker(startTick: 3 * q, stopTick: 3 * q + s, intensity: 0.55),
+                Marker(startTick: 0,     stopTick: s,         intensity: 0.95),  // kick 1
+                Marker(startTick: 0,     stopTick: s,         intensity: 0.55),  // hat 1
+                Marker(startTick: q,     stopTick: q + s,     intensity: 0.55),  // hat 2
+                Marker(startTick: 2 * q, stopTick: 2 * q + s, intensity: 0.72),  // snare 3
+                Marker(startTick: 2 * q, stopTick: 2 * q + s, intensity: 0.55),  // hat 3
+                Marker(startTick: 3 * q, stopTick: 3 * q + s, intensity: 0.55),  // hat 4
             ],
-            name: "focus_drum_sparse_4q"
-        ),
-        // EMPTY bar for breath.
-        Atom(
-            sizeQuarters: 4,
-            type: .empty,
-            markers: [],
-            name: "focus_drum_empty_4q"
+            name: "focus_drum_halftime_4q"
         ),
     ]
 

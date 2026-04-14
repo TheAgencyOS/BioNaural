@@ -728,16 +728,17 @@ extension SessionView {
             .overlay(
                 VStack {
                     Spacer()
-                    Text("Tap to peek")
+                    Text("Tap to wake")
                         .font(Theme.Typography.small)
                         .foregroundStyle(Theme.Colors.sleepTint)
                         .opacity(Theme.Opacity.subtle)
                         .padding(.bottom, Theme.Spacing.mega)
                 }
             )
+            .contentShape(Rectangle())
             .onTapGesture { viewModel.revealData() }
             .accessibilityLabel("Screen blanked during sleep mode")
-            .accessibilityHint("Tap to reveal session data")
+            .accessibilityHint("Tap to wake the screen")
     }
 }
 

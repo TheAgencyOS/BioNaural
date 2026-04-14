@@ -115,6 +115,11 @@ final class SessionViewModel {
     /// Whether the sleep-mode screen blanking is active.
     private(set) var isSleepBlanked: Bool = false
 
+    /// Elapsed time at which the last wake tap happened, used to
+    /// gate the sleep-dim timer so a tap keeps the screen on for
+    /// a full auto-dim window before re-blanking.
+    private var lastSleepRevealElapsed: TimeInterval = 0
+
     /// Whether the session has ended (triggers post-session summary).
     private(set) var isSessionComplete: Bool = false
 
@@ -242,15 +247,13 @@ final class SessionViewModel {
         audioEngine.parameters.beatFrequency = clamped
     }
 
-    /// Wakes the display during sleep mode (reveals data for a few seconds).
+    /// Wake the display during sleep mode. Keeps the screen on for
+    /// a full auto-dim window; the tick loop will re-blank once that
+    /// window elapses without another tap.
     func revealData() {
         guard sessionMode == .sleep else { return }
         isSleepBlanked = false
-        DispatchQueue.main.asyncAfter(
-            deadline: .now() + Theme.Animation.Duration.tapToRevealDismiss
-        ) { [weak self] in
-            self?.isSleepBlanked = true
-        }
+        lastSleepRevealElapsed = elapsedTime
     }
 
     // MARK: - Biometric Updates (called by BiometricProcessor)
@@ -335,10 +338,15 @@ final class SessionViewModel {
             updateEnergizePhase()
         }
 
-        // Sleep mode auto-dim.
+        // Sleep mode auto-dim. The screen blanks `sleepAutoDim`
+        // seconds after the session starts, or the same window
+        // after the last wake tap — whichever comes later. A tap
+        // calls revealData() which bumps lastSleepRevealElapsed,
+        // resetting the dim countdown.
         if sessionMode == .sleep {
             let dimThreshold = Theme.Animation.Duration.sleepAutoDim
-            if elapsedTime >= dimThreshold && !isSleepBlanked {
+            let sinceLastReveal = elapsedTime - lastSleepRevealElapsed
+            if sinceLastReveal >= dimThreshold && !isSleepBlanked {
                 isSleepBlanked = true
             }
         }

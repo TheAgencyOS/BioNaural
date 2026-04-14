@@ -579,10 +579,24 @@ public final class AudioEngine: AudioEngineProtocol {
     /// Forward biometric state to real-time generative layers AND
     /// regenerate the v3 MusicPattern with updated Class parameters.
     /// The new pattern crossfades in at the next bar boundary so the
-    /// user hears a musical transition, not a hard cut.
+    /// user hears a musical transition, not a hard cut. Also shifts
+    /// the binaural carrier frequency per biometric state so the
+    /// entrainment tone (if enabled) drifts with arousal.
     public func updateBiometricState(_ state: BiometricState) {
         guard state != currentBiometricState else { return }
         currentBiometricState = state
+
+        // Apply biometric-driven carrier frequency push. The iso
+        // principle says matching-then-leading works better than
+        // abrupt shifts. Sleep and Relax pull the carrier lower
+        // under elevated arousal; Focus holds steady.
+        if let tonality = sessionTonality, let mode = currentMode {
+            parameters.carrierFrequency = biometricAdjustedCarrier(
+                base: tonality.alignedCarrierFrequency,
+                mode: mode,
+                state: state
+            )
+        }
 
         guard let mode = currentMode, let tonality = sessionTonality else { return }
         let phase = SessionArcPlanner.phase(at: currentSessionProgress(), for: mode)
@@ -595,6 +609,40 @@ public final class AudioEngine: AudioEngineProtocol {
             styleMemory: styleMemory
         )
         musicPatternPlayer?.crossfadeTo(pattern: pattern)
+    }
+
+    // MARK: - Biometric carrier adjustment
+
+    /// Apply the iso-principle carrier shift. For Sleep and Relax,
+    /// elevated/peak arousal pushes the carrier down a fraction so
+    /// the binaural tone (when enabled) leads the user toward lower
+    /// frequencies. Focus holds steady — research on cognitive
+    /// performance and tone stability supports fixed frequencies
+    /// for sustained attention.
+    private func biometricAdjustedCarrier(
+        base: Double,
+        mode: FocusMode,
+        state: BiometricState
+    ) -> Double {
+        let multiplier: Double
+        switch mode {
+        case .sleep:
+            switch state {
+            case .calm:     multiplier = 1.00
+            case .focused:  multiplier = 0.98
+            case .elevated: multiplier = 0.94
+            case .peak:     multiplier = 0.90
+            }
+        case .relaxation:
+            switch state {
+            case .calm, .focused: multiplier = 1.00
+            case .elevated:       multiplier = 0.96
+            case .peak:           multiplier = 0.92
+            }
+        case .focus, .energize:
+            multiplier = 1.00
+        }
+        return max(40.0, min(800.0, base * multiplier))
     }
 
     // MARK: - Session Arc Timer
@@ -735,14 +783,17 @@ public final class AudioEngine: AudioEngineProtocol {
             delay.lowPassCutoff = 5500.0
             delay.wetDryMix = 20.0
         case .focus:
-            // Focus is now ambient — use the same lush space as
-            // relaxation. Large hall + slow delay.
-            reverb.loadFactoryPreset(.largeHall)
-            reverb.wetDryMix = 60.0
-            delay.delayTime = 0.30
-            delay.feedback = 32.0
-            delay.lowPassCutoff = 5500.0
-            delay.wetDryMix = 18.0
+            // Focus is trip-hop / lo-fi hip-hop — a tight warm
+            // room with a short slapback delay. NOT a large hall;
+            // real lo-fi sits dry-ish with a lot of tape saturation
+            // character, which we approximate here with a medium
+            // room reverb and a subtle 15ms doubling delay.
+            reverb.loadFactoryPreset(.mediumRoom)
+            reverb.wetDryMix = 30.0
+            delay.delayTime = 0.015           // 15ms chorus-ish doubling
+            delay.feedback = 20.0
+            delay.lowPassCutoff = 7000.0
+            delay.wetDryMix = 22.0
         case .energize:
             // Energize is now hip-hop — a warm medium room, short
             // slapback delay on melody/leads. Kick still dominates.
@@ -769,7 +820,7 @@ public final class AudioEngine: AudioEngineProtocol {
         switch mode {
         case .sleep:      env = Envelope(attack: 118, release: 125, brightness: 30)   // ultra soft pad
         case .relaxation: env = Envelope(attack:  92, release: 110, brightness: 48)   // warm
-        case .focus:      env = Envelope(attack:  96, release: 115, brightness: 42)   // ambient pad
+        case .focus:      env = Envelope(attack:  36, release:  60, brightness: 52)   // warm rhodes / lo-fi
         case .energize:   env = Envelope(attack:  30, release:  55, brightness: 68)   // warm rhodes / hip-hop
         }
         let samplers = [voices.melody.sampler, voices.bass.sampler, voices.drums.sampler]

@@ -128,18 +128,23 @@ public enum ClassLibrary {
     // MARK: - SLEEP (biometric-invariant)
 
     private static func sleepMelody() -> MusicalClass {
+        // Sleep music research (Harmat et al. 2008, Lai & Good 2005,
+        // Dickson & Schubert 2019) converges on: minimal melodic
+        // events, long sustains, slow tempo, no surprise dynamics.
+        // Density pushed to 0.12 so atom selection overwhelmingly
+        // favors rest/drone atoms over any with multiple markers.
         MusicalClass(
             name: "sleep_melody",
             role: .melody,
-            allowedAtomTypes: [.alpha, .empty],   // no syncopation
-            atomicRepetitiveness: .same,           // looping for habituation
+            allowedAtomTypes: [.alpha, .empty],    // no beta/gamma
+            atomicRepetitiveness: .same,
             weirdnessRange: WeirdnessRange(.zero, .safe),
-            density: 0.20,
-            allowedEventTypes: [.note],            // single notes only
-            octaveRange: 2...3,                    // lowered — was 3...5
-            velocityRange: 35...60,
-            allowedAtomSizes: [4],                 // long phrases
-            contour: .descending                   // settle into lower register
+            density: 0.12,                         // research-sparse
+            allowedEventTypes: [.note],
+            octaveRange: 2...3,
+            velocityRange: 30...55,                // quieter too
+            allowedAtomSizes: [4],
+            contour: .descending
         )
     }
 
@@ -176,18 +181,23 @@ public enum ClassLibrary {
     // MARK: - RELAXATION (biometric-invariant)
 
     private static func relaxMelody() -> MusicalClass {
+        // Relaxation research (Pelletier 2004 meta-analysis, Linnemann
+        // et al. 2015) supports slow tempo, sparse melodic density,
+        // and predictable rhythms for parasympathetic response.
+        // Density dropped from 0.40 to 0.25 so phrases have more
+        // breath between events.
         MusicalClass(
             name: "relax_melody",
             role: .melody,
-            allowedAtomTypes: [.alpha, .beta, .empty],
-            atomicRepetitiveness: .none,            // varied phrases
-            weirdnessRange: WeirdnessRange(.zero, .mild),
-            density: 0.40,
-            allowedEventTypes: [.note, .arpeggio],
-            octaveRange: 3...4,                     // lowered — was 3...5
-            velocityRange: 50...75,
-            allowedAtomSizes: [2],
-            contour: .archUpDown                    // breath-like rise and fall
+            allowedAtomTypes: [.alpha, .empty],     // dropped .beta — no syncopation
+            atomicRepetitiveness: .same,            // more looping, fewer surprises
+            weirdnessRange: WeirdnessRange(.zero, .safe),
+            density: 0.25,
+            allowedEventTypes: [.note],             // dropped .arpeggio — too busy
+            octaveRange: 3...4,
+            velocityRange: 45...68,
+            allowedAtomSizes: [2, 4],
+            contour: .archUpDown
         )
     }
 
@@ -221,18 +231,19 @@ public enum ClassLibrary {
         )
     }
 
-    // MARK: - FOCUS (trancey + rhythmic)
+    // MARK: - FOCUS (slow trip-hop / lo-fi hip-hop)
 
-    /// Focus melody: hypnotic minimal. Repeating sustained notes
-    /// with slow contour motion — one Rhodes or pad voice holding
-    /// drone-like tones over the chord drone.
+    /// Focus melody: sparse and unobtrusive. Long rests between
+    /// notes, low density across all biometric states. Real lo-fi
+    /// beats put most of the melodic weight in the chord comping
+    /// and leave the melody as occasional punctuation.
     private static func focusMelody(_ state: BiometricState) -> MusicalClass {
         let density: Double
         switch state {
-        case .calm:     density = 0.32
-        case .focused:  density = 0.38
-        case .elevated: density = 0.28
-        case .peak:     density = 0.24
+        case .calm:     density = 0.22
+        case .focused:  density = 0.26
+        case .elevated: density = 0.20   // calm them via sparser melody
+        case .peak:     density = 0.16
         }
         return MusicalClass(
             name: "focus_melody_\(state)",
@@ -242,33 +253,34 @@ public enum ClassLibrary {
             weirdnessRange: WeirdnessRange(.zero, .mild),
             density: density,
             allowedEventTypes: [.note],
-            octaveRange: 3...4,                     // lowered — was 4...5
-            velocityRange: 45...72,
+            octaveRange: 3...4,
+            velocityRange: 45...70,
             allowedAtomSizes: [2, 4],
             contour: .archUpDown
         )
     }
 
-    /// Focus bass: pulsing root notes — the trance heartbeat.
-    /// Repeats relentlessly. Density higher than the old ambient
-    /// focus bass because the pulse IS the focus.
+    /// Focus bass: walking upright bass. Quarter notes on 1, 3
+    /// mostly, with occasional passing tones on the "ands". Not a
+    /// pulsing drone — it grooves with the drums.
     private static func focusBass() -> MusicalClass {
         MusicalClass(
             name: "focus_bass",
             role: .bass,
-            allowedAtomTypes: [.alpha, .beta],
+            allowedAtomTypes: [.alpha],
             atomicRepetitiveness: .same,
-            weirdnessRange: WeirdnessRange(.zero),
-            density: 0.55,
+            weirdnessRange: WeirdnessRange(.zero, .safe),
+            density: 0.40,
             allowedEventTypes: [.note],
             octaveRange: 1...2,
-            velocityRange: 55...80,
+            velocityRange: 55...78,
             allowedAtomSizes: [4]
         )
     }
 
-    /// Focus chords: sustained drone. One or two chord voicings per
-    /// bar, held out to create the hypnotic harmonic bed.
+    /// Focus chords: sparse rhodes comping. One or two chord hits
+    /// per bar — enough to state the harmony without filling the
+    /// mix. Most lo-fi tracks don't sustain pads, they comp.
     private static func focusChords() -> MusicalClass {
         MusicalClass(
             name: "focus_chords",
@@ -276,7 +288,7 @@ public enum ClassLibrary {
             allowedAtomTypes: [.alpha],
             atomicRepetitiveness: .same,
             weirdnessRange: WeirdnessRange(.zero, .safe),
-            density: 0.35,
+            density: 0.30,
             allowedEventTypes: [.chord],
             octaveRange: 3...4,
             velocityRange: 45...68,

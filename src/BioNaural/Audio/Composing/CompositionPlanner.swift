@@ -114,12 +114,60 @@ public enum CompositionPlanner {
             tracks.append((rp: rp, musicalClass: mclass, gmProgram: gmProgram))
         }
 
+        // Biometric-driven tempo modulation. Sleep and Relax music
+        // research (Pelletier 2004; Dickson & Schubert 2019) supports
+        // the "iso principle" — match the user's current arousal,
+        // then slow the music to pull them down. Implemented as a
+        // small BPM offset applied per biometric state at
+        // regeneration time. Focus keeps its tempo stable for
+        // habituation.
+        let biometricTempoDelta = biometricTempoAdjustment(
+            for: mode,
+            state: biometricState
+        )
+        let adjustedTempo = max(30.0, min(180.0, tonality.tempo + biometricTempoDelta))
+
         return CompositionPlan(
-            tempoBPM: tonality.tempo,
+            tempoBPM: adjustedTempo,
             loopLengthTicks: loopLengthTicks,
             harmonicContext: hc,
             tracks: tracks
         )
+    }
+
+    /// Per-mode biometric tempo offset in BPM. Applied on top of
+    /// the seed's session tempo at MusicPattern build time.
+    /// Research basis: the iso principle (Altshuler, via Pelletier
+    /// 2004 meta-analysis on music and stress reduction) says
+    /// matching-then-leading works better than immediate
+    /// deceleration for parasympathetic engagement.
+    private static func biometricTempoAdjustment(
+        for mode: FocusMode,
+        state: BiometricState
+    ) -> Double {
+        switch mode {
+        case .sleep:
+            switch state {
+            case .calm:     return 0.0
+            case .focused:  return -1.0
+            case .elevated: return -3.0   // slow down to pull them down
+            case .peak:     return -5.0
+            }
+        case .relaxation:
+            switch state {
+            case .calm:     return 0.0
+            case .focused:  return 0.0
+            case .elevated: return -2.0
+            case .peak:     return -4.0
+            }
+        case .focus:
+            // Focus holds tempo stable for habituation — the
+            // research on lo-fi study beats (Ribeiro et al. 2019)
+            // supports a steady pulse over an adaptive one.
+            return 0.0
+        case .energize:
+            return 0.0
+        }
     }
 
     /// Convenience: run the full pipeline to produce a MusicPattern.
