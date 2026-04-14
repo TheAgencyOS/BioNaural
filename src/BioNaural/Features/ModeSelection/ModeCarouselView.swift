@@ -29,7 +29,7 @@ struct ModeCarouselView: View {
     @State private var dragOffset: CGFloat = 0
     @State private var isDragging = false
 
-    private let modes: [FocusMode] = [.focus, .relaxation, .sleep, .energize]
+    private let modes: [FocusMode] = [.focus, .relaxation, .sleep]
     private let cardSpacing: CGFloat = Theme.Spacing.lg
 
     /// Total card count: recommendation (if present) + 4 mode cards.

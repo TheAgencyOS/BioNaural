@@ -163,7 +163,8 @@ public enum PatternBuilder {
         tracks: [(rp: RealPattern, musicalClass: MusicalClass, gmProgram: UInt8)],
         harmonicContext: HarmonicContext,
         tempoBPM: Double,
-        loopLengthTicks: Int
+        loopLengthTicks: Int,
+        drumKit: DrumKit = .sparseKit
     ) -> MusicPattern {
         var mpTracks: [MPTrack] = []
 
@@ -203,7 +204,8 @@ public enum PatternBuilder {
                         type: rpNote.type,
                         velocity: rpNote.velocity,
                         hc: hcEntry,
-                        octave: octave
+                        octave: octave,
+                        drumKit: drumKit
                     )
 
                     // Voice-leading: if this melodic note is more than

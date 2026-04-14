@@ -58,10 +58,9 @@ struct ComposerView: View {
             isPresented: $showModePicker,
             titleVisibility: .visible
         ) {
-            Button("Sleep")       { createDefaultComposition(mode: .sleep) }
-            Button("Relaxation")  { createDefaultComposition(mode: .relaxation) }
-            Button("Focus")       { createDefaultComposition(mode: .focus) }
-            Button("Energize")    { createDefaultComposition(mode: .energize) }
+            Button("Sleep") { createDefaultComposition(mode: .sleep) }
+            Button("Relax") { createDefaultComposition(mode: .relaxation) }
+            Button("Focus") { createDefaultComposition(mode: .focus) }
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("Pick a mode — the rest uses defaults you can adjust in Mix Levels later.")
@@ -220,9 +219,9 @@ struct ComposerView: View {
     private func defaultName(for mode: FocusMode) -> String {
         switch mode {
         case .sleep:      return "Sleep"
-        case .relaxation: return "Relaxation"
+        case .relaxation: return "Relax"
         case .focus:      return "Focus"
-        case .energize:   return "Energize"
+        case .energize:   return "Focus"   // legacy — energize hidden from UI
         }
     }
 
@@ -231,7 +230,7 @@ struct ComposerView: View {
         case .sleep:      return "rain-texture-60s"
         case .relaxation: return "ocean-waves-60s"
         case .focus:      return "pink-noise-60s"
-        case .energize:   return "brown-noise-60s"
+        case .energize:   return "pink-noise-60s"
         }
     }
 

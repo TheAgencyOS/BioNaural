@@ -20,6 +20,22 @@ import BioNauralShared
 import Foundation
 @preconcurrency import Tonic
 
+// MARK: - DrumKit
+
+/// Percussion character for a focus session. The seed picks one at
+/// session start; the WeirdnessResolver translates drum-atom marker
+/// intensities into kit-appropriate MIDI notes at resolve time.
+///
+/// - sparseKit: kick + snare + hat + sidestick, very restrained, no fills
+/// - congas: low/mid/high conga + shaker, head-nod Latin feel
+/// - tabla: low floor tom (bayan) + low/mid tom + timbale (tabla slap),
+///          trance-drone companion
+public enum DrumKit: String, Sendable, Hashable, CaseIterable {
+    case sparseKit
+    case congas
+    case tabla
+}
+
 // MARK: - CompositionSeed
 
 public struct CompositionSeed: Sendable, Hashable {
@@ -51,6 +67,10 @@ public struct CompositionSeed: Sendable, Hashable {
     /// ~40 = light swing, ~80 = hard shuffle.
     public let swingTicks: Int
 
+    /// Percussion kit for focus sessions. Nil for modes that don't
+    /// carry drums (sleep, relaxation) or for a future custom mode.
+    public let drumKit: DrumKit?
+
     // MARK: - Generation
 
     /// Build a fresh random seed for the given mode using `generator`
@@ -74,6 +94,9 @@ public struct CompositionSeed: Sendable, Hashable {
         let tempoRange = tempoOffsetRange(for: mode)
         let tempoOffset = Double.random(in: tempoRange, using: &generator)
         let swing = swingTicks(for: mode)
+        let drumKit: DrumKit? = (mode == .focus)
+            ? DrumKit.allCases[Int.random(in: 0..<DrumKit.allCases.count, using: &generator)]
+            : nil
 
         return CompositionSeed(
             mode: mode,
@@ -82,7 +105,8 @@ public struct CompositionSeed: Sendable, Hashable {
             gmPrograms: programs,
             progressionVariant: variant,
             tempoOffsetBPM: tempoOffset,
-            swingTicks: swing
+            swingTicks: swing,
+            drumKit: drumKit
         )
     }
 
@@ -95,11 +119,12 @@ public struct CompositionSeed: Sendable, Hashable {
         case .sleep:       return -4.0 ... 2.0
         // Relaxation: ambient sits 55-70 BPM — default is 60, ±5.
         case .relaxation:  return -5.0 ... 5.0
-        // Focus: now ambient, not lo-fi. Default tempo is 72 but we
-        // want it slower for a drifting pad feel — drop into 60-72.
-        case .focus:       return -12.0 ... 0.0
-        // Energize: hip-hop sits 85-100 BPM. Default is 120 so drop
-        // substantially — we want that head-nod tempo, not dance floor.
+        // Focus: trancey + rhythmic. Default is 72 so +8..+28 puts
+        // sessions at 80-100 BPM — downtempo trance / ambient techno
+        // pulse that's still slow enough for long sessions.
+        case .focus:       return 8.0 ... 28.0
+        // Energize: legacy mode, hidden from UI. Kept for data
+        // compatibility but no user path currently selects it.
         case .energize:    return -32.0 ... -18.0
         }
     }
@@ -110,9 +135,12 @@ public struct CompositionSeed: Sendable, Hashable {
     public static func swingTicks(for mode: FocusMode) -> Int {
         switch mode {
         case .sleep:       return 0
-        case .relaxation:  return 0    // ambient is rubato, no swing
-        case .focus:       return 0    // ambient — pads don't swing
-        case .energize:    return 48   // hip-hop / boom-bap drag
+        case .relaxation:  return 0
+        // Focus: trance / minimalist techno is machine-straight.
+        // The groove variety comes from the drum kit + atom choice,
+        // not swing.
+        case .focus:       return 0
+        case .energize:    return 48
         }
     }
 
@@ -145,9 +173,10 @@ public struct CompositionSeed: Sendable, Hashable {
         case .sleep:       return [.pentatonicMinor, .lydian, .minor]
         // Relaxation: floating modal palette.
         case .relaxation:  return [.lydian, .dorian, .major, .pentatonicMajor, .mixolydian]
-        // Focus: now an ambient mode — same palette as relaxation so
-        // sessions feel like drifting pads, not lo-fi beats.
-        case .focus:       return [.lydian, .dorian, .major, .pentatonicMajor, .mixolydian]
+        // Focus: trancey + rhythmic. Minor-leaning modal palette
+        // (dorian, natural minor, pentatonicMinor) — hypnotic, dark,
+        // motion-oriented.
+        case .focus:       return [.dorian, .minor, .pentatonicMinor, .dorian, .minor]
         // Energize: hip-hop / boom-bap territory — overwhelmingly
         // minor (minor 7 / min9 flavors) with a bit of dorian colour.
         case .energize:    return [.minor, .dorian, .minor, .dorian, .pentatonicMinor]
@@ -192,15 +221,16 @@ public struct CompositionSeed: Sendable, Hashable {
         case (.relaxation, .texture): return [97, 94]
         case (.relaxation, .drums):   return nil
 
-        // MARK: Focus — ambient palette (was lo-fi hip-hop, reframed).
-        // Pads, choir, harp, warm pad, halo pad — no pianos/rhodes.
-        // Focus sessions now drift like sleep/relaxation instead of
-        // sitting on study beats.
-        case (.focus, .melody):  return [88, 89, 91, 94, 52, 46]        // pads + choir + harp
-        case (.focus, .bass):    return [89, 88, 42]                    // warm pad + cello
-        case (.focus, .chords):  return [48, 49, 52, 89, 88]            // strings + choir + pads
-        case (.focus, .drums):   return nil                             // ambient has no drums
-        case (.focus, .pad):     return [88, 89, 91, 94]
+        // MARK: Focus — trancey + rhythmic palette.
+        // Warm electric piano / rhodes / pads for the hypnotic
+        // melodic voice; synth bass for a sub pulse; pad + strings
+        // for the chord drone. Drums use a dedicated kit picked by
+        // CompositionSeed.drumKit (sparse kit / congas / tabla).
+        case (.focus, .melody):  return [4, 89, 11, 88, 5, 94]          // rhodes, warm pad, vibes, new-age pad, DX, halo
+        case (.focus, .bass):    return [38, 39, 89, 42]                // synth bass 1/2, warm pad, cello
+        case (.focus, .chords):  return [89, 88, 48, 94]                // warm + new-age + strings + halo
+        case (.focus, .drums):   return [0]                             // percussion bank — kit comes from seed.drumKit
+        case (.focus, .pad):     return [89, 88, 94]
         case (.focus, .texture): return [97, 94, 91]
 
         // MARK: Energize — hip-hop palette (was synthwave, reframed).
