@@ -201,59 +201,64 @@ public enum CompositionPlanner {
                 ]
             }
 
-        // MARK: Relaxation — gentle, slowly pulsing motion
+        // MARK: Relaxation — gentle motion built on extended chords.
+        // Ambient and new-age live on maj7 / m7 / sus2 voicings — pure
+        // triads sound empty in this register. These progressions
+        // favor modal motion and long sustains.
         case .relaxation:
             if minorScale {
                 return [
-                    // i - ♭VI - iv - ♭VII x2
-                    [(0,.minor),(8,.major),(5,.minor),(10,.major),
-                     (0,.minor),(8,.major),(5,.minor),(10,.major)],
-                    // i - v - ♭VI - ♭VII (Andalusian softened)
-                    [(0,.minor),(7,.minor),(8,.major),(10,.major),
-                     (0,.minor),(7,.minor),(8,.major),(10,.major)],
-                    // dorian: i - IV - i - ♭VII
-                    [(0,.minor),(5,.major),(0,.minor),(10,.major),
-                     (0,.minor),(5,.major),(0,.minor),(10,.major)],
+                    // dorian vamp: i7 - IV (i7 dorian → bright IV)
+                    [(0,.minor7),(5,.major7),(0,.minor7),(5,.major7),
+                     (0,.minor7),(5,.major7),(0,.minor7),(5,.major7)],
+                    // i9 - ♭VImaj7 - iv9 - ♭VIImaj7
+                    [(0,.minor9),(8,.major7),(5,.minor9),(10,.major7),
+                     (0,.minor9),(8,.major7),(5,.minor9),(10,.major7)],
+                    // im7 - v7 - ♭VImaj7 - iv7 (ECM-style)
+                    [(0,.minor7),(7,.minor7),(8,.major7),(5,.minor7),
+                     (0,.minor7),(7,.minor7),(8,.major7),(5,.minor7)],
                 ]
             } else {
                 return [
-                    // I - vi - IV - V (classic)
-                    [(0,.major),(9,.minor),(5,.major),(7,.major),
-                     (0,.major),(9,.minor),(5,.major),(7,.major)],
-                    // I - iii - IV - V (soft)
-                    [(0,.major),(4,.minor),(5,.major),(7,.major),
-                     (0,.major),(4,.minor),(5,.major),(7,.major)],
-                    // I - IV - vi - V (lydian-friendly)
-                    [(0,.major),(5,.major),(9,.minor),(7,.major),
-                     (0,.major),(5,.major),(9,.minor),(7,.major)],
+                    // Imaj7 - vi7 - IVmaj7 - V7 (classic soft jazz)
+                    [(0,.major7),(9,.minor7),(5,.major7),(7,.dominant7),
+                     (0,.major7),(9,.minor7),(5,.major7),(7,.dominant7)],
+                    // Imaj9 - iii7 - IVmaj7 - V7 (lush)
+                    [(0,.major9),(4,.minor7),(5,.major7),(7,.dominant7),
+                     (0,.major9),(4,.minor7),(5,.major7),(7,.dominant7)],
+                    // Isus2 - IVmaj7 - vi7 - Vsus4 (lydian float)
+                    [(0,.sus2),(5,.major7),(9,.minor7),(7,.sus4),
+                     (0,.sus2),(5,.major7),(9,.minor7),(7,.sus4)],
                 ]
             }
 
-        // MARK: Focus — steady, predictable, lo-fi rotations
+        // MARK: Focus — lo-fi hip-hop rotations built on 7th and 9th
+        // chords. Real lo-fi sits on min7 / m9 / maj7 voicings for its
+        // dusty, dreamy character. Plain triads sound too clean.
         case .focus:
             if minorScale {
                 return [
-                    // i - ♭VII - ♭VI - ♭VII x2
-                    [(0,.minor),(10,.major),(8,.major),(10,.major),
-                     (0,.minor),(10,.major),(8,.major),(10,.major)],
-                    // ii - v - i - ♭VII (jazz-tinged)
-                    [(2,.minor),(7,.minor),(0,.minor),(10,.major),
-                     (2,.minor),(7,.minor),(0,.minor),(10,.major)],
-                    // i - iv - v - i (plaintive)
-                    [(0,.minor),(5,.minor),(7,.minor),(0,.minor),
-                     (0,.minor),(5,.minor),(7,.minor),(0,.minor)],
+                    // im9 - ♭VIImaj7 - ♭VImaj7 - v7 (Nujabes-style)
+                    [(0,.minor9),(10,.major7),(8,.major7),(7,.minor7),
+                     (0,.minor9),(10,.major7),(8,.major7),(7,.minor7)],
+                    // ii7 - V7 - im7 - ♭VIImaj7 (jazz 2-5-1 minor)
+                    [(2,.minor7),(7,.dominant7),(0,.minor7),(10,.major7),
+                     (2,.minor7),(7,.dominant7),(0,.minor7),(10,.major7)],
+                    // im7 - iv7 - ♭VIImaj7 - ♭IIImaj7 (moody loop)
+                    [(0,.minor7),(5,.minor7),(10,.major7),(3,.major7),
+                     (0,.minor7),(5,.minor7),(10,.major7),(3,.major7)],
                 ]
             } else {
                 return [
-                    // I - V - vi - IV (four-chord loop)
-                    [(0,.major),(7,.major),(9,.minor),(5,.major),
-                     (0,.major),(7,.major),(9,.minor),(5,.major)],
-                    // vi - IV - I - V
-                    [(9,.minor),(5,.major),(0,.major),(7,.major),
-                     (9,.minor),(5,.major),(0,.major),(7,.major)],
-                    // ii - V - I - vi (jazz 2-5-1)
-                    [(2,.minor),(7,.major),(0,.major),(9,.minor),
-                     (2,.minor),(7,.major),(0,.major),(9,.minor)],
+                    // Imaj7 - vi7 - ii7 - V7 (jazz-standard turnaround)
+                    [(0,.major7),(9,.minor7),(2,.minor7),(7,.dominant7),
+                     (0,.major7),(9,.minor7),(2,.minor7),(7,.dominant7)],
+                    // Imaj9 - IVmaj7 - iii7 - vi7 (dreamy)
+                    [(0,.major9),(5,.major7),(4,.minor7),(9,.minor7),
+                     (0,.major9),(5,.major7),(4,.minor7),(9,.minor7)],
+                    // vi9 - ii7 - V7 - Imaj7 (classic jazz resolve)
+                    [(9,.minor9),(2,.minor7),(7,.dominant7),(0,.major7),
+                     (9,.minor9),(2,.minor7),(7,.dominant7),(0,.major7)],
                 ]
             }
 
