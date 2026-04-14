@@ -133,6 +133,12 @@ public enum ClassLibrary {
         // events, long sustains, slow tempo, no surprise dynamics.
         // Density pushed to 0.12 so atom selection overwhelmingly
         // favors rest/drone atoms over any with multiple markers.
+        //
+        // Octave range raised from 2...3 to 3...4 — the old range
+        // (C2-C3, 65-130 Hz) put sleep melodies in bass territory.
+        // Research supports a mid-low register (C3-C4, 130-260 Hz)
+        // for sleep induction; the descending contour still pulls
+        // phrases toward the bottom of the range.
         MusicalClass(
             name: "sleep_melody",
             role: .melody,
@@ -141,8 +147,8 @@ public enum ClassLibrary {
             weirdnessRange: WeirdnessRange(.zero, .safe),
             density: 0.12,                         // research-sparse
             allowedEventTypes: [.note],
-            octaveRange: 2...3,
-            velocityRange: 30...55,                // quieter too
+            octaveRange: 3...4,
+            velocityRange: 30...55,
             allowedAtomSizes: [4],
             contour: .descending
         )
