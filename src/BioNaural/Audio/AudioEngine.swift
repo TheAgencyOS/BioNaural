@@ -54,6 +54,15 @@ public final class AudioEngine: AudioEngineProtocol {
     public private(set) var bassLine: BassLineGenerator?
     public private(set) var drums: DrumPatternGenerator?
 
+    /// v3 NWL composing-core player. Runs a pre-built Standard MIDI File
+    /// through AVAudioSequencer on the audio thread. Replaces
+    /// GenerativeMIDIEngine / BassLineGenerator / DrumPatternGenerator.
+    public private(set) var musicPatternPlayer: MusicPatternPlayer?
+
+    /// Most recent biometric state — used to regenerate the MusicPattern
+    /// when biometrics change mid-session.
+    private var currentBiometricState: BiometricState = .calm
+
     /// Synthesised sub-bass oscillator (energize mode only).
     /// Adds physical low-end (30-80 Hz) that SoundFont samples can't produce.
     private var subBassNode: AVAudioSourceNode?
@@ -246,14 +255,10 @@ public final class AudioEngine: AudioEngineProtocol {
         // Start ambient layer with mode-appropriate default soundscape.
         startAmbienceLayer(for: mode)
 
-        // v2: Real-time generative MIDI is the PRIMARY music path.
-        // GenerativeMIDIEngine produces melody notes in real-time with
-        // voice leading, phrase structure, and biometric-responsive density.
-        // BassLineGenerator and DrumPatternGenerator provide rhythm section.
-        // MIDISequencePlayer is kept as infrastructure but not the default.
-        startGenerativeLayer(for: mode)
-        startBassLine(tonality: tonality)
-        startDrumPattern(tonality: tonality)
+        // v3 NWL composing core: pre-compute a complete MusicPattern and
+        // let AVAudioSequencer loop it sample-accurately on the audio
+        // thread. No DispatchSourceTimer, no per-tick scheduling.
+        startMusicPatternLayer(for: mode, tonality: tonality)
 
         // Start volume sync so user slider changes reach player nodes.
         startVolumeSyncTimer()
@@ -373,6 +378,49 @@ public final class AudioEngine: AudioEngineProtocol {
         drums?.start(tonality: tonality)
     }
 
+    // MARK: - v3 Music Pattern Layer
+
+    /// Build and play a complete MusicPattern for the given mode + tonality.
+    /// Runs CompositionPlanner → PatternBuilder → MIDIFileBuilder → AVAudioSequencer.
+    private func startMusicPatternLayer(for mode: FocusMode, tonality: SessionTonality) {
+        guard let sf2URL = Bundle.main.url(
+            forResource: Theme.SF2.resourceName,
+            withExtension: Theme.SF2.resourceExtension
+        ) else {
+            Logger.audio.error("v3: SoundFont missing — music pattern layer disabled")
+            return
+        }
+        guard let mv = multiVoice else {
+            Logger.audio.error("v3: MultiVoiceRenderer not available")
+            return
+        }
+
+        // Configure the multi-voice samplers with mode-appropriate presets.
+        // MusicPatternPlayer routes AVAudioSequencer tracks into these samplers.
+        do {
+            try mv.setup(sf2URL: sf2URL, mode: mode)
+        } catch {
+            Logger.audio.error("v3: MultiVoiceRenderer setup failed: \(error.localizedDescription)")
+            return
+        }
+
+        let pattern = CompositionPlanner.buildMusicPattern(
+            mode: mode,
+            biometricState: currentBiometricState,
+            tonality: tonality
+        )
+
+        let player = musicPatternPlayer ?? MusicPatternPlayer(engine: engine, voices: mv)
+        self.musicPatternPlayer = player
+
+        do {
+            try player.play(pattern: pattern)
+            Logger.audio.info("v3: MusicPatternPlayer started (\(mode.rawValue), \(pattern.tracks.count) tracks)")
+        } catch {
+            Logger.audio.error("v3: MusicPatternPlayer failed to start: \(error.localizedDescription)")
+        }
+    }
+
     public func stop() {
         // Set amplitude to zero — the render callback's per-sample smoothing
         // (5ms time constant) creates an audible fade-out ramp. isPlaying
@@ -384,6 +432,7 @@ public final class AudioEngine: AudioEngineProtocol {
         // Stop volume sync and audio layers gracefully.
         stopVolumeSyncTimer()
         sequencePlayer?.stop()
+        musicPatternPlayer?.stop()
         drums?.stop()
         bassLine?.stop()
         generativeMIDI?.stop()
@@ -438,11 +487,26 @@ public final class AudioEngine: AudioEngineProtocol {
         ambienceLayer?.crossfadeTo(bedName: bedName)
     }
 
-    /// Forward biometric state to real-time generative layers.
-    /// Drives melody density/register, drum intensity, and volume mixing.
+    /// Forward biometric state to real-time generative layers AND
+    /// regenerate the v3 MusicPattern with updated Class parameters.
+    /// Phase 8 will add bar-boundary crossfade; Phase 6 just does a
+    /// straight swap.
     public func updateBiometricState(_ state: BiometricState) {
+        currentBiometricState = state
         generativeMIDI?.updateBiometricState(state)
         drums?.updateBiometricState(state)
+
+        guard let mode = currentMode, let tonality = sessionTonality else { return }
+        let pattern = CompositionPlanner.buildMusicPattern(
+            mode: mode,
+            biometricState: state,
+            tonality: tonality
+        )
+        do {
+            try musicPatternPlayer?.play(pattern: pattern)
+        } catch {
+            Logger.audio.error("v3: regenerate on biometric change failed: \(error.localizedDescription)")
+        }
     }
 
     // MARK: - Stem Pack Loading
