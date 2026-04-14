@@ -316,9 +316,12 @@ public enum PatternBuilder {
     }
 
     /// Build the appropriate VPEvent for the given class + marker info.
-    /// Phase 4 keeps it simple: chord tracks emit `.chord`, drum tracks
-    /// emit `.note(.rhythmic)`, everything else emits `.note(.mixed)` or
-    /// `.note(.comp)` based on role.
+    /// Chord tracks emit `.chord`, drum tracks emit `.note(.rhythmic)`,
+    /// everything else emits `.note(.mixed)` or `.note(.comp)` based on
+    /// role. Melodic and solo notes vary weirdness deterministically
+    /// across the marker position within the bar so the melody line
+    /// actually moves through scale tones instead of repeating a
+    /// single pitch.
     private static func makeEvent(
         musicalClass: MusicalClass,
         position: Int,
@@ -338,7 +341,10 @@ public enum PatternBuilder {
             )
         }
 
-        let weirdness = musicalClass.weirdnessRange.lower
+        let weirdness = melodicWeirdness(
+            for: musicalClass,
+            position: position
+        )
         return .note(
             weirdness: weirdness,
             position: position,
@@ -346,6 +352,43 @@ public enum PatternBuilder {
             velocity: velocity,
             type: noteType(for: musicalClass.role)
         )
+    }
+
+    /// Deterministic per-position weirdness value for a melodic note.
+    /// Previously every melody note got `weirdnessRange.lower`, which
+    /// collapsed the melody to a single repeating pitch. Now we walk
+    /// a fixed sequence of weirdness values spanning the class's
+    /// allowed range, keyed by the marker's tick position modulo the
+    /// sequence length so the same bar always plays the same melodic
+    /// shape. Drums and bass keep their stable root resolution via
+    /// other code paths — this only affects melody/pad/texture.
+    private static func melodicWeirdness(
+        for musicalClass: MusicalClass,
+        position: Int
+    ) -> Weirdness {
+        switch musicalClass.role {
+        case .melody, .pad, .texture:
+            // Walk a stepped sequence inside the class's range so the
+            // melody picks different scale / chord tones across
+            // positions. 6-step scan covers root → 5th → 3rd → 7th →
+            // 2nd → back to root territory in the safety-ordered
+            // resolver tables. The step is chosen by the marker's
+            // sixteenth-note index in the bar, so bar structure
+            // maps directly to pitch shape.
+            let lower = musicalClass.weirdnessRange.lower.value
+            let upper = musicalClass.weirdnessRange.upper.value
+            let span = max(0.0, upper - lower)
+            guard span > 0.0001 else { return musicalClass.weirdnessRange.lower }
+            let steps: [Double] = [0.00, 0.25, 0.55, 0.15, 0.80, 0.40, 0.05, 0.65]
+            let sixteenthIndex = (position / (Composing.ticksPerQuarter / 4))
+            let stepIdx = ((sixteenthIndex % steps.count) + steps.count) % steps.count
+            let t = steps[stepIdx]
+            return Weirdness(lower + span * t)
+        default:
+            // Bass, chords, drums, etc. stay at the safest tone —
+            // the existing behavior.
+            return musicalClass.weirdnessRange.lower
+        }
     }
 
     /// Map a track role to the appropriate NoteType for pitch resolution.

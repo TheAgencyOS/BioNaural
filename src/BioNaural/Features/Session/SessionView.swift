@@ -906,9 +906,10 @@ extension SessionView {
 
     fileprivate var mixLevelsSheet: some View {
         NavigationStack {
-            VStack(spacing: Theme.Spacing.xl) {
-                Spacer()
-                    .frame(height: Theme.Spacing.md)
+            ScrollView {
+                VStack(spacing: Theme.Spacing.xl) {
+                    Spacer()
+                        .frame(height: Theme.Spacing.md)
 
                 mixSlider(
                     label: "Binaural",
@@ -960,15 +961,17 @@ extension SessionView {
                     )
                 }
 
-                // Reshuffle row — MadPlayer-style per-role
-                // regeneration. Each button rolls a new atom + new
-                // instrument for one track and crossfades it in at
-                // the next bar boundary.
-                reshuffleRow(modeAllowsRhythm: modeAllowsRhythm)
+                    // Reshuffle row — MadPlayer-style per-role
+                    // regeneration. Each button rolls a new atom +
+                    // instrument for one track and crossfades it in
+                    // at the next bar boundary.
+                    reshuffleRow(modeAllowsRhythm: modeAllowsRhythm)
 
-                Spacer()
+                    Spacer()
+                        .frame(height: Theme.Spacing.xl)
+                }
+                .padding(.horizontal, Theme.Spacing.pageMargin)
             }
-            .padding(.horizontal, Theme.Spacing.pageMargin)
             .background(Theme.Colors.canvas.ignoresSafeArea())
             .navigationTitle("Mix Levels")
             .navigationBarTitleDisplayMode(.inline)
@@ -977,7 +980,7 @@ extension SessionView {
                     Button("Done") { showMixLevels = false }
                 }
             }
-            .presentationDetents([.medium])
+            .presentationDetents([.large])
             .presentationDragIndicator(.visible)
         }
     }
