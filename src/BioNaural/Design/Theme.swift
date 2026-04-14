@@ -1038,10 +1038,14 @@ extension Theme {
             /// SessionTonality.alignedCarrierFrequency so the tone
             /// stays consonant with the current music.
             static let binauralVolume: Double = 0.0
-            /// Ambient texture bed (rain, noise, wind).
-            static let ambientVolume: Double = 0.20
+            /// Ambient texture bed (rain, noise, wind). Lowered from
+            /// 0.20 to 0.10 per listening feedback — the texture bed
+            /// was overpowering the melodic voices.
+            static let ambientVolume: Double = 0.10
             /// Melodic content layer (pads, piano, MIDI sequences).
-            static let melodicVolume: Double = 0.79
+            /// Raised from 0.79 to 0.95 so the actual music sits
+            /// clearly above the ambient bed.
+            static let melodicVolume: Double = 0.95
         }
 
         // MARK: - Loop Crossfade

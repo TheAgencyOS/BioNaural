@@ -147,22 +147,23 @@ public final class MultiVoiceRenderer {
         // Load bass voice (GM 38 = Synth Bass 1)
         if Theme.ModeInstrumentation.allowsRhythmStem(for: mode) {
             try loadVoice(bass, preset: Theme.SF2.PresetIndex.bass, sf2URL: sf2URL)
-            bass.submixer.volume = 0.55
+            bass.submixer.volume = 0.85
         } else {
             bass.submixer.volume = 0.0
         }
 
-        // Load drums voice (GM 0, but we'll use drum-range notes 35-81)
-        // For GM drum sounds, we load bank 128 (percussion)
+        // Load drums voice (GM 0, drum-range notes 35-81)
         if Theme.ModeInstrumentation.allowsRhythmStem(for: mode) {
             try loadDrumVoice(drums, sf2URL: sf2URL)
-            drums.submixer.volume = mode == .focus ? 0.25 : 0.50
+            drums.submixer.volume = mode == .focus ? 0.70 : 0.75
         } else {
             drums.submixer.volume = 0.0
         }
 
-        // Set initial volumes
-        melody.submixer.volume = 0.65
+        // Initial melodic voice volume — the syncVolumes timer
+        // overwrites this every ~100ms so the value here is only the
+        // first-frame fallback before the timer kicks in.
+        melody.submixer.volume = 0.95
         masterSubmixer.volume = 1.0
 
         Self.logger.info("MultiVoiceRenderer ready — melody:\(melodyPreset), bass:\(Theme.SF2.PresetIndex.bass), drums:bank128 for \(mode.rawValue)")
@@ -212,10 +213,11 @@ public final class MultiVoiceRenderer {
 
     // MARK: - Volume Control
 
-    /// Update per-voice volumes from AudioParameters.
-    /// Called from the volume sync timer (10Hz).
+    /// Update per-voice volumes from AudioParameters. The melodic
+    /// voice gets no extra attenuation anymore — the old 0.65
+    /// multiplier buried the music under the ambient bed.
     public func syncVolumes(parameters: AudioParameters) {
-        melody.submixer.volume = Float(parameters.melodicVolume) * 0.65
+        melody.submixer.volume = Float(parameters.melodicVolume)
         bass.submixer.volume = Float(parameters.bassVolume)
         drums.submixer.volume = Float(parameters.drumsVolume)
     }
