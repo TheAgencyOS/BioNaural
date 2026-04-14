@@ -129,6 +129,14 @@ public final class AudioEngine: AudioEngineProtocol {
     /// Delay unit on the music path — adds short stereo echoes on top
     /// of the reverb for relaxation and sleep. Configured per mode.
     private var musicDelay: AVAudioUnitDelay?
+
+    /// Classic shimmer reverb effect: MultiVoice output is split
+    /// in parallel to a pitch-shifted (+12 semitones) cathedral
+    /// reverb, creating an octave-up ghost trailing every note.
+    /// Sleep and Relax send heavily to this bus; Focus is bypassed.
+    private var shimmerPitch: AVAudioUnitTimePitch?
+    private var shimmerReverb: AVAudioUnitReverb?
+    private var shimmerBus: AVAudioMixerNode?
     private var isSetUp = false
 
     /// Tracks the current mode for reconfiguration recovery.
@@ -830,42 +838,42 @@ public final class AudioEngine: AudioEngineProtocol {
     /// worth the trade.
     private func applyMusicFX(for mode: FocusMode) {
         guard let reverb = musicReverb, let delay = musicDelay else { return }
+        let shim = shimmerBus
         switch mode {
         case .sleep:
             reverb.loadFactoryPreset(.cathedral)
-            reverb.wetDryMix = 80.0          // maximum enveloping tail
-            delay.delayTime = 0.42           // slow dreamy echo
-            delay.feedback = 42.0
-            delay.lowPassCutoff = 4000.0
-            delay.wetDryMix = 22.0
+            reverb.wetDryMix = 85.0          // maximum enveloping tail
+            delay.delayTime = 0.48           // slow dreamy echo
+            delay.feedback = 45.0
+            delay.lowPassCutoff = 3800.0
+            delay.wetDryMix = 24.0
+            shim?.volume = 0.42              // heavy shimmer — octave-up ghost
         case .relaxation:
             reverb.loadFactoryPreset(.largeHall)
-            reverb.wetDryMix = 65.0          // lots of air
-            delay.delayTime = 0.32
-            delay.feedback = 35.0
+            reverb.wetDryMix = 72.0          // lots of air
+            delay.delayTime = 0.36
+            delay.feedback = 38.0
             delay.lowPassCutoff = 5500.0
-            delay.wetDryMix = 20.0
+            delay.wetDryMix = 22.0
+            shim?.volume = 0.34              // strong shimmer
         case .focus:
-            // Focus is trip-hop / lo-fi hip-hop — a tight warm
-            // room with a short slapback delay. NOT a large hall;
-            // real lo-fi sits dry-ish with a lot of tape saturation
-            // character, which we approximate here with a medium
-            // room reverb and a subtle 15ms doubling delay.
+            // Focus is trip-hop / lo-fi — tight room, no shimmer
+            // (shimmer would fight the dusty lo-fi character).
             reverb.loadFactoryPreset(.mediumRoom)
             reverb.wetDryMix = 30.0
             delay.delayTime = 0.015           // 15ms chorus-ish doubling
             delay.feedback = 20.0
             delay.lowPassCutoff = 7000.0
             delay.wetDryMix = 22.0
+            shim?.volume = 0.0                // no shimmer on focus
         case .energize:
-            // Energize is now hip-hop — a warm medium room, short
-            // slapback delay on melody/leads. Kick still dominates.
             reverb.loadFactoryPreset(.mediumHall)
             reverb.wetDryMix = 30.0
-            delay.delayTime = 0.12           // ~16th-note slapback
+            delay.delayTime = 0.12
             delay.feedback = 25.0
             delay.lowPassCutoff = 6000.0
             delay.wetDryMix = 20.0
+            shim?.volume = 0.0
         }
     }
 
@@ -929,16 +937,16 @@ public final class AudioEngine: AudioEngineProtocol {
         let mv = MultiVoiceRenderer(engine: engine)
         self.multiVoice = mv
 
-        // Insert a dedicated music reverb + delay chain between the
-        // MultiVoiceRenderer output and the main mixer. Before this,
-        // the music path was running dry — ambient pads had no space,
-        // relaxation sounded cheap, and sleep was less immersive than
-        // it should be. The chain is:
+        // Music FX chain. MultiVoiceRenderer output splits into TWO
+        // parallel paths that sum into the main mixer:
         //
-        //   mv.outputNode → musicDelay → musicReverb → mainMixer
+        //   Main path:   mv → delay → musicReverb → mainMixer
+        //   Shimmer path: mv → pitch(+12) → shimmerReverb → bus → mainMixer
         //
-        // Mode-specific presets are applied in startMusicPatternLayer
-        // so the same chain shapes every mode differently.
+        // The shimmer path creates the classic octave-up reverb
+        // ghost on sustained notes — what makes ambient pads sound
+        // spacious and ethereal. Shimmer bus volume is configured
+        // per mode (heavy for sleep/relax, zero for focus).
         let delay = AVAudioUnitDelay()
         delay.delayTime = 0.0
         delay.feedback = 0.0
@@ -952,9 +960,43 @@ public final class AudioEngine: AudioEngineProtocol {
         engine.attach(reverbUnit)
         self.musicReverb = reverbUnit
 
-        engine.connect(mv.outputNode, to: delay, format: nil)
+        // Shimmer parallel send
+        let pitch = AVAudioUnitTimePitch()
+        pitch.pitch = 1200           // +12 semitones (one octave up)
+        pitch.overlap = 8            // higher overlap = smoother pitch shift
+        engine.attach(pitch)
+        self.shimmerPitch = pitch
+
+        let shimmerUnit = AVAudioUnitReverb()
+        shimmerUnit.loadFactoryPreset(.cathedral)
+        shimmerUnit.wetDryMix = 100  // fully wet — the whole point of this path
+        engine.attach(shimmerUnit)
+        self.shimmerReverb = shimmerUnit
+
+        let shimBus = AVAudioMixerNode()
+        shimBus.volume = 0.0         // default off; applyMusicFX sets per mode
+        engine.attach(shimBus)
+        self.shimmerBus = shimBus
+
+        // Split mv.outputNode into both the main chain and the
+        // shimmer chain. AVAudioEngine supports multi-point
+        // connections from a mixer node.
+        engine.connect(
+            mv.outputNode,
+            to: [
+                AVAudioConnectionPoint(node: delay, bus: 0),
+                AVAudioConnectionPoint(node: pitch, bus: 0)
+            ],
+            fromBus: 0,
+            format: nil
+        )
+        // Main path wiring
         engine.connect(delay, to: reverbUnit, format: nil)
         engine.connect(reverbUnit, to: engine.mainMixerNode, format: nil)
+        // Shimmer path wiring
+        engine.connect(pitch, to: shimmerUnit, format: nil)
+        engine.connect(shimmerUnit, to: shimBus, format: nil)
+        engine.connect(shimBus, to: engine.mainMixerNode, format: nil)
 
         Logger.audio.info("SF2 samplers ready — melody + bass + drums (music FX chain attached)")
     }
