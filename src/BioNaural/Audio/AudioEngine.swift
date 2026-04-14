@@ -388,6 +388,12 @@ public final class AudioEngine: AudioEngineProtocol {
             return
         }
 
+        // Mode-specific articulation — shape envelope on the samplers so
+        // the same SoundFont preset speaks differently per mode. Sleep
+        // gets slow attack + long release (pad-like); energize gets
+        // tight, percussive response.
+        applyArticulation(for: mode, voices: mv)
+
         let pattern = CompositionPlanner.buildMusicPattern(
             mode: mode,
             biometricState: currentBiometricState,
@@ -542,6 +548,28 @@ public final class AudioEngine: AudioEngineProtocol {
     private func stopVolumeSyncTimer() {
         volumeSyncTimer?.invalidate()
         volumeSyncTimer = nil
+    }
+
+    // MARK: - Articulation (MIDI CC)
+
+    /// Send mode-appropriate attack/release and brightness CCs to every
+    /// sampler voice. CC 73 = attack time, CC 72 = release time,
+    /// CC 74 = brightness (low-pass filter cutoff). Values 0-127.
+    private func applyArticulation(for mode: FocusMode, voices: MultiVoiceRenderer) {
+        struct Envelope { let attack: UInt8; let release: UInt8; let brightness: UInt8 }
+        let env: Envelope
+        switch mode {
+        case .sleep:      env = Envelope(attack: 110, release: 120, brightness: 40)   // slow pad
+        case .relaxation: env = Envelope(attack:  80, release: 100, brightness: 64)   // soft
+        case .focus:      env = Envelope(attack:  24, release:  40, brightness: 70)   // clean piano
+        case .energize:   env = Envelope(attack:  10, release:  20, brightness: 96)   // tight, bright
+        }
+        let samplers = [voices.melody.sampler, voices.bass.sampler, voices.drums.sampler]
+        for sampler in samplers {
+            sampler.sendController(73, withValue: env.attack,     onChannel: 0)
+            sampler.sendController(72, withValue: env.release,    onChannel: 0)
+            sampler.sendController(74, withValue: env.brightness, onChannel: 0)
+        }
     }
 
     // MARK: - SF2 Layer Setup

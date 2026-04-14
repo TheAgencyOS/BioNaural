@@ -36,6 +36,20 @@ public enum VPEventType: String, Sendable, Hashable, CaseIterable {
     case arpeggio
 }
 
+// MARK: - MelodicContour
+
+/// Pitch-direction intent for a class. Drives a position-based octave
+/// bias during pitch resolution so phrases have a sense of motion
+/// appropriate to the mode — sleep descends, energize ascends, focus
+/// and relaxation stay neutral.
+public enum MelodicContour: String, Sendable, Hashable {
+    case neutral
+    case ascending
+    case descending
+    case archUpDown       // rise then fall
+    case archDownUp       // fall then rise (cradle)
+}
+
 // MARK: - TrackRole
 
 /// The role of a track in the ensemble. Drives Class selection and
@@ -86,6 +100,9 @@ public struct MusicalClass: Hashable, Sendable {
     /// Typically [1, 2] or [2, 4].
     public let allowedAtomSizes: [Int]
 
+    /// Pitch-direction intent for the track across a phrase.
+    public let contour: MelodicContour
+
     public init(
         name: String,
         role: TrackRole,
@@ -96,7 +113,8 @@ public struct MusicalClass: Hashable, Sendable {
         allowedEventTypes: Set<VPEventType>,
         octaveRange: ClosedRange<Int>,
         velocityRange: ClosedRange<UInt8>,
-        allowedAtomSizes: [Int]
+        allowedAtomSizes: [Int],
+        contour: MelodicContour = .neutral
     ) {
         self.name = name
         self.role = role
@@ -108,5 +126,6 @@ public struct MusicalClass: Hashable, Sendable {
         self.octaveRange = octaveRange
         self.velocityRange = velocityRange
         self.allowedAtomSizes = allowedAtomSizes
+        self.contour = contour
     }
 }

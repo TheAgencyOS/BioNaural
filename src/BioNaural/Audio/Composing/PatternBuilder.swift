@@ -168,7 +168,7 @@ public enum PatternBuilder {
         for trackInput in tracks {
             let rp = trackInput.rp
             let mclass = trackInput.musicalClass
-            let octave = middleOctave(of: mclass.octaveRange)
+            let baseOctave = middleOctave(of: mclass.octaveRange)
             var notes: [MPNote] = []
 
             // Tile the RP across the full loop length. Each tile uses
@@ -182,6 +182,18 @@ public enum PatternBuilder {
 
                     let hcEntry = harmonicContext.entry(at: absoluteTick)
                         ?? defaultHarmonicEntry(at: absoluteTick)
+
+                    // Contour bias — shift octave based on phrase position
+                    // so melodic tracks have a sense of direction that
+                    // matches the mode (sleep descends, energize ascends).
+                    let progress = Double(absoluteTick) / Double(max(1, loopLengthTicks))
+                    let octave = applyContour(
+                        base: baseOctave,
+                        range: mclass.octaveRange,
+                        contour: mclass.contour,
+                        type: rpNote.type,
+                        progress: progress
+                    )
 
                     let pitch = WeirdnessResolver.resolve(
                         weirdness: rpNote.weirdness,
@@ -305,6 +317,45 @@ public enum PatternBuilder {
     /// Pick a sensible octave from a class's range (the middle).
     private static func middleOctave(of range: ClosedRange<Int>) -> Int {
         return (range.lowerBound + range.upperBound) / 2
+    }
+
+    /// Apply a mode's melodic-contour bias to an octave based on a
+    /// note's position within the loop. Drum tracks and chord/bass
+    /// (.comp) tracks never bias — only melodic notes (.mixed / .solo)
+    /// get the phrase-shaped octave motion.
+    private static func applyContour(
+        base: Int,
+        range: ClosedRange<Int>,
+        contour: MelodicContour,
+        type: NoteType,
+        progress: Double
+    ) -> Int {
+        guard type == .mixed || type == .solo else { return base }
+        guard contour != .neutral else { return base }
+
+        let clampedProgress = max(0.0, min(1.0, progress))
+        let shift: Int
+        switch contour {
+        case .ascending:
+            if clampedProgress < 0.33       { shift = -1 }
+            else if clampedProgress < 0.66  { shift =  0 }
+            else                             { shift = +1 }
+        case .descending:
+            if clampedProgress < 0.33       { shift = +1 }
+            else if clampedProgress < 0.66  { shift =  0 }
+            else                             { shift = -1 }
+        case .archUpDown:
+            if clampedProgress < 0.25 || clampedProgress >= 0.75 { shift = 0 }
+            else { shift = +1 }
+        case .archDownUp:
+            if clampedProgress < 0.25 || clampedProgress >= 0.75 { shift = 0 }
+            else { shift = -1 }
+        case .neutral:
+            shift = 0
+        }
+
+        let target = base + shift
+        return max(range.lowerBound, min(range.upperBound, target))
     }
 
     /// Defensive fallback when the HC has no entry for a tick (shouldn't
