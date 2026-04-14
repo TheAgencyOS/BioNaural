@@ -111,6 +111,26 @@ public enum AtomLibrary {
             ],
             name: "sleep_alpha_long_short_4q"
         ),
+        // ALPHA: single late note (huge space then whisper)
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 2 * q + e, stopTick: 4 * q, intensity: 0.45, moveAbility: 0.8)
+            ],
+            name: "sleep_alpha_whisper_late_4q"
+        ),
+        // ALPHA: three descending points
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,         stopTick: q + e,     intensity: 0.55, moveAbility: 0.4),
+                Marker(startTick: q + e,     stopTick: 2 * q + e, intensity: 0.50, moveAbility: 0.5),
+                Marker(startTick: 2 * q + e, stopTick: 4 * q,     intensity: 0.40, moveAbility: 0.7)
+            ],
+            name: "sleep_alpha_three_descend_4q"
+        ),
         Atom(
             sizeQuarters: 4,
             type: .empty,
@@ -344,27 +364,42 @@ public enum AtomLibrary {
     // MARK: - FOCUS — Drums (very minimal, side stick on 2 & 4)
 
     private static let focusDrums: [Atom] = [
-        // 2-quarter atom: side stick on beat 2 (intensity 0.35 → side stick)
+        // Steady closed-hat on every 8th + side stick on beat 2.
         Atom(
             sizeQuarters: 2,
             type: .alpha,
             markers: [
-                Marker(startTick: q,        stopTick: q + e,     intensity: 0.35, moveAbility: 0.05),
-                // shaker on the "and" of 2
-                Marker(startTick: q + e,    stopTick: 2 * q,     intensity: 0.20, moveAbility: 0.1)
+                Marker(startTick: 0,        stopTick: s,         intensity: 0.65, moveAbility: 0.0),
+                Marker(startTick: e,        stopTick: e + s,     intensity: 0.60, moveAbility: 0.0),
+                Marker(startTick: q,        stopTick: q + s,     intensity: 0.35, moveAbility: 0.0),
+                Marker(startTick: q + e,    stopTick: q + e + s, intensity: 0.60, moveAbility: 0.0),
             ],
-            name: "focus_drum_minimal_2q"
+            name: "focus_drum_hat_sidestick_2q"
         ),
-        // 2-quarter atom: just side stick on beat 2
+        // Closed hat on all 8ths (study pulse).
         Atom(
             sizeQuarters: 2,
             type: .alpha,
             markers: [
-                Marker(startTick: q,        stopTick: q + e,     intensity: 0.35, moveAbility: 0.05)
+                Marker(startTick: 0,     stopTick: s,         intensity: 0.62, moveAbility: 0.0),
+                Marker(startTick: e,     stopTick: e + s,     intensity: 0.58, moveAbility: 0.0),
+                Marker(startTick: q,     stopTick: q + s,     intensity: 0.62, moveAbility: 0.0),
+                Marker(startTick: q + e, stopTick: q + e + s, intensity: 0.58, moveAbility: 0.0),
             ],
-            name: "focus_drum_sidestick_2q"
+            name: "focus_drum_hat_pulse_2q"
         ),
-        // EMPTY (silence)
+        // Soft snare on beat 2 with hats around it.
+        Atom(
+            sizeQuarters: 2,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: s,         intensity: 0.60, moveAbility: 0.0),
+                Marker(startTick: q,     stopTick: q + s,     intensity: 0.72, moveAbility: 0.0),  // snare
+                Marker(startTick: q + e, stopTick: q + e + s, intensity: 0.60, moveAbility: 0.0),
+            ],
+            name: "focus_drum_soft_backbeat_2q"
+        ),
+        // EMPTY — leaves space
         Atom(
             sizeQuarters: 2,
             type: .empty,

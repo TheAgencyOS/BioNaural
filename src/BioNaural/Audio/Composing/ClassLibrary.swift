@@ -73,9 +73,10 @@ public enum ClassLibrary {
             weirdnessRange: WeirdnessRange(.zero, .safe),
             density: 0.20,
             allowedEventTypes: [.note],            // single notes only
-            octaveRange: 3...4,
+            octaveRange: 3...5,
             velocityRange: 35...60,
-            allowedAtomSizes: [4]                  // long phrases
+            allowedAtomSizes: [4],                 // long phrases
+            contour: .descending                   // settle into lower register
         )
     }
 
@@ -122,7 +123,8 @@ public enum ClassLibrary {
             allowedEventTypes: [.note, .arpeggio],
             octaveRange: 3...5,
             velocityRange: 50...75,
-            allowedAtomSizes: [2]
+            allowedAtomSizes: [2],
+            contour: .archUpDown                    // breath-like rise and fall
         )
     }
 
@@ -180,7 +182,8 @@ public enum ClassLibrary {
             allowedEventTypes: [.note],
             octaveRange: 4...5,                     // C4-C5 mid range
             velocityRange: 50...75,
-            allowedAtomSizes: [2]
+            allowedAtomSizes: [2],
+            contour: .neutral                       // stable register for habituation
         )
     }
 
@@ -259,9 +262,10 @@ public enum ClassLibrary {
             weirdnessRange: WeirdnessRange(.zero, .adventurous),
             density: density,
             allowedEventTypes: [.note, .chord],
-            octaveRange: 4...5,
+            octaveRange: 4...6,
             velocityRange: 70...100,
-            allowedAtomSizes: [2]
+            allowedAtomSizes: [2],
+            contour: .ascending                     // lift the listener
         )
     }
 
