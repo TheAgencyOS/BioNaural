@@ -1032,8 +1032,12 @@ extension Theme {
         /// Initial slider positions when a session starts (0.0–1.0).
         /// These are user-facing defaults — the adaptive engine never overrides them.
         enum Defaults {
-            /// Binaural/entrainment tones: barely perceptible, felt not heard.
-            static let binauralVolume: Double = 0.01
+            /// Binaural/entrainment tones are opt-in: default off, user
+            /// can enable them via the binaural slider. When on, the
+            /// carrier frequency is aligned to the song's root via
+            /// SessionTonality.alignedCarrierFrequency so the tone
+            /// stays consonant with the current music.
+            static let binauralVolume: Double = 0.0
             /// Ambient texture bed (rain, noise, wind).
             static let ambientVolume: Double = 0.20
             /// Melodic content layer (pads, piano, MIDI sequences).
