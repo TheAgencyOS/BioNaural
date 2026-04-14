@@ -534,7 +534,14 @@ public enum CompositionPlanner {
             return Molecule(atoms: [], repetitiveness: musicalClass.atomicRepetitiveness)
         }
 
-        // Section boundary in ticks. Anything before → A pool, after → B.
+        // For .same repetitiveness we want the SAME atom across the
+        // entire loop — that's the whole point of .same. The old
+        // code split candidates into poolA/poolB and used pool[0]
+        // from each, which swapped atoms mid-loop and produced
+        // clunky unmusical transitions on focus bass + melody.
+        //
+        // Now: .same uses candidates[0] for the whole loop.
+        // .none/.diff cycles through candidates across both sections.
         let sectionBoundaryTicks = sectionBars * Composing.ticksPerBar
         let half = max(1, candidates.count / 2)
         let poolA = Array(candidates.prefix(half))
@@ -544,12 +551,12 @@ public enum CompositionPlanner {
         var filled = 0
         var i = 0
         while filled < loopLengthTicks {
-            let pool = filled < sectionBoundaryTicks ? poolA : poolB
             let atom: Atom
             switch musicalClass.atomicRepetitiveness {
             case .same:
-                atom = pool[0]
+                atom = candidates[0]
             case .none, .diff:
+                let pool = filled < sectionBoundaryTicks ? poolA : poolB
                 atom = pool[i % pool.count]
             }
             atoms.append(atom)

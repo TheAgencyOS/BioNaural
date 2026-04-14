@@ -255,25 +255,27 @@ public enum ClassLibrary {
             allowedEventTypes: [.note],
             octaveRange: 3...4,
             velocityRange: 45...70,
-            allowedAtomSizes: [2, 4],
+            allowedAtomSizes: [4],                  // 1-bar sparse phrases only
             contour: .archUpDown
         )
     }
 
-    /// Focus bass: walking upright bass. Quarter notes on 1, 3
-    /// mostly, with occasional passing tones on the "ands". Not a
-    /// pulsing drone — it grooves with the drums.
+    /// Focus bass: trip-hop upright — sits on the root at beat 1
+    /// with occasional passing tones. The atom order in AtomLibrary
+    /// puts focus_bass_boombap_4q first so .same repetitiveness
+    /// picks the groove-with-kick pattern. Octave bumped from 1..2
+    /// (too subby) to 2..3 for note definition.
     private static func focusBass() -> MusicalClass {
         MusicalClass(
             name: "focus_bass",
             role: .bass,
             allowedAtomTypes: [.alpha],
             atomicRepetitiveness: .same,
-            weirdnessRange: WeirdnessRange(.zero, .safe),
+            weirdnessRange: WeirdnessRange(.zero),
             density: 0.40,
             allowedEventTypes: [.note],
-            octaveRange: 1...2,
-            velocityRange: 55...78,
+            octaveRange: 2...3,
+            velocityRange: 60...85,
             allowedAtomSizes: [4]
         )
     }
