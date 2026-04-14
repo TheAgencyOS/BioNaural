@@ -93,13 +93,14 @@ public struct CompositionSeed: Sendable, Hashable {
         switch mode {
         // Sleep stays slow and steady.
         case .sleep:       return -4.0 ... 2.0
-        // Relaxation: real ambient / new-age sits 55-70 BPM — default
-        // tempo is 60, so ±5 gives 55-65.
+        // Relaxation: ambient sits 55-70 BPM — default is 60, ±5.
         case .relaxation:  return -5.0 ... 5.0
-        // Focus: lo-fi beats live 70-85 BPM — default is 72, so
-        // -2..+10 gives 70-82 which matches the genre sweet spot.
-        case .focus:       return -2.0 ... 10.0
-        case .energize:    return -4.0 ... 8.0
+        // Focus: now ambient, not lo-fi. Default tempo is 72 but we
+        // want it slower for a drifting pad feel — drop into 60-72.
+        case .focus:       return -12.0 ... 0.0
+        // Energize: hip-hop sits 85-100 BPM. Default is 120 so drop
+        // substantially — we want that head-nod tempo, not dance floor.
+        case .energize:    return -32.0 ... -18.0
         }
     }
 
@@ -109,9 +110,9 @@ public struct CompositionSeed: Sendable, Hashable {
     public static func swingTicks(for mode: FocusMode) -> Int {
         switch mode {
         case .sleep:       return 0
-        case .relaxation:  return 24   // barely-there drag
-        case .focus:       return 48   // classic lo-fi swing
-        case .energize:    return 0    // machine-straight
+        case .relaxation:  return 0    // ambient is rubato, no swing
+        case .focus:       return 0    // ambient — pads don't swing
+        case .energize:    return 48   // hip-hop / boom-bap drag
         }
     }
 
@@ -140,16 +141,16 @@ public struct CompositionSeed: Sendable, Hashable {
     /// style pentatonic); energize gets bright mixolydian/major.
     public static func scalePool(for mode: FocusMode) -> [Scale] {
         switch mode {
+        // Sleep: minimal dissonance, pad-friendly modes.
         case .sleep:       return [.pentatonicMinor, .lydian, .minor]
-        // Relaxation: modal and jazz-friendly. Lydian (floating),
-        // dorian (wistful), major (bright new-age), pentatonicMajor
-        // (Windham Hill piano), mixolydian (soft fusion).
+        // Relaxation: floating modal palette.
         case .relaxation:  return [.lydian, .dorian, .major, .pentatonicMajor, .mixolydian]
-        // Focus: lo-fi hip-hop is overwhelmingly minor. Weight the
-        // pool toward minor and dorian — pentatonicMajor is removed
-        // because it sounded too cheerful for a study beat.
-        case .focus:       return [.minor, .dorian, .minor, .dorian, .mixolydian]
-        case .energize:    return [.major, .mixolydian, .lydian, .pentatonicMajor]
+        // Focus: now an ambient mode — same palette as relaxation so
+        // sessions feel like drifting pads, not lo-fi beats.
+        case .focus:       return [.lydian, .dorian, .major, .pentatonicMajor, .mixolydian]
+        // Energize: hip-hop / boom-bap territory — overwhelmingly
+        // minor (minor 7 / min9 flavors) with a bit of dorian colour.
+        case .energize:    return [.minor, .dorian, .minor, .dorian, .pentatonicMinor]
         }
     }
 
@@ -191,23 +192,27 @@ public struct CompositionSeed: Sendable, Hashable {
         case (.relaxation, .texture): return [97, 94]
         case (.relaxation, .drums):   return nil
 
-        // MARK: Focus — lo-fi / study palette
-        case (.focus, .melody):  return [4, 5, 0, 11, 1]                // rhodes, dx, piano, vibes, bright piano
-        case (.focus, .bass):    return [32, 33, 35]                    // acoustic, finger, fretless
-        case (.focus, .chords):  return [4, 5, 0, 89]
-        case (.focus, .drums):   return [0]                             // GM drum kit — program ignored, percussion bank
-        case (.focus, .pad):     return [89, 88]
-        case (.focus, .texture): return [97, 94]
+        // MARK: Focus — ambient palette (was lo-fi hip-hop, reframed).
+        // Pads, choir, harp, warm pad, halo pad — no pianos/rhodes.
+        // Focus sessions now drift like sleep/relaxation instead of
+        // sitting on study beats.
+        case (.focus, .melody):  return [88, 89, 91, 94, 52, 46]        // pads + choir + harp
+        case (.focus, .bass):    return [89, 88, 42]                    // warm pad + cello
+        case (.focus, .chords):  return [48, 49, 52, 89, 88]            // strings + choir + pads
+        case (.focus, .drums):   return nil                             // ambient has no drums
+        case (.focus, .pad):     return [88, 89, 91, 94]
+        case (.focus, .texture): return [97, 94, 91]
 
-        // MARK: Energize — synthwave / uplifting electronic palette.
-        // Distortion guitar (GM 30) was removed — GeneralUser GS
-        // renders it as a tinny, pitchy mess. Replaced with additional
-        // synth leads (83 Chiff, 84 Charang, 86 5th Saw).
-        case (.energize, .melody):  return [80, 81, 82, 83, 84, 85, 86, 87]  // synth leads only
-        case (.energize, .bass):    return [38, 39, 34, 35]             // synth bass, pick bass, fretless
-        case (.energize, .chords):  return [88, 50, 48, 63]             // new age pad, synth strings, strings, brass
+        // MARK: Energize — hip-hop palette (was synthwave, reframed).
+        // Rhodes and electric piano for the melodic hook, sub bass /
+        // synth bass for the low end, brushed drums / 808 kit handled
+        // by the drum bank. Minor 7ths and boom-bap over head-nod
+        // tempos (85-102 BPM), not dance floor.
+        case (.energize, .melody):  return [4, 5, 0, 11, 87, 80]        // rhodes, DX, piano, vibes, bass+lead, square
+        case (.energize, .bass):    return [38, 39, 33, 35]             // synth bass 1/2, finger, fretless
+        case (.energize, .chords):  return [4, 5, 89, 48]               // rhodes, DX, warm pad, strings
         case (.energize, .drums):   return [0]
-        case (.energize, .pad):     return [88, 89, 94]
+        case (.energize, .pad):     return [89, 88]
         case (.energize, .texture): return [94, 97]
         }
     }

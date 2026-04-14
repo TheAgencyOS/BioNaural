@@ -959,45 +959,6 @@ extension SessionView {
                     )
                 }
 
-                // Genre selector — change genre mid-session
-                VStack(alignment: .leading, spacing: Theme.Spacing.xxs) {
-                    Text("Genre")
-                        .font(Theme.Typography.caption)
-                        .foregroundStyle(Theme.Colors.textSecondary)
-
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: Theme.Spacing.xs) {
-                            ForEach(Theme.ModeInstrumentation.genreOptions, id: \.id) { genre in
-                                let isSelected = viewModel.audioEngine.genrePreference == genre.id
-                                Button {
-                                    // Change genre mid-session — switch the sequence player
-                                    viewModel.audioEngine.genrePreference = genre.id
-                                    if let audioEngine = viewModel.audioEngine as? AudioEngine,
-                                       let tonality = audioEngine.sessionTonality {
-                                        audioEngine.sequencePlayer?.stop()
-                                        audioEngine.musicPatternPlayer?.stop()
-                                        audioEngine.startMusicGeneration(
-                                            mode: viewModel.sessionMode,
-                                            tonality: tonality
-                                        )
-                                    }
-                                } label: {
-                                    Text(genre.label)
-                                        .font(Theme.Typography.caption)
-                                        .padding(.horizontal, Theme.Spacing.sm)
-                                        .padding(.vertical, Theme.Spacing.xxs)
-                                        .background(
-                                            Capsule().fill(isSelected ? Theme.Colors.accent.opacity(0.3) : Theme.Colors.surface)
-                                        )
-                                        .overlay(Capsule().stroke(isSelected ? Theme.Colors.accent : Color.clear, lineWidth: 1.5))
-                                        .foregroundStyle(isSelected ? Theme.Colors.textPrimary : Theme.Colors.textSecondary)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                        }
-                    }
-                }
-
                 Spacer()
             }
             .padding(.horizontal, Theme.Spacing.pageMargin)

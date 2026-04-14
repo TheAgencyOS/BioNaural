@@ -634,19 +634,23 @@ public final class AudioEngine: AudioEngineProtocol {
             delay.lowPassCutoff = 5500.0
             delay.wetDryMix = 20.0
         case .focus:
-            reverb.loadFactoryPreset(.largeRoom2)
-            reverb.wetDryMix = 42.0          // lush but not washy
-            delay.delayTime = 0.015          // 15ms chorus-style doubling
-            delay.feedback = 20.0
-            delay.lowPassCutoff = 7000.0
-            delay.wetDryMix = 28.0           // thickens rhodes / piano
+            // Focus is now ambient — use the same lush space as
+            // relaxation. Large hall + slow delay.
+            reverb.loadFactoryPreset(.largeHall)
+            reverb.wetDryMix = 60.0
+            delay.delayTime = 0.30
+            delay.feedback = 32.0
+            delay.lowPassCutoff = 5500.0
+            delay.wetDryMix = 18.0
         case .energize:
+            // Energize is now hip-hop — a warm medium room, short
+            // slapback delay on melody/leads. Kick still dominates.
             reverb.loadFactoryPreset(.mediumHall)
-            reverb.wetDryMix = 34.0          // still tight on the kick side
-            delay.delayTime = 0.018          // 18ms widening
-            delay.feedback = 18.0
-            delay.lowPassCutoff = 9000.0
-            delay.wetDryMix = 24.0           // thickens synth leads
+            reverb.wetDryMix = 30.0
+            delay.delayTime = 0.12           // ~16th-note slapback
+            delay.feedback = 25.0
+            delay.lowPassCutoff = 6000.0
+            delay.wetDryMix = 20.0
         }
     }
 
@@ -664,8 +668,8 @@ public final class AudioEngine: AudioEngineProtocol {
         switch mode {
         case .sleep:      env = Envelope(attack: 118, release: 125, brightness: 30)   // ultra soft pad
         case .relaxation: env = Envelope(attack:  92, release: 110, brightness: 48)   // warm
-        case .focus:      env = Envelope(attack:  42, release:  70, brightness: 54)   // warm piano / rhodes
-        case .energize:   env = Envelope(attack:  20, release:  50, brightness: 78)   // still tight, but warmer
+        case .focus:      env = Envelope(attack:  96, release: 115, brightness: 42)   // ambient pad
+        case .energize:   env = Envelope(attack:  30, release:  55, brightness: 68)   // warm rhodes / hip-hop
         }
         let samplers = [voices.melody.sampler, voices.bass.sampler, voices.drums.sampler]
         for sampler in samplers {
