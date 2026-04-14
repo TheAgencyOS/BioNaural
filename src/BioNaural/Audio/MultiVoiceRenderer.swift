@@ -179,6 +179,24 @@ public final class MultiVoiceRenderer {
         voice.isReady = true
     }
 
+    /// Reload a melodic voice with a new GM program. AVAudioUnitSampler
+    /// binds to a single instrument at load time — a MIDI program
+    /// change event does NOT switch the loaded patch — so a true patch
+    /// swap requires calling `loadSoundBankInstrument` again. Used by
+    /// AudioEngine when CompositionSeed picks a randomized instrument
+    /// palette that differs from the MultiVoiceRenderer default.
+    public func reloadMelodicVoice(_ voice: SFVoice, program: UInt8) throws {
+        guard let sf2URL = sf2URL else { return }
+        try voice.sampler.loadSoundBankInstrument(
+            at: sf2URL,
+            program: program,
+            bankMSB: UInt8(kAUSampler_DefaultMelodicBankMSB),
+            bankLSB: UInt8(kAUSampler_DefaultBankLSB)
+        )
+        voice.preset = Int(program)
+        voice.isReady = true
+    }
+
     private func loadDrumVoice(_ voice: SFVoice, sf2URL: URL) throws {
         // GM drums use bank 128 (percussion bank)
         // bankMSB = 120 for percussion in General MIDI

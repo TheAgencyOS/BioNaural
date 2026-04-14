@@ -403,6 +403,21 @@ public final class AudioEngine: AudioEngineProtocol {
             return
         }
 
+        // Reload melody + bass samplers with the seed's randomized GM
+        // programs. AVAudioUnitSampler binds to a specific instrument at
+        // load time — a MIDI program change in the SMF does NOT swap
+        // patches — so we must reload the sampler explicitly for the
+        // randomized palette to actually take effect.
+        if let seed = currentSeed {
+            if let melodyProgram = seed.gmPrograms[.melody] {
+                try? mv.reloadMelodicVoice(mv.melody, program: melodyProgram)
+            }
+            if let bassProgram = seed.gmPrograms[.bass] {
+                try? mv.reloadMelodicVoice(mv.bass, program: bassProgram)
+            }
+            Logger.audio.info("v3 seed patches — melody:\(seed.gmPrograms[.melody] ?? 0) bass:\(seed.gmPrograms[.bass] ?? 0)")
+        }
+
         // Mode-specific articulation — shape envelope on the samplers so
         // the same SoundFont preset speaks differently per mode. Sleep
         // gets slow attack + long release (pad-like); energize gets
