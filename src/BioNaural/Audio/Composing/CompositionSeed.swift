@@ -94,8 +94,12 @@ public struct CompositionSeed: Sendable, Hashable {
         let tempoRange = tempoOffsetRange(for: mode)
         let tempoOffset = Double.random(in: tempoRange, using: &generator)
         let swing = swingTicks(for: mode)
+        // Focus drum kit: only tabla and congas. sparseKit (standard
+        // rock kit) was removed — tabla and conga grooves are the
+        // two focus-appropriate percussion flavors.
+        let focusKitPool: [DrumKit] = [.tabla, .congas]
         let drumKit: DrumKit? = (mode == .focus)
-            ? DrumKit.allCases[Int.random(in: 0..<DrumKit.allCases.count, using: &generator)]
+            ? focusKitPool[Int.random(in: 0..<focusKitPool.count, using: &generator)]
             : nil
 
         return CompositionSeed(
