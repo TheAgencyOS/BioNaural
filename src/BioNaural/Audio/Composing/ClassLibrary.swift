@@ -233,7 +233,7 @@ public enum ClassLibrary {
             density: density,
             allowedEventTypes: [.note],
             octaveRange: 0...0,                              // unused for drums
-            velocityRange: 25...45,
+            velocityRange: 55...80,
             allowedAtomSizes: [2]
         )
     }

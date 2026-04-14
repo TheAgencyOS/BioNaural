@@ -88,21 +88,28 @@ public enum CompositionPlanner {
 
     // MARK: - Harmonic Context
 
-    /// Build a simple 4-bar progression rooted at the session tonality.
-    /// Uses I-V-vi-IV, which resolves tastefully in every mode without
-    /// caring whether the session scale is strictly major or minor.
+    /// Build a 4-bar progression rooted at the session tonality. Chord
+    /// qualities are chosen to match the scale quality so the chord
+    /// track's thirds stay consonant with solo/mixed tracks drawing from
+    /// the same scale.
     private static func buildHarmonicContext(
         tonality: SessionTonality,
         loopLengthTicks: Int
     ) -> HarmonicContext {
         let rootSemitone = Int(tonality.root.intValue)
-        // Degrees as (semitone offset from root, ChordFamily)
-        let progression: [(offset: Int, family: ChordFamily)] = [
-            (0, .major),   // I
-            (7, .major),   // V
-            (9, .minor),   // vi
-            (5, .major)    // IV
-        ]
+        let progression: [(offset: Int, family: ChordFamily)] = isMinorScale(tonality: tonality)
+            ? [
+                (0, .minor),   // i
+                (8, .major),   // ♭VI
+                (10, .major),  // ♭VII
+                (0, .minor)    // i
+            ]
+            : [
+                (0, .major),   // I
+                (7, .major),   // V
+                (9, .minor),   // vi
+                (5, .major)    // IV
+            ]
 
         let barTicks = Composing.ticksPerBar
         var entries: [HarmonicContextEntry] = []
@@ -127,6 +134,25 @@ public enum CompositionPlanner {
     private static func noteClass(for semitone: Int) -> NoteClass {
         let table: [NoteClass] = [.C, .Cs, .D, .Ds, .E, .F, .Fs, .G, .Gs, .A, .As, .B]
         return table[((semitone % 12) + 12) % 12]
+    }
+
+    /// True if the session's scale has a minor 3rd relative to its root.
+    /// Checked by scanning the Tonic Key's note set for a pitch class
+    /// three semitones above the root — present in every minor/dorian/
+    /// phrygian-family scale and absent in every major-family scale.
+    private static func isMinorScale(tonality: SessionTonality) -> Bool {
+        let rootPc = (Int(tonality.root.intValue) % 12 + 12) % 12
+        let minorThirdPc = (rootPc + 3) % 12
+        let majorThirdPc = (rootPc + 4) % 12
+        var hasMinor = false
+        var hasMajor = false
+        for note in tonality.key.noteSet.array {
+            let pc = (Int(note.noteClass.intValue) % 12 + 12) % 12
+            if pc == minorThirdPc { hasMinor = true }
+            if pc == majorThirdPc { hasMajor = true }
+        }
+        // Prefer minor only if minor 3rd is present AND major 3rd isn't.
+        return hasMinor && !hasMajor
     }
 
     // MARK: - Molecule assembly

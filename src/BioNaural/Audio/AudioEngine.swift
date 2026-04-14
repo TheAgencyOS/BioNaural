@@ -489,9 +489,10 @@ public final class AudioEngine: AudioEngineProtocol {
 
     /// Forward biometric state to real-time generative layers AND
     /// regenerate the v3 MusicPattern with updated Class parameters.
-    /// Phase 8 will add bar-boundary crossfade; Phase 6 just does a
-    /// straight swap.
+    /// The new pattern crossfades in at the next bar boundary so the
+    /// user hears a musical transition, not a hard cut.
     public func updateBiometricState(_ state: BiometricState) {
+        guard state != currentBiometricState else { return }
         currentBiometricState = state
         generativeMIDI?.updateBiometricState(state)
         drums?.updateBiometricState(state)
@@ -502,11 +503,7 @@ public final class AudioEngine: AudioEngineProtocol {
             biometricState: state,
             tonality: tonality
         )
-        do {
-            try musicPatternPlayer?.play(pattern: pattern)
-        } catch {
-            Logger.audio.error("v3: regenerate on biometric change failed: \(error.localizedDescription)")
-        }
+        musicPatternPlayer?.crossfadeTo(pattern: pattern)
     }
 
     // MARK: - Stem Pack Loading

@@ -12,7 +12,7 @@ import AVFoundation
 import BioNauralShared
 import OSLog
 
-public final class MusicPatternPlayer {
+public final class MusicPatternPlayer: @unchecked Sendable {
 
     // MARK: - Dependencies
 
@@ -23,6 +23,18 @@ public final class MusicPatternPlayer {
 
     private var sequencer: AVAudioSequencer?
     private var currentPattern: MusicPattern?
+
+    /// A swap queued by `crossfadeTo` that will fire at the next bar
+    /// boundary. Only one swap can be pending at a time — a new request
+    /// supersedes the previous one.
+    private var pendingSwap: DispatchWorkItem?
+
+    /// Master submixer volume target to restore after a crossfade swap.
+    /// Captured when the fade starts so we can restore any user mix.
+    private var preFadeMasterVolume: Float = 1.0
+
+    /// Length of the crossfade ramp at each end of a swap.
+    private static let fadeDuration: TimeInterval = 0.15
 
     private static let logger = Logger(
         subsystem: "com.bionaural",
@@ -70,8 +82,80 @@ public final class MusicPatternPlayer {
         Self.logger.info("MusicPatternPlayer started — \(pattern.tracks.count) tracks, \(pattern.totalLengthTicks) ticks @ \(pattern.tempoBPM) BPM")
     }
 
+    /// Schedule a crossfade swap to a new pattern at the next bar boundary.
+    /// Fades the master submixer down, stops the old sequencer, loads the
+    /// new pattern, restarts, and fades back up. Supersedes any pending
+    /// swap. Falls back to an immediate `play` if nothing is running yet.
+    public func crossfadeTo(pattern: MusicPattern) {
+        guard let seq = sequencer, seq.isPlaying else {
+            try? play(pattern: pattern)
+            return
+        }
+
+        pendingSwap?.cancel()
+
+        let delay = secondsUntilNextBar(sequencer: seq, tempoBPM: pattern.tempoBPM)
+        let work = DispatchWorkItem { [weak self] in
+            self?.performCrossfade(to: pattern)
+        }
+        pendingSwap = work
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay, execute: work)
+    }
+
+    private func performCrossfade(to pattern: MusicPattern) {
+        guard let voices = voices else { return }
+        let restoreVolume = voices.masterSubmixer.volume
+        preFadeMasterVolume = restoreVolume
+
+        Task { @MainActor in
+            await self.rampMasterVolume(from: restoreVolume, to: 0.0, duration: Self.fadeDuration)
+            do {
+                try self.play(pattern: pattern)
+                await self.rampMasterVolume(from: 0.0, to: restoreVolume, duration: Self.fadeDuration)
+            } catch {
+                Self.logger.error("crossfade swap failed: \(error.localizedDescription)")
+                self.voices?.masterSubmixer.volume = restoreVolume
+            }
+        }
+    }
+
+    /// Seconds from now until the next downbeat (bar boundary) in the
+    /// currently running sequencer. Uses `currentPositionInBeats` and the
+    /// pattern's tempo — 4 beats per bar.
+    private func secondsUntilNextBar(sequencer: AVAudioSequencer, tempoBPM: Double) -> TimeInterval {
+        let beatsPerBar: Double = 4
+        let current = sequencer.currentPositionInBeats
+        let nextBar = (floor(current / beatsPerBar) + 1) * beatsPerBar
+        let beatsRemaining = max(0.0, nextBar - current)
+        let secondsPerBeat = 60.0 / max(1.0, tempoBPM)
+        return beatsRemaining * secondsPerBeat
+    }
+
+    /// Ramp the master submixer volume from `start` to `target` over
+    /// `duration`. @MainActor so it can touch the audio graph directly
+    /// without Sendable hops. Uses `Task.sleep` between steps; the total
+    /// fade is a handful of main-thread hops, which AVAudioMixerNode
+    /// smooths internally.
+    @MainActor
+    private func rampMasterVolume(
+        from start: Float,
+        to target: Float,
+        duration: TimeInterval
+    ) async {
+        let steps = 8
+        let stepNanos = UInt64((duration / Double(steps)) * 1_000_000_000)
+        for i in 1...steps {
+            try? await Task.sleep(nanoseconds: stepNanos)
+            let t = Float(i) / Float(steps)
+            let value = start + (target - start) * t
+            voices?.masterSubmixer.volume = value
+        }
+    }
+
     /// Stop playback and release the sequencer. All active notes are cut.
     public func stop() {
+        pendingSwap?.cancel()
+        pendingSwap = nil
         if let seq = sequencer, seq.isPlaying {
             seq.stop()
         }

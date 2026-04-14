@@ -292,10 +292,12 @@ public enum PatternBuilder {
         }
     }
 
-    /// Apply small humanization jitter to a position. Drums get zero
-    /// jitter (locked to grid). Other roles get a tiny ±5 tick wobble.
+    /// Apply small humanization jitter to a position. Only melodic
+    /// `.mixed` notes wobble — bass and chord tones (`.comp`), scale
+    /// solos (`.solo`), and drums (`.rhythmic`) stay locked to the grid
+    /// so all tracks share phase with the drum clock.
     private static func humanizePosition(_ position: Int, type: NoteType) -> Int {
-        guard type != .rhythmic else { return position }
+        guard type == .mixed else { return position }
         let jitter = Int.random(in: -5...5)
         return max(0, position + jitter)
     }
