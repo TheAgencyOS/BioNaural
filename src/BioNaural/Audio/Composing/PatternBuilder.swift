@@ -269,11 +269,27 @@ public enum PatternBuilder {
 
             let channel: UInt8 = (rp.role == .drums) ? 9 : channelForRole(rp.role)
             let ccs = buildExpressionCCs(role: rp.role, loopLengthTicks: loopLengthTicks)
+
+            // Drum tracks get GrooVAE-inspired humanization: per-
+            // voice microtiming offsets and metric velocity shaping
+            // so the rhythm section reads as a human drummer rather
+            // than a quantized grid.
+            let finalNotes: [MPNote]
+            if rp.role == .drums {
+                finalNotes = DrumHumanizer.humanize(
+                    notes: notes,
+                    loopLengthTicks: loopLengthTicks,
+                    ticksPerBar: Composing.ticksPerBar
+                )
+            } else {
+                finalNotes = notes
+            }
+
             mpTracks.append(MPTrack(
                 role: rp.role,
                 gmProgram: trackInput.gmProgram,
                 channel: channel,
-                notes: notes,
+                notes: finalNotes,
                 controlChanges: ccs
             ))
         }
