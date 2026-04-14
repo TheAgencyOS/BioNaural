@@ -65,6 +65,25 @@ public final class AudioEngine: AudioEngineProtocol {
     /// instruments change mid-session.
     private var currentSeed: CompositionSeed?
 
+    /// Wall-clock session duration, in minutes, used by the session
+    /// arc planner to compute phase boundaries. Callers (Session
+    /// launcher) should set this before or after `start(mode:)`.
+    /// Defaults to 20 — a reasonable middle for meditation sessions.
+    public var sessionArcDurationMinutes: Int = 20
+
+    /// The moment the current session started. Used with
+    /// `sessionArcDurationMinutes` to compute session progress.
+    private var sessionStartDate: Date?
+
+    /// Label of the currently-active arc phase. Changed by the arc
+    /// timer when wallclock crosses a phase boundary; triggers a
+    /// MusicPattern regeneration with the new phase intensity.
+    private var currentArcPhaseLabel: String?
+
+    /// Timer that wakes every N seconds to check if session progress
+    /// has crossed an arc-phase boundary.
+    private var arcTimer: Timer?
+
     /// Synthesised sub-bass oscillator (energize mode only).
     /// Adds physical low-end (30-80 Hz) that SoundFont samples can't produce.
     private var subBassNode: AVAudioSourceNode?
@@ -448,11 +467,22 @@ public final class AudioEngine: AudioEngineProtocol {
         // a dry SoundFont demo.
         applyMusicFX(for: mode)
 
+        // Establish the session start clock + initial arc phase so
+        // the first MusicPattern is built with the intro-phase
+        // intensity rather than full tilt.
+        if sessionStartDate == nil {
+            sessionStartDate = Date()
+        }
+        let initialPhase = SessionArcPlanner.phase(at: 0.0, for: mode)
+        currentArcPhaseLabel = initialPhase.label
+        startArcTimer()
+
         let pattern = CompositionPlanner.buildMusicPattern(
             mode: mode,
             biometricState: currentBiometricState,
             tonality: tonality,
-            seed: currentSeed
+            seed: currentSeed,
+            arcIntensity: initialPhase.intensity
         )
 
         let player = musicPatternPlayer ?? MusicPatternPlayer(engine: engine, voices: mv)
@@ -474,6 +504,9 @@ public final class AudioEngine: AudioEngineProtocol {
         currentMode = nil
         sessionTonality = nil
         currentSeed = nil
+        stopArcTimer()
+        sessionStartDate = nil
+        currentArcPhaseLabel = nil
 
         // Stop volume sync and audio layers gracefully.
         stopVolumeSyncTimer()
@@ -539,11 +572,64 @@ public final class AudioEngine: AudioEngineProtocol {
         currentBiometricState = state
 
         guard let mode = currentMode, let tonality = sessionTonality else { return }
+        let phase = SessionArcPlanner.phase(at: currentSessionProgress(), for: mode)
         let pattern = CompositionPlanner.buildMusicPattern(
             mode: mode,
             biometricState: state,
             tonality: tonality,
-            seed: currentSeed
+            seed: currentSeed,
+            arcIntensity: phase.intensity
+        )
+        musicPatternPlayer?.crossfadeTo(pattern: pattern)
+    }
+
+    // MARK: - Session Arc Timer
+
+    /// Current session progress as a fraction [0, 1]. 0 if the
+    /// session hasn't started; 1 past the configured duration.
+    private func currentSessionProgress() -> Double {
+        guard let start = sessionStartDate else { return 0.0 }
+        let elapsed = Date().timeIntervalSince(start)
+        let total = Double(sessionArcDurationMinutes) * 60.0
+        return max(0.0, min(1.0, elapsed / max(1.0, total)))
+    }
+
+    private func startArcTimer() {
+        stopArcTimer()
+        // Wake every 10 seconds — phase boundaries move on minute
+        // scale, so 10s is granular enough and avoids burning the CPU.
+        arcTimer = Timer.scheduledTimer(withTimeInterval: 10.0, repeats: true) { [weak self] _ in
+            self?.tickArcTimer()
+        }
+    }
+
+    private func stopArcTimer() {
+        arcTimer?.invalidate()
+        arcTimer = nil
+    }
+
+    /// Called on every arc timer tick. If session progress has
+    /// crossed into a new phase, regenerate the MusicPattern with
+    /// the new intensity and crossfade it in at the next bar boundary.
+    private func tickArcTimer() {
+        guard let mode = currentMode,
+              let tonality = sessionTonality,
+              musicPatternPlayer != nil
+        else { return }
+
+        let progress = currentSessionProgress()
+        let phase = SessionArcPlanner.phase(at: progress, for: mode)
+        guard phase.label != currentArcPhaseLabel else { return }
+
+        Logger.audio.info("v3 arc: \(self.currentArcPhaseLabel ?? "nil") → \(phase.label) (intensity \(phase.intensity), progress \(progress))")
+        currentArcPhaseLabel = phase.label
+
+        let pattern = CompositionPlanner.buildMusicPattern(
+            mode: mode,
+            biometricState: currentBiometricState,
+            tonality: tonality,
+            seed: currentSeed,
+            arcIntensity: phase.intensity
         )
         musicPatternPlayer?.crossfadeTo(pattern: pattern)
     }
