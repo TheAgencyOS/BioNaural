@@ -124,14 +124,26 @@ public struct CompositionSeed: Sendable, Hashable {
         }
 
         // Parametrically generate atoms per role so each session
-        // has its own rhythmic vocabulary. Currently only Focus
-        // has generators; Sleep and Relax continue to use the
-        // hand-authored AtomLibrary pools.
+        // has its own rhythmic vocabulary. All three active modes
+        // have generators — sleep and relax produce their own
+        // stylistic envelopes (sparser, longer sustains, arch-
+        // shaped phrases) distinct from focus's trip-hop variants.
         var generated: [TrackRole: [Atom]] = [:]
-        if mode == .focus {
+        switch mode {
+        case .focus:
             generated[.drums]  = AtomGenerator.generateFocusDrumAtoms(count: 8, using: &generator)
             generated[.bass]   = AtomGenerator.generateFocusBassAtoms(count: 8, using: &generator)
             generated[.melody] = AtomGenerator.generateFocusMelodyAtoms(count: 8, using: &generator)
+        case .sleep:
+            generated[.melody] = AtomGenerator.generateSleepMelodyAtoms(count: 8, using: &generator)
+            generated[.bass]   = AtomGenerator.generateSleepBassAtoms(count: 8, using: &generator)
+            generated[.chords] = AtomGenerator.generateSleepChordAtoms(count: 8, using: &generator)
+        case .relaxation:
+            generated[.melody] = AtomGenerator.generateRelaxMelodyAtoms(count: 8, using: &generator)
+            generated[.bass]   = AtomGenerator.generateRelaxBassAtoms(count: 8, using: &generator)
+            generated[.chords] = AtomGenerator.generateRelaxChordAtoms(count: 8, using: &generator)
+        case .energize:
+            break  // legacy mode, hidden from UI
         }
 
         var seed = CompositionSeed(
