@@ -94,13 +94,11 @@ public struct CompositionSeed: Sendable, Hashable {
         let tempoRange = tempoOffsetRange(for: mode)
         let tempoOffset = Double.random(in: tempoRange, using: &generator)
         let swing = swingTicks(for: mode)
-        // Focus drum kit: only tabla and congas. sparseKit (standard
-        // rock kit) was removed — tabla and conga grooves are the
-        // two focus-appropriate percussion flavors.
-        let focusKitPool: [DrumKit] = [.tabla, .congas]
-        let drumKit: DrumKit? = (mode == .focus)
-            ? focusKitPool[Int.random(in: 0..<focusKitPool.count, using: &generator)]
-            : nil
+        // Focus is trip-hop / lo-fi now — sparseKit (kick / snare /
+        // hat) is the right palette. Tabla and congas were removed
+        // from the focus pool because they read as ambient
+        // percussion, not hip-hop.
+        let drumKit: DrumKit? = (mode == .focus) ? .sparseKit : nil
 
         return CompositionSeed(
             mode: mode,
@@ -123,10 +121,12 @@ public struct CompositionSeed: Sendable, Hashable {
         case .sleep:       return -4.0 ... 2.0
         // Relaxation: ambient sits 55-70 BPM — default is 60, ±5.
         case .relaxation:  return -5.0 ... 5.0
-        // Focus: trancey + rhythmic. Default is 72 so +8..+28 puts
-        // sessions at 80-100 BPM — downtempo trance / ambient techno
-        // pulse that's still slow enough for long sessions.
-        case .focus:       return 8.0 ... 28.0
+        // Focus: slow trip-hop / hip-hop. Default tempo is 72 so
+        // -4..+14 puts sessions at 68-86 BPM — the head-nod pocket
+        // where Nujabes, J Dilla, Massive Attack, and DJ Shadow
+        // built their focus-adjacent music. Slower than we had
+        // before (was 80-100) per user feedback.
+        case .focus:       return -4.0 ... 14.0
         // Energize: legacy mode, hidden from UI. Kept for data
         // compatibility but no user path currently selects it.
         case .energize:    return -32.0 ... -18.0
@@ -140,10 +140,11 @@ public struct CompositionSeed: Sendable, Hashable {
         switch mode {
         case .sleep:       return 0
         case .relaxation:  return 0
-        // Focus: trance / minimalist techno is machine-straight.
-        // The groove variety comes from the drum kit + atom choice,
-        // not swing.
-        case .focus:       return 0
+        // Focus is trip-hop / lo-fi hip-hop now. Real lo-fi has
+        // classic ~56-58% swing on the off-8ths; 48 ticks at 480
+        // PPQN is a light Dilla shuffle that reads as "groovy"
+        // without dragging the pocket.
+        case .focus:       return 48
         case .energize:    return 48
         }
     }
@@ -225,17 +226,16 @@ public struct CompositionSeed: Sendable, Hashable {
         case (.relaxation, .texture): return [97, 94]
         case (.relaxation, .drums):   return nil
 
-        // MARK: Focus — trancey + rhythmic palette.
-        // Warm electric piano / rhodes / pads for the hypnotic
-        // melodic voice; synth bass for a sub pulse; pad + strings
-        // for the chord drone. Drums use a dedicated kit picked by
-        // CompositionSeed.drumKit (sparse kit / congas / tabla).
-        case (.focus, .melody):  return [4, 89, 11, 88, 5, 94]          // rhodes, warm pad, vibes, new-age pad, DX, halo
-        case (.focus, .bass):    return [38, 39, 89, 42]                // synth bass 1/2, warm pad, cello
-        case (.focus, .chords):  return [89, 88, 48, 94]                // warm + new-age + strings + halo
-        case (.focus, .drums):   return [0]                             // percussion bank — kit comes from seed.drumKit
-        case (.focus, .pad):     return [89, 88, 94]
-        case (.focus, .texture): return [97, 94, 91]
+        // MARK: Focus — trip-hop / lo-fi hip-hop palette.
+        // Electric piano + acoustic piano + vibes for the dusty
+        // melodic voice; upright / electric bass for the walking
+        // low end; warm pad + rhodes for sparse chord comping.
+        case (.focus, .melody):  return [4, 0, 11, 5, 1]                // rhodes, acoustic piano, vibes, DX, bright piano
+        case (.focus, .bass):    return [32, 33, 35]                    // acoustic bass, electric bass, fretless
+        case (.focus, .chords):  return [4, 5, 89, 0]                   // rhodes, DX, warm pad, piano
+        case (.focus, .drums):   return [0]                             // percussion bank (sparseKit)
+        case (.focus, .pad):     return [89, 88]
+        case (.focus, .texture): return [89, 88, 94]
 
         // MARK: Energize — hip-hop palette (was synthwave, reframed).
         // Rhodes and electric piano for the melodic hook, sub bass /
