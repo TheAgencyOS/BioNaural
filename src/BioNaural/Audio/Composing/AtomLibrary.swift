@@ -150,6 +150,7 @@ public enum AtomLibrary {
     // MARK: - SLEEP — Bass / Chords (drones)
 
     private static let sleepBass: [Atom] = [
+        // Long drone on the root — the default sleep bass.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
@@ -158,9 +159,41 @@ public enum AtomLibrary {
             ],
             name: "sleep_bass_drone_4q"
         ),
+        // Two halves — a gentle root-to-5th breath.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: 2 * q, intensity: 0.45, moveAbility: 0.1),
+                Marker(startTick: 2 * q, stopTick: 4 * q, intensity: 0.40, moveAbility: 0.1),
+            ],
+            name: "sleep_bass_halves_4q"
+        ),
+        // Late entry — silence for two beats, then a single long note.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 2 * q, stopTick: 4 * q, intensity: 0.42, moveAbility: 0.2)
+            ],
+            name: "sleep_bass_late_4q"
+        ),
+        // Fill variant for section transitions — half note pulse.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,         stopTick: q,         intensity: 0.50, moveAbility: 0.0),
+                Marker(startTick: q,         stopTick: 2 * q,     intensity: 0.45, moveAbility: 0.0),
+                Marker(startTick: 2 * q,     stopTick: 3 * q,     intensity: 0.50, moveAbility: 0.0),
+                Marker(startTick: 3 * q,     stopTick: 4 * q,     intensity: 0.45, moveAbility: 0.0),
+            ],
+            name: "sleep_bass_fill_walkin_4q"
+        ),
     ]
 
     private static let sleepChords: [Atom] = [
+        // Long pad — the default sleep chord voice.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
@@ -168,6 +201,36 @@ public enum AtomLibrary {
                 Marker(startTick: 0, stopTick: 4 * q, intensity: 0.40, moveAbility: 0.2)
             ],
             name: "sleep_chord_pad_4q"
+        ),
+        // Two-chord breath — late entry on beat 3.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: 2 * q, intensity: 0.42, moveAbility: 0.2),
+                Marker(startTick: 2 * q, stopTick: 4 * q, intensity: 0.38, moveAbility: 0.3),
+            ],
+            name: "sleep_chord_breath_4q"
+        ),
+        // Chord swell into beat 1 — long crescendo.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: e, stopTick: 4 * q, intensity: 0.35, moveAbility: 0.3)
+            ],
+            name: "sleep_chord_swell_4q"
+        ),
+        // Fill — arpeggiated pad into next section.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,         stopTick: 4 * q,     intensity: 0.42, moveAbility: 0.0),
+                Marker(startTick: q + e,     stopTick: 4 * q,     intensity: 0.38, moveAbility: 0.0),
+                Marker(startTick: 3 * q,     stopTick: 4 * q,     intensity: 0.35, moveAbility: 0.0),
+            ],
+            name: "sleep_chord_fill_arp_4q"
         ),
     ]
 
@@ -229,6 +292,7 @@ public enum AtomLibrary {
     // MARK: - RELAXATION — Bass / Chords
 
     private static let relaxBass: [Atom] = [
+        // Whole-note root.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
@@ -237,9 +301,42 @@ public enum AtomLibrary {
             ],
             name: "relax_bass_root_4q"
         ),
+        // Dotted half + quarter (soft push into beat 4).
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: 3 * q, intensity: 0.52, moveAbility: 0.0),
+                Marker(startTick: 3 * q, stopTick: 4 * q, intensity: 0.46, moveAbility: 0.0),
+            ],
+            name: "relax_bass_dotted_half_4q"
+        ),
+        // Root + 5th halves.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: 2 * q, intensity: 0.52, moveAbility: 0.0),
+                Marker(startTick: 2 * q, stopTick: 4 * q, intensity: 0.48, moveAbility: 0.0),
+            ],
+            name: "relax_bass_halves_4q"
+        ),
+        // Fill — walking quarter notes into next phrase.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: q,     intensity: 0.55, moveAbility: 0.0),
+                Marker(startTick: q,     stopTick: 2 * q, intensity: 0.52, moveAbility: 0.0),
+                Marker(startTick: 2 * q, stopTick: 3 * q, intensity: 0.55, moveAbility: 0.0),
+                Marker(startTick: 3 * q, stopTick: 4 * q, intensity: 0.60, moveAbility: 0.0),
+            ],
+            name: "relax_bass_fill_walking_4q"
+        ),
     ]
 
     private static let relaxChords: [Atom] = [
+        // Sustained whole.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
@@ -247,6 +344,36 @@ public enum AtomLibrary {
                 Marker(startTick: 0, stopTick: 4 * q, intensity: 0.50, moveAbility: 0.1)
             ],
             name: "relax_chord_sustained_4q"
+        ),
+        // Gentle two-chord (change on beat 3).
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: 2 * q, intensity: 0.50, moveAbility: 0.1),
+                Marker(startTick: 2 * q, stopTick: 4 * q, intensity: 0.48, moveAbility: 0.1),
+            ],
+            name: "relax_chord_change_3_4q"
+        ),
+        // Soft swell — late start.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: q, stopTick: 4 * q, intensity: 0.44, moveAbility: 0.2)
+            ],
+            name: "relax_chord_swell_4q"
+        ),
+        // Fill — arpeggiated pad across the last bar.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: 4 * q, intensity: 0.48, moveAbility: 0.0),
+                Marker(startTick: q,     stopTick: 4 * q, intensity: 0.45, moveAbility: 0.0),
+                Marker(startTick: 2 * q, stopTick: 4 * q, intensity: 0.42, moveAbility: 0.0),
+            ],
+            name: "relax_chord_fill_roll_4q"
         ),
     ]
 
@@ -328,6 +455,7 @@ public enum AtomLibrary {
     // MARK: - FOCUS — Bass (warm whole notes)
 
     private static let focusBass: [Atom] = [
+        // Whole note root — the simplest focus bass.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
@@ -336,7 +464,7 @@ public enum AtomLibrary {
             ],
             name: "focus_bass_whole_4q"
         ),
-        // ALPHA: root + 5th halves
+        // Root + 5th halves.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
@@ -346,11 +474,45 @@ public enum AtomLibrary {
             ],
             name: "focus_bass_halves_4q"
         ),
+        // Boom-bap: root on 1, root on 3-and (classic lo-fi hip-hop).
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,             stopTick: q,     intensity: 0.60, moveAbility: 0.0),
+                Marker(startTick: 2 * q + e,     stopTick: 4 * q, intensity: 0.58, moveAbility: 0.0),
+            ],
+            name: "focus_bass_boombap_4q"
+        ),
+        // Walking quarters — upright feel.
+        Atom(
+            sizeQuarters: 4,
+            type: .beta,
+            markers: [
+                Marker(startTick: 0,     stopTick: q,     intensity: 0.58, moveAbility: 0.0),
+                Marker(startTick: q,     stopTick: 2 * q, intensity: 0.52, moveAbility: 0.0),
+                Marker(startTick: 2 * q, stopTick: 3 * q, intensity: 0.56, moveAbility: 0.0),
+                Marker(startTick: 3 * q, stopTick: 4 * q, intensity: 0.52, moveAbility: 0.0),
+            ],
+            name: "focus_bass_walking_4q"
+        ),
+        // Fill — chromatic walk-up into next phrase.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: 2 * q, intensity: 0.55, moveAbility: 0.0),
+                Marker(startTick: 2 * q, stopTick: 3 * q, intensity: 0.60, moveAbility: 0.0),
+                Marker(startTick: 3 * q, stopTick: 4 * q, intensity: 0.65, moveAbility: 0.0),
+            ],
+            name: "focus_bass_fill_walkup_4q"
+        ),
     ]
 
-    // MARK: - FOCUS — Chords (sustained pads)
+    // MARK: - FOCUS — Chords (sustained pads + Rhodes comping)
 
     private static let focusChords: [Atom] = [
+        // Sustained whole — the default focus chord voice.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
@@ -358,6 +520,38 @@ public enum AtomLibrary {
                 Marker(startTick: 0, stopTick: 4 * q, intensity: 0.45, moveAbility: 0.0)
             ],
             name: "focus_chord_sustained_4q"
+        ),
+        // Rhodes comp on beat 1 and 3-and (lo-fi comping).
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,         stopTick: q,         intensity: 0.48, moveAbility: 0.0),
+                Marker(startTick: 2 * q + e, stopTick: 4 * q,     intensity: 0.44, moveAbility: 0.0),
+            ],
+            name: "focus_chord_comp_lofi_4q"
+        ),
+        // Chord change halfway — two colours per bar.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: 2 * q, intensity: 0.46, moveAbility: 0.0),
+                Marker(startTick: 2 * q, stopTick: 4 * q, intensity: 0.44, moveAbility: 0.0),
+            ],
+            name: "focus_chord_halves_4q"
+        ),
+        // Fill — short stab on every beat (turnaround).
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,         stopTick: e,         intensity: 0.55, moveAbility: 0.0),
+                Marker(startTick: q,         stopTick: q + e,     intensity: 0.50, moveAbility: 0.0),
+                Marker(startTick: 2 * q,     stopTick: 2 * q + e, intensity: 0.55, moveAbility: 0.0),
+                Marker(startTick: 3 * q,     stopTick: 3 * q + e, intensity: 0.60, moveAbility: 0.0),
+            ],
+            name: "focus_chord_fill_stabs_4q"
         ),
     ]
 
@@ -405,6 +599,19 @@ public enum AtomLibrary {
             type: .empty,
             markers: [],
             name: "focus_drum_empty_2q"
+        ),
+        // Fill — soft 16th snare roll into section change.
+        Atom(
+            sizeQuarters: 2,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,         stopTick: s,         intensity: 0.62, moveAbility: 0.0),  // hat
+                Marker(startTick: q,         stopTick: q + s,     intensity: 0.70, moveAbility: 0.0),  // snare
+                Marker(startTick: q + s,     stopTick: q + 2 * s, intensity: 0.72, moveAbility: 0.0),  // snare
+                Marker(startTick: q + e,     stopTick: q + e + s, intensity: 0.74, moveAbility: 0.0),  // snare
+                Marker(startTick: q + 3 * s, stopTick: 2 * q,     intensity: 0.76, moveAbility: 0.0),  // snare
+            ],
+            name: "focus_drum_fill_snareroll_2q"
         ),
     ]
 
@@ -474,7 +681,7 @@ public enum AtomLibrary {
     // MARK: - ENERGIZE — Bass (locked to kick)
 
     private static let energizeBass: [Atom] = [
-        // ALPHA: quarter notes (root on every beat — locks to kick)
+        // Quarter notes — default four-on-the-floor lock.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
@@ -486,7 +693,7 @@ public enum AtomLibrary {
             ],
             name: "energize_bass_quarters_4q"
         ),
-        // BETA: 8th note pattern (root, root, fifth, root, ...)
+        // 8th note pattern (root, root, fifth, root, ...).
         Atom(
             sizeQuarters: 4,
             type: .beta,
@@ -502,12 +709,50 @@ public enum AtomLibrary {
             ],
             name: "energize_bass_8ths_4q"
         ),
+        // Syncopated house bass — root on 1, root on 2-and, root on 4.
+        Atom(
+            sizeQuarters: 4,
+            type: .beta,
+            markers: [
+                Marker(startTick: 0,             stopTick: e,         intensity: 0.88, moveAbility: 0.0),
+                Marker(startTick: q + e,         stopTick: 2 * q,     intensity: 0.75, moveAbility: 0.0),
+                Marker(startTick: 2 * q + e,     stopTick: 3 * q,     intensity: 0.78, moveAbility: 0.0),
+                Marker(startTick: 3 * q,         stopTick: 3 * q + e, intensity: 0.85, moveAbility: 0.0),
+            ],
+            name: "energize_bass_house_synco_4q"
+        ),
+        // 16th pulse — aggressive driving pattern.
+        Atom(
+            sizeQuarters: 4,
+            type: .gamma,
+            markers: (0..<16).map { i in
+                Marker(
+                    startTick: i * s,
+                    stopTick: i * s + s,
+                    intensity: i % 4 == 0 ? 0.88 : 0.62,
+                    moveAbility: 0.0
+                )
+            },
+            name: "energize_bass_16ths_4q"
+        ),
+        // Fill — octave walk-up into the next section.
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: q,     intensity: 0.80, moveAbility: 0.0),
+                Marker(startTick: q,     stopTick: 2 * q, intensity: 0.82, moveAbility: 0.0),
+                Marker(startTick: 2 * q, stopTick: 3 * q, intensity: 0.85, moveAbility: 0.0),
+                Marker(startTick: 3 * q, stopTick: 4 * q, intensity: 0.92, moveAbility: 0.0),
+            ],
+            name: "energize_bass_fill_walkup_4q"
+        ),
     ]
 
     // MARK: - ENERGIZE — Chords (stabs on backbeats)
 
     private static let energizeChords: [Atom] = [
-        // BETA: chord stabs on beats 2 and 4
+        // BETA: chord stabs on beats 2 and 4.
         Atom(
             sizeQuarters: 4,
             type: .beta,
@@ -517,7 +762,7 @@ public enum AtomLibrary {
             ],
             name: "energize_chord_stabs_4q"
         ),
-        // ALPHA: sustained pad
+        // ALPHA: sustained pad.
         Atom(
             sizeQuarters: 4,
             type: .alpha,
@@ -525,6 +770,46 @@ public enum AtomLibrary {
                 Marker(startTick: 0, stopTick: 4 * q, intensity: 0.55, moveAbility: 0.0)
             ],
             name: "energize_chord_pad_4q"
+        ),
+        // ALPHA: 8th-note comping (uplifting push).
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,             stopTick: s,         intensity: 0.60, moveAbility: 0.0),
+                Marker(startTick: e,             stopTick: e + s,     intensity: 0.55, moveAbility: 0.0),
+                Marker(startTick: q,             stopTick: q + s,     intensity: 0.60, moveAbility: 0.0),
+                Marker(startTick: q + e,         stopTick: q + e + s, intensity: 0.55, moveAbility: 0.0),
+                Marker(startTick: 2 * q,         stopTick: 2 * q + s, intensity: 0.60, moveAbility: 0.0),
+                Marker(startTick: 2 * q + e,     stopTick: 2 * q + e + s, intensity: 0.55, moveAbility: 0.0),
+                Marker(startTick: 3 * q,         stopTick: 3 * q + s, intensity: 0.60, moveAbility: 0.0),
+                Marker(startTick: 3 * q + e,     stopTick: 3 * q + e + s, intensity: 0.55, moveAbility: 0.0),
+            ],
+            name: "energize_chord_pumping_4q"
+        ),
+        // BETA: syncopated stab pattern (house / synthwave feel).
+        Atom(
+            sizeQuarters: 4,
+            type: .beta,
+            markers: [
+                Marker(startTick: e,             stopTick: q,         intensity: 0.62, moveAbility: 0.0),
+                Marker(startTick: q + e,         stopTick: 2 * q,     intensity: 0.65, moveAbility: 0.0),
+                Marker(startTick: 2 * q + e,     stopTick: 3 * q,     intensity: 0.62, moveAbility: 0.0),
+                Marker(startTick: 3 * q + e,     stopTick: 4 * q,     intensity: 0.68, moveAbility: 0.0),
+            ],
+            name: "energize_chord_synco_4q"
+        ),
+        // Fill — chord stab on every quarter (turnaround).
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: e,         intensity: 0.75, moveAbility: 0.0),
+                Marker(startTick: q,     stopTick: q + e,     intensity: 0.72, moveAbility: 0.0),
+                Marker(startTick: 2 * q, stopTick: 2 * q + e, intensity: 0.75, moveAbility: 0.0),
+                Marker(startTick: 3 * q, stopTick: 3 * q + e, intensity: 0.85, moveAbility: 0.0),
+            ],
+            name: "energize_chord_fill_punches_4q"
         ),
     ]
 
@@ -613,6 +898,29 @@ public enum AtomLibrary {
                 return m
             }(),
             name: "energize_drums_busy_4q"
+        ),
+        // Fill — classic snare roll into downbeat (last bar of section).
+        Atom(
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: {
+                var m: [Marker] = []
+                // Bars 1-3: standard kick/snare, just to keep energy up.
+                m.append(Marker(startTick: 0,     stopTick: s, intensity: 0.95))
+                m.append(Marker(startTick: q,     stopTick: q + s, intensity: 0.75))
+                m.append(Marker(startTick: 2 * q, stopTick: 2 * q + s, intensity: 0.95))
+                // Beat 4: 16th snare roll crescendo.
+                for i in 0..<4 {
+                    let tick = 3 * q + i * s
+                    m.append(Marker(
+                        startTick: tick,
+                        stopTick: tick + s,
+                        intensity: 0.70 + Double(i) * 0.05  // 0.70 → 0.85
+                    ))
+                }
+                return m
+            }(),
+            name: "energize_drums_fill_snareroll_4q"
         ),
     ]
 }

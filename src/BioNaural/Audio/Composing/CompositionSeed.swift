@@ -41,6 +41,16 @@ public struct CompositionSeed: Sendable, Hashable {
     /// Index into the mode's chord progression pool.
     public let progressionVariant: Int
 
+    /// Per-session tempo offset in BPM applied to the mode's default
+    /// tempo. Ranges are small (±6 BPM typical) so each session keeps
+    /// its mode character but feels distinct in pulse.
+    public let tempoOffsetBPM: Double
+
+    /// Swing amount in ticks. Positive values delay every off-8th note
+    /// within an atom, producing shuffle / lo-fi feel. 0 = straight,
+    /// ~40 = light swing, ~80 = hard shuffle.
+    public let swingTicks: Int
+
     // MARK: - Generation
 
     /// Build a fresh random seed for the given mode using `generator`
@@ -61,13 +71,43 @@ public struct CompositionSeed: Sendable, Hashable {
             }
         }
 
+        let tempoRange = tempoOffsetRange(for: mode)
+        let tempoOffset = Double.random(in: tempoRange, using: &generator)
+        let swing = swingTicks(for: mode)
+
         return CompositionSeed(
             mode: mode,
             root: root,
             scale: scale,
             gmPrograms: programs,
-            progressionVariant: variant
+            progressionVariant: variant,
+            tempoOffsetBPM: tempoOffset,
+            swingTicks: swing
         )
+    }
+
+    /// Per-mode tempo variation ranges. Sleep and relaxation get small
+    /// ranges (pulse matters less); focus and energize get slightly
+    /// wider windows so two sessions feel distinct in drive.
+    public static func tempoOffsetRange(for mode: FocusMode) -> ClosedRange<Double> {
+        switch mode {
+        case .sleep:       return -4.0 ... 2.0
+        case .relaxation:  return -4.0 ... 4.0
+        case .focus:       return -6.0 ... 6.0
+        case .energize:    return -4.0 ... 8.0
+        }
+    }
+
+    /// Per-mode swing amount (PPQN = 480). Focus gets classic lo-fi
+    /// shuffle; relaxation gets a hint of rubato; sleep and energize
+    /// stay straight.
+    public static func swingTicks(for mode: FocusMode) -> Int {
+        switch mode {
+        case .sleep:       return 0
+        case .relaxation:  return 24   // barely-there drag
+        case .focus:       return 48   // classic lo-fi swing
+        case .energize:    return 0    // machine-straight
+        }
     }
 
     /// Convenience: random seed using the system generator.

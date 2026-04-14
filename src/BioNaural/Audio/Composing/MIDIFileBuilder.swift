@@ -70,21 +70,26 @@ public enum MIDIFileBuilder {
         body.append(0xC0 | channel)
         body.append(track.gmProgram & 0x7F)
 
-        // Build combined event list: note-on + note-off, sorted by tick.
-        // note-offs sort BEFORE note-ons at the same tick to avoid
-        // cutting off notes that start on the same tick.
+        // Build combined event list: note-off (0), CC (1), note-on (2),
+        // sorted by tick. note-offs sort BEFORE note-ons at the same
+        // tick so adjacent notes don't clobber each other, and CC
+        // events land between them so expression changes take effect
+        // just before new notes sound.
         struct Event {
             let tick: Int
-            let kind: Int  // 0 = off, 1 = on
-            let pitch: UInt8
-            let velocity: UInt8
+            let kind: Int      // 0 = off, 1 = cc, 2 = on
+            let a: UInt8       // pitch / controller
+            let b: UInt8       // velocity / value
         }
         var events: [Event] = []
-        events.reserveCapacity(track.notes.count * 2)
+        events.reserveCapacity(track.notes.count * 2 + track.controlChanges.count)
         for n in track.notes {
             let off = max(n.positionTicks + 1, n.positionTicks + n.lengthTicks)
-            events.append(Event(tick: n.positionTicks, kind: 1, pitch: n.pitch, velocity: n.velocity))
-            events.append(Event(tick: off, kind: 0, pitch: n.pitch, velocity: 0))
+            events.append(Event(tick: n.positionTicks, kind: 2, a: n.pitch, b: n.velocity))
+            events.append(Event(tick: off, kind: 0, a: n.pitch, b: 0))
+        }
+        for cc in track.controlChanges {
+            events.append(Event(tick: cc.positionTicks, kind: 1, a: cc.controller, b: cc.value))
         }
         events.sort { a, b in
             if a.tick != b.tick { return a.tick < b.tick }
@@ -95,13 +100,18 @@ public enum MIDIFileBuilder {
         for e in events {
             let delta = max(0, e.tick - lastTick)
             body.append(vlq(UInt32(delta)))
-            if e.kind == 1 {
+            switch e.kind {
+            case 2:
                 body.append(0x90 | channel)
-                body.append(e.pitch & 0x7F)
-                body.append(max(1, e.velocity) & 0x7F)
-            } else {
+                body.append(e.a & 0x7F)
+                body.append(max(1, e.b) & 0x7F)
+            case 1:
+                body.append(0xB0 | channel)
+                body.append(e.a & 0x7F)
+                body.append(e.b & 0x7F)
+            default:
                 body.append(0x80 | channel)
-                body.append(e.pitch & 0x7F)
+                body.append(e.a & 0x7F)
                 body.append(0x00)
             }
             lastTick = e.tick

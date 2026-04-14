@@ -84,7 +84,11 @@ public enum CompositionPlanner {
             guard !molecule.atoms.isEmpty else { continue }
 
             let vp = PatternBuilder.buildVP(from: molecule, musicalClass: mclass)
-            let rp = PatternBuilder.buildRP(from: vp, musicalClass: mclass)
+            let rp = PatternBuilder.buildRP(
+                from: vp,
+                musicalClass: mclass,
+                swingTicks: seed?.swingTicks ?? 0
+            )
             let gmProgram = seed?.gmPrograms[role] ?? gmProgram(for: role, mode: mode)
             tracks.append((rp: rp, musicalClass: mclass, gmProgram: gmProgram))
         }
@@ -318,10 +322,14 @@ public enum CompositionPlanner {
         musicalClass: MusicalClass,
         loopLengthTicks: Int
     ) -> Molecule {
-        let candidates = AtomLibrary.allAtoms(mode: mode, role: role).filter { atom in
+        let allMatching = AtomLibrary.allAtoms(mode: mode, role: role).filter { atom in
             musicalClass.allowedAtomTypes.contains(atom.type)
                 && musicalClass.allowedAtomSizes.contains(atom.sizeQuarters)
         }
+        // Split out fills so they're reserved for section endings,
+        // then use the rest as the body pool.
+        let fills = allMatching.filter { $0.name.contains("fill") }
+        let candidates = allMatching.filter { !$0.name.contains("fill") }
         guard !candidates.isEmpty else {
             return Molecule(atoms: [], repetitiveness: musicalClass.atomicRepetitiveness)
         }
@@ -340,8 +348,6 @@ public enum CompositionPlanner {
             let atom: Atom
             switch musicalClass.atomicRepetitiveness {
             case .same:
-                // Still respect A/B sections — same atom within section,
-                // potentially different atom in section B.
                 atom = pool[0]
             case .none, .diff:
                 atom = pool[i % pool.count]
@@ -351,6 +357,26 @@ public enum CompositionPlanner {
             i += 1
             if atom.lengthTicks <= 0 { break }
         }
+
+        // Section-ending fills: replace the atom that covers the last
+        // beat of each section with a fill of matching size if one is
+        // available. Gives the phrase a turnaround instead of a hard
+        // loop point.
+        if !fills.isEmpty {
+            var cursor = 0
+            for (idx, atom) in atoms.enumerated() {
+                let atomEnd = cursor + atom.lengthTicks
+                let endsSectionA = cursor < sectionBoundaryTicks && atomEnd >= sectionBoundaryTicks
+                let endsSectionB = cursor < loopLengthTicks && atomEnd >= loopLengthTicks
+                if endsSectionA || endsSectionB {
+                    if let fill = fills.first(where: { $0.sizeQuarters == atom.sizeQuarters }) {
+                        atoms[idx] = fill
+                    }
+                }
+                cursor += atom.lengthTicks
+            }
+        }
+
         return Molecule(atoms: atoms, repetitiveness: musicalClass.atomicRepetitiveness)
     }
 

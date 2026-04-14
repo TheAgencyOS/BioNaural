@@ -47,6 +47,20 @@ public struct MPNote: Hashable, Sendable {
 
 // MARK: - MPTrack
 
+/// A single CC (Control Change) event — used for expression swells,
+/// modulation wheel vibrato, brightness changes, etc.
+public struct MPControlChange: Hashable, Sendable {
+    public let positionTicks: Int
+    public let controller: UInt8
+    public let value: UInt8
+
+    public init(positionTicks: Int, controller: UInt8, value: UInt8) {
+        self.positionTicks = positionTicks
+        self.controller = controller
+        self.value = value
+    }
+}
+
 /// A single track in a Music Pattern.
 public struct MPTrack: Hashable, Sendable {
 
@@ -62,16 +76,22 @@ public struct MPTrack: Hashable, Sendable {
     /// The notes in this track, sorted by position.
     public let notes: [MPNote]
 
+    /// Continuous-controller events interleaved with the notes.
+    /// Serialized into the track chunk alongside note events.
+    public let controlChanges: [MPControlChange]
+
     public init(
         role: TrackRole,
         gmProgram: UInt8,
         channel: UInt8,
-        notes: [MPNote]
+        notes: [MPNote],
+        controlChanges: [MPControlChange] = []
     ) {
         self.role = role
         self.gmProgram = gmProgram
         self.channel = channel
         self.notes = notes.sorted { $0.positionTicks < $1.positionTicks }
+        self.controlChanges = controlChanges.sorted { $0.positionTicks < $1.positionTicks }
     }
 }
 

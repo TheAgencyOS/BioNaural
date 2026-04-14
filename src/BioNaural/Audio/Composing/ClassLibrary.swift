@@ -26,17 +26,19 @@ public enum ClassLibrary {
         biometricState: BiometricState
     ) -> MusicalClass? {
         switch (mode, role) {
-        case (.sleep, .melody): return sleepMelody()
-        case (.sleep, .bass):   return sleepBass()
-        case (.sleep, .chords): return sleepChords()
-        case (.sleep, .drums):  return nil  // sleep has no drums
-        case (.sleep, _):       return nil
+        case (.sleep, .melody):  return sleepMelody()
+        case (.sleep, .bass):    return sleepBass()
+        case (.sleep, .chords):  return sleepChords()
+        case (.sleep, .texture): return sleepTexture()
+        case (.sleep, .drums):   return nil  // sleep has no drums
+        case (.sleep, _):        return nil
 
-        case (.relaxation, .melody): return relaxMelody()
-        case (.relaxation, .bass):   return relaxBass()
-        case (.relaxation, .chords): return relaxChords()
-        case (.relaxation, .drums):  return nil  // relaxation has no drums
-        case (.relaxation, _):       return nil
+        case (.relaxation, .melody):  return relaxMelody()
+        case (.relaxation, .bass):    return relaxBass()
+        case (.relaxation, .chords):  return relaxChords()
+        case (.relaxation, .texture): return relaxTexture()
+        case (.relaxation, .drums):   return nil  // relaxation has no drums
+        case (.relaxation, _):        return nil
 
         case (.focus, .melody): return focusMelody(biometricState)
         case (.focus, .bass):   return focusBass()
@@ -55,11 +57,50 @@ public enum ClassLibrary {
     /// All roles supported for a given mode.
     public static func roles(for mode: FocusMode) -> [TrackRole] {
         switch mode {
-        case .sleep:       return [.melody, .bass, .chords]
-        case .relaxation:  return [.melody, .bass, .chords]
+        case .sleep:       return [.melody, .bass, .chords, .texture]
+        case .relaxation:  return [.melody, .bass, .chords, .texture]
         case .focus:       return [.melody, .bass, .chords, .drums]
         case .energize:    return [.melody, .bass, .chords, .drums]
         }
+    }
+
+    // MARK: - Texture classes
+
+    /// Sleep texture — very sparse high sustains that hover above the
+    /// main pad. Adds subliminal movement without filling the mix.
+    /// Routed to the melody sampler for now; a dedicated texture voice
+    /// would make this more distinct sonically.
+    private static func sleepTexture() -> MusicalClass {
+        MusicalClass(
+            name: "sleep_texture",
+            role: .texture,
+            allowedAtomTypes: [.alpha, .empty],
+            atomicRepetitiveness: .same,
+            weirdnessRange: WeirdnessRange(.zero, .safe),
+            density: 0.12,
+            allowedEventTypes: [.note],
+            octaveRange: 5...6,              // sits above main pad
+            velocityRange: 25...45,          // very quiet
+            allowedAtomSizes: [4],
+            contour: .archDownUp
+        )
+    }
+
+    /// Relaxation texture — gentle high drones / color notes.
+    private static func relaxTexture() -> MusicalClass {
+        MusicalClass(
+            name: "relax_texture",
+            role: .texture,
+            allowedAtomTypes: [.alpha, .empty],
+            atomicRepetitiveness: .same,
+            weirdnessRange: WeirdnessRange(.zero, .mild),
+            density: 0.20,
+            allowedEventTypes: [.note],
+            octaveRange: 5...6,
+            velocityRange: 30...55,
+            allowedAtomSizes: [2],
+            contour: .archUpDown
+        )
     }
 
     // MARK: - SLEEP (biometric-invariant)
