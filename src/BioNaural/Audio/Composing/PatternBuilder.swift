@@ -480,12 +480,17 @@ public enum PatternBuilder {
         progress: Double,
         role: TrackRole
     ) -> UInt8 {
+        // Drums are exempt. Their velocity is a direct tier selector
+        // for the WeirdnessResolver, and they should keep a constant
+        // rhythmic spine rather than breathing with the phrase.
+        // DrumHumanizer still adds its own micro-variation later.
+        if role == .drums { return velocity }
+
         let p = max(0.0, min(1.0, progress))
         // sin(π·p) peaks at p=0.5, zero at p=0 and p=1.
         let curve = sin(.pi * p)
         let floor: Double
         switch role {
-        case .drums:          floor = 0.85  // drums stay strong
         case .bass:           floor = 0.80
         case .chords, .pad:   floor = 0.70
         default:              floor = 0.60  // melody swells the most

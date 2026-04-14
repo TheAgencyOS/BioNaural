@@ -212,6 +212,17 @@ public enum CompositionPlanner {
         biometricState: BiometricState,
         to base: MusicalClass
     ) -> MusicalClass {
+        // Drums are exempt from arc-intensity scaling. Their
+        // velocityRange is carefully calibrated so atom-intensity
+        // tiers map to the right resolver drum tiers (kick / snare /
+        // hat); scaling that range with the phase intensity pushes
+        // tiers out of the right resolver buckets and produces a
+        // different drum sound in intro/outro phases than in the
+        // body of the session. Keep drums at their base class
+        // throughout — constant rhythm is more important than
+        // session-arc dynamics for the rhythmic spine.
+        if base.role == .drums { return base }
+
         let clamped = max(0.2, min(1.2, intensity))
         let cappedWeirdness = weirdnessCap(for: biometricState, base: base.weirdnessRange)
 
