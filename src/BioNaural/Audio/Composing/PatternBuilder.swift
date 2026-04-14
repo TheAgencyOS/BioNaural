@@ -175,6 +175,19 @@ public enum PatternBuilder {
             var notes: [MPNote] = []
             var lastPitch: UInt8? = nil
 
+            // Precompute parsimonious chord voicings per HC entry for
+            // the chord track. Every HC entry's voicing is chosen to
+            // minimize voice motion from the previous entry's voicing,
+            // so chord changes glide by common tones instead of
+            // jumping in parallel.
+            let chordVoicings: [Int: [UInt8]] = {
+                guard rp.role == .chords else { return [:] }
+                return precomputeChordVoicings(
+                    harmonicContext: harmonicContext,
+                    octaveRange: mclass.octaveRange
+                )
+            }()
+
             // Tile the RP across the full loop length. Each tile uses
             // the same rhythmic pattern but different pitches because
             // the active HC entry may have changed.
@@ -199,14 +212,26 @@ public enum PatternBuilder {
                         progress: progress
                     )
 
-                    var pitch = WeirdnessResolver.resolve(
-                        weirdness: rpNote.weirdness,
-                        type: rpNote.type,
-                        velocity: rpNote.velocity,
-                        hc: hcEntry,
-                        octave: octave,
-                        drumKit: drumKit
-                    )
+                    var pitch: UInt8
+                    if rp.role == .chords,
+                       let voicing = chordVoicings[hcEntry.startTick],
+                       !voicing.isEmpty {
+                        // Map weirdness to an index into the precomputed
+                        // parsimonious voicing: weirdness 0 → lowest voice,
+                        // weirdness 1 → highest. Keeps the chord-tone spread
+                        // intact while the voicing itself moves minimally.
+                        let idx = min(voicing.count - 1, max(0, Int(rpNote.weirdness.value * Double(voicing.count))))
+                        pitch = voicing[idx]
+                    } else {
+                        pitch = WeirdnessResolver.resolve(
+                            weirdness: rpNote.weirdness,
+                            type: rpNote.type,
+                            velocity: rpNote.velocity,
+                            hc: hcEntry,
+                            octave: octave,
+                            drumKit: drumKit
+                        )
+                    }
 
                     // Voice-leading: if this melodic note is more than
                     // 7 semitones away from the previous one, transpose
@@ -329,6 +354,32 @@ public enum PatternBuilder {
         case .pad:     return 3
         case .texture: return 4
         }
+    }
+
+    /// Walk the HarmonicContext entries in order and build a
+    /// parsimonious voicing for each chord, using VoiceLeader to
+    /// minimize voice motion from the previous chord. Returns a
+    /// map keyed by `entry.startTick` so the buildMP note loop
+    /// can look up the voicing for the HC entry active at any tick.
+    private static func precomputeChordVoicings(
+        harmonicContext: HarmonicContext,
+        octaveRange: ClosedRange<Int>
+    ) -> [Int: [UInt8]] {
+        var voicings: [Int: [UInt8]] = [:]
+        var previous: [UInt8] = []
+        for entry in harmonicContext.entries {
+            let intervals = entry.family.intervals
+            let tonicPc = Int(entry.tonic.intValue)
+            let pitchClasses = intervals.map { tonicPc + $0 }
+            let voicing = VoiceLeader.voicing(
+                chordPitchClasses: pitchClasses,
+                octaveRange: octaveRange,
+                previous: previous
+            )
+            voicings[entry.startTick] = voicing
+            previous = voicing
+        }
+        return voicings
     }
 
     /// Build a sequence of CC events shaped to the loop's phrase
