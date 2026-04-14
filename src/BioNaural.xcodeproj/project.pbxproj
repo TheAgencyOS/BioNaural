@@ -182,6 +182,7 @@
 		E1D2C3B4A5969795 /* CompositionSeed.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9795A5B4C3D2E1F0 /* CompositionSeed.swift */; };
 		E1D2C3B4A5969796 /* SessionArcPlanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9796A5B4C3D2E1F0 /* SessionArcPlanner.swift */; };
 		E1D2C3B4A5969797 /* VoiceLeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9797A5B4C3D2E1F0 /* VoiceLeader.swift */; };
+		E1D2C3B4A5969798 /* SessionStyleMemory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9798A5B4C3D2E1F0 /* SessionStyleMemory.swift */; };
 		B1C2D3E4F5A6B7C8D9E0F1A2 /* ContextualBandit.swift in Sources */ = {isa = PBXBuildFile; fileRef = C2D3E4F5A6B7C8D9E0F1A2B3 /* ContextualBandit.swift */; };
 		919FC44C04155F78C1618D1B /* SessionBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 185122EA9C658E448BE40CDC /* SessionBackgroundView.swift */; };
 		91FD658A3C6BF319836B96F0 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8667E958B039D62FB0E7E7E4 /* OnboardingView.swift */; };
@@ -416,6 +417,7 @@
 		9795A5B4C3D2E1F0 /* CompositionSeed.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CompositionSeed.swift; path = Composing/CompositionSeed.swift; sourceTree = "<group>"; };
 		9796A5B4C3D2E1F0 /* SessionArcPlanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SessionArcPlanner.swift; path = Composing/SessionArcPlanner.swift; sourceTree = "<group>"; };
 		9797A5B4C3D2E1F0 /* VoiceLeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = VoiceLeader.swift; path = Composing/VoiceLeader.swift; sourceTree = "<group>"; };
+		9798A5B4C3D2E1F0 /* SessionStyleMemory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SessionStyleMemory.swift; path = Composing/SessionStyleMemory.swift; sourceTree = "<group>"; };
 		C2D3E4F5A6B7C8D9E0F1A2B3 /* ContextualBandit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContextualBandit.swift; sourceTree = "<group>"; };
 		696FC7A467EB0E607CFB4254 /* View+Modifiers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Modifiers.swift"; sourceTree = "<group>"; };
 		697A85E6F9E68CCB69B181BA /* EnergizeScreeningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnergizeScreeningView.swift; sourceTree = "<group>"; };
@@ -1305,6 +1307,7 @@
 				9795A5B4C3D2E1F0 /* CompositionSeed.swift */,
 				9796A5B4C3D2E1F0 /* SessionArcPlanner.swift */,
 				9797A5B4C3D2E1F0 /* VoiceLeader.swift */,
+				9798A5B4C3D2E1F0 /* SessionStyleMemory.swift */,
 				F3E719F5490497C1B4C9A00E /* BiometricStemMixer.swift */,
 				BF72961F52C034FCF105C594 /* MelodicLayer.swift */,
 				6D6BEB0CDA6210074A1647BB /* MicroVariationEngine.swift */,
@@ -1659,6 +1662,7 @@
 				E1D2C3B4A5969795 /* CompositionSeed.swift in Sources */,
 				E1D2C3B4A5969796 /* SessionArcPlanner.swift in Sources */,
 				E1D2C3B4A5969797 /* VoiceLeader.swift in Sources */,
+				E1D2C3B4A5969798 /* SessionStyleMemory.swift in Sources */,
 				B1C2D3E4F5A6B7C8D9E0F1A2 /* ContextualBandit.swift in Sources */,
 				46BA45295C8D2624A1B24051 /* BioNauralApp.swift in Sources */,
 				DB070B0B06852896D0676ED0 /* BioNauralFocusFilter.swift in Sources */,

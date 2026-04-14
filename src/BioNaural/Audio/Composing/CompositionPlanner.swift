@@ -47,7 +47,8 @@ public enum CompositionPlanner {
         biometricState: BiometricState,
         tonality: SessionTonality,
         seed: CompositionSeed? = nil,
-        arcIntensity: Double = 1.0
+        arcIntensity: Double = 1.0,
+        styleMemory: SessionStyleMemory? = nil
     ) -> CompositionPlan {
 
         let loopLengthTicks = loopBars * Composing.ticksPerBar
@@ -69,11 +70,16 @@ public enum CompositionPlanner {
                 role: role,
                 biometricState: biometricState
             ) else { continue }
-            // Apply the session-arc intensity multiplier. Low
-            // intensity narrows atom variety and scales velocity
-            // down so intro / outro phases feel noticeably sparser
-            // than the body of the session.
-            let mclass = applyArcIntensity(arcIntensity, to: baseClass)
+            // Apply the session-arc intensity multiplier and the
+            // HRV-derived weirdness ceiling. Low intensity narrows
+            // atom variety and scales velocity down so intro / outro
+            // phases feel sparser; elevated/peak biometric states
+            // cap tonal tension for parasympathetic recovery.
+            let mclass = applyArcIntensity(
+                arcIntensity,
+                biometricState: biometricState,
+                to: baseClass
+            )
 
             let molecule: Molecule
             if role == .bass, let drums = drumMolecule, shouldInterlockBassWithDrums(mode: mode) {
@@ -83,8 +89,17 @@ public enum CompositionPlanner {
                     mode: mode,
                     role: role,
                     musicalClass: mclass,
-                    loopLengthTicks: loopLengthTicks
+                    loopLengthTicks: loopLengthTicks,
+                    styleMemory: styleMemory
                 )
+            }
+            // Record the atoms we chose so the next regeneration's
+            // buildMolecule will bias its candidate ordering toward
+            // the same atoms — stylistic continuity across blocks.
+            if let styleMemory {
+                for atom in molecule.atoms {
+                    styleMemory.record(role: role, atomName: atom.name)
+                }
             }
             if role == .drums { drumMolecule = molecule }
             guard !molecule.atoms.isEmpty else { continue }
@@ -113,14 +128,16 @@ public enum CompositionPlanner {
         biometricState: BiometricState,
         tonality: SessionTonality,
         seed: CompositionSeed? = nil,
-        arcIntensity: Double = 1.0
+        arcIntensity: Double = 1.0,
+        styleMemory: SessionStyleMemory? = nil
     ) -> MusicPattern {
         let p = plan(
             mode: mode,
             biometricState: biometricState,
             tonality: tonality,
             seed: seed,
-            arcIntensity: arcIntensity
+            arcIntensity: arcIntensity,
+            styleMemory: styleMemory
         )
         return PatternBuilder.buildMP(
             tracks: p.tracks,
@@ -133,16 +150,26 @@ public enum CompositionPlanner {
 
     // MARK: - Arc intensity application
 
-    /// Apply a session-arc intensity multiplier to a MusicalClass.
-    /// Returns a new MusicalClass with scaled density, velocity, and
-    /// (at very low intensity) narrowed atom types. Intensity 1.0 is
-    /// a passthrough.
+    /// Apply the session-arc intensity multiplier AND a biometric
+    /// HRV-derived weirdness ceiling to a MusicalClass. Returns a
+    /// new MusicalClass with scaled density, velocity, atom types,
+    /// and tonal-tension range.
+    ///
+    /// HRV mapping: elevated / peak states reduce the weirdness
+    /// ceiling to favor consonant intervals, backed by the 2021
+    /// biofeedback study showing harmonic-consonance shifts push
+    /// HRV toward parasympathetic recovery.
     private static func applyArcIntensity(
         _ intensity: Double,
+        biometricState: BiometricState,
         to base: MusicalClass
     ) -> MusicalClass {
-        guard abs(intensity - 1.0) > 0.01 else { return base }
         let clamped = max(0.2, min(1.2, intensity))
+        let cappedWeirdness = weirdnessCap(for: biometricState, base: base.weirdnessRange)
+
+        let noArcChange = abs(intensity - 1.0) <= 0.01
+        let noWeirdnessChange = cappedWeirdness == base.weirdnessRange
+        if noArcChange && noWeirdnessChange { return base }
 
         // Scale density.
         let newDensity = max(0.05, min(1.0, base.density * clamped))
@@ -164,11 +191,11 @@ public enum CompositionPlanner {
         }
 
         return MusicalClass(
-            name: base.name + "_arc\(Int(clamped * 100))",
+            name: base.name + "_arc\(Int(clamped * 100))_bio\(biometricState)",
             role: base.role,
             allowedAtomTypes: newAtomTypes,
             atomicRepetitiveness: base.atomicRepetitiveness,
-            weirdnessRange: base.weirdnessRange,
+            weirdnessRange: cappedWeirdness,
             density: newDensity,
             allowedEventTypes: base.allowedEventTypes,
             octaveRange: base.octaveRange,
@@ -176,6 +203,25 @@ public enum CompositionPlanner {
             allowedAtomSizes: base.allowedAtomSizes,
             contour: base.contour
         )
+    }
+
+    /// HRV → weirdness ceiling. Elevated and peak arousal states cap
+    /// the upper bound of the weirdness range so chord tones and
+    /// scale tones stay closer to the consonant center. Calm and
+    /// focused states pass the range through unchanged.
+    private static func weirdnessCap(
+        for state: BiometricState,
+        base: WeirdnessRange
+    ) -> WeirdnessRange {
+        let cap: Double
+        switch state {
+        case .calm, .focused: return base
+        case .elevated:       cap = 0.50   // mild ceiling
+        case .peak:           cap = 0.30   // safe ceiling
+        }
+        let newUpper = min(base.upper.value, cap)
+        let newLower = min(base.lower.value, newUpper)
+        return WeirdnessRange(Weirdness(newLower), Weirdness(newUpper))
     }
 
     // MARK: - Harmonic Context
@@ -389,11 +435,22 @@ public enum CompositionPlanner {
         mode: FocusMode,
         role: TrackRole,
         musicalClass: MusicalClass,
-        loopLengthTicks: Int
+        loopLengthTicks: Int,
+        styleMemory: SessionStyleMemory? = nil
     ) -> Molecule {
-        let allMatching = AtomLibrary.allAtoms(mode: mode, role: role).filter { atom in
+        var allMatching = AtomLibrary.allAtoms(mode: mode, role: role).filter { atom in
             musicalClass.allowedAtomTypes.contains(atom.type)
                 && musicalClass.allowedAtomSizes.contains(atom.sizeQuarters)
+        }
+        // Stylistic continuity: reorder the candidate pool so atoms
+        // the session has recently played float to the front. The
+        // rest of the ordering stays intact, so the selection still
+        // has the original variety on a fresh session.
+        if let styleMemory, !styleMemory.isEmpty(for: role) {
+            allMatching.sort { a, b in
+                styleMemory.recency(role: role, atomName: a.name)
+                    > styleMemory.recency(role: role, atomName: b.name)
+            }
         }
         // Drums get a dedicated path: one hand-picked atom repeats
         // for the entire loop with no A/B swap, no empty bars, and
