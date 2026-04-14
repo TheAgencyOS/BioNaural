@@ -289,18 +289,21 @@ extension SessionView {
 
     fileprivate var overflowMenu: some View {
         Menu {
-            // Sound selection section
+            // Soundscape picker — native Picker renders a checkmark
+            // on only the selected item and leaves the others
+            // unmarked, which is the standard iOS "choose one"
+            // affordance. The previous hand-rolled Menu buttons
+            // showed a music-note icon next to unselected options
+            // which read as "all playing" and misled the user.
             Section("Soundscape") {
-                ForEach(Array(Constants.Soundscape.presets.enumerated()), id: \.offset) { index, preset in
-                    Button {
-                        selectedSoundscapeIndex = index
-                        viewModel.selectSoundscape(preset.bedName)
-                    } label: {
-                        Label(
-                            preset.displayName,
-                            systemImage: selectedSoundscapeIndex == index ? "checkmark" : "music.note"
-                        )
+                Picker("Soundscape", selection: $selectedSoundscapeIndex) {
+                    ForEach(Array(Constants.Soundscape.presets.enumerated()), id: \.offset) { index, preset in
+                        Text(preset.displayName).tag(index)
                     }
+                }
+                .onChange(of: selectedSoundscapeIndex) { _, newIndex in
+                    let preset = Constants.Soundscape.presets[newIndex]
+                    viewModel.selectSoundscape(preset.bedName)
                 }
             }
 
