@@ -82,7 +82,7 @@ public enum ClassLibrary {
             weirdnessRange: WeirdnessRange(.zero, .safe),
             density: 0.12,
             allowedEventTypes: [.note],
-            octaveRange: 5...6,              // sits above main pad
+            octaveRange: 4...5,              // sits above main pad
             velocityRange: 25...45,          // very quiet
             allowedAtomSizes: [4],
             contour: .archDownUp
@@ -99,7 +99,7 @@ public enum ClassLibrary {
             weirdnessRange: WeirdnessRange(.zero, .mild),
             density: 0.20,
             allowedEventTypes: [.note],
-            octaveRange: 5...6,
+            octaveRange: 4...5,
             velocityRange: 30...55,
             allowedAtomSizes: [2],
             contour: .archUpDown
@@ -118,7 +118,7 @@ public enum ClassLibrary {
             weirdnessRange: WeirdnessRange(.zero, .mild),
             density: 0.15,
             allowedEventTypes: [.note],
-            octaveRange: 5...6,
+            octaveRange: 4...5,
             velocityRange: 28...48,
             allowedAtomSizes: [2, 4],
             contour: .archUpDown
@@ -136,7 +136,7 @@ public enum ClassLibrary {
             weirdnessRange: WeirdnessRange(.zero, .safe),
             density: 0.20,
             allowedEventTypes: [.note],            // single notes only
-            octaveRange: 3...5,
+            octaveRange: 2...3,                    // lowered — was 3...5
             velocityRange: 35...60,
             allowedAtomSizes: [4],                 // long phrases
             contour: .descending                   // settle into lower register
@@ -184,7 +184,7 @@ public enum ClassLibrary {
             weirdnessRange: WeirdnessRange(.zero, .mild),
             density: 0.40,
             allowedEventTypes: [.note, .arpeggio],
-            octaveRange: 3...5,
+            octaveRange: 3...4,                     // lowered — was 3...5
             velocityRange: 50...75,
             allowedAtomSizes: [2],
             contour: .archUpDown                    // breath-like rise and fall
@@ -242,7 +242,7 @@ public enum ClassLibrary {
             weirdnessRange: WeirdnessRange(.zero, .mild),
             density: density,
             allowedEventTypes: [.note],
-            octaveRange: 4...5,
+            octaveRange: 3...4,                     // lowered — was 4...5
             velocityRange: 45...72,
             allowedAtomSizes: [2, 4],
             contour: .archUpDown
@@ -299,14 +299,14 @@ public enum ClassLibrary {
         return MusicalClass(
             name: "focus_drums_\(state)",
             role: .drums,
-            allowedAtomTypes: [.alpha, .empty],
+            allowedAtomTypes: [.alpha],                      // no .empty — drums must be constant
             atomicRepetitiveness: .same,
             weirdnessRange: WeirdnessRange(.zero, .safe),  // unused for drums
-            density: 0.60,                                   // steady rhythmic pulse
+            density: 0.85,                                   // steady rhythmic pulse
             allowedEventTypes: [.note],
             octaveRange: 0...0,                              // unused for drums
-            velocityRange: 70...95,                          // audible, not loud
-            allowedAtomSizes: [2, 4]
+            velocityRange: 70...95,
+            allowedAtomSizes: [4]                            // only 4-quarter patterns
         )
     }
 

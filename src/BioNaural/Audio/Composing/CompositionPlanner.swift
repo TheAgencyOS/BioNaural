@@ -335,6 +335,21 @@ public enum CompositionPlanner {
             musicalClass.allowedAtomTypes.contains(atom.type)
                 && musicalClass.allowedAtomSizes.contains(atom.sizeQuarters)
         }
+        // Drums get a dedicated path: one hand-picked atom repeats
+        // for the entire loop with no A/B swap, no empty bars, and
+        // no fill substitution. A constant rhythmic spine is more
+        // important than variety for hypnotic modes.
+        if role == .drums {
+            let drumAtom = allMatching.first { !$0.name.contains("empty") } ?? allMatching.first
+            guard let drumAtom, drumAtom.lengthTicks > 0 else {
+                return Molecule(atoms: [], repetitiveness: .same)
+            }
+            let count = max(1, loopLengthTicks / drumAtom.lengthTicks)
+            return Molecule(
+                atoms: Array(repeating: drumAtom, count: count),
+                repetitiveness: .same
+            )
+        }
         // Split out fills so they're reserved for section endings,
         // then use the rest as the body pool.
         let fills = allMatching.filter { $0.name.contains("fill") }
