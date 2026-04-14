@@ -60,15 +60,17 @@ public struct SessionTonality: Sendable {
         )
     }
 
-    /// Create a session tonality from an explicit root and scale.
-    /// Used when a CompositionSeed has picked a randomized key so the
-    /// session doesn't always use ScaleMapper's deterministic default.
-    public init(mode: FocusMode, root: NoteClass, scale: Scale) {
+    /// Create a session tonality from an explicit root, scale, and
+    /// tempo offset. Used when a CompositionSeed has picked a
+    /// randomized key + tempo so the session doesn't always use
+    /// ScaleMapper's deterministic default.
+    public init(mode: FocusMode, root: NoteClass, scale: Scale, tempoOffsetBPM: Double = 0.0) {
         self.mode = mode
         self.root = root
         self.scale = scale
         self.key = Key(root: root, scale: scale)
-        self.tempo = Self.defaultTempo(for: mode)
+        let baseTempo = Self.defaultTempo(for: mode)
+        self.tempo = max(30.0, min(180.0, baseTempo + tempoOffsetBPM))
 
         // Compute root frequency (A4 = 440 Hz standard)
         // NoteClass.intValue gives semitones from C: C=0, D=2, F=5, G=7

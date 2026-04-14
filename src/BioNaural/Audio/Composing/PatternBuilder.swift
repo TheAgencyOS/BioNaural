@@ -68,7 +68,8 @@ public enum PatternBuilder {
     /// notes (none for rhythmic / drum notes).
     public static func buildRP(
         from vp: VirtualPattern,
-        musicalClass: MusicalClass
+        musicalClass: MusicalClass,
+        swingTicks: Int = 0
     ) -> RealPattern {
         var notes: [RPNote] = []
 
@@ -76,7 +77,8 @@ public enum PatternBuilder {
             switch event {
 
             case .note(let weirdness, let position, let length, let velocity, let type):
-                let jittered = humanizePosition(position, type: type)
+                let swung = applySwing(position: position, swingTicks: swingTicks, role: vp.role)
+                let jittered = humanizePosition(swung, type: type)
                 notes.append(RPNote(
                     weirdness: weirdness,
                     positionTicks: jittered,
@@ -170,6 +172,7 @@ public enum PatternBuilder {
             let mclass = trackInput.musicalClass
             let baseOctave = middleOctave(of: mclass.octaveRange)
             var notes: [MPNote] = []
+            var lastPitch: UInt8? = nil
 
             // Tile the RP across the full loop length. Each tile uses
             // the same rhythmic pattern but different pitches because
@@ -195,12 +198,32 @@ public enum PatternBuilder {
                         progress: progress
                     )
 
-                    let pitch = WeirdnessResolver.resolve(
+                    var pitch = WeirdnessResolver.resolve(
                         weirdness: rpNote.weirdness,
                         type: rpNote.type,
                         velocity: rpNote.velocity,
                         hc: hcEntry,
                         octave: octave
+                    )
+
+                    // Voice-leading: if this melodic note is more than
+                    // 7 semitones away from the previous one, transpose
+                    // by octaves toward the previous pitch so the line
+                    // moves by small intervals instead of big leaps.
+                    if (rpNote.type == .mixed || rpNote.type == .solo), let prev = lastPitch {
+                        pitch = voiceLead(pitch: pitch, toward: prev, octaveRange: mclass.octaveRange)
+                    }
+                    if rpNote.type == .mixed || rpNote.type == .solo {
+                        lastPitch = pitch
+                    }
+
+                    // Dynamic density: velocity rides a half-sine envelope
+                    // across the loop so the phrase has a sense of swell
+                    // and release instead of flat dynamics.
+                    let shapedVelocity = applyDensityEnvelope(
+                        velocity: rpNote.velocity,
+                        progress: progress,
+                        role: rp.role
                     )
 
                     // Trim length so the note doesn't extend past the loop.
@@ -209,7 +232,7 @@ public enum PatternBuilder {
 
                     notes.append(MPNote(
                         pitch: pitch,
-                        velocity: rpNote.velocity,
+                        velocity: shapedVelocity,
                         positionTicks: absoluteTick,
                         lengthTicks: length
                     ))
@@ -218,11 +241,13 @@ public enum PatternBuilder {
             }
 
             let channel: UInt8 = (rp.role == .drums) ? 9 : channelForRole(rp.role)
+            let ccs = buildExpressionCCs(role: rp.role, loopLengthTicks: loopLengthTicks)
             mpTracks.append(MPTrack(
                 role: rp.role,
                 gmProgram: trackInput.gmProgram,
                 channel: channel,
-                notes: notes
+                notes: notes,
+                controlChanges: ccs
             ))
         }
 
@@ -302,6 +327,103 @@ public enum PatternBuilder {
         case .pad:     return 3
         case .texture: return 4
         }
+    }
+
+    /// Build a sequence of CC events shaped to the loop's phrase
+    /// envelope. CC 11 (expression) crescendos and decrescendos with
+    /// the density envelope so sustained voices breathe. CC 1 (mod
+    /// wheel) adds a slow vibrato pulse on melodic tracks. Drums and
+    /// bass get fewer CC events — they should stay tight.
+    private static func buildExpressionCCs(role: TrackRole, loopLengthTicks: Int) -> [MPControlChange] {
+        var ccs: [MPControlChange] = []
+        let stepTicks = Composing.ticksPerBar / 2  // every half bar
+        guard stepTicks > 0 else { return ccs }
+
+        var tick = 0
+        while tick < loopLengthTicks {
+            let progress = Double(tick) / Double(max(1, loopLengthTicks))
+            let curve = sin(.pi * max(0.0, min(1.0, progress)))
+
+            let expressionFloor: Double
+            switch role {
+            case .drums, .bass: expressionFloor = 110  // mostly flat
+            case .chords, .pad: expressionFloor =  88
+            default:            expressionFloor =  72  // melody breathes
+            }
+            let expression = UInt8(max(1, min(127, Int((expressionFloor + (127.0 - expressionFloor) * curve).rounded()))))
+            ccs.append(MPControlChange(positionTicks: tick, controller: 11, value: expression))
+
+            // Mod wheel vibrato pulse on melody only — slow oscillation.
+            if role == .melody {
+                let vib = Int(15.0 + 15.0 * sin(2.0 * .pi * progress))
+                ccs.append(MPControlChange(positionTicks: tick, controller: 1, value: UInt8(max(0, min(127, vib)))))
+            }
+
+            tick += stepTicks
+        }
+        return ccs
+    }
+
+    /// Apply a swing offset to a position. Shifts notes that land on
+    /// an off-8th (tick % 480 == 240) by `swingTicks`. Used for lo-fi
+    /// focus shuffle and relaxation rubato. Drums are spared so the
+    /// grid stays honest.
+    private static func applySwing(position: Int, swingTicks: Int, role: TrackRole) -> Int {
+        guard swingTicks > 0, role != .drums else { return position }
+        let q = Composing.ticksPerQuarter
+        let e = q / 2
+        let withinBeat = position % q
+        if withinBeat == e {
+            return position + swingTicks
+        }
+        return position
+    }
+
+    /// Nudge a freshly resolved melodic pitch toward a previous pitch
+    /// by transposing in octaves when the interval exceeds a 5th.
+    /// Keeps the line moving by small intervals instead of jumping
+    /// around the scale. Does not exceed the class's octaveRange.
+    private static func voiceLead(
+        pitch: UInt8,
+        toward previous: UInt8,
+        octaveRange: ClosedRange<Int>
+    ) -> UInt8 {
+        var candidate = Int(pitch)
+        let prevInt = Int(previous)
+        let minMidi = (octaveRange.lowerBound + 1) * 12
+        let maxMidi = (octaveRange.upperBound + 1) * 12 + 11
+        // Shift up/down by octaves until within a 5th of previous.
+        while candidate - prevInt > 7 && candidate - 12 >= minMidi {
+            candidate -= 12
+        }
+        while prevInt - candidate > 7 && candidate + 12 <= maxMidi {
+            candidate += 12
+        }
+        return UInt8(max(0, min(127, candidate)))
+    }
+
+    /// Shape velocity across the loop using a half-sine envelope so
+    /// the phrase has breath — sparser at the edges, stronger in the
+    /// middle. Drums get a tighter envelope (they should remain audible
+    /// throughout); melodic tracks get a wider dynamic swing.
+    private static func applyDensityEnvelope(
+        velocity: UInt8,
+        progress: Double,
+        role: TrackRole
+    ) -> UInt8 {
+        let p = max(0.0, min(1.0, progress))
+        // sin(π·p) peaks at p=0.5, zero at p=0 and p=1.
+        let curve = sin(.pi * p)
+        let floor: Double
+        switch role {
+        case .drums:          floor = 0.85  // drums stay strong
+        case .bass:           floor = 0.80
+        case .chords, .pad:   floor = 0.70
+        default:              floor = 0.60  // melody swells the most
+        }
+        let scale = floor + (1.0 - floor) * curve
+        let shaped = Double(velocity) * scale
+        return UInt8(max(1, min(127, Int(shaped.rounded()))))
     }
 
     /// Apply small humanization jitter to a position. Only melodic

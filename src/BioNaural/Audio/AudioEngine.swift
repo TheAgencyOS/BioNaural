@@ -225,9 +225,15 @@ public final class AudioEngine: AudioEngineProtocol {
         self.currentSeed = seed
         Logger.audio.info("v3 seed — root:\(String(describing: seed.root)) scale:\(String(describing: seed.scale)) variant:\(seed.progressionVariant)")
 
-        // Create the master tonality using the seeded root + scale so
-        // all layers share the same randomized key for the session.
-        let tonality = SessionTonality(mode: mode, root: seed.root, scale: seed.scale)
+        // Create the master tonality using the seeded root, scale, and
+        // tempo offset so each session has its own pulse as well as
+        // its own key.
+        let tonality = SessionTonality(
+            mode: mode,
+            root: seed.root,
+            scale: seed.scale,
+            tempoOffsetBPM: seed.tempoOffsetBPM
+        )
         self.sessionTonality = tonality
 
         // Apply binaural preset using the tonality-aligned carrier frequency.
