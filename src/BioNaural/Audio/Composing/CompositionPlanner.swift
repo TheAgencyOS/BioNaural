@@ -46,7 +46,8 @@ public enum CompositionPlanner {
         mode: FocusMode,
         biometricState: BiometricState,
         tonality: SessionTonality,
-        seed: CompositionSeed? = nil
+        seed: CompositionSeed? = nil,
+        arcIntensity: Double = 1.0
     ) -> CompositionPlan {
 
         let loopLengthTicks = loopBars * Composing.ticksPerBar
@@ -63,11 +64,16 @@ public enum CompositionPlanner {
         var tracks: [(rp: RealPattern, musicalClass: MusicalClass, gmProgram: UInt8)] = []
 
         for role in ClassLibrary.roles(for: mode) {
-            guard let mclass = ClassLibrary.musicalClass(
+            guard let baseClass = ClassLibrary.musicalClass(
                 mode: mode,
                 role: role,
                 biometricState: biometricState
             ) else { continue }
+            // Apply the session-arc intensity multiplier. Low
+            // intensity narrows atom variety and scales velocity
+            // down so intro / outro phases feel noticeably sparser
+            // than the body of the session.
+            let mclass = applyArcIntensity(arcIntensity, to: baseClass)
 
             let molecule: Molecule
             if role == .bass, let drums = drumMolecule, shouldInterlockBassWithDrums(mode: mode) {
@@ -106,15 +112,69 @@ public enum CompositionPlanner {
         mode: FocusMode,
         biometricState: BiometricState,
         tonality: SessionTonality,
-        seed: CompositionSeed? = nil
+        seed: CompositionSeed? = nil,
+        arcIntensity: Double = 1.0
     ) -> MusicPattern {
-        let p = plan(mode: mode, biometricState: biometricState, tonality: tonality, seed: seed)
+        let p = plan(
+            mode: mode,
+            biometricState: biometricState,
+            tonality: tonality,
+            seed: seed,
+            arcIntensity: arcIntensity
+        )
         return PatternBuilder.buildMP(
             tracks: p.tracks,
             harmonicContext: p.harmonicContext,
             tempoBPM: p.tempoBPM,
             loopLengthTicks: p.loopLengthTicks,
             drumKit: seed?.drumKit ?? .sparseKit
+        )
+    }
+
+    // MARK: - Arc intensity application
+
+    /// Apply a session-arc intensity multiplier to a MusicalClass.
+    /// Returns a new MusicalClass with scaled density, velocity, and
+    /// (at very low intensity) narrowed atom types. Intensity 1.0 is
+    /// a passthrough.
+    private static func applyArcIntensity(
+        _ intensity: Double,
+        to base: MusicalClass
+    ) -> MusicalClass {
+        guard abs(intensity - 1.0) > 0.01 else { return base }
+        let clamped = max(0.2, min(1.2, intensity))
+
+        // Scale density.
+        let newDensity = max(0.05, min(1.0, base.density * clamped))
+
+        // Scale velocity range — low phases noticeably quieter.
+        let loScale = Int(Double(base.velocityRange.lowerBound) * clamped)
+        let hiScale = Int(Double(base.velocityRange.upperBound) * clamped)
+        let newLo = UInt8(max(1, min(127, loScale)))
+        let newHi = UInt8(max(Int(newLo) + 1, min(127, hiScale)))
+        let newVelocityRange: ClosedRange<UInt8> = newLo...newHi
+
+        // At very low intensity, strip beta and gamma atom types so
+        // the phase stays minimal. Drums are exempt — drum atoms are
+        // all alpha and drums are a rhythmic spine we want running.
+        var newAtomTypes = base.allowedAtomTypes
+        if clamped < 0.55 && base.role != .drums {
+            newAtomTypes = newAtomTypes.filter { $0 == .alpha || $0 == .empty }
+            if newAtomTypes.isEmpty { newAtomTypes = [.alpha] }
+        }
+
+        return MusicalClass(
+            name: base.name + "_arc\(Int(clamped * 100))",
+            role: base.role,
+            allowedAtomTypes: newAtomTypes,
+            atomicRepetitiveness: base.atomicRepetitiveness,
+            weirdnessRange: base.weirdnessRange,
+            density: newDensity,
+            allowedEventTypes: base.allowedEventTypes,
+            octaveRange: base.octaveRange,
+            velocityRange: newVelocityRange,
+            allowedAtomSizes: base.allowedAtomSizes,
+            contour: base.contour
         )
     }
 
