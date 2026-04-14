@@ -53,9 +53,20 @@ public struct SessionTonality: Sendable {
 
     /// Create a session tonality from a mode and biometric state.
     public init(mode: FocusMode, biometricState: BiometricState = .calm) {
+        self.init(
+            mode: mode,
+            root: ScaleMapper.rootNote(for: mode),
+            scale: ScaleMapper.scale(for: mode, biometricState: biometricState)
+        )
+    }
+
+    /// Create a session tonality from an explicit root and scale.
+    /// Used when a CompositionSeed has picked a randomized key so the
+    /// session doesn't always use ScaleMapper's deterministic default.
+    public init(mode: FocusMode, root: NoteClass, scale: Scale) {
         self.mode = mode
-        self.root = ScaleMapper.rootNote(for: mode)
-        self.scale = ScaleMapper.scale(for: mode, biometricState: biometricState)
+        self.root = root
+        self.scale = scale
         self.key = Key(root: root, scale: scale)
         self.tempo = Self.defaultTempo(for: mode)
 

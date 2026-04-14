@@ -59,6 +59,12 @@ public final class AudioEngine: AudioEngineProtocol {
     /// when biometrics change mid-session.
     private var currentBiometricState: BiometricState = .calm
 
+    /// Session-stable randomization of key, scale, instruments, and
+    /// progression variant. Generated once per `start(mode:)` call and
+    /// reused for biometric regenerations so the listener never hears
+    /// instruments change mid-session.
+    private var currentSeed: CompositionSeed?
+
     /// Synthesised sub-bass oscillator (energize mode only).
     /// Adds physical low-end (30-80 Hz) that SoundFont samples can't produce.
     private var subBassNode: AVAudioSourceNode?
@@ -211,8 +217,17 @@ public final class AudioEngine: AudioEngineProtocol {
 
         currentMode = mode
 
-        // Create the master tonality — ALL layers use this for key/scale/tempo.
-        let tonality = SessionTonality(mode: mode)
+        // Generate a fresh CompositionSeed so this session picks a new
+        // root, scale, instrument palette, and progression variant.
+        // The seed is stable for the duration of the session — biometric
+        // regens reuse it so the listener doesn't hear a patch change.
+        let seed = CompositionSeed.random(for: mode)
+        self.currentSeed = seed
+        Logger.audio.info("v3 seed — root:\(String(describing: seed.root)) scale:\(String(describing: seed.scale)) variant:\(seed.progressionVariant)")
+
+        // Create the master tonality using the seeded root + scale so
+        // all layers share the same randomized key for the session.
+        let tonality = SessionTonality(mode: mode, root: seed.root, scale: seed.scale)
         self.sessionTonality = tonality
 
         // Apply binaural preset using the tonality-aligned carrier frequency.
@@ -397,7 +412,8 @@ public final class AudioEngine: AudioEngineProtocol {
         let pattern = CompositionPlanner.buildMusicPattern(
             mode: mode,
             biometricState: currentBiometricState,
-            tonality: tonality
+            tonality: tonality,
+            seed: currentSeed
         )
 
         let player = musicPatternPlayer ?? MusicPatternPlayer(engine: engine, voices: mv)
@@ -418,6 +434,7 @@ public final class AudioEngine: AudioEngineProtocol {
         parameters.amplitude = 0.0
         currentMode = nil
         sessionTonality = nil
+        currentSeed = nil
 
         // Stop volume sync and audio layers gracefully.
         stopVolumeSyncTimer()
@@ -486,7 +503,8 @@ public final class AudioEngine: AudioEngineProtocol {
         let pattern = CompositionPlanner.buildMusicPattern(
             mode: mode,
             biometricState: state,
-            tonality: tonality
+            tonality: tonality,
+            seed: currentSeed
         )
         musicPatternPlayer?.crossfadeTo(pattern: pattern)
     }

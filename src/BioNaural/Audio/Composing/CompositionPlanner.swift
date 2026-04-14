@@ -45,11 +45,17 @@ public enum CompositionPlanner {
     public static func plan(
         mode: FocusMode,
         biometricState: BiometricState,
-        tonality: SessionTonality
+        tonality: SessionTonality,
+        seed: CompositionSeed? = nil
     ) -> CompositionPlan {
 
         let loopLengthTicks = loopBars * Composing.ticksPerBar
-        let hc = buildHarmonicContext(mode: mode, tonality: tonality, loopLengthTicks: loopLengthTicks)
+        let hc = buildHarmonicContext(
+            mode: mode,
+            tonality: tonality,
+            loopLengthTicks: loopLengthTicks,
+            variant: seed?.progressionVariant ?? 0
+        )
 
         // Build the drum molecule first. The bass molecule in rhythmic
         // modes will be derived from it so kick and bass interlock.
@@ -79,7 +85,7 @@ public enum CompositionPlanner {
 
             let vp = PatternBuilder.buildVP(from: molecule, musicalClass: mclass)
             let rp = PatternBuilder.buildRP(from: vp, musicalClass: mclass)
-            let gmProgram = gmProgram(for: role, mode: mode)
+            let gmProgram = seed?.gmPrograms[role] ?? gmProgram(for: role, mode: mode)
             tracks.append((rp: rp, musicalClass: mclass, gmProgram: gmProgram))
         }
 
@@ -95,9 +101,10 @@ public enum CompositionPlanner {
     public static func buildMusicPattern(
         mode: FocusMode,
         biometricState: BiometricState,
-        tonality: SessionTonality
+        tonality: SessionTonality,
+        seed: CompositionSeed? = nil
     ) -> MusicPattern {
-        let p = plan(mode: mode, biometricState: biometricState, tonality: tonality)
+        let p = plan(mode: mode, biometricState: biometricState, tonality: tonality, seed: seed)
         return PatternBuilder.buildMP(
             tracks: p.tracks,
             harmonicContext: p.harmonicContext,
@@ -116,11 +123,12 @@ public enum CompositionPlanner {
     private static func buildHarmonicContext(
         mode: FocusMode,
         tonality: SessionTonality,
-        loopLengthTicks: Int
+        loopLengthTicks: Int,
+        variant: Int = 0
     ) -> HarmonicContext {
         let rootSemitone = Int(tonality.root.intValue)
         let minor = isMinorScale(tonality: tonality)
-        let progression = progressionFor(mode: mode, minorScale: minor)
+        let progression = progressionFor(mode: mode, minorScale: minor, variant: variant)
 
         let barTicks = Composing.ticksPerBar
         var entries: [HarmonicContextEntry] = []
@@ -141,60 +149,137 @@ public enum CompositionPlanner {
         return HarmonicContext(entries: entries)
     }
 
-    /// Per-mode 8-bar chord progression (one chord per bar).
+    /// Per-mode 8-bar chord progression pool. Each mode carries multiple
+    /// variants so a session with a different seed produces a different
+    /// harmonic feel — not just different notes on the same chord motion.
     /// Each entry is `(semitone offset from tonic, chord family)`.
     private static func progressionFor(
         mode: FocusMode,
-        minorScale: Bool
+        minorScale: Bool,
+        variant: Int
     ) -> [(offset: Int, family: ChordFamily)] {
+        let pool = progressionPool(mode: mode, minorScale: minorScale)
+        let idx = ((variant % pool.count) + pool.count) % pool.count
+        return pool[idx]
+    }
+
+    private static func progressionPool(
+        mode: FocusMode,
+        minorScale: Bool
+    ) -> [[(offset: Int, family: ChordFamily)]] {
         switch mode {
+
+        // MARK: Sleep — barely-moving drones and pedal tones
         case .sleep:
-            // Minimal motion — long tonic stretches with one gentle departure.
-            return minorScale
-                ? [
-                    (0, .minor), (0, .minor), (0, .minor), (5, .minor),   // i   i   i   iv
-                    (0, .minor), (0, .minor), (8, .major), (0, .minor)    // i   i   ♭VI i
+            if minorScale {
+                return [
+                    // i pedal with a single iv departure
+                    [(0,.minor),(0,.minor),(0,.minor),(5,.minor),
+                     (0,.minor),(0,.minor),(8,.major),(0,.minor)],
+                    // i - VI drift
+                    [(0,.minor),(0,.minor),(8,.major),(0,.minor),
+                     (0,.minor),(8,.major),(5,.minor),(0,.minor)],
+                    // brief phrygian colour
+                    [(0,.minor),(1,.major),(0,.minor),(0,.minor),
+                     (0,.minor),(8,.major),(0,.minor),(0,.minor)],
                 ]
-                : [
-                    (0, .major), (0, .major), (0, .major), (9, .minor),   // I   I   I   vi
-                    (0, .major), (0, .major), (5, .major), (0, .major)    // I   I   IV  I
+            } else {
+                return [
+                    // I pedal with a late IV
+                    [(0,.major),(0,.major),(0,.major),(9,.minor),
+                     (0,.major),(0,.major),(5,.major),(0,.major)],
+                    // I - IV breathing
+                    [(0,.major),(0,.major),(5,.major),(0,.major),
+                     (0,.major),(5,.major),(9,.minor),(0,.major)],
+                    // lydian float (I - II)
+                    [(0,.major),(0,.major),(2,.major),(0,.major),
+                     (0,.major),(2,.major),(0,.major),(0,.major)],
                 ]
+            }
 
+        // MARK: Relaxation — gentle, slowly pulsing motion
         case .relaxation:
-            // Gentle breathing — classic soft progression, then repeat.
-            return minorScale
-                ? [
-                    (0, .minor), (8, .major), (5, .minor), (10, .major),  // i   ♭VI iv  ♭VII
-                    (0, .minor), (8, .major), (5, .minor), (7, .minor)    // i   ♭VI iv  v
+            if minorScale {
+                return [
+                    // i - ♭VI - iv - ♭VII x2
+                    [(0,.minor),(8,.major),(5,.minor),(10,.major),
+                     (0,.minor),(8,.major),(5,.minor),(10,.major)],
+                    // i - v - ♭VI - ♭VII (Andalusian softened)
+                    [(0,.minor),(7,.minor),(8,.major),(10,.major),
+                     (0,.minor),(7,.minor),(8,.major),(10,.major)],
+                    // dorian: i - IV - i - ♭VII
+                    [(0,.minor),(5,.major),(0,.minor),(10,.major),
+                     (0,.minor),(5,.major),(0,.minor),(10,.major)],
                 ]
-                : [
-                    (0, .major), (9, .minor), (5, .major), (7, .major),   // I   vi  IV  V
-                    (0, .major), (9, .minor), (5, .major), (7, .major)    // (repeat)
+            } else {
+                return [
+                    // I - vi - IV - V (classic)
+                    [(0,.major),(9,.minor),(5,.major),(7,.major),
+                     (0,.major),(9,.minor),(5,.major),(7,.major)],
+                    // I - iii - IV - V (soft)
+                    [(0,.major),(4,.minor),(5,.major),(7,.major),
+                     (0,.major),(4,.minor),(5,.major),(7,.major)],
+                    // I - IV - vi - V (lydian-friendly)
+                    [(0,.major),(5,.major),(9,.minor),(7,.major),
+                     (0,.major),(5,.major),(9,.minor),(7,.major)],
                 ]
+            }
 
+        // MARK: Focus — steady, predictable, lo-fi rotations
         case .focus:
-            // Steady, predictable — classic lo-fi / study rotation.
-            return minorScale
-                ? [
-                    (0, .minor), (10, .major), (8, .major), (10, .major), // i   ♭VII ♭VI ♭VII
-                    (0, .minor), (10, .major), (8, .major), (7, .major)   // i   ♭VII ♭VI V
+            if minorScale {
+                return [
+                    // i - ♭VII - ♭VI - ♭VII x2
+                    [(0,.minor),(10,.major),(8,.major),(10,.major),
+                     (0,.minor),(10,.major),(8,.major),(10,.major)],
+                    // ii - v - i - ♭VII (jazz-tinged)
+                    [(2,.minor),(7,.minor),(0,.minor),(10,.major),
+                     (2,.minor),(7,.minor),(0,.minor),(10,.major)],
+                    // i - iv - v - i (plaintive)
+                    [(0,.minor),(5,.minor),(7,.minor),(0,.minor),
+                     (0,.minor),(5,.minor),(7,.minor),(0,.minor)],
                 ]
-                : [
-                    (0, .major), (7, .major), (9, .minor), (5, .major),   // I   V   vi  IV
-                    (0, .major), (7, .major), (9, .minor), (5, .major)    // (repeat)
+            } else {
+                return [
+                    // I - V - vi - IV (four-chord loop)
+                    [(0,.major),(7,.major),(9,.minor),(5,.major),
+                     (0,.major),(7,.major),(9,.minor),(5,.major)],
+                    // vi - IV - I - V
+                    [(9,.minor),(5,.major),(0,.major),(7,.major),
+                     (9,.minor),(5,.major),(0,.major),(7,.major)],
+                    // ii - V - I - vi (jazz 2-5-1)
+                    [(2,.minor),(7,.major),(0,.major),(9,.minor),
+                     (2,.minor),(7,.major),(0,.major),(9,.minor)],
                 ]
+            }
 
+        // MARK: Energize — forward motion, driving changes
         case .energize:
-            // Driving progression with bar-start harmonic punches.
-            return minorScale
-                ? [
-                    (0, .minor), (10, .major), (8, .major), (7, .major),  // i   ♭VII ♭VI V
-                    (0, .minor), (10, .major), (8, .major), (7, .major)   // (repeat)
+            if minorScale {
+                return [
+                    // i - ♭VII - ♭VI - V (harmonic minor punch)
+                    [(0,.minor),(10,.major),(8,.major),(7,.major),
+                     (0,.minor),(10,.major),(8,.major),(7,.major)],
+                    // i - ♭VI - ♭VII - i (rock)
+                    [(0,.minor),(8,.major),(10,.major),(0,.minor),
+                     (0,.minor),(8,.major),(10,.major),(0,.minor)],
+                    // i - iv - ♭VI - V (minor pop)
+                    [(0,.minor),(5,.minor),(8,.major),(7,.major),
+                     (0,.minor),(5,.minor),(8,.major),(7,.major)],
                 ]
-                : [
-                    (0, .major), (7, .major), (10, .major), (5, .major),  // I   V   ♭VII IV
-                    (0, .major), (7, .major), (10, .major), (5, .major)   // (repeat)
+            } else {
+                return [
+                    // I - V - ♭VII - IV (anthemic)
+                    [(0,.major),(7,.major),(10,.major),(5,.major),
+                     (0,.major),(7,.major),(10,.major),(5,.major)],
+                    // I - IV - V - IV (house)
+                    [(0,.major),(5,.major),(7,.major),(5,.major),
+                     (0,.major),(5,.major),(7,.major),(5,.major)],
+                    // vi - IV - I - V (uplift)
+                    [(9,.minor),(5,.major),(0,.major),(7,.major),
+                     (9,.minor),(5,.major),(0,.major),(7,.major)],
                 ]
+            }
         }
     }
 
