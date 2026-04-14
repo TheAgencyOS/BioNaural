@@ -279,9 +279,11 @@ public enum AtomGenerator {
             q + s,      2 * q + 3 * s                   // 16th accents (rare)
         ]
 
-        // Number of notes: 1-4. Favor 2-3 — real lo-fi melodies
-        // are sparse but not silent.
-        let noteCount = [1, 2, 2, 3, 3, 4].randomElement(using: &generator) ?? 2
+        // Number of notes: 1-2 per bar. Real lo-fi / trip-hop
+        // melodies are VERY sparse — often one sustained tone per
+        // bar, occasionally two. Per user feedback focus needs
+        // less melody going on.
+        let noteCount = [1, 1, 1, 2, 2].randomElement(using: &generator) ?? 1
 
         // Sample distinct positions without replacement.
         var pool = weightedPositions

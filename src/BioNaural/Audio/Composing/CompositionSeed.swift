@@ -280,15 +280,19 @@ public struct CompositionSeed: Sendable, Hashable {
         case (.relaxation, .drums):   return nil
 
         // MARK: Focus — trip-hop / lo-fi hip-hop palette.
-        // Electric piano + acoustic piano + vibes for the dusty
-        // melodic voice; upright / electric bass for the walking
-        // low end; warm pad + rhodes for sparse chord comping.
-        case (.focus, .melody):  return [4, 0, 11, 5, 1]                // rhodes, acoustic piano, vibes, DX, bright piano
-        case (.focus, .bass):    return [32, 33, 35]                    // acoustic bass, electric bass, fretless
-        case (.focus, .chords):  return [4, 5, 89, 0]                   // rhodes, DX, warm pad, piano
+        // Melody is LOCKED to Rhodes (GM 4) only — acoustic piano,
+        // vibes, DX, and bright piano are removed per user
+        // feedback that focus was producing a busy high-pitched
+        // piano and multiple melodic parts. Bass covers upright /
+        // electric / fretless. Chord and texture pools are kept
+        // for data compatibility but roles(for: .focus) currently
+        // excludes those tracks.
+        case (.focus, .melody):  return [4]                             // rhodes only
+        case (.focus, .bass):    return [32, 33, 35]                    // acoustic, electric, fretless
+        case (.focus, .chords):  return [4]                             // unused — excluded from focus roles
         case (.focus, .drums):   return [0]                             // percussion bank (sparseKit)
-        case (.focus, .pad):     return [89, 88, 90, 94]
-        case (.focus, .texture): return [89, 88, 94, 95, 98]
+        case (.focus, .pad):     return [89]
+        case (.focus, .texture): return [89]
 
         // MARK: Energize — hip-hop palette (was synthwave, reframed).
         // Rhodes and electric piano for the melodic hook, sub bass /
