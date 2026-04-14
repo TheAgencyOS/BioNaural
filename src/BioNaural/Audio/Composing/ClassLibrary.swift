@@ -60,9 +60,14 @@ public enum ClassLibrary {
         switch mode {
         case .sleep:       return [.melody, .bass, .chords, .texture]
         case .relaxation:  return [.melody, .bass, .chords, .texture]
-        // Focus (trancey + rhythmic): pad melody, pulsing bass,
-        // sustained chord drone, minimal percussion, subtle texture.
-        case .focus:       return [.melody, .bass, .chords, .drums, .texture]
+        // Focus (trip-hop / lo-fi): single Rhodes melody line over
+        // bass + drums. No chord layer or texture — both route
+        // through the melody sampler and create "multiple melodic
+        // parts playing at once" on the same instrument. Real
+        // lo-fi beats are melody + bass + drums; chord harmony
+        // still drives pitch selection via the HarmonicContext
+        // progression, just without a simultaneous comping voice.
+        case .focus:       return [.melody, .bass, .drums]
         case .energize:    return [.melody, .bass, .chords, .drums]
         }
     }
