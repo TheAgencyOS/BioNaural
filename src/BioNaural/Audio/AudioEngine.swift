@@ -610,39 +610,43 @@ public final class AudioEngine: AudioEngineProtocol {
     // MARK: - Music FX chain
 
     /// Configure the music reverb + delay chain for the given mode.
-    /// Each mode gets a characteristic space that matches its genre:
-    /// sleep and relaxation get long, lush reverbs with a short stereo
-    /// delay on top; focus gets a tighter room; energize gets a small
-    /// room so the kick stays punchy.
+    /// We lean lush across the board — every mode gets meaningful
+    /// reverb, and every mode gets at least a short doubling delay
+    /// (~15ms) that acts like analog chorus for thicker timbres.
+    /// Focus and energize pay for this with slightly longer decays
+    /// than a strict "room" reverb would give, but the warmth is
+    /// worth the trade.
     private func applyMusicFX(for mode: FocusMode) {
         guard let reverb = musicReverb, let delay = musicDelay else { return }
         switch mode {
         case .sleep:
             reverb.loadFactoryPreset(.cathedral)
-            reverb.wetDryMix = 75.0          // lush, enveloping
-            delay.delayTime = 0.38           // slow, dreamy echo
-            delay.feedback = 35.0
-            delay.lowPassCutoff = 4500.0
-            delay.wetDryMix = 18.0
+            reverb.wetDryMix = 80.0          // maximum enveloping tail
+            delay.delayTime = 0.42           // slow dreamy echo
+            delay.feedback = 42.0
+            delay.lowPassCutoff = 4000.0
+            delay.wetDryMix = 22.0
         case .relaxation:
             reverb.loadFactoryPreset(.largeHall)
-            reverb.wetDryMix = 55.0          // lots of air
-            delay.delayTime = 0.28
-            delay.feedback = 28.0
-            delay.lowPassCutoff = 6000.0
-            delay.wetDryMix = 14.0
+            reverb.wetDryMix = 65.0          // lots of air
+            delay.delayTime = 0.32
+            delay.feedback = 35.0
+            delay.lowPassCutoff = 5500.0
+            delay.wetDryMix = 20.0
         case .focus:
-            reverb.loadFactoryPreset(.mediumRoom)
-            reverb.wetDryMix = 28.0          // enough space to feel lo-fi, not washy
-            delay.delayTime = 0.0
-            delay.feedback = 0.0
-            delay.wetDryMix = 0.0
+            reverb.loadFactoryPreset(.largeRoom2)
+            reverb.wetDryMix = 42.0          // lush but not washy
+            delay.delayTime = 0.015          // 15ms chorus-style doubling
+            delay.feedback = 20.0
+            delay.lowPassCutoff = 7000.0
+            delay.wetDryMix = 28.0           // thickens rhodes / piano
         case .energize:
-            reverb.loadFactoryPreset(.smallRoom)
-            reverb.wetDryMix = 18.0          // tight — kick stays punchy
-            delay.delayTime = 0.0
-            delay.feedback = 0.0
-            delay.wetDryMix = 0.0
+            reverb.loadFactoryPreset(.mediumHall)
+            reverb.wetDryMix = 34.0          // still tight on the kick side
+            delay.delayTime = 0.018          // 18ms widening
+            delay.feedback = 18.0
+            delay.lowPassCutoff = 9000.0
+            delay.wetDryMix = 24.0           // thickens synth leads
         }
     }
 
@@ -653,12 +657,15 @@ public final class AudioEngine: AudioEngineProtocol {
     /// CC 74 = brightness (low-pass filter cutoff). Values 0-127.
     private func applyArticulation(for mode: FocusMode, voices: MultiVoiceRenderer) {
         struct Envelope { let attack: UInt8; let release: UInt8; let brightness: UInt8 }
+        // All four modes are tuned for lush warmth: slower attacks,
+        // longer releases, darker filter settings than a "clean" mix
+        // would use. The new music reverb tail picks up the slack.
         let env: Envelope
         switch mode {
-        case .sleep:      env = Envelope(attack: 110, release: 120, brightness: 40)   // slow pad
-        case .relaxation: env = Envelope(attack:  80, release: 100, brightness: 64)   // soft
-        case .focus:      env = Envelope(attack:  24, release:  40, brightness: 70)   // clean piano
-        case .energize:   env = Envelope(attack:  10, release:  20, brightness: 96)   // tight, bright
+        case .sleep:      env = Envelope(attack: 118, release: 125, brightness: 30)   // ultra soft pad
+        case .relaxation: env = Envelope(attack:  92, release: 110, brightness: 48)   // warm
+        case .focus:      env = Envelope(attack:  42, release:  70, brightness: 54)   // warm piano / rhodes
+        case .energize:   env = Envelope(attack:  20, release:  50, brightness: 78)   // still tight, but warmer
         }
         let samplers = [voices.melody.sampler, voices.bass.sampler, voices.drums.sampler]
         for sampler in samplers {
