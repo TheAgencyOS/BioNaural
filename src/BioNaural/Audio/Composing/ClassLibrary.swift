@@ -44,7 +44,7 @@ public enum ClassLibrary {
         case (.focus, .bass):    return focusBass()
         case (.focus, .chords):  return focusChords()
         case (.focus, .texture): return focusTexture()
-        case (.focus, .drums):   return nil   // ambient focus has no drums
+        case (.focus, .drums):   return focusDrums(biometricState)
         case (.focus, _):        return nil
 
         case (.energize, .melody): return energizeMelody(biometricState)
@@ -60,7 +60,9 @@ public enum ClassLibrary {
         switch mode {
         case .sleep:       return [.melody, .bass, .chords, .texture]
         case .relaxation:  return [.melody, .bass, .chords, .texture]
-        case .focus:       return [.melody, .bass, .chords, .texture]   // ambient reframe — no drums
+        // Focus (trancey + rhythmic): pad melody, pulsing bass,
+        // sustained chord drone, minimal percussion, subtle texture.
+        case .focus:       return [.melody, .bass, .chords, .drums, .texture]
         case .energize:    return [.melody, .bass, .chords, .drums]
         }
     }
@@ -219,51 +221,54 @@ public enum ClassLibrary {
         )
     }
 
-    // MARK: - FOCUS (ambient reframe)
+    // MARK: - FOCUS (trancey + rhythmic)
 
-    /// Focus is now an ambient mode — drifting pad phrases, no drums,
-    /// no boom-bap. Uses the same density and articulation as
-    /// relaxation with a slightly wider contour and sparser atoms
-    /// so it still reads as "study" rather than "meditation".
+    /// Focus melody: hypnotic minimal. Repeating sustained notes
+    /// with slow contour motion — one Rhodes or pad voice holding
+    /// drone-like tones over the chord drone.
     private static func focusMelody(_ state: BiometricState) -> MusicalClass {
         let density: Double
-        let types: Set<AtomType>
         switch state {
-        case .calm:     density = 0.32; types = [.alpha, .empty]
-        case .focused:  density = 0.38; types = [.alpha, .empty]
-        case .elevated: density = 0.28; types = [.alpha, .empty]   // calm them
-        case .peak:     density = 0.22; types = [.alpha, .empty]   // calm further
+        case .calm:     density = 0.32
+        case .focused:  density = 0.38
+        case .elevated: density = 0.28
+        case .peak:     density = 0.24
         }
         return MusicalClass(
             name: "focus_melody_\(state)",
             role: .melody,
-            allowedAtomTypes: types,
+            allowedAtomTypes: [.alpha, .empty],
             atomicRepetitiveness: .same,
             weirdnessRange: WeirdnessRange(.zero, .mild),
             density: density,
             allowedEventTypes: [.note],
             octaveRange: 4...5,
-            velocityRange: 45...70,
-            allowedAtomSizes: [2, 4],               // prefer longer phrases
-            contour: .archUpDown                    // gentle breathing motion
+            velocityRange: 45...72,
+            allowedAtomSizes: [2, 4],
+            contour: .archUpDown
         )
     }
 
+    /// Focus bass: pulsing root notes — the trance heartbeat.
+    /// Repeats relentlessly. Density higher than the old ambient
+    /// focus bass because the pulse IS the focus.
     private static func focusBass() -> MusicalClass {
         MusicalClass(
             name: "focus_bass",
             role: .bass,
-            allowedAtomTypes: [.alpha],
+            allowedAtomTypes: [.alpha, .beta],
             atomicRepetitiveness: .same,
             weirdnessRange: WeirdnessRange(.zero),
-            density: 0.18,
+            density: 0.55,
             allowedEventTypes: [.note],
-            octaveRange: 2...3,
-            velocityRange: 38...58,
+            octaveRange: 1...2,
+            velocityRange: 55...80,
             allowedAtomSizes: [4]
         )
     }
 
+    /// Focus chords: sustained drone. One or two chord voicings per
+    /// bar, held out to create the hypnotic harmonic bed.
     private static func focusChords() -> MusicalClass {
         MusicalClass(
             name: "focus_chords",
@@ -271,16 +276,18 @@ public enum ClassLibrary {
             allowedAtomTypes: [.alpha],
             atomicRepetitiveness: .same,
             weirdnessRange: WeirdnessRange(.zero, .safe),
-            density: 0.30,
+            density: 0.35,
             allowedEventTypes: [.chord],
             octaveRange: 3...4,
-            velocityRange: 42...62,
+            velocityRange: 45...68,
             allowedAtomSizes: [4]
         )
     }
 
-    /// Focus drums: retained for compatibility but no longer used —
-    /// focus is ambient now and drops drums entirely in roles(for:).
+    /// Focus drums: minimal rhythmic spine. The drum kit (tabla /
+    /// congas / sparse kit) is chosen by CompositionSeed.drumKit —
+    /// the atoms themselves are kit-neutral; the resolver maps
+    /// marker intensities to kit-appropriate percussion notes.
     private static func focusDrums(_ state: BiometricState) -> MusicalClass {
         let density: Double
         switch state {
@@ -295,11 +302,11 @@ public enum ClassLibrary {
             allowedAtomTypes: [.alpha, .empty],
             atomicRepetitiveness: .same,
             weirdnessRange: WeirdnessRange(.zero, .safe),  // unused for drums
-            density: density,
+            density: 0.60,                                   // steady rhythmic pulse
             allowedEventTypes: [.note],
             octaveRange: 0...0,                              // unused for drums
-            velocityRange: 55...80,
-            allowedAtomSizes: [2]
+            velocityRange: 70...95,                          // audible, not loud
+            allowedAtomSizes: [2, 4]
         )
     }
 

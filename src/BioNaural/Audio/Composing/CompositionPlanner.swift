@@ -113,7 +113,8 @@ public enum CompositionPlanner {
             tracks: p.tracks,
             harmonicContext: p.harmonicContext,
             tempoBPM: p.tempoBPM,
-            loopLengthTicks: p.loopLengthTicks
+            loopLengthTicks: p.loopLengthTicks,
+            drumKit: seed?.drumKit ?? .sparseKit
         )
     }
 

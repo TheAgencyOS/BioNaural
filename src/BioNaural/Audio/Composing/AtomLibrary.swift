@@ -557,61 +557,90 @@ public enum AtomLibrary {
 
     // MARK: - FOCUS — Drums (very minimal, side stick on 2 & 4)
 
+    // MARK: - FOCUS — Drums (kit-neutral trance patterns)
+    //
+    // Focus drum atoms are kit-neutral: they encode the RHYTHM and
+    // general intensity tier (low / mid / high-accent). The
+    // WeirdnessResolver translates each intensity tier into the
+    // correct percussion note for the seed's selected DrumKit —
+    // sparse rock kit, congas, or tabla. That lets a single pattern
+    // sound like a sidestick loop, a conga pattern, or a tabla cycle
+    // without maintaining three parallel atom libraries.
+    //
+    // Intensity tiers used throughout:
+    //   0.92+  → low-tier hit (kick / low conga / bayan)
+    //   0.72-  → mid-tier hit (snare / mid conga / tabla slap)
+    //   0.55-  → high-tier hit (closed hat / high conga / tabla tin)
     private static let focusDrums: [Atom] = [
-        // Steady closed-hat on every 8th + side stick on beat 2.
+        // Hypnotic downbeat pulse: low hit on beat 1, high hit on
+        // every 8th after. Trance four-on-the-floor without snares.
         Atom(
-            sizeQuarters: 2,
+            sizeQuarters: 4,
             type: .alpha,
             markers: [
-                Marker(startTick: 0,        stopTick: s,         intensity: 0.65, moveAbility: 0.0),
-                Marker(startTick: e,        stopTick: e + s,     intensity: 0.60, moveAbility: 0.0),
-                Marker(startTick: q,        stopTick: q + s,     intensity: 0.35, moveAbility: 0.0),
-                Marker(startTick: q + e,    stopTick: q + e + s, intensity: 0.60, moveAbility: 0.0),
+                Marker(startTick: 0,         stopTick: s,         intensity: 0.95, moveAbility: 0.0),
+                Marker(startTick: e,         stopTick: e + s,     intensity: 0.55, moveAbility: 0.0),
+                Marker(startTick: q,         stopTick: q + s,     intensity: 0.95, moveAbility: 0.0),
+                Marker(startTick: q + e,     stopTick: q + e + s, intensity: 0.55, moveAbility: 0.0),
+                Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.95, moveAbility: 0.0),
+                Marker(startTick: 2 * q + e, stopTick: 2 * q + e + s, intensity: 0.55, moveAbility: 0.0),
+                Marker(startTick: 3 * q,     stopTick: 3 * q + s, intensity: 0.95, moveAbility: 0.0),
+                Marker(startTick: 3 * q + e, stopTick: 3 * q + e + s, intensity: 0.55, moveAbility: 0.0),
             ],
-            name: "focus_drum_hat_sidestick_2q"
+            name: "focus_drum_pulse_4q"
         ),
-        // Closed hat on all 8ths (study pulse).
+        // Downbeat + backbeat spine — low on 1+3, mid on 2+4,
+        // high on the "ands". The most song-like focus drum.
         Atom(
-            sizeQuarters: 2,
+            sizeQuarters: 4,
             type: .alpha,
             markers: [
-                Marker(startTick: 0,     stopTick: s,         intensity: 0.62, moveAbility: 0.0),
-                Marker(startTick: e,     stopTick: e + s,     intensity: 0.58, moveAbility: 0.0),
-                Marker(startTick: q,     stopTick: q + s,     intensity: 0.62, moveAbility: 0.0),
-                Marker(startTick: q + e, stopTick: q + e + s, intensity: 0.58, moveAbility: 0.0),
+                Marker(startTick: 0,         stopTick: s,         intensity: 0.95),
+                Marker(startTick: e,         stopTick: e + s,     intensity: 0.55),
+                Marker(startTick: q,         stopTick: q + s,     intensity: 0.72),
+                Marker(startTick: q + e,     stopTick: q + e + s, intensity: 0.55),
+                Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.95),
+                Marker(startTick: 2 * q + e, stopTick: 2 * q + e + s, intensity: 0.55),
+                Marker(startTick: 3 * q,     stopTick: 3 * q + s, intensity: 0.72),
+                Marker(startTick: 3 * q + e, stopTick: 3 * q + e + s, intensity: 0.55),
             ],
-            name: "focus_drum_hat_pulse_2q"
+            name: "focus_drum_backbeat_4q"
         ),
-        // Soft snare on beat 2 with hats around it.
+        // Syncopated trance pattern — low on 1 + 2-and, mid on 3,
+        // scattered high hits.
         Atom(
-            sizeQuarters: 2,
+            sizeQuarters: 4,
             type: .alpha,
             markers: [
-                Marker(startTick: 0,     stopTick: s,         intensity: 0.60, moveAbility: 0.0),
-                Marker(startTick: q,     stopTick: q + s,     intensity: 0.72, moveAbility: 0.0),  // snare
-                Marker(startTick: q + e, stopTick: q + e + s, intensity: 0.60, moveAbility: 0.0),
+                Marker(startTick: 0,         stopTick: s,         intensity: 0.95),
+                Marker(startTick: e,         stopTick: e + s,     intensity: 0.55),
+                Marker(startTick: q + e,     stopTick: q + e + s, intensity: 0.92),
+                Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.72),
+                Marker(startTick: 2 * q + e, stopTick: 2 * q + e + s, intensity: 0.55),
+                Marker(startTick: 3 * q,     stopTick: 3 * q + s, intensity: 0.55),
+                Marker(startTick: 3 * q + e, stopTick: 3 * q + e + s, intensity: 0.55),
             ],
-            name: "focus_drum_soft_backbeat_2q"
+            name: "focus_drum_synco_4q"
         ),
-        // EMPTY — leaves space
+        // Sparse groove — every beat a high hit, low on 1 only.
+        // The minimum-viable focus drum atom.
         Atom(
-            sizeQuarters: 2,
+            sizeQuarters: 4,
+            type: .alpha,
+            markers: [
+                Marker(startTick: 0,     stopTick: s,         intensity: 0.95),
+                Marker(startTick: q,     stopTick: q + s,     intensity: 0.55),
+                Marker(startTick: 2 * q, stopTick: 2 * q + s, intensity: 0.55),
+                Marker(startTick: 3 * q, stopTick: 3 * q + s, intensity: 0.55),
+            ],
+            name: "focus_drum_sparse_4q"
+        ),
+        // EMPTY bar for breath.
+        Atom(
+            sizeQuarters: 4,
             type: .empty,
             markers: [],
-            name: "focus_drum_empty_2q"
-        ),
-        // Fill — soft 16th snare roll into section change.
-        Atom(
-            sizeQuarters: 2,
-            type: .alpha,
-            markers: [
-                Marker(startTick: 0,         stopTick: s,         intensity: 0.62, moveAbility: 0.0),  // hat
-                Marker(startTick: q,         stopTick: q + s,     intensity: 0.70, moveAbility: 0.0),  // snare
-                Marker(startTick: q + s,     stopTick: q + 2 * s, intensity: 0.72, moveAbility: 0.0),  // snare
-                Marker(startTick: q + e,     stopTick: q + e + s, intensity: 0.74, moveAbility: 0.0),  // snare
-                Marker(startTick: q + 3 * s, stopTick: 2 * q,     intensity: 0.76, moveAbility: 0.0),  // snare
-            ],
-            name: "focus_drum_fill_snareroll_2q"
+            name: "focus_drum_empty_4q"
         ),
     ]
 

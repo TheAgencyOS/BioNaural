@@ -28,9 +28,9 @@ public enum FocusMode: String, Codable, CaseIterable, Identifiable, Sendable {
     public var displayName: String {
         switch self {
         case .focus:       return "Focus"
-        case .relaxation:  return "Relaxation"
+        case .relaxation:  return "Relax"
         case .sleep:       return "Sleep"
-        case .energize:    return "Energize"
+        case .energize:    return "Focus"  // legacy — energize hidden, falls back to Focus label
         }
     }
 

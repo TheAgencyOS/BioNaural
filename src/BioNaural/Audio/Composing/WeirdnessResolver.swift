@@ -32,19 +32,21 @@ public enum WeirdnessResolver {
     // MARK: - Public API
 
     /// Resolve a single note to a MIDI pitch using the appropriate
-    /// strategy for its NoteType.
+    /// strategy for its NoteType. Drum resolution uses the caller's
+    /// DrumKit to pick percussion notes — default is .sparseKit.
     public static func resolve(
         weirdness: Weirdness,
         type: NoteType,
         velocity: UInt8,
         hc: HarmonicContextEntry,
-        octave: Int
+        octave: Int,
+        drumKit: DrumKit = .sparseKit
     ) -> UInt8 {
         switch type {
         case .comp:     return resolveComp(weirdness: weirdness, hc: hc, octave: octave)
         case .solo:     return resolveSolo(weirdness: weirdness, hc: hc, octave: octave)
         case .mixed:    return resolveMixed(weirdness: weirdness, hc: hc, octave: octave)
-        case .rhythmic: return resolveRhythmic(velocity: velocity)
+        case .rhythmic: return resolveRhythmic(velocity: velocity, kit: drumKit)
         }
     }
 
@@ -122,14 +124,37 @@ public enum WeirdnessResolver {
     ///   0.45+ → closed hi-hat (velocity ~60+)
     ///   0.30+ → open hi-hat / side stick (velocity ~40+)
     ///   else  → shaker / ghost
-    public static func resolveRhythmic(velocity: UInt8) -> UInt8 {
-        switch velocity {
-        case 108...127: return 36  // Bass Drum 1 (kick)
-        case 85...107:  return 38  // Acoustic Snare
-        case 60...84:   return 42  // Closed Hi-Hat
-        case 45...59:   return 46  // Open Hi-Hat
-        case 25...44:   return 37  // Side Stick
-        default:        return 70  // Maracas (shaker)
+    public static func resolveRhythmic(velocity: UInt8, kit: DrumKit = .sparseKit) -> UInt8 {
+        switch kit {
+        case .sparseKit:
+            // Standard rock / focus sparse kit (kick / snare / hat).
+            switch velocity {
+            case 108...127: return 36  // Bass Drum 1 (kick)
+            case 85...107:  return 38  // Acoustic Snare
+            case 60...84:   return 42  // Closed Hi-Hat
+            case 45...59:   return 37  // Side Stick
+            default:        return 70  // Maracas (shaker)
+            }
+        case .congas:
+            // Latin percussion layout using GM conga + bongo notes.
+            switch velocity {
+            case 108...127: return 64  // Low Conga
+            case 85...107:  return 63  // Open High Conga
+            case 60...84:   return 62  // Mute High Conga
+            case 45...59:   return 60  // High Bongo
+            default:        return 70  // Maracas (shaker)
+            }
+        case .tabla:
+            // Tabla approximation using low floor tom for the bayan
+            // bass stroke, low/mid tom for tin-tin strokes, and the
+            // high timbale for the sharp tabla slap.
+            switch velocity {
+            case 108...127: return 41  // Low Floor Tom (bayan thump)
+            case 85...107:  return 47  // Low-Mid Tom (tin)
+            case 60...84:   return 65  // High Timbale (tabla slap)
+            case 45...59:   return 45  // Low Tom
+            default:        return 70  // Maracas (shaker)
+            }
         }
     }
 
