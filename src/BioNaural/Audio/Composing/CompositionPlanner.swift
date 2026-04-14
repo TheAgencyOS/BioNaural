@@ -232,61 +232,64 @@ public enum CompositionPlanner {
                 ]
             }
 
-        // MARK: Focus — lo-fi hip-hop rotations built on 7th and 9th
-        // chords. Real lo-fi sits on min7 / m9 / maj7 voicings for its
-        // dusty, dreamy character. Plain triads sound too clean.
+        // MARK: Focus — ambient reframe. Long-sustain extended chords,
+        // modal motion, no cadential dominants. Same feel as
+        // relaxation but even more drifting and sparser.
         case .focus:
             if minorScale {
                 return [
-                    // im9 - ♭VIImaj7 - ♭VImaj7 - v7 (Nujabes-style)
-                    [(0,.minor9),(10,.major7),(8,.major7),(7,.minor7),
-                     (0,.minor9),(10,.major7),(8,.major7),(7,.minor7)],
-                    // ii7 - V7 - im7 - ♭VIImaj7 (jazz 2-5-1 minor)
-                    [(2,.minor7),(7,.dominant7),(0,.minor7),(10,.major7),
-                     (2,.minor7),(7,.dominant7),(0,.minor7),(10,.major7)],
-                    // im7 - iv7 - ♭VIImaj7 - ♭IIImaj7 (moody loop)
-                    [(0,.minor7),(5,.minor7),(10,.major7),(3,.major7),
-                     (0,.minor7),(5,.minor7),(10,.major7),(3,.major7)],
+                    // im9 - ♭VImaj7 drone pair (two chords, slow move)
+                    [(0,.minor9),(0,.minor9),(8,.major7),(8,.major7),
+                     (0,.minor9),(0,.minor9),(8,.major7),(8,.major7)],
+                    // dorian vamp: im7 - IVmaj7
+                    [(0,.minor7),(5,.major7),(0,.minor7),(5,.major7),
+                     (0,.minor7),(5,.major7),(0,.minor7),(5,.major7)],
+                    // im7 - ♭VIImaj7 - ♭VImaj7 - ♭VIImaj7 (modal float)
+                    [(0,.minor7),(10,.major7),(8,.major7),(10,.major7),
+                     (0,.minor7),(10,.major7),(8,.major7),(10,.major7)],
                 ]
             } else {
                 return [
-                    // Imaj7 - vi7 - ii7 - V7 (jazz-standard turnaround)
-                    [(0,.major7),(9,.minor7),(2,.minor7),(7,.dominant7),
-                     (0,.major7),(9,.minor7),(2,.minor7),(7,.dominant7)],
-                    // Imaj9 - IVmaj7 - iii7 - vi7 (dreamy)
-                    [(0,.major9),(5,.major7),(4,.minor7),(9,.minor7),
-                     (0,.major9),(5,.major7),(4,.minor7),(9,.minor7)],
-                    // vi9 - ii7 - V7 - Imaj7 (classic jazz resolve)
-                    [(9,.minor9),(2,.minor7),(7,.dominant7),(0,.major7),
-                     (9,.minor9),(2,.minor7),(7,.dominant7),(0,.major7)],
+                    // Imaj9 pedal with one IVmaj7 departure
+                    [(0,.major9),(0,.major9),(0,.major9),(5,.major7),
+                     (0,.major9),(0,.major9),(5,.major7),(0,.major9)],
+                    // Imaj7 - IVmaj7 - vi9 - IVmaj7 (lydian float)
+                    [(0,.major7),(5,.major7),(9,.minor9),(5,.major7),
+                     (0,.major7),(5,.major7),(9,.minor9),(5,.major7)],
+                    // Isus2 - Imaj7 - IVmaj7 - Imaj7 (breath)
+                    [(0,.sus2),(0,.major7),(5,.major7),(0,.major7),
+                     (0,.sus2),(0,.major7),(5,.major7),(0,.major7)],
                 ]
             }
 
-        // MARK: Energize — forward motion, driving changes
+        // MARK: Energize — hip-hop / boom-bap. Minor 7ths and m9s
+        // over head-nod tempos. Think Nujabes, J Dilla, Madlib —
+        // warm rhodes, subby bass, dusty drums.
         case .energize:
             if minorScale {
                 return [
-                    // i - ♭VII - ♭VI - V (harmonic minor punch)
-                    [(0,.minor),(10,.major),(8,.major),(7,.major),
-                     (0,.minor),(10,.major),(8,.major),(7,.major)],
-                    // i - ♭VI - ♭VII - i (rock)
-                    [(0,.minor),(8,.major),(10,.major),(0,.minor),
-                     (0,.minor),(8,.major),(10,.major),(0,.minor)],
-                    // i - iv - ♭VI - V (minor pop)
-                    [(0,.minor),(5,.minor),(8,.major),(7,.major),
-                     (0,.minor),(5,.minor),(8,.major),(7,.major)],
+                    // im9 - ♭VIImaj7 - ♭VImaj7 - v7 (Nujabes)
+                    [(0,.minor9),(10,.major7),(8,.major7),(7,.minor7),
+                     (0,.minor9),(10,.major7),(8,.major7),(7,.minor7)],
+                    // im7 - iv7 - ♭VIImaj7 - ♭IIImaj7 (moody loop)
+                    [(0,.minor7),(5,.minor7),(10,.major7),(3,.major7),
+                     (0,.minor7),(5,.minor7),(10,.major7),(3,.major7)],
+                    // ii7 - V7 - im7 - ♭VIImaj7 (jazz 2-5-1 minor)
+                    [(2,.minor7),(7,.dominant7),(0,.minor7),(10,.major7),
+                     (2,.minor7),(7,.dominant7),(0,.minor7),(10,.major7)],
                 ]
             } else {
+                // Fallback for the rare major energize seed.
                 return [
-                    // I - V - ♭VII - IV (anthemic)
-                    [(0,.major),(7,.major),(10,.major),(5,.major),
-                     (0,.major),(7,.major),(10,.major),(5,.major)],
-                    // I - IV - V - IV (house)
-                    [(0,.major),(5,.major),(7,.major),(5,.major),
-                     (0,.major),(5,.major),(7,.major),(5,.major)],
-                    // vi - IV - I - V (uplift)
-                    [(9,.minor),(5,.major),(0,.major),(7,.major),
-                     (9,.minor),(5,.major),(0,.major),(7,.major)],
+                    // Imaj7 - vi7 - ii7 - V7
+                    [(0,.major7),(9,.minor7),(2,.minor7),(7,.dominant7),
+                     (0,.major7),(9,.minor7),(2,.minor7),(7,.dominant7)],
+                    // vi9 - ii7 - V7 - Imaj7
+                    [(9,.minor9),(2,.minor7),(7,.dominant7),(0,.major7),
+                     (9,.minor9),(2,.minor7),(7,.dominant7),(0,.major7)],
+                    // Imaj9 - IVmaj7 - iii7 - vi7
+                    [(0,.major9),(5,.major7),(4,.minor7),(9,.minor7),
+                     (0,.major9),(5,.major7),(4,.minor7),(9,.minor7)],
                 ]
             }
         }

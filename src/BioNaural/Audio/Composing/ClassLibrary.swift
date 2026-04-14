@@ -40,11 +40,12 @@ public enum ClassLibrary {
         case (.relaxation, .drums):   return nil  // relaxation has no drums
         case (.relaxation, _):        return nil
 
-        case (.focus, .melody): return focusMelody(biometricState)
-        case (.focus, .bass):   return focusBass()
-        case (.focus, .chords): return focusChords()
-        case (.focus, .drums):  return focusDrums(biometricState)
-        case (.focus, _):       return nil
+        case (.focus, .melody):  return focusMelody(biometricState)
+        case (.focus, .bass):    return focusBass()
+        case (.focus, .chords):  return focusChords()
+        case (.focus, .texture): return focusTexture()
+        case (.focus, .drums):   return nil   // ambient focus has no drums
+        case (.focus, _):        return nil
 
         case (.energize, .melody): return energizeMelody(biometricState)
         case (.energize, .bass):   return energizeBass(biometricState)
@@ -59,7 +60,7 @@ public enum ClassLibrary {
         switch mode {
         case .sleep:       return [.melody, .bass, .chords, .texture]
         case .relaxation:  return [.melody, .bass, .chords, .texture]
-        case .focus:       return [.melody, .bass, .chords, .drums]
+        case .focus:       return [.melody, .bass, .chords, .texture]   // ambient reframe — no drums
         case .energize:    return [.melody, .bass, .chords, .drums]
         }
     }
@@ -99,6 +100,25 @@ public enum ClassLibrary {
             octaveRange: 5...6,
             velocityRange: 30...55,
             allowedAtomSizes: [2],
+            contour: .archUpDown
+        )
+    }
+
+    /// Focus texture — sparse high harmonic overlay for the ambient
+    /// focus reframe. Almost subliminal — just enough to give the
+    /// phrase a shimmer above the main pad.
+    private static func focusTexture() -> MusicalClass {
+        MusicalClass(
+            name: "focus_texture",
+            role: .texture,
+            allowedAtomTypes: [.alpha, .empty],
+            atomicRepetitiveness: .same,
+            weirdnessRange: WeirdnessRange(.zero, .mild),
+            density: 0.15,
+            allowedEventTypes: [.note],
+            octaveRange: 5...6,
+            velocityRange: 28...48,
+            allowedAtomSizes: [2, 4],
             contour: .archUpDown
         )
     }
@@ -199,32 +219,33 @@ public enum ClassLibrary {
         )
     }
 
-    // MARK: - FOCUS (subtle biometric shift)
+    // MARK: - FOCUS (ambient reframe)
 
-    /// Focus melody: lo-fi piano feel. Density stays moderate across
-    /// biometric states to maintain habituation. At higher arousal we
-    /// don't add complexity — we keep the steady predictability.
+    /// Focus is now an ambient mode — drifting pad phrases, no drums,
+    /// no boom-bap. Uses the same density and articulation as
+    /// relaxation with a slightly wider contour and sparser atoms
+    /// so it still reads as "study" rather than "meditation".
     private static func focusMelody(_ state: BiometricState) -> MusicalClass {
         let density: Double
         let types: Set<AtomType>
         switch state {
-        case .calm:     density = 0.55; types = [.alpha, .empty]
-        case .focused:  density = 0.60; types = [.alpha, .beta, .empty]
-        case .elevated: density = 0.50; types = [.alpha, .empty]   // calm them
-        case .peak:     density = 0.45; types = [.alpha]            // calm further
+        case .calm:     density = 0.32; types = [.alpha, .empty]
+        case .focused:  density = 0.38; types = [.alpha, .empty]
+        case .elevated: density = 0.28; types = [.alpha, .empty]   // calm them
+        case .peak:     density = 0.22; types = [.alpha, .empty]   // calm further
         }
         return MusicalClass(
             name: "focus_melody_\(state)",
             role: .melody,
             allowedAtomTypes: types,
-            atomicRepetitiveness: .same,            // loop for habituation
+            atomicRepetitiveness: .same,
             weirdnessRange: WeirdnessRange(.zero, .mild),
             density: density,
             allowedEventTypes: [.note],
-            octaveRange: 4...5,                     // C4-C5 mid range
-            velocityRange: 50...75,
-            allowedAtomSizes: [2],
-            contour: .neutral                       // stable register for habituation
+            octaveRange: 4...5,
+            velocityRange: 45...70,
+            allowedAtomSizes: [2, 4],               // prefer longer phrases
+            contour: .archUpDown                    // gentle breathing motion
         )
     }
 
@@ -235,10 +256,10 @@ public enum ClassLibrary {
             allowedAtomTypes: [.alpha],
             atomicRepetitiveness: .same,
             weirdnessRange: WeirdnessRange(.zero),
-            density: 0.25,
+            density: 0.18,
             allowedEventTypes: [.note],
             octaveRange: 2...3,
-            velocityRange: 50...70,
+            velocityRange: 38...58,
             allowedAtomSizes: [4]
         )
     }
@@ -249,17 +270,17 @@ public enum ClassLibrary {
             role: .chords,
             allowedAtomTypes: [.alpha],
             atomicRepetitiveness: .same,
-            weirdnessRange: WeirdnessRange(.safe, .mild),
-            density: 0.35,
+            weirdnessRange: WeirdnessRange(.zero, .safe),
+            density: 0.30,
             allowedEventTypes: [.chord],
             octaveRange: 3...4,
-            velocityRange: 45...65,
+            velocityRange: 42...62,
             allowedAtomSizes: [4]
         )
     }
 
-    /// Focus drums: nearly silent shaker/sidestick. Slight increase in
-    /// presence at .focused; pulled back at .elevated/.peak.
+    /// Focus drums: retained for compatibility but no longer used —
+    /// focus is ambient now and drops drums entirely in roles(for:).
     private static func focusDrums(_ state: BiometricState) -> MusicalClass {
         let density: Double
         switch state {

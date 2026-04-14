@@ -21,7 +21,7 @@ struct ComposerView: View {
     @Query(sort: \CustomComposition.createdDate, order: .reverse)
     private var compositions: [CustomComposition]
 
-    @State private var showCreationSheet = false
+    @State private var showModePicker = false
     @Namespace private var glassNamespace
 
     private let columns = [
@@ -44,7 +44,7 @@ struct ComposerView: View {
             ToolbarItem(placement: .topBarTrailing) {
                 Button {
                     dependencies.hapticService.buttonPress()
-                    showCreationSheet = true
+                    showModePicker = true
                 } label: {
                     Image(systemName: "plus")
                         .font(.system(size: Theme.Typography.Size.body, weight: .medium))
@@ -53,9 +53,18 @@ struct ComposerView: View {
                 .accessibilityLabel("Create new composition")
             }
         }
-        .sheet(isPresented: $showCreationSheet) {
-            ComposerSheetView()
-                .environment(dependencies)
+        .confirmationDialog(
+            "New composition",
+            isPresented: $showModePicker,
+            titleVisibility: .visible
+        ) {
+            Button("Sleep")       { createDefaultComposition(mode: .sleep) }
+            Button("Relaxation")  { createDefaultComposition(mode: .relaxation) }
+            Button("Focus")       { createDefaultComposition(mode: .focus) }
+            Button("Energize")    { createDefaultComposition(mode: .energize) }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Pick a mode — the rest uses defaults you can adjust in Mix Levels later.")
         }
     }
 
@@ -150,7 +159,7 @@ struct ComposerView: View {
     private var createButton: some View {
         Button {
             dependencies.hapticService.buttonPress()
-            showCreationSheet = true
+            showModePicker = true
         } label: {
             Image(systemName: "plus")
                 .font(.system(size: Theme.Typography.Size.headline, weight: .medium))
@@ -181,6 +190,50 @@ struct ComposerView: View {
     }
 
     // MARK: - Actions
+
+    /// One-tap composition creation. Picks a mode, fills every other
+    /// field with sensible defaults from Theme.Compose.Defaults, and
+    /// inserts the new composition immediately. All adjustments
+    /// happen later in the session's Mix Levels panel.
+    private func createDefaultComposition(mode: FocusMode) {
+        dependencies.hapticService.buttonPress()
+        let composition = CustomComposition(
+            name: defaultName(for: mode),
+            brainState: mode.rawValue,
+            beatFrequency: mode.defaultBeatFrequency,
+            carrierFrequency: mode.defaultCarrierFrequency,
+            ambientBedName: defaultAmbientBed(for: mode),
+            detailTextureName: nil,
+            instruments: [],
+            brightness: Theme.Compose.Defaults.brightness,
+            density: Theme.Compose.Defaults.density,
+            reverbWetDry: Theme.Compose.Defaults.reverbWetDry,
+            binauralVolume: Theme.Compose.Defaults.binauralVolume,
+            ambientVolume: Theme.Compose.Defaults.ambientVolume,
+            melodicVolume: Theme.Compose.Defaults.melodicVolume,
+            durationMinutes: Theme.Compose.Defaults.durationMinutes,
+            isAdaptive: false
+        )
+        modelContext.insert(composition)
+    }
+
+    private func defaultName(for mode: FocusMode) -> String {
+        switch mode {
+        case .sleep:      return "Sleep"
+        case .relaxation: return "Relaxation"
+        case .focus:      return "Focus"
+        case .energize:   return "Energize"
+        }
+    }
+
+    private func defaultAmbientBed(for mode: FocusMode) -> String? {
+        switch mode {
+        case .sleep:      return "rain-texture-60s"
+        case .relaxation: return "ocean-waves-60s"
+        case .focus:      return "pink-noise-60s"
+        case .energize:   return "brown-noise-60s"
+        }
+    }
 
     private func duplicateComposition(_ source: CustomComposition) {
         let copy = CustomComposition(
