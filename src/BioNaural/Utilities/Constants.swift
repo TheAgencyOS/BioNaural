@@ -176,17 +176,35 @@ enum Constants {
 
     // MARK: Soundscape Presets
 
-    /// Available ambient soundscape bed names and their display labels.
+    /// Available ambient soundscape bed names and their display
+    /// labels. Names MUST match the bundled file names under
+    /// `sounds/ambient/` so the AmbienceLayer lookup succeeds.
+    /// Labels are honest: this menu ONLY switches the ambient
+    /// audio bed (rain/ocean/noise) — it does NOT change pads or
+    /// any other musical layer.
     enum Soundscape {
-        static let rain = "rain"
-        static let wind = "wind"
-        static let pinkNoise = "pink_noise"
+        static let rain      = "rain-texture-60s"
+        static let ocean     = "ocean-waves-60s"
+        static let pinkNoise = "pink-noise-60s"
+        static let brownNoise = "brown-noise-60s"
+
+        /// Perceptual-loudness override applied on focus session
+        /// start. Pink noise reads louder than nature loops at the
+        /// same linear gain, so focus uses half the default level.
+        static let focusBedVolumeOverride: Double = 0.05
+
+        /// Energize bed override — music carries the texture so the
+        /// bed sits quieter under the drums.
+        static let energizeBedVolumeOverride: Double = 0.30
 
         /// Ordered list of presets for the session soundscape menu.
+        /// The `bedName` values match real bundled audio files; the
+        /// `displayName` values describe only the ambient bed.
         static let presets: [(bedName: String, displayName: String)] = [
-            (rain, "Rain · Warm Pad"),
-            (wind, "Wind · Subtle Drone"),
-            (pinkNoise, "Pink Noise · Bright Pad")
+            (rain,      "Rain"),
+            (ocean,     "Ocean"),
+            (pinkNoise, "Pink Noise"),
+            (brownNoise, "Brown Noise")
         ]
     }
 
