@@ -340,16 +340,16 @@ public final class AudioEngine: AudioEngineProtocol {
         let bedName: String
         switch mode {
         case .sleep:
-            bedName = "rain-texture-60s"
+            bedName = Constants.Soundscape.rain
         case .relaxation:
-            bedName = "ocean-waves-60s"
+            bedName = Constants.Soundscape.ocean
         case .focus:
-            bedName = "pink-noise-60s"
+            bedName = Constants.Soundscape.pinkNoise
             // Perceptual match: rain/ocean at 0.10 ≈ pink noise at 0.05.
-            parameters.ambientVolume = 0.05
+            parameters.ambientVolume = Constants.Soundscape.focusBedVolumeOverride
         case .energize:
-            bedName = "brown-noise-60s"
-            parameters.ambientVolume = 0.3
+            bedName = Constants.Soundscape.brownNoise
+            parameters.ambientVolume = Constants.Soundscape.energizeBedVolumeOverride
         }
         ambienceLayer?.play(bedName: bedName)
     }

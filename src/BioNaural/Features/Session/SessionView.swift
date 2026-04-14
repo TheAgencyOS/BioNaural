@@ -42,7 +42,10 @@ struct SessionView: View {
 
     // MARK: - Menu Action State
 
-    /// Index of the currently selected soundscape preset (0 = Rain, 1 = Wind, 2 = Pink Noise).
+    /// Index of the currently selected soundscape preset. Initialized
+    /// lazily from the session mode's default bed in `onAppear` so it
+    /// reflects what the audio engine actually started playing rather
+    /// than always showing Rain.
     @State private var selectedSoundscapeIndex: Int = 0
     /// Controls presentation of the mix levels sheet.
     @State private var showMixLevels = false
@@ -172,6 +175,14 @@ struct SessionView: View {
             // Ensure shared session state is set for the mini player,
             // covering both HomeTab-initiated and Compose-initiated sessions.
             dependencies.activeSessionMode = viewModel.sessionMode
+
+            // Sync the soundscape menu selection with whichever bed
+            // the audio engine actually started for this mode, so
+            // the checkmark matches reality.
+            let defaultBed = defaultSoundscapeBedName(for: viewModel.sessionMode)
+            if let idx = Constants.Soundscape.presets.firstIndex(where: { $0.bedName == defaultBed }) {
+                selectedSoundscapeIndex = idx
+            }
 
             // Start the session timer and audio (audio may already be
             // running from MainView.startSession — that's safe).
@@ -1300,6 +1311,18 @@ extension SessionView {
 // MARK: - Computed Helpers
 
 extension SessionView {
+
+    /// Default ambient bed name per mode. Must mirror what
+    /// AudioEngine.startAmbienceLayer actually plays so the
+    /// Soundscape menu checkmark reflects reality.
+    fileprivate func defaultSoundscapeBedName(for mode: FocusMode) -> String {
+        switch mode {
+        case .sleep:      return Constants.Soundscape.rain
+        case .relaxation: return Constants.Soundscape.ocean
+        case .focus:      return Constants.Soundscape.pinkNoise
+        case .energize:   return Constants.Soundscape.brownNoise
+        }
+    }
 
     fileprivate var isSleepMode: Bool { viewModel.sessionMode == .sleep }
 
