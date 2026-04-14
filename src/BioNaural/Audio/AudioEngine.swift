@@ -84,6 +84,12 @@ public final class AudioEngine: AudioEngineProtocol {
     /// has crossed an arc-phase boundary.
     private var arcTimer: Timer?
 
+    /// Stylistic memory across regenerated MusicPatterns within a
+    /// session. Lets each regeneration bias its atom selection
+    /// toward atoms that were used recently so blocks feel like a
+    /// continuation rather than a reset.
+    private var styleMemory: SessionStyleMemory?
+
     /// Synthesised sub-bass oscillator (energize mode only).
     /// Adds physical low-end (30-80 Hz) that SoundFont samples can't produce.
     private var subBassNode: AVAudioSourceNode?
@@ -477,12 +483,18 @@ public final class AudioEngine: AudioEngineProtocol {
         currentArcPhaseLabel = initialPhase.label
         startArcTimer()
 
+        // Fresh style memory for this session.
+        let memory = styleMemory ?? SessionStyleMemory()
+        memory.reset()
+        styleMemory = memory
+
         let pattern = CompositionPlanner.buildMusicPattern(
             mode: mode,
             biometricState: currentBiometricState,
             tonality: tonality,
             seed: currentSeed,
-            arcIntensity: initialPhase.intensity
+            arcIntensity: initialPhase.intensity,
+            styleMemory: memory
         )
 
         let player = musicPatternPlayer ?? MusicPatternPlayer(engine: engine, voices: mv)
@@ -507,6 +519,7 @@ public final class AudioEngine: AudioEngineProtocol {
         stopArcTimer()
         sessionStartDate = nil
         currentArcPhaseLabel = nil
+        styleMemory?.reset()
 
         // Stop volume sync and audio layers gracefully.
         stopVolumeSyncTimer()
@@ -578,7 +591,8 @@ public final class AudioEngine: AudioEngineProtocol {
             biometricState: state,
             tonality: tonality,
             seed: currentSeed,
-            arcIntensity: phase.intensity
+            arcIntensity: phase.intensity,
+            styleMemory: styleMemory
         )
         musicPatternPlayer?.crossfadeTo(pattern: pattern)
     }
@@ -629,7 +643,8 @@ public final class AudioEngine: AudioEngineProtocol {
             biometricState: currentBiometricState,
             tonality: tonality,
             seed: currentSeed,
-            arcIntensity: phase.intensity
+            arcIntensity: phase.intensity,
+            styleMemory: styleMemory
         )
         musicPatternPlayer?.crossfadeTo(pattern: pattern)
     }
