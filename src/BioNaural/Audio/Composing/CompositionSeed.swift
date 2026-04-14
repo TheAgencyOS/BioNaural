@@ -91,9 +91,14 @@ public struct CompositionSeed: Sendable, Hashable {
     /// wider windows so two sessions feel distinct in drive.
     public static func tempoOffsetRange(for mode: FocusMode) -> ClosedRange<Double> {
         switch mode {
+        // Sleep stays slow and steady.
         case .sleep:       return -4.0 ... 2.0
-        case .relaxation:  return -4.0 ... 4.0
-        case .focus:       return -6.0 ... 6.0
+        // Relaxation: real ambient / new-age sits 55-70 BPM — default
+        // tempo is 60, so ±5 gives 55-65.
+        case .relaxation:  return -5.0 ... 5.0
+        // Focus: lo-fi beats live 70-85 BPM — default is 72, so
+        // -2..+10 gives 70-82 which matches the genre sweet spot.
+        case .focus:       return -2.0 ... 10.0
         case .energize:    return -4.0 ... 8.0
         }
     }
@@ -136,8 +141,14 @@ public struct CompositionSeed: Sendable, Hashable {
     public static func scalePool(for mode: FocusMode) -> [Scale] {
         switch mode {
         case .sleep:       return [.pentatonicMinor, .lydian, .minor]
+        // Relaxation: modal and jazz-friendly. Lydian (floating),
+        // dorian (wistful), major (bright new-age), pentatonicMajor
+        // (Windham Hill piano), mixolydian (soft fusion).
         case .relaxation:  return [.lydian, .dorian, .major, .pentatonicMajor, .mixolydian]
-        case .focus:       return [.pentatonicMajor, .dorian, .minor, .mixolydian]
+        // Focus: lo-fi hip-hop is overwhelmingly minor. Weight the
+        // pool toward minor and dorian — pentatonicMajor is removed
+        // because it sounded too cheerful for a study beat.
+        case .focus:       return [.minor, .dorian, .minor, .dorian, .mixolydian]
         case .energize:    return [.major, .mixolydian, .lydian, .pentatonicMajor]
         }
     }
@@ -168,8 +179,12 @@ public struct CompositionSeed: Sendable, Hashable {
         case (.sleep, .texture): return [97, 94, 91]
         case (.sleep, .drums):   return nil
 
-        // MARK: Relaxation — new-age / neo-classical palette
-        case (.relaxation, .melody):  return [0, 4, 11, 46, 40, 73]     // piano, rhodes, vibes, harp, violin, flute
+        // MARK: Relaxation — new-age / neo-classical palette.
+        // Violin (40) and flute (73) were removed — GM solo string
+        // and woodwind presets sound thin and synthetic without deep
+        // velocity layering. The kept instruments all render well in
+        // GeneralUser GS with our new reverb tail.
+        case (.relaxation, .melody):  return [0, 4, 11, 46, 5, 89]      // piano, rhodes, vibes, harp, DX, warm pad
         case (.relaxation, .bass):    return [32, 42, 33]               // acoustic, cello, finger bass
         case (.relaxation, .chords):  return [48, 49, 89, 0, 88]
         case (.relaxation, .pad):     return [89, 91, 88]
@@ -184,8 +199,11 @@ public struct CompositionSeed: Sendable, Hashable {
         case (.focus, .pad):     return [89, 88]
         case (.focus, .texture): return [97, 94]
 
-        // MARK: Energize — synthwave / uplifting electronic palette
-        case (.energize, .melody):  return [80, 81, 82, 85, 87, 30]     // leads + overdriven
+        // MARK: Energize — synthwave / uplifting electronic palette.
+        // Distortion guitar (GM 30) was removed — GeneralUser GS
+        // renders it as a tinny, pitchy mess. Replaced with additional
+        // synth leads (83 Chiff, 84 Charang, 86 5th Saw).
+        case (.energize, .melody):  return [80, 81, 82, 83, 84, 85, 86, 87]  // synth leads only
         case (.energize, .bass):    return [38, 39, 34, 35]             // synth bass, pick bass, fretless
         case (.energize, .chords):  return [88, 50, 48, 63]             // new age pad, synth strings, strings, brass
         case (.energize, .drums):   return [0]

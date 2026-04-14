@@ -89,8 +89,21 @@ public final class AudioEngine: AudioEngineProtocol {
 
     private let engine = AVAudioEngine()
     private var sourceNode: AVAudioSourceNode?
-    /// Reverb unit — exposed for composition preview (reverb depth control).
+    /// Reverb unit on the binaural beat path — kept for historical
+    /// compatibility; mostly inaudible since binaural is default-off.
     public private(set) var reverb: AVAudioUnitReverb?
+
+    /// Dedicated reverb on the music path. Inserted between the
+    /// MultiVoiceRenderer output and the main mixer so melody / bass /
+    /// chords / texture all share a mode-specific space. Sleep and
+    /// relaxation get cathedral-scale tails; focus and energize get
+    /// tight rooms. This is the piece that makes the ambient genres
+    /// actually sound ambient — before this they were running dry.
+    public private(set) var musicReverb: AVAudioUnitReverb?
+
+    /// Delay unit on the music path — adds short stereo echoes on top
+    /// of the reverb for relaxation and sleep. Configured per mode.
+    private var musicDelay: AVAudioUnitDelay?
     private var isSetUp = false
 
     /// Tracks the current mode for reconfiguration recovery.
@@ -430,6 +443,11 @@ public final class AudioEngine: AudioEngineProtocol {
         // tight, percussive response.
         applyArticulation(for: mode, voices: mv)
 
+        // Mode-specific music FX — reverb tail + delay. This is what
+        // makes relaxation and sleep actually sound ambient instead of
+        // a dry SoundFont demo.
+        applyMusicFX(for: mode)
+
         let pattern = CompositionPlanner.buildMusicPattern(
             mode: mode,
             biometricState: currentBiometricState,
@@ -589,6 +607,45 @@ public final class AudioEngine: AudioEngineProtocol {
         volumeSyncTimer = nil
     }
 
+    // MARK: - Music FX chain
+
+    /// Configure the music reverb + delay chain for the given mode.
+    /// Each mode gets a characteristic space that matches its genre:
+    /// sleep and relaxation get long, lush reverbs with a short stereo
+    /// delay on top; focus gets a tighter room; energize gets a small
+    /// room so the kick stays punchy.
+    private func applyMusicFX(for mode: FocusMode) {
+        guard let reverb = musicReverb, let delay = musicDelay else { return }
+        switch mode {
+        case .sleep:
+            reverb.loadFactoryPreset(.cathedral)
+            reverb.wetDryMix = 75.0          // lush, enveloping
+            delay.delayTime = 0.38           // slow, dreamy echo
+            delay.feedback = 35.0
+            delay.lowPassCutoff = 4500.0
+            delay.wetDryMix = 18.0
+        case .relaxation:
+            reverb.loadFactoryPreset(.largeHall)
+            reverb.wetDryMix = 55.0          // lots of air
+            delay.delayTime = 0.28
+            delay.feedback = 28.0
+            delay.lowPassCutoff = 6000.0
+            delay.wetDryMix = 14.0
+        case .focus:
+            reverb.loadFactoryPreset(.mediumRoom)
+            reverb.wetDryMix = 28.0          // enough space to feel lo-fi, not washy
+            delay.delayTime = 0.0
+            delay.feedback = 0.0
+            delay.wetDryMix = 0.0
+        case .energize:
+            reverb.loadFactoryPreset(.smallRoom)
+            reverb.wetDryMix = 18.0          // tight — kick stays punchy
+            delay.delayTime = 0.0
+            delay.feedback = 0.0
+            delay.wetDryMix = 0.0
+        }
+    }
+
     // MARK: - Articulation (MIDI CC)
 
     /// Send mode-appropriate attack/release and brightness CCs to every
@@ -644,10 +701,36 @@ public final class AudioEngine: AudioEngineProtocol {
         }
 
         let mv = MultiVoiceRenderer(engine: engine)
-        engine.connect(mv.outputNode, to: engine.mainMixerNode, format: nil)
         self.multiVoice = mv
 
-        Logger.audio.info("SF2 samplers ready — melody + bass + drums")
+        // Insert a dedicated music reverb + delay chain between the
+        // MultiVoiceRenderer output and the main mixer. Before this,
+        // the music path was running dry — ambient pads had no space,
+        // relaxation sounded cheap, and sleep was less immersive than
+        // it should be. The chain is:
+        //
+        //   mv.outputNode → musicDelay → musicReverb → mainMixer
+        //
+        // Mode-specific presets are applied in startMusicPatternLayer
+        // so the same chain shapes every mode differently.
+        let delay = AVAudioUnitDelay()
+        delay.delayTime = 0.0
+        delay.feedback = 0.0
+        delay.wetDryMix = 0.0
+        engine.attach(delay)
+        self.musicDelay = delay
+
+        let reverbUnit = AVAudioUnitReverb()
+        reverbUnit.loadFactoryPreset(.mediumHall)
+        reverbUnit.wetDryMix = 30.0
+        engine.attach(reverbUnit)
+        self.musicReverb = reverbUnit
+
+        engine.connect(mv.outputNode, to: delay, format: nil)
+        engine.connect(delay, to: reverbUnit, format: nil)
+        engine.connect(reverbUnit, to: engine.mainMixerNode, format: nil)
+
+        Logger.audio.info("SF2 samplers ready — melody + bass + drums (music FX chain attached)")
     }
 
     // MARK: - Preset Application
