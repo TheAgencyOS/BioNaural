@@ -960,6 +960,12 @@ extension SessionView {
                     )
                 }
 
+                // Reshuffle row — MadPlayer-style per-role
+                // regeneration. Each button rolls a new atom + new
+                // instrument for one track and crossfades it in at
+                // the next bar boundary.
+                reshuffleRow(modeAllowsRhythm: modeAllowsRhythm)
+
                 Spacer()
             }
             .padding(.horizontal, Theme.Spacing.pageMargin)
@@ -991,6 +997,57 @@ extension SessionView {
                 .accessibilityLabel(label)
                 .tint(color)
         }
+    }
+
+    /// Row of reshuffle buttons — one per track role the current
+    /// mode uses. Each calls AudioEngine.reshuffleRole to swap the
+    /// atom pattern and instrument for just that track.
+    @ViewBuilder
+    fileprivate func reshuffleRow(modeAllowsRhythm: Bool) -> some View {
+        VStack(alignment: .leading, spacing: Theme.Spacing.xs) {
+            Text("SHUFFLE")
+                .font(Theme.Typography.caption)
+                .tracking(1.5)
+                .foregroundStyle(Theme.Colors.textTertiary)
+
+            HStack(spacing: Theme.Spacing.sm) {
+                reshuffleButton(label: "Melody",  role: .melody,  color: Theme.Colors.accent)
+                reshuffleButton(label: "Ambient", role: .chords,  color: Theme.Colors.signalCalm)
+                if modeAllowsRhythm {
+                    reshuffleButton(label: "Bass",    role: .bass,  color: Theme.Colors.signalElevated)
+                    reshuffleButton(label: "Drums",   role: .drums, color: Theme.Colors.signalPeak)
+                }
+            }
+        }
+    }
+
+    fileprivate func reshuffleButton(label: String, role: TrackRole, color: Color) -> some View {
+        Button {
+            dependencies.hapticService.adaptationEvent()
+            if let engine = viewModel.audioEngine as? AudioEngine {
+                engine.reshuffleRole(role)
+            }
+        } label: {
+            VStack(spacing: Theme.Spacing.xxs) {
+                Image(systemName: "arrow.triangle.2.circlepath")
+                    .font(.system(size: 14, weight: .medium))
+                Text(label)
+                    .font(Theme.Typography.caption)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, Theme.Spacing.sm)
+            .background(
+                RoundedRectangle(cornerRadius: Theme.Radius.md)
+                    .fill(color.opacity(Theme.Opacity.subtle))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: Theme.Radius.md)
+                    .stroke(color.opacity(Theme.Opacity.medium), lineWidth: 1)
+            )
+            .foregroundStyle(color)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel("Generate new \(label.lowercased())")
     }
 }
 

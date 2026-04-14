@@ -611,6 +611,69 @@ public final class AudioEngine: AudioEngineProtocol {
         musicPatternPlayer?.crossfadeTo(pattern: pattern)
     }
 
+    // MARK: - Reshuffle (MadPlayer-style per-role regeneration)
+
+    /// Roll the dice on one specific track role. Picks a new GM
+    /// instrument from the role's program pool, swaps it into the
+    /// running CompositionSeed, bumps the role's atom shuffle
+    /// offset so the next molecule assembly selects a different
+    /// atom, reloads the affected sampler voice with the new
+    /// program, and regenerates the MusicPattern with a crossfade.
+    /// The user hits this via the "new melody / new ambient / new
+    /// bass / new drums" buttons in the mix panel.
+    public func reshuffleRole(_ role: TrackRole) {
+        guard let mode = currentMode,
+              let tonality = sessionTonality,
+              var seed = currentSeed,
+              let mv = multiVoice
+        else { return }
+
+        // 1. Bump the atom offset so the molecule builder picks a
+        //    different atom from the candidate pool next time.
+        seed.roleAtomOffset[role, default: 0] += 1
+
+        // 2. Pick a different GM program from the role's pool —
+        //    avoid repeating the current one when possible.
+        if let pool = CompositionSeed.programPool(mode: mode, role: role), !pool.isEmpty {
+            let currentProgram = seed.gmPrograms[role]
+            let candidates = pool.filter { $0 != currentProgram }
+            let newProgram = (candidates.isEmpty ? pool : candidates).randomElement() ?? pool[0]
+            seed.gmPrograms[role] = newProgram
+
+            // 3. Reload the sampler voice with the new program.
+            //    Melody and bass each have their own sampler.
+            //    Drums and chords/texture route through the melody
+            //    sampler for now; reloading the melody voice would
+            //    disrupt the melodic track, so we skip those for
+            //    non-melody/bass roles. Drums stay on the
+            //    percussion bank.
+            switch role {
+            case .melody:
+                try? mv.reloadMelodicVoice(mv.melody, program: newProgram)
+            case .bass:
+                try? mv.reloadMelodicVoice(mv.bass, program: newProgram)
+            default:
+                break
+            }
+        }
+
+        self.currentSeed = seed
+
+        // 4. Regenerate the MusicPattern with the updated seed and
+        //    crossfade at the next bar boundary.
+        let phase = SessionArcPlanner.phase(at: currentSessionProgress(), for: mode)
+        let pattern = CompositionPlanner.buildMusicPattern(
+            mode: mode,
+            biometricState: currentBiometricState,
+            tonality: tonality,
+            seed: seed,
+            arcIntensity: phase.intensity,
+            styleMemory: styleMemory
+        )
+        musicPatternPlayer?.crossfadeTo(pattern: pattern)
+        Logger.audio.info("v3 reshuffle: role=\(String(describing: role)) offset=\(seed.roleAtomOffset[role] ?? 0)")
+    }
+
     // MARK: - Biometric carrier adjustment
 
     /// Apply the iso-principle carrier shift. For Sleep and Relax,

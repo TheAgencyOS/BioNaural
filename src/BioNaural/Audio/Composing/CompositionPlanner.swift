@@ -82,6 +82,7 @@ public enum CompositionPlanner {
             )
 
             let molecule: Molecule
+            let shuffleOffset = seed?.roleAtomOffset[role] ?? 0
             if role == .bass, let drums = drumMolecule, shouldInterlockBassWithDrums(mode: mode) {
                 molecule = deriveBassMolecule(from: drums, musicalClass: mclass, loopLengthTicks: loopLengthTicks)
             } else {
@@ -90,7 +91,8 @@ public enum CompositionPlanner {
                     role: role,
                     musicalClass: mclass,
                     loopLengthTicks: loopLengthTicks,
-                    styleMemory: styleMemory
+                    styleMemory: styleMemory,
+                    shuffleOffset: shuffleOffset
                 )
             }
             // Record the atoms we chose so the next regeneration's
@@ -495,7 +497,8 @@ public enum CompositionPlanner {
         role: TrackRole,
         musicalClass: MusicalClass,
         loopLengthTicks: Int,
-        styleMemory: SessionStyleMemory? = nil
+        styleMemory: SessionStyleMemory? = nil,
+        shuffleOffset: Int = 0
     ) -> Molecule {
         var allMatching = AtomLibrary.allAtoms(mode: mode, role: role).filter { atom in
             musicalClass.allowedAtomTypes.contains(atom.type)
@@ -514,12 +517,17 @@ public enum CompositionPlanner {
         // Drums get a dedicated path: one hand-picked atom repeats
         // for the entire loop with no A/B swap, no empty bars, and
         // no fill substitution. A constant rhythmic spine is more
-        // important than variety for hypnotic modes.
+        // important than variety for hypnotic modes. The shuffle
+        // offset lets the user cycle through available drum atoms
+        // via the "new drums" button in the mix panel.
         if role == .drums {
-            let drumAtom = allMatching.first { !$0.name.contains("empty") } ?? allMatching.first
-            guard let drumAtom, drumAtom.lengthTicks > 0 else {
+            let playable = allMatching.filter { !$0.name.contains("empty") }
+            let pool = playable.isEmpty ? allMatching : playable
+            guard let first = pool.first, first.lengthTicks > 0 else {
                 return Molecule(atoms: [], repetitiveness: .same)
             }
+            let idx = ((shuffleOffset % pool.count) + pool.count) % pool.count
+            let drumAtom = pool[idx]
             let count = max(1, loopLengthTicks / drumAtom.lengthTicks)
             return Molecule(
                 atoms: Array(repeating: drumAtom, count: count),
@@ -547,6 +555,14 @@ public enum CompositionPlanner {
         let poolA = Array(candidates.prefix(half))
         let poolB = candidates.count > half ? Array(candidates.suffix(from: half)) : candidates
 
+        // shuffleOffset comes from seed.roleAtomOffset[role] and is
+        // bumped when the user taps the mix-panel reshuffle button
+        // for this track. For .same it selects a different atom
+        // from the full candidate pool; for .none/.diff it rotates
+        // the cycling start index.
+        let wrappedOffset = candidates.isEmpty
+            ? 0
+            : ((shuffleOffset % candidates.count) + candidates.count) % candidates.count
         var atoms: [Atom] = []
         var filled = 0
         var i = 0
@@ -554,10 +570,10 @@ public enum CompositionPlanner {
             let atom: Atom
             switch musicalClass.atomicRepetitiveness {
             case .same:
-                atom = candidates[0]
+                atom = candidates[wrappedOffset]
             case .none, .diff:
                 let pool = filled < sectionBoundaryTicks ? poolA : poolB
-                atom = pool[i % pool.count]
+                atom = pool[(i + wrappedOffset) % pool.count]
             }
             atoms.append(atom)
             filled += atom.lengthTicks

@@ -50,9 +50,10 @@ public struct CompositionSeed: Sendable, Hashable {
     /// The randomized scale for the session.
     public let scale: Scale
 
-    /// The randomized GM program numbers per track role. Tracks not
-    /// present in the role set for this mode are simply absent.
-    public let gmPrograms: [TrackRole: UInt8]
+    /// The randomized GM program numbers per track role. Mutable so
+    /// AudioEngine.reshuffleRole can swap in a new instrument for
+    /// one specific track without disturbing the others.
+    public var gmPrograms: [TrackRole: UInt8]
 
     /// Index into the mode's chord progression pool.
     public let progressionVariant: Int
@@ -70,6 +71,14 @@ public struct CompositionSeed: Sendable, Hashable {
     /// Percussion kit for focus sessions. Nil for modes that don't
     /// carry drums (sleep, relaxation) or for a future custom mode.
     public let drumKit: DrumKit?
+
+    /// Per-role "shuffle" counter. Incremented each time the user
+    /// taps a "new melody / new bass / new drums / new ambient"
+    /// button in the mix panel. CompositionPlanner uses it as an
+    /// index offset into the candidate atom pool so each press
+    /// picks a different atom from the current pool without
+    /// regenerating the whole seed.
+    public var roleAtomOffset: [TrackRole: Int] = [:]
 
     // MARK: - Generation
 
