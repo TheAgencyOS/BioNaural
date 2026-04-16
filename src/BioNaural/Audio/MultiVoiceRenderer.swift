@@ -155,7 +155,10 @@ public final class MultiVoiceRenderer {
         // Load drums voice (GM 0, drum-range notes 35-81)
         if Theme.ModeInstrumentation.allowsRhythmStem(for: mode) {
             try loadDrumVoice(drums, sf2URL: sf2URL)
-            drums.submixer.volume = mode == .focus ? 0.70 : 0.75
+            // Focus percussion (tabla/conga/shaker) should sit LOW
+            // in the mix — barely audible, subliminal rhythm. The
+            // research says percussion should not demand attention.
+            drums.submixer.volume = mode == .focus ? 0.35 : 0.75
         } else {
             drums.submixer.volume = 0.0
         }

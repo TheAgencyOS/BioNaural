@@ -111,7 +111,14 @@ public struct CompositionSeed: Sendable, Hashable {
         let tempoRange = tempoOffsetRange(for: mode)
         let tempoOffset = Double.random(in: tempoRange, using: &generator)
         let swing = swingTicks(for: mode)
-        let drumKit: DrumKit? = (mode == .focus) ? .sparseKit : nil
+        // Focus: tabla and congas only — NO drum kit ever. Sharp
+        // kick/snare transients involuntarily capture attention
+        // (Parmentier 2014). Tabla and conga have soft pitched
+        // attacks that sit under conscious awareness.
+        let focusKitPool: [DrumKit] = [.tabla, .congas]
+        let drumKit: DrumKit? = (mode == .focus)
+            ? focusKitPool[Int.random(in: 0..<focusKitPool.count, using: &generator)]
+            : nil
 
         // Randomize roleAtomOffset so two back-to-back sessions
         // start with different atom picks instead of always landing
