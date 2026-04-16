@@ -189,11 +189,14 @@ public struct CompositionSeed: Sendable, Hashable {
         switch mode {
         case .sleep:       return 0
         case .relaxation:  return 0
-        // Focus is trip-hop / lo-fi hip-hop now. Real lo-fi has
-        // classic ~56-58% swing on the off-8ths; 48 ticks at 480
-        // PPQN is a light Dilla shuffle that reads as "groovy"
-        // without dragging the pocket.
-        case .focus:       return 48
+        // Focus is trip-hop / lo-fi. J Dilla's signature swing is
+        // ~55-58% (off-8th shifted 15-38 ticks at 480 PPQN). 48
+        // ticks was 60% — heavy jazz shuffle that felt sloppy with
+        // our syncopated ghost patterns. 24 ticks = 55% swing —
+        // subtle pocket drag, not audible shuffle. The funk comes
+        // from the generator's ghost kick/snare PLACEMENT, not
+        // from loose timing.
+        case .focus:       return 24
         case .energize:    return 48
         }
     }

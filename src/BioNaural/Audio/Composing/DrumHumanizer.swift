@@ -100,23 +100,23 @@ public enum DrumHumanizer {
     }
 
     private static func profile(for voice: Voice) -> Profile {
-        // Timing offsets for subtle micro-variation. The SWING (48
-        // ticks on off-8ths) does the heavy lifting for trip-hop
-        // feel. The humanizer just needs tiny per-hit drift so the
-        // pattern doesn't sound machine-perfect. Phase 36's values
-        // were too aggressive (±8-18 ticks) and produced a sloppy,
-        // disjointed sound when combined with swing. These values
-        // add ~5-10 ms of drift, which is subliminal but audibly
-        // "human" — the line between groovy and sloppy.
+        // TIGHT timing — nearly grid-locked. The funk comes from
+        // syncopated note PLACEMENT in the AtomGenerator (ghost
+        // kicks on the "and" of 2, ghost snares on 16th-note "e"
+        // and "a" positions), not from timing drift. These values
+        // add just ~3-8 ms of barely-perceptible variation so the
+        // pattern doesn't sound perfectly machine-stamped. The
+        // snare gets a tiny +2 tick backbeat drag — enough to feel
+        // slightly behind, not enough to hear as "late."
         switch voice {
         case .kick:
-            return Profile(maxTimingOffset: 4,  biasTimingOffset: 0, velocityJitter: 0.05, velocityFloor: 0.90)
+            return Profile(maxTimingOffset: 2,  biasTimingOffset: 0, velocityJitter: 0.04, velocityFloor: 0.92)
         case .snare:
-            return Profile(maxTimingOffset: 6,  biasTimingOffset: 4, velocityJitter: 0.08, velocityFloor: 0.85)
+            return Profile(maxTimingOffset: 3,  biasTimingOffset: 2, velocityJitter: 0.06, velocityFloor: 0.88)
         case .hat:
-            return Profile(maxTimingOffset: 8,  biasTimingOffset: 0, velocityJitter: 0.12, velocityFloor: 0.72)
+            return Profile(maxTimingOffset: 5,  biasTimingOffset: 0, velocityJitter: 0.10, velocityFloor: 0.75)
         case .shaker:
-            return Profile(maxTimingOffset: 4,  biasTimingOffset: 0, velocityJitter: 0.10, velocityFloor: 0.68)
+            return Profile(maxTimingOffset: 3,  biasTimingOffset: 0, velocityJitter: 0.08, velocityFloor: 0.70)
         }
     }
 
