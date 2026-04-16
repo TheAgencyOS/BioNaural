@@ -127,12 +127,17 @@ public enum WeirdnessResolver {
     public static func resolveRhythmic(velocity: UInt8, kit: DrumKit = .sparseKit) -> UInt8 {
         switch kit {
         case .sparseKit:
-            // Standard rock / focus sparse kit (kick / snare / hat).
+            // Trip-hop / lo-fi focus kit. The 45-59 range maps to
+            // snare (same MIDI note 38 as the main snare) at lower
+            // velocity — this is the ghost-snare tier. In the
+            // AtomGenerator, intensity ~0.30 lands here and
+            // produces a quiet snare hit between the main hits.
+            // Sidestick was removed — trip-hop rarely uses it.
             switch velocity {
             case 108...127: return 36  // Bass Drum 1 (kick)
-            case 85...107:  return 38  // Acoustic Snare
+            case 85...107:  return 38  // Acoustic Snare (main)
             case 60...84:   return 42  // Closed Hi-Hat
-            case 45...59:   return 37  // Side Stick
+            case 45...59:   return 38  // Acoustic Snare (ghost — same note, lower velocity)
             default:        return 70  // Maracas (shaker)
             }
         case .congas:

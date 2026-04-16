@@ -100,15 +100,21 @@ public enum DrumHumanizer {
     }
 
     private static func profile(for voice: Voice) -> Profile {
+        // Timing offsets sized for trip-hop feel. At 480 PPQN and
+        // ~80 BPM, 1 tick ≈ 1.6 ms. The old values (±3 kick, ±6
+        // snare) were barely perceptible. Real trip-hop drummers
+        // have 10-30 ms of timing drift — that's ±8 to ±18 ticks.
+        // The snare drag bias (+10) puts the backbeat behind the
+        // beat, which is THE trip-hop signature.
         switch voice {
         case .kick:
-            return Profile(maxTimingOffset: 3,  biasTimingOffset: 0, velocityJitter: 0.04, velocityFloor: 0.92)
+            return Profile(maxTimingOffset: 8,  biasTimingOffset: 0, velocityJitter: 0.06, velocityFloor: 0.88)
         case .snare:
-            return Profile(maxTimingOffset: 6,  biasTimingOffset: 4, velocityJitter: 0.08, velocityFloor: 0.85)
+            return Profile(maxTimingOffset: 14, biasTimingOffset: 10, velocityJitter: 0.10, velocityFloor: 0.80)
         case .hat:
-            return Profile(maxTimingOffset: 10, biasTimingOffset: 0, velocityJitter: 0.12, velocityFloor: 0.75)
+            return Profile(maxTimingOffset: 18, biasTimingOffset: 0, velocityJitter: 0.15, velocityFloor: 0.70)
         case .shaker:
-            return Profile(maxTimingOffset: 4,  biasTimingOffset: 0, velocityJitter: 0.10, velocityFloor: 0.70)
+            return Profile(maxTimingOffset: 8,  biasTimingOffset: 0, velocityJitter: 0.12, velocityFloor: 0.65)
         }
     }
 

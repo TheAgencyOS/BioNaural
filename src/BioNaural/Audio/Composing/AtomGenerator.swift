@@ -174,41 +174,72 @@ public enum AtomGenerator {
 
         // Fixed anchors: kick on beat 1, snare on beat 3. Every
         // trip-hop / lo-fi pattern rests on these.
-        markers.append(Marker(startTick: 0,         stopTick: s,         intensity: 0.95))
+        markers.append(Marker(startTick: 0,         stopTick: s, intensity: 0.95))
         markers.append(Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.72))
 
-        // Ghost kick candidates — syncopated positions that the
-        // J Dilla / Nujabes school uses to create the trip-hop bounce.
+        // Ghost kick(s) — syncopated positions that the J Dilla /
+        // Massive Attack school uses for the trip-hop bounce.
+        // Intensity 0.88 = kick tier but quieter than the main kick.
         let ghostKickCandidates: [Int] = [
             q + e,          // "and" of 2
             2 * q + e,      // "and" of 3 (the Massive Attack pocket)
             3 * q,          // beat 4
             3 * q + e       // "and" of 4
         ]
-        let numGhostKicks = Int.random(in: 1...3, using: &generator)
+        let numGhostKicks = Int.random(in: 1...2, using: &generator)
         for tick in ghostKickCandidates.shuffled(using: &generator).prefix(numGhostKicks) {
             markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: 0.88))
         }
 
-        // Optional ghost snare on the "e" of 2 or 4 — classic
-        // linear-funk move for extra pocket depth.
-        if Double.random(in: 0...1, using: &generator) < 0.35 {
-            let ghostSnarePositions = [q + s, 3 * q + s]
-            if let tick = ghostSnarePositions.randomElement(using: &generator) {
-                markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: 0.62))
-            }
+        // Ghost snares — VERY quiet snare taps between main hits.
+        // Intensity 0.30 → velocity ~52 → resolver maps to snare
+        // note 38 at low velocity = the classic trip-hop ghost
+        // snare feel. Placed on the "e" and "a" positions
+        // (16th-note subdivisions off the beat).
+        let ghostSnarePositions = [
+            q + s,          // "e" of 2
+            q + 3 * s,      // "a" of 2
+            2 * q + s,      // "e" of 3
+            3 * q + s,      // "e" of 4
+            3 * q + 3 * s   // "a" of 4
+        ]
+        let numGhostSnares = Int.random(in: 1...3, using: &generator)
+        for tick in ghostSnarePositions.shuffled(using: &generator).prefix(numGhostSnares) {
+            markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: 0.30))
         }
 
-        // Hat pattern drawn from four styles: quarters (sparse),
-        // 8ths (standard), 16ths (busy), dotted (shuffle-heavy).
-        let hatStyles: [Int] = [q, e, s, e]   // duplicate 8ths to bias toward them
-        let hatStep = hatStyles.randomElement(using: &generator) ?? e
-        var hatTick = 0
-        while hatTick < 4 * q {
-            // Alternate slightly louder / softer hats for groove
-            let intensity: Double = (hatTick / hatStep) % 2 == 0 ? 0.58 : 0.52
-            markers.append(Marker(startTick: hatTick, stopTick: hatTick + s, intensity: intensity))
-            hatTick += hatStep
+        // Hat pattern — drawn from 3 feel types with dynamic
+        // accent shaping. Real trip-hop hats aren't even velocity;
+        // they accent certain positions and ghost others.
+        let hatFeel = Int.random(in: 0..<3, using: &generator)
+        switch hatFeel {
+        case 0:
+            // Standard 8ths with strong accent on beats 1 and 3,
+            // softer on the "ands" — classic boom-bap hat.
+            var tick = 0
+            while tick < 4 * q {
+                let onBeat = (tick % q == 0)
+                let intensity: Double = onBeat ? 0.58 : 0.48
+                markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: intensity))
+                tick += e
+            }
+        case 1:
+            // 16ths with accent on every other 16th — busy,
+            // high-energy trip-hop feel.
+            var tick = 0
+            var idx = 0
+            while tick < 4 * q {
+                let accent: Double = (idx % 2 == 0) ? 0.56 : 0.44
+                markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: accent))
+                tick += s
+                idx += 1
+            }
+        default:
+            // Quarter-note hats — sparse, open, letting the
+            // ghost snares fill the space. Most trip-hop-like.
+            for beat in 0..<4 {
+                markers.append(Marker(startTick: beat * q, stopTick: beat * q + s, intensity: 0.55))
+            }
         }
 
         return Atom(
