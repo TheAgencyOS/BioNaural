@@ -344,9 +344,12 @@ public final class AudioEngine: AudioEngineProtocol {
         case .relaxation:
             bedName = Constants.Soundscape.ocean
         case .focus:
+            // Focus default: no ambient bed, no binaural. The music
+            // (Rhodes + bass + drums) IS the soundscape. User can
+            // raise either slider in Mix Levels if they want.
             bedName = Constants.Soundscape.pinkNoise
-            // Perceptual match: rain/ocean at 0.10 ≈ pink noise at 0.05.
-            parameters.ambientVolume = Constants.Soundscape.focusBedVolumeOverride
+            parameters.ambientVolume = 0.0
+            parameters.binauralVolume = 0.0
         case .energize:
             bedName = Constants.Soundscape.brownNoise
             parameters.ambientVolume = Constants.Soundscape.energizeBedVolumeOverride
@@ -862,15 +865,16 @@ public final class AudioEngine: AudioEngineProtocol {
             delay.wetDryMix = 22.0
             shim?.volume = 0.34              // strong shimmer
         case .focus:
-            // Focus is trip-hop / lo-fi — tight room, no shimmer
-            // (shimmer would fight the dusty lo-fi character).
-            reverb.loadFactoryPreset(.mediumRoom)
-            reverb.wetDryMix = 30.0
-            delay.delayTime = 0.015           // 15ms chorus-ish doubling
-            delay.feedback = 20.0
-            delay.lowPassCutoff = 7000.0
-            delay.wetDryMix = 22.0
-            shim?.volume = 0.0                // no shimmer on focus
+            // Focus is trip-hop / lo-fi — warm room with enough
+            // reverb to make the Rhodes lush, not dry and tinny.
+            // No shimmer (would fight the dusty lo-fi character).
+            reverb.loadFactoryPreset(.largeRoom2)
+            reverb.wetDryMix = 45.0           // wetter for warm Rhodes tail
+            delay.delayTime = 0.018           // 18ms doubling for width
+            delay.feedback = 15.0
+            delay.lowPassCutoff = 5500.0      // darker delay tail
+            delay.wetDryMix = 20.0
+            shim?.volume = 0.0
         case .energize:
             reverb.loadFactoryPreset(.mediumHall)
             reverb.wetDryMix = 30.0
@@ -896,7 +900,7 @@ public final class AudioEngine: AudioEngineProtocol {
         switch mode {
         case .sleep:      env = Envelope(attack: 118, release: 125, brightness: 30)   // ultra soft pad
         case .relaxation: env = Envelope(attack:  92, release: 110, brightness: 48)   // warm
-        case .focus:      env = Envelope(attack:  36, release:  60, brightness: 52)   // warm rhodes / lo-fi
+        case .focus:      env = Envelope(attack:  48, release:  72, brightness: 36)   // dark warm rhodes — no tinny high end
         case .energize:   env = Envelope(attack:  30, release:  55, brightness: 68)   // warm rhodes / hip-hop
         }
         let samplers = [voices.melody.sampler, voices.bass.sampler, voices.drums.sampler]
