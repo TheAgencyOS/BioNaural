@@ -544,13 +544,20 @@ public enum PatternBuilder {
         return UInt8(max(1, min(127, Int(shaped.rounded()))))
     }
 
-    /// Apply small humanization jitter to a position. Only melodic
-    /// `.mixed` notes wobble — bass and chord tones (`.comp`), scale
-    /// solos (`.solo`), and drums (`.rhythmic`) stay locked to the grid
-    /// so all tracks share phase with the drum clock.
+    /// Apply humanization jitter to a position. Different NoteTypes
+    /// get different amounts of drift — melody gets the most
+    /// (it's the foreground voice with the most expressive freedom),
+    /// bass gets a small amount (breathes around the kick but stays
+    /// close), drums and solo stay grid-locked (drums have their own
+    /// DrumHumanizer pass; solo notes are rare).
     private static func humanizePosition(_ position: Int, type: NoteType) -> Int {
-        guard type == .mixed else { return position }
-        let jitter = Int.random(in: -5...5)
+        let jitter: Int
+        switch type {
+        case .mixed:    jitter = Int.random(in: -10...10)  // melody — most drift
+        case .comp:     jitter = Int.random(in: -6...6)    // bass/chords — subtle float
+        case .solo:     jitter = Int.random(in: -4...4)    // scale solos — light
+        case .rhythmic: return position                     // drums — DrumHumanizer handles this
+        }
         return max(0, position + jitter)
     }
 
