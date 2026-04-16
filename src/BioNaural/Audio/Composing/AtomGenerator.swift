@@ -208,14 +208,14 @@ public enum AtomGenerator {
             markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: 0.30))
         }
 
-        // Hat pattern — drawn from 3 feel types with dynamic
-        // accent shaping. Real trip-hop hats aren't even velocity;
-        // they accent certain positions and ghost others.
-        let hatFeel = Int.random(in: 0..<3, using: &generator)
-        switch hatFeel {
-        case 0:
-            // Standard 8ths with strong accent on beats 1 and 3,
-            // softer on the "ands" — classic boom-bap hat.
+        // Hat pattern — straight 8ths or quarters only. No 16ths,
+        // no triplets. The funk comes from the ghost kick/snare
+        // PLACEMENT, not from busy hat patterns. Hats just keep
+        // time with a clean on-beat / off-beat accent groove.
+        let useEighths = Double.random(in: 0...1, using: &generator) < 0.75
+        if useEighths {
+            // Straight 8th-note hats — on-beats accented, off-beats
+            // softer. Classic boom-bap / trip-hop hat pattern.
             var tick = 0
             while tick < 4 * q {
                 let onBeat = (tick % q == 0)
@@ -223,20 +223,9 @@ public enum AtomGenerator {
                 markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: intensity))
                 tick += e
             }
-        case 1:
-            // 16ths with accent on every other 16th — busy,
-            // high-energy trip-hop feel.
-            var tick = 0
-            var idx = 0
-            while tick < 4 * q {
-                let accent: Double = (idx % 2 == 0) ? 0.56 : 0.44
-                markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: accent))
-                tick += s
-                idx += 1
-            }
-        default:
-            // Quarter-note hats — sparse, open, letting the
-            // ghost snares fill the space. Most trip-hop-like.
+        } else {
+            // Quarter-note hats — sparse, open, letting the ghost
+            // snares fill the space between hits.
             for beat in 0..<4 {
                 markers.append(Marker(startTick: beat * q, stopTick: beat * q + s, intensity: 0.55))
             }
