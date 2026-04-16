@@ -247,59 +247,45 @@ public enum AtomGenerator {
         index: Int,
         using generator: inout G
     ) -> Atom {
-        var markers: [Marker] = []
+        // Research-optimal focus "melody": one sustained tone held
+        // for the ENTIRE bar, or silence. Not a melodic phrase —
+        // a pad-like sustained voice that reinforces the current
+        // chord. The harmonic context (changing every 2 bars)
+        // provides all the movement; the "melody" just picks one
+        // chord/scale tone and holds it.
+        //
+        // Kämpfe 2011: fewer events = less cognitive load.
+        // Brain.fm: long sustained tones, not melodic fragments.
+        //
+        // 80% chance of a sustained tone, 20% silence.
+        let isSilent = Double.random(in: 0...1, using: &generator) < 0.20
 
-        // Beat-weighted position set. Beats 1 and 3 (strong) are
-        // most likely; weak beats, off-8ths, and 16ths are rarer.
-        let weightedPositions: [Int] = [
-            0,          0,          0,                 // beat 1 (heavy)
-            q,                                          // beat 2
-            2 * q,      2 * q,                          // beat 3
-            3 * q,                                      // beat 4
-            q + e,                                      // "and" of 2
-            2 * q + e,                                  // "and" of 3
-            3 * q + e,                                  // "and" of 4
-            q + s,      2 * q + 3 * s                   // 16th accents (rare)
-        ]
-
-        // Number of notes: 1-2 per bar. Real lo-fi / trip-hop
-        // melodies are VERY sparse — often one sustained tone per
-        // bar, occasionally two. Per user feedback focus needs
-        // less melody going on.
-        let noteCount = [1, 1, 1, 2, 2].randomElement(using: &generator) ?? 1
-
-        // Sample distinct positions without replacement.
-        var pool = weightedPositions
-        var chosenTicks: [Int] = []
-        for _ in 0..<noteCount {
-            guard !pool.isEmpty else { break }
-            let pickIdx = Int.random(in: 0..<pool.count, using: &generator)
-            let tick = pool[pickIdx]
-            if !chosenTicks.contains(tick) {
-                chosenTicks.append(tick)
-            }
-            pool.remove(at: pickIdx)
+        if isSilent {
+            return Atom(
+                sizeQuarters: 4,
+                type: .empty,
+                markers: [],
+                name: "gen_focus_melody_\(index)"
+            )
         }
-        chosenTicks.sort()
 
-        // Emit markers. Each note runs to the next note's start
-        // position so sustained tones are possible when the melody
-        // is very sparse.
-        for (i, tick) in chosenTicks.enumerated() {
-            let next = (i + 1 < chosenTicks.count) ? chosenTicks[i + 1] : 4 * q
-            let intensity = 0.55 + Double.random(in: -0.05...0.12, using: &generator)
-            markers.append(Marker(
-                startTick: tick,
-                stopTick: next,
-                intensity: max(0.1, min(0.9, intensity)),
-                moveAbility: 0.1
-            ))
-        }
+        // Single tone starting on beat 1, held for the full bar.
+        // Intensity varies slightly across generated atoms so
+        // different bars have subtly different velocity — just
+        // enough variation to prevent machine-perfect sameness.
+        let intensity = 0.45 + Double.random(in: -0.05...0.10, using: &generator)
 
         return Atom(
             sizeQuarters: 4,
             type: .alpha,
-            markers: markers,
+            markers: [
+                Marker(
+                    startTick: 0,
+                    stopTick: 4 * q,
+                    intensity: max(0.1, min(0.9, intensity)),
+                    moveAbility: 0.0
+                )
+            ],
             name: "gen_focus_melody_\(index)"
         )
     }
