@@ -477,11 +477,12 @@ public enum PatternBuilder {
     }
 
     /// Apply a swing offset to a position. Shifts notes that land on
-    /// an off-8th (tick % 480 == 240) by `swingTicks`. Used for lo-fi
-    /// focus shuffle and relaxation rubato. Drums are spared so the
-    /// grid stays honest.
+    /// an off-8th (tick % 480 == 240) by `swingTicks`. Applies to ALL
+    /// roles including drums — trip-hop IS swung drums, and excluding
+    /// them was producing a robotic, square feel. The DrumHumanizer
+    /// adds additional per-voice micro-variation on top of the swing.
     private static func applySwing(position: Int, swingTicks: Int, role: TrackRole) -> Int {
-        guard swingTicks > 0, role != .drums else { return position }
+        guard swingTicks > 0 else { return position }
         let q = Composing.ticksPerQuarter
         let e = q / 2
         let withinBeat = position % q
