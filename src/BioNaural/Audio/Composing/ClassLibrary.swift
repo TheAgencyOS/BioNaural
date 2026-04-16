@@ -265,9 +265,13 @@ public enum ClassLibrary {
             density: density,
             allowedEventTypes: [.note],
             octaveRange: 3...4,
-            velocityRange: 45...70,
-            allowedAtomSizes: [4],                  // 1-bar sparse phrases only
-            contour: .archUpDown
+            // Velocity lowered so melody sits in the BACKGROUND.
+            // Research: focus music should be low-saliency, not
+            // demanding conscious parsing. The Rhodes should float
+            // under awareness, not draw attention.
+            velocityRange: 35...55,
+            allowedAtomSizes: [4],
+            contour: .neutral                       // no contour motion — predictability
         )
     }
 
