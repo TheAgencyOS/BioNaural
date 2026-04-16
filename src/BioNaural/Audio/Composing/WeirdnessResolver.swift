@@ -150,14 +150,16 @@ public enum WeirdnessResolver {
             default:        return 70  // Maracas (shaker)
             }
         case .tabla:
-            // Tabla approximation using low floor tom for the bayan
-            // bass stroke, low/mid tom for tin-tin strokes, and the
-            // high timbale for the sharp tabla slap.
+            // Tabla approximation. GM doesn't have real tabla notes,
+            // so we use the softest available pitched percussion.
+            // HIGH TIMBALE (65) WAS WRONG — it's bright and metallic,
+            // the opposite of a tabla. High/Low Bongo (60/61) are
+            // softer and rounder, closer to tabla character.
             switch velocity {
             case 108...127: return 41  // Low Floor Tom (bayan thump)
-            case 85...107:  return 47  // Low-Mid Tom (tin)
-            case 60...84:   return 65  // High Timbale (tabla slap)
-            case 45...59:   return 45  // Low Tom
+            case 85...107:  return 61  // Low Bongo (softer than tom)
+            case 60...84:   return 60  // High Bongo (tabla "ta" stroke)
+            case 45...59:   return 61  // Low Bongo (repeat — soft)
             default:        return 70  // Maracas (shaker)
             }
         }
