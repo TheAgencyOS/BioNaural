@@ -189,14 +189,13 @@ public struct CompositionSeed: Sendable, Hashable {
         switch mode {
         case .sleep:       return 0
         case .relaxation:  return 0
-        // Focus is trip-hop / lo-fi. J Dilla's signature swing is
-        // ~55-58% (off-8th shifted 15-38 ticks at 480 PPQN). 48
-        // ticks was 60% — heavy jazz shuffle that felt sloppy with
-        // our syncopated ghost patterns. 24 ticks = 55% swing —
-        // subtle pocket drag, not audible shuffle. The funk comes
-        // from the generator's ghost kick/snare PLACEMENT, not
-        // from loose timing.
-        case .focus:       return 24
+        // Focus: STRAIGHT timing. Research (Kämpfe 2011) shows
+        // predictable patterns minimize cognitive load. Swing adds
+        // micro-complexity to timing that demands parsing. Dead-
+        // straight 8th-note grid is maximally predictable and
+        // habituatable — the music becomes invisible, which is
+        // the goal for focus.
+        case .focus:       return 0
         case .energize:    return 48
         }
     }
@@ -230,10 +229,12 @@ public struct CompositionSeed: Sendable, Hashable {
         case .sleep:       return [.pentatonicMinor, .lydian, .minor]
         // Relaxation: floating modal palette.
         case .relaxation:  return [.lydian, .dorian, .major, .pentatonicMajor, .mixolydian]
-        // Focus: trancey + rhythmic. Minor-leaning modal palette
-        // (dorian, natural minor, pentatonicMinor) — hypnotic, dark,
-        // motion-oriented.
-        case .focus:       return [.dorian, .minor, .pentatonicMinor, .dorian, .minor]
+        // Focus: 50/50 major/minor. Thompson 2001 + Bottiroli 2014
+        // show major mode induces positive arousal which aids focus.
+        // Minor is OK for contemplative study. Balanced pool gives
+        // variety across sessions while hitting the arousal sweet
+        // spot more often than a pure-minor pool.
+        case .focus:       return [.dorian, .minor, .major, .pentatonicMajor, .mixolydian]
         // Energize: hip-hop / boom-bap territory — overwhelmingly
         // minor (minor 7 / min9 flavors) with a bit of dorian colour.
         case .energize:    return [.minor, .dorian, .minor, .dorian, .pentatonicMinor]

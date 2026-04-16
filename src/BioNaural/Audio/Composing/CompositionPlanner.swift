@@ -402,33 +402,35 @@ public enum CompositionPlanner {
                 ]
             }
 
-        // MARK: Focus — ambient reframe. Long-sustain extended chords,
-        // modal motion, no cadential dominants. Same feel as
-        // relaxation but even more drifting and sparser.
+        // MARK: Focus — research-grounded. Each chord held for 2 bars
+        // (Kämpfe 2011: predictability minimizes cognitive load).
+        // Only 4 chords total per 8-bar loop. Simple ii-V-I family
+        // progressions — the lo-fi convention that research
+        // validated indirectly via the "simple/repetitive" finding.
         case .focus:
             if minorScale {
                 return [
-                    // im9 - ♭VImaj7 drone pair (two chords, slow move)
-                    [(0,.minor9),(0,.minor9),(8,.major7),(8,.major7),
-                     (0,.minor9),(0,.minor9),(8,.major7),(8,.major7)],
-                    // dorian vamp: im7 - IVmaj7
-                    [(0,.minor7),(5,.major7),(0,.minor7),(5,.major7),
-                     (0,.minor7),(5,.major7),(0,.minor7),(5,.major7)],
-                    // im7 - ♭VIImaj7 - ♭VImaj7 - ♭VIImaj7 (modal float)
-                    [(0,.minor7),(10,.major7),(8,.major7),(10,.major7),
-                     (0,.minor7),(10,.major7),(8,.major7),(10,.major7)],
+                    // im7 (2 bars) - ♭VImaj7 (2 bars) - repeat
+                    [(0,.minor7),(0,.minor7),(8,.major7),(8,.major7),
+                     (0,.minor7),(0,.minor7),(8,.major7),(8,.major7)],
+                    // im7 (2) - IVmaj7 (2) - im7 (2) - IVmaj7 (2)
+                    [(0,.minor7),(0,.minor7),(5,.major7),(5,.major7),
+                     (0,.minor7),(0,.minor7),(5,.major7),(5,.major7)],
+                    // im9 (2) - ♭VIImaj7 (2) - repeat
+                    [(0,.minor9),(0,.minor9),(10,.major7),(10,.major7),
+                     (0,.minor9),(0,.minor9),(10,.major7),(10,.major7)],
                 ]
             } else {
                 return [
-                    // Imaj9 pedal with one IVmaj7 departure
-                    [(0,.major9),(0,.major9),(0,.major9),(5,.major7),
-                     (0,.major9),(0,.major9),(5,.major7),(0,.major9)],
-                    // Imaj7 - IVmaj7 - vi9 - IVmaj7 (lydian float)
-                    [(0,.major7),(5,.major7),(9,.minor9),(5,.major7),
-                     (0,.major7),(5,.major7),(9,.minor9),(5,.major7)],
-                    // Isus2 - Imaj7 - IVmaj7 - Imaj7 (breath)
-                    [(0,.sus2),(0,.major7),(5,.major7),(0,.major7),
-                     (0,.sus2),(0,.major7),(5,.major7),(0,.major7)],
+                    // Imaj7 (2 bars) - IVmaj7 (2 bars) - repeat
+                    [(0,.major7),(0,.major7),(5,.major7),(5,.major7),
+                     (0,.major7),(0,.major7),(5,.major7),(5,.major7)],
+                    // Imaj9 (2) - vi7 (2) - repeat
+                    [(0,.major9),(0,.major9),(9,.minor7),(9,.minor7),
+                     (0,.major9),(0,.major9),(9,.minor7),(9,.minor7)],
+                    // Imaj7 (2) - ii7 (2) - Imaj7 (2) - V7 (2)
+                    [(0,.major7),(0,.major7),(2,.minor7),(2,.minor7),
+                     (0,.major7),(0,.major7),(7,.dominant7),(7,.dominant7)],
                 ]
             }
 

@@ -170,40 +170,29 @@ public enum AtomGenerator {
         index: Int,
         using generator: inout G
     ) -> Atom {
-        // Portishead / Massive Attack drum aesthetic: STARK.
-        // Kick on 1, snare on 3, hats on 8ths. Maybe one extra
-        // kick somewhere. NO ghost snares — those create implicit
-        // 16th subdivisions that sound triplet-y and busy.
-        // The weight and simplicity IS the trip-hop feel.
+        // Research-grounded focus drums: MAXIMALLY SIMPLE.
+        // Kämpfe 2011 meta-analysis: predictable patterns minimize
+        // cognitive load. No ghost kicks, no syncopation, no swing.
+        // Every bar identical. The music should be FORGETTABLE —
+        // invisible to conscious parsing.
+        //
+        // Fixed pattern: kick(1) + snare(3) + straight 8th hats.
+        // Variety across sessions comes from key/scale/tempo/
+        // instrument, not from drum-pattern variation.
         var markers: [Marker] = []
 
-        // Kick on beat 1 — always.
+        // Kick on beat 1.
         markers.append(Marker(startTick: 0, stopTick: s, intensity: 0.95))
 
-        // Snare on beat 3 — always. One heavy hit, period.
+        // Snare on beat 3.
         markers.append(Marker(startTick: 2 * q, stopTick: 2 * q + s, intensity: 0.72))
 
-        // Optional second kick (0-1). Classic Portishead move:
-        // sometimes a second kick on beat 4 or the "and" of 2.
-        // 50% chance of having one at all.
-        if Double.random(in: 0...1, using: &generator) < 0.50 {
-            let secondKickOptions = [
-                q + e,      // "and" of 2 (Massive Attack "Angel")
-                3 * q,      // beat 4 (Portishead "Sour Times")
-                3 * q + e   // "and" of 4 (Portishead "Glory Box")
-            ]
-            if let tick = secondKickOptions.randomElement(using: &generator) {
-                markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: 0.88))
-            }
-        }
-
-        // Hats — straight 8ths. On-beats accented, off-beats
-        // softer. That's the entire hat pattern. Clean, simple,
-        // heavy.
+        // Straight 8th-note hats. On-beats slightly accented.
+        // Dead-straight grid — no swing, no ghost, no variation.
         var tick = 0
         while tick < 4 * q {
             let onBeat = (tick % q == 0)
-            let intensity: Double = onBeat ? 0.58 : 0.48
+            let intensity: Double = onBeat ? 0.56 : 0.48
             markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: intensity))
             tick += e
         }
@@ -222,35 +211,22 @@ public enum AtomGenerator {
         index: Int,
         using generator: inout G
     ) -> Atom {
-        var markers: [Marker] = []
-
-        // Always root on beat 1 — locks with the drum kick.
-        let anchor1Length = [q, 2 * q, 3 * q].randomElement(using: &generator) ?? q
-        markers.append(Marker(startTick: 0, stopTick: anchor1Length, intensity: 0.65))
-
-        // Possible passing hits on the off-beats. Each has an
-        // independent probability; at most two are picked so the
-        // bass stays sparse.
-        let passingCandidates: [(tick: Int, length: Int, intensity: Double)] = [
-            (q + e,     e,      0.55),   // "and" of 2
-            (2 * q + e, q + e,  0.60),   // "and" of 3 (trip-hop lock)
-            (3 * q,     q,      0.55),   // beat 4
-            (3 * q + e, e,      0.60)    // "and" of 4
-        ]
-        let numPassing = Int.random(in: 0...2, using: &generator)
-        for candidate in passingCandidates.shuffled(using: &generator).prefix(numPassing) {
-            let stopTick = min(4 * q, candidate.tick + candidate.length)
-            markers.append(Marker(
-                startTick: candidate.tick,
-                stopTick: stopTick,
-                intensity: candidate.intensity
-            ))
-        }
-
+        // Research-grounded: simpler = less cognitive load.
+        // Bass just holds the root for the full bar. Pitch changes
+        // only when the HarmonicContext chord changes (every 2 bars
+        // per the slowed-down progression). No passing tones, no
+        // walking, no syncopation. A sub-bass drone anchor.
         return Atom(
             sizeQuarters: 4,
             type: .alpha,
-            markers: markers,
+            markers: [
+                Marker(
+                    startTick: 0,
+                    stopTick: 4 * q,
+                    intensity: 0.70,
+                    moveAbility: 0.0
+                )
+            ],
             name: "gen_focus_bass_\(index)"
         )
     }
