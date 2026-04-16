@@ -277,6 +277,9 @@ public enum ClassLibrary {
     /// picks the groove-with-kick pattern. Octave bumped from 1..2
     /// (too subby) to 2..3 for note definition.
     private static func focusBass() -> MusicalClass {
+        // Bass pool now includes synth bass (GM 38/39) which is
+        // fatter than acoustic/fretless. Velocity bumped for more
+        // presence in the mix. Octave 1...2 for sub-weight.
         MusicalClass(
             name: "focus_bass",
             role: .bass,
@@ -285,8 +288,8 @@ public enum ClassLibrary {
             weirdnessRange: WeirdnessRange(.zero),
             density: 0.40,
             allowedEventTypes: [.note],
-            octaveRange: 2...3,
-            velocityRange: 60...85,
+            octaveRange: 1...2,
+            velocityRange: 75...100,
             allowedAtomSizes: [4]
         )
     }

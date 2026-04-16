@@ -147,7 +147,7 @@ public final class MultiVoiceRenderer {
         // Load bass voice (GM 38 = Synth Bass 1)
         if Theme.ModeInstrumentation.allowsRhythmStem(for: mode) {
             try loadVoice(bass, preset: Theme.SF2.PresetIndex.bass, sf2URL: sf2URL)
-            bass.submixer.volume = 0.85
+            bass.submixer.volume = 1.0
         } else {
             bass.submixer.volume = 0.0
         }
