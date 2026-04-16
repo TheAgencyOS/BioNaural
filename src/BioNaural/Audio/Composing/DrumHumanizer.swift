@@ -100,21 +100,23 @@ public enum DrumHumanizer {
     }
 
     private static func profile(for voice: Voice) -> Profile {
-        // Timing offsets sized for trip-hop feel. At 480 PPQN and
-        // ~80 BPM, 1 tick ≈ 1.6 ms. The old values (±3 kick, ±6
-        // snare) were barely perceptible. Real trip-hop drummers
-        // have 10-30 ms of timing drift — that's ±8 to ±18 ticks.
-        // The snare drag bias (+10) puts the backbeat behind the
-        // beat, which is THE trip-hop signature.
+        // Timing offsets for subtle micro-variation. The SWING (48
+        // ticks on off-8ths) does the heavy lifting for trip-hop
+        // feel. The humanizer just needs tiny per-hit drift so the
+        // pattern doesn't sound machine-perfect. Phase 36's values
+        // were too aggressive (±8-18 ticks) and produced a sloppy,
+        // disjointed sound when combined with swing. These values
+        // add ~5-10 ms of drift, which is subliminal but audibly
+        // "human" — the line between groovy and sloppy.
         switch voice {
         case .kick:
-            return Profile(maxTimingOffset: 8,  biasTimingOffset: 0, velocityJitter: 0.06, velocityFloor: 0.88)
+            return Profile(maxTimingOffset: 4,  biasTimingOffset: 0, velocityJitter: 0.05, velocityFloor: 0.90)
         case .snare:
-            return Profile(maxTimingOffset: 14, biasTimingOffset: 10, velocityJitter: 0.10, velocityFloor: 0.80)
+            return Profile(maxTimingOffset: 6,  biasTimingOffset: 4, velocityJitter: 0.08, velocityFloor: 0.85)
         case .hat:
-            return Profile(maxTimingOffset: 18, biasTimingOffset: 0, velocityJitter: 0.15, velocityFloor: 0.70)
+            return Profile(maxTimingOffset: 8,  biasTimingOffset: 0, velocityJitter: 0.12, velocityFloor: 0.72)
         case .shaker:
-            return Profile(maxTimingOffset: 8,  biasTimingOffset: 0, velocityJitter: 0.12, velocityFloor: 0.65)
+            return Profile(maxTimingOffset: 4,  biasTimingOffset: 0, velocityJitter: 0.10, velocityFloor: 0.68)
         }
     }
 

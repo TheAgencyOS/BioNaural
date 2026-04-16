@@ -551,11 +551,18 @@ public enum PatternBuilder {
     /// close), drums and solo stay grid-locked (drums have their own
     /// DrumHumanizer pass; solo notes are rare).
     private static func humanizePosition(_ position: Int, type: NoteType) -> Int {
+        // Swing (48 ticks on off-8ths) provides the trip-hop feel.
+        // These jitter values are intentionally SMALL — just enough
+        // micro-variation that the pattern doesn't sound machine-
+        // perfect, not so much that voices drift apart into slop.
+        // Phase 37's values (±10 melody, ±6 bass) were too
+        // aggressive when combined with swing and produced a
+        // disjointed sound.
         let jitter: Int
         switch type {
-        case .mixed:    jitter = Int.random(in: -10...10)  // melody — most drift
-        case .comp:     jitter = Int.random(in: -6...6)    // bass/chords — subtle float
-        case .solo:     jitter = Int.random(in: -4...4)    // scale solos — light
+        case .mixed:    jitter = Int.random(in: -5...5)    // melody — moderate drift
+        case .comp:     jitter = Int.random(in: -3...3)    // bass — tight to kick
+        case .solo:     jitter = Int.random(in: -2...2)    // scale solos — light
         case .rhythmic: return position                     // drums — DrumHumanizer handles this
         }
         return max(0, position + jitter)
