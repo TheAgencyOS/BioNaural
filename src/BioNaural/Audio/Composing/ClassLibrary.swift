@@ -316,32 +316,24 @@ public enum ClassLibrary {
         )
     }
 
-    /// Focus drums: minimal rhythmic spine. The drum kit (tabla /
-    /// congas / sparse kit) is chosen by CompositionSeed.drumKit —
-    /// the atoms themselves are kit-neutral; the resolver maps
-    /// marker intensities to kit-appropriate percussion notes.
+    /// Focus drums: tabla / conga / shaker — soft pitched percussion
+    /// that sits under conscious awareness. The drum kit (tabla or
+    /// conga) is chosen by CompositionSeed.drumKit. No sparseKit
+    /// (kick/snare) ever — those sharp transients capture attention.
     private static func focusDrums(_ state: BiometricState) -> MusicalClass {
-        let density: Double
-        switch state {
-        case .calm:     density = 0.20
-        case .focused:  density = 0.30
-        case .elevated: density = 0.20  // calm them
-        case .peak:     density = 0.15  // calm further
-        }
         return MusicalClass(
             name: "focus_drums_\(state)",
             role: .drums,
-            allowedAtomTypes: [.alpha],                      // no .empty — drums must be constant
+            allowedAtomTypes: [.alpha],
             atomicRepetitiveness: .same,
-            weirdnessRange: WeirdnessRange(.zero, .safe),  // unused for drums
+            weirdnessRange: WeirdnessRange(.zero, .safe),
             density: 0.85,
             allowedEventTypes: [.note],
-            octaveRange: 0...0,                              // unused for drums
-            // CRITICAL: the full 20..127 range is required so atom
-            // intensity tiers (hat 0.55, snare 0.72, kick 0.95) map
-            // to velocities that land in the resolver's drum tiers.
-            // Previously 70..95 clamped every hit into the snare
-            // tier — kicks weren't actually firing kick notes.
+            octaveRange: 0...0,
+            // Wide range preserved so intensity tiers (0.28 shaker,
+            // 0.55 high, 0.72 mid, 0.95 low) all land in the right
+            // resolver buckets. Volume is controlled by the drum
+            // submixer (0.35 for focus) not by velocity range.
             velocityRange: 20...127,
             allowedAtomSizes: [4]
         )

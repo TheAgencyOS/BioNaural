@@ -170,31 +170,70 @@ public enum AtomGenerator {
         index: Int,
         using generator: inout G
     ) -> Atom {
-        // Research-grounded focus drums: MAXIMALLY SIMPLE.
-        // Kämpfe 2011 meta-analysis: predictable patterns minimize
-        // cognitive load. No ghost kicks, no syncopation, no swing.
-        // Every bar identical. The music should be FORGETTABLE —
-        // invisible to conscious parsing.
+        // Research-grounded focus percussion: soft, pitched, low-
+        // transient. NO kick or snare — those are sharp-onset
+        // sounds that capture attention (Parmentier 2014). Tabla
+        // and conga hits have softer envelopes that sit under
+        // conscious awareness.
         //
-        // Fixed pattern: kick(1) + snare(3) + straight 8th hats.
-        // Variety across sessions comes from key/scale/tempo/
-        // instrument, not from drum-pattern variation.
+        // The seed picks tabla or conga kit at random. Both kits
+        // use the same intensity tiers:
+        //   0.95 → low drum (bayan / low conga)
+        //   0.72 → mid drum (tin / open conga)
+        //   0.55 → high drum (slap / mute conga)
+        //   <0.45 → shaker (maracas note 70)
+        //
+        // Patterns are simple quarter-note or 8th-note pulses.
+        // Every bar identical. Predictable = habituatable.
         var markers: [Marker] = []
 
-        // Kick on beat 1.
-        markers.append(Marker(startTick: 0, stopTick: s, intensity: 0.95))
-
-        // Snare on beat 3.
-        markers.append(Marker(startTick: 2 * q, stopTick: 2 * q + s, intensity: 0.72))
-
-        // Straight 8th-note hats. On-beats slightly accented.
-        // Dead-straight grid — no swing, no ghost, no variation.
-        var tick = 0
-        while tick < 4 * q {
-            let onBeat = (tick % q == 0)
-            let intensity: Double = onBeat ? 0.56 : 0.48
-            markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: intensity))
-            tick += e
+        let feel = Int.random(in: 0..<3, using: &generator)
+        switch feel {
+        case 0:
+            // Quarter-note pulse — one soft hit per beat.
+            // The gentlest possible rhythmic presence.
+            for beat in 0..<4 {
+                // Alternate between mid and high timbres for
+                // tonal variety without dynamic contrast.
+                let intensity: Double = (beat % 2 == 0) ? 0.55 : 0.72
+                markers.append(Marker(
+                    startTick: beat * q,
+                    stopTick: beat * q + s,
+                    intensity: intensity
+                ))
+            }
+        case 1:
+            // 8th-note shaker — continuous soft pulse.
+            // Uses the lowest intensity tier → resolves to
+            // maracas/shaker (note 70) in both kits.
+            var tick = 0
+            while tick < 4 * q {
+                let onBeat = (tick % q == 0)
+                let intensity: Double = onBeat ? 0.35 : 0.28
+                markers.append(Marker(
+                    startTick: tick,
+                    stopTick: tick + s,
+                    intensity: intensity
+                ))
+                tick += e
+            }
+        default:
+            // Mixed: low drum on beat 1, shaker on 8ths.
+            // The low drum anchors the bar; the shaker fills time.
+            markers.append(Marker(
+                startTick: 0,
+                stopTick: s,
+                intensity: 0.72
+            ))
+            var tick = e
+            while tick < 4 * q {
+                markers.append(Marker(
+                    startTick: tick,
+                    stopTick: tick + s,
+                    intensity: 0.30
+                ))
+                tick += e
+            }
         }
 
         return Atom(
