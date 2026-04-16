@@ -291,7 +291,7 @@ public struct CompositionSeed: Sendable, Hashable {
         // for data compatibility but roles(for: .focus) currently
         // excludes those tracks.
         case (.focus, .melody):  return [4]                             // rhodes only
-        case (.focus, .bass):    return [38, 39, 33, 35]                // synth bass 1/2 (fat), electric finger, fretless
+        case (.focus, .bass):    return [38, 39]                        // synth bass only (101/sub-bass tone) — no upright or fretless
         case (.focus, .chords):  return [4]                             // unused — excluded from focus roles
         case (.focus, .drums):   return [0]                             // percussion bank (sparseKit)
         case (.focus, .pad):     return [89]

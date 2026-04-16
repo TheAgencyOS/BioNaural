@@ -170,65 +170,42 @@ public enum AtomGenerator {
         index: Int,
         using generator: inout G
     ) -> Atom {
+        // Portishead / Massive Attack drum aesthetic: STARK.
+        // Kick on 1, snare on 3, hats on 8ths. Maybe one extra
+        // kick somewhere. NO ghost snares — those create implicit
+        // 16th subdivisions that sound triplet-y and busy.
+        // The weight and simplicity IS the trip-hop feel.
         var markers: [Marker] = []
 
-        // Fixed anchors: kick on beat 1, snare on beat 3. Every
-        // trip-hop / lo-fi pattern rests on these.
-        markers.append(Marker(startTick: 0,         stopTick: s, intensity: 0.95))
-        markers.append(Marker(startTick: 2 * q,     stopTick: 2 * q + s, intensity: 0.72))
+        // Kick on beat 1 — always.
+        markers.append(Marker(startTick: 0, stopTick: s, intensity: 0.95))
 
-        // Ghost kick(s) — syncopated positions that the J Dilla /
-        // Massive Attack school uses for the trip-hop bounce.
-        // Intensity 0.88 = kick tier but quieter than the main kick.
-        let ghostKickCandidates: [Int] = [
-            q + e,          // "and" of 2
-            2 * q + e,      // "and" of 3 (the Massive Attack pocket)
-            3 * q,          // beat 4
-            3 * q + e       // "and" of 4
-        ]
-        let numGhostKicks = Int.random(in: 1...2, using: &generator)
-        for tick in ghostKickCandidates.shuffled(using: &generator).prefix(numGhostKicks) {
-            markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: 0.88))
+        // Snare on beat 3 — always. One heavy hit, period.
+        markers.append(Marker(startTick: 2 * q, stopTick: 2 * q + s, intensity: 0.72))
+
+        // Optional second kick (0-1). Classic Portishead move:
+        // sometimes a second kick on beat 4 or the "and" of 2.
+        // 50% chance of having one at all.
+        if Double.random(in: 0...1, using: &generator) < 0.50 {
+            let secondKickOptions = [
+                q + e,      // "and" of 2 (Massive Attack "Angel")
+                3 * q,      // beat 4 (Portishead "Sour Times")
+                3 * q + e   // "and" of 4 (Portishead "Glory Box")
+            ]
+            if let tick = secondKickOptions.randomElement(using: &generator) {
+                markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: 0.88))
+            }
         }
 
-        // Ghost snares — VERY quiet snare taps between main hits.
-        // Intensity 0.30 → velocity ~52 → resolver maps to snare
-        // note 38 at low velocity = the classic trip-hop ghost
-        // snare feel. Placed on the "e" and "a" positions
-        // (16th-note subdivisions off the beat).
-        let ghostSnarePositions = [
-            q + s,          // "e" of 2
-            q + 3 * s,      // "a" of 2
-            2 * q + s,      // "e" of 3
-            3 * q + s,      // "e" of 4
-            3 * q + 3 * s   // "a" of 4
-        ]
-        let numGhostSnares = Int.random(in: 1...3, using: &generator)
-        for tick in ghostSnarePositions.shuffled(using: &generator).prefix(numGhostSnares) {
-            markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: 0.30))
-        }
-
-        // Hat pattern — straight 8ths or quarters only. No 16ths,
-        // no triplets. The funk comes from the ghost kick/snare
-        // PLACEMENT, not from busy hat patterns. Hats just keep
-        // time with a clean on-beat / off-beat accent groove.
-        let useEighths = Double.random(in: 0...1, using: &generator) < 0.75
-        if useEighths {
-            // Straight 8th-note hats — on-beats accented, off-beats
-            // softer. Classic boom-bap / trip-hop hat pattern.
-            var tick = 0
-            while tick < 4 * q {
-                let onBeat = (tick % q == 0)
-                let intensity: Double = onBeat ? 0.58 : 0.48
-                markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: intensity))
-                tick += e
-            }
-        } else {
-            // Quarter-note hats — sparse, open, letting the ghost
-            // snares fill the space between hits.
-            for beat in 0..<4 {
-                markers.append(Marker(startTick: beat * q, stopTick: beat * q + s, intensity: 0.55))
-            }
+        // Hats — straight 8ths. On-beats accented, off-beats
+        // softer. That's the entire hat pattern. Clean, simple,
+        // heavy.
+        var tick = 0
+        while tick < 4 * q {
+            let onBeat = (tick % q == 0)
+            let intensity: Double = onBeat ? 0.58 : 0.48
+            markers.append(Marker(startTick: tick, stopTick: tick + s, intensity: intensity))
+            tick += e
         }
 
         return Atom(
