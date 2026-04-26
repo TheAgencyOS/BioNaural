@@ -5,6 +5,7 @@
 // Every color, spacing, font, duration, frequency, and threshold in the app
 // references this file. No hardcoded values anywhere else.
 
+import AVFoundation
 import BioNauralShared
 import SwiftUI
 import UIKit
@@ -748,6 +749,38 @@ extension Theme {
         enum Fade {
             /// Amplitude ramp-to-zero duration before engine stop (seconds).
             static let stopDuration: TimeInterval = 0.1
+        }
+
+        // MARK: Offline Export
+
+        enum Export {
+            /// Render sample rate (Hz). 48 kHz keeps full audible range
+            /// and matches AVAudioFormat standard format defaults.
+            static let sampleRate: Double = 48_000
+
+            /// Stereo channel count for the exported file.
+            static let channelCount: AVAudioChannelCount = 2
+
+            /// Frames per offline render call. Larger = fewer Swift→C
+            /// crossings but more memory; 4096 ≈ 85 ms at 48 kHz.
+            static let bufferFrameCount: AVAudioFrameCount = 4096
+
+            /// PCM bit depth for WAV output. Int16 keeps file size
+            /// roughly half of Float32 with no perceivable quality loss
+            /// on a final-mix stereo bounce.
+            static let wavBitDepth: Int = 16
+
+            /// Hard cap on user-requested export duration (minutes).
+            /// 60 minutes at WAV/Int16 stereo ≈ 330 MB.
+            static let durationCapMinutes: Int = 60
+
+            /// Linear amplitude ramp applied at start and end of the
+            /// rendered file to avoid speaker pops on import.
+            static let edgeFadeSeconds: Double = 0.5
+
+            /// Lifetime of an exported file in the temporary directory
+            /// before the cleanup pass removes it (seconds).
+            static let tempFileTTL: TimeInterval = 60 * 60 * 24
         }
 
         // MARK: Slew Rate Limits
