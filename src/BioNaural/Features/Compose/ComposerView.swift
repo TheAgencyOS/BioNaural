@@ -22,7 +22,15 @@ struct ComposerView: View {
     private var compositions: [CustomComposition]
 
     @State private var showModePicker = false
+    @State private var exportRequest: ExportRequest?
     @Namespace private var glassNamespace
+
+    /// Identifiable wrapper so we can present `ExportTrackSheet` via
+    /// `.sheet(item:)` without modifying the SwiftData `@Model` type.
+    fileprivate struct ExportRequest: Identifiable {
+        let id = UUID()
+        let composition: CustomComposition
+    }
 
     private let columns = [
         GridItem(.flexible(), spacing: Theme.Spacing.md),
@@ -64,6 +72,9 @@ struct ComposerView: View {
             Button("Cancel", role: .cancel) {}
         } message: {
             Text("Pick a mode — the rest uses defaults you can adjust in Mix Levels later.")
+        }
+        .sheet(item: $exportRequest) { request in
+            ExportTrackSheet(composition: request.composition)
         }
     }
 
@@ -131,6 +142,12 @@ struct ComposerView: View {
                 }
                 .buttonStyle(.plain)
                 .contextMenu {
+                    Button {
+                        exportRequest = ExportRequest(composition: composition)
+                    } label: {
+                        Label("Export Audio…", systemImage: "square.and.arrow.up")
+                    }
+
                     Button {
                         duplicateComposition(composition)
                     } label: {
